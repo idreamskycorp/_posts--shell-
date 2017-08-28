@@ -165,7 +165,13 @@
         <div class="row">
             <!-- Post Container -->
             <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
-                
+                <p>1、修改NSTableView 背景</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">self.tableView.enclosingScrollView?.drawsBackground = false</div><div class="line">self.tableView.backgroundColor = NSColor.black</div></pre></td></tr></table></figure>
+<p>2、NSTextField使用代码改变边框颜色</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">NSTextField *textField= [[NSTextField alloc] initWithFrame:NSMakeRect(100, 100, 300, 30)];</div><div class="line">textField.editable = YES;</div><div class="line">textField.placeholderString = @&quot;改变边框颜色&quot;;</div><div class="line">[self.view addSubview:textField];</div><div class="line"></div><div class="line">// 改变边框步骤如下</div><div class="line">textField.bordered = YES;</div><div class="line">textField.wantsLayer = YES;</div><div class="line">textField.layer.borderColor = [NSColor redColor].CGColor;</div><div class="line">textField.layer.borderWidth = 1.0f;</div><div class="line"></div><div class="line">// 重要：一定要设置如下属性，否则无法显示效果</div><div class="line">[[textField cell] setBezeled:NO];</div><div class="line">[[textField cell] setBordered:NO];</div></pre></td></tr></table></figure>
+<p>3、设置NSTextfieldCell背景颜色</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">backgroundColor = NSColor.orange</div><div class="line">drawsBackground = true</div><div class="line">focusRingType = .none</div><div class="line">isBordered = false</div></pre></td></tr></table></figure>
+
                 <hr>
                 
 
