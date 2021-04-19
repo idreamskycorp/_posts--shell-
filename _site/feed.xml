@@ -5,8 +5,8 @@
     <description>欢迎来到我的个人站~</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 19 Apr 2021 16:11:00 +0800</pubDate>
-    <lastBuildDate>Mon, 19 Apr 2021 16:11:00 +0800</lastBuildDate>
+    <pubDate>Mon, 19 Apr 2021 16:39:13 +0800</pubDate>
+    <lastBuildDate>Mon, 19 Apr 2021 16:39:13 +0800</lastBuildDate>
     <generator>Jekyll v3.8.5</generator>
     
       <item>
@@ -83,7 +83,7 @@ iosBatchLazyCode&lt;span class=&quot;o&quot;&gt;(){&lt;/span&gt;
         <link>http://localhost:4000/2021/04/Shell_lazy_load/</link>
         <guid isPermaLink="true">http://localhost:4000/2021/04/Shell_lazy_load/</guid>
         
-        <category>mark</category>
+        <category>shell</category>
         
         
       </item>
@@ -241,6 +241,574 @@ done
         <guid isPermaLink="true">http://localhost:4000/2021/04/Shell_rename/</guid>
         
         <category>Shell</category>
+        
+        
+      </item>
+    
+      <item>
+        <title>Shell笔记</title>
+        <description>&lt;h2 id=&quot;1mac下shell别名可以在etcbashrc-或者bash_profile添加&quot;&gt;1、Mac下shell别名，可以在&lt;code class=&quot;highlighter-rouge&quot;&gt;/etc/bashrc&lt;/code&gt; 或者&lt;code class=&quot;highlighter-rouge&quot;&gt;~/.bash_profile&lt;/code&gt;添加&lt;/h2&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;alias grep='grep --color=auto'
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h2 id=&quot;2变量赋值等号两边每空格&quot;&gt;2、变量赋值等号两边每空格&lt;/h2&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;A=&quot;Hello world&quot;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h2 id=&quot;3expr-运算符两边有空格&quot;&gt;3、expr 运算符两边有空格&lt;/h2&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;expr 2 + 3
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h2 id=&quot;4条件判断-条件判断---条件判断-两边有空格&quot;&gt;4、条件判断[ 条件判断 ] [[ 条件判断 ]]两边有空格&lt;/h2&gt;
+&lt;h2 id=&quot;5条件判断中运算符两边有空格&quot;&gt;5、条件判断中运算符两边有空格&lt;/h2&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;[ ! $(id -u) -eq 0 ] &amp;amp;&amp;amp; echo &quot;ABC&quot;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h2 id=&quot;5表达式&quot;&gt;5、表达式&lt;/h2&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;#表达式空格可有可无，两个表达式相等
+$((1+3))
+$[1+3]
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;6类c风格a1赋值ab判等&quot;&gt;6、类C风格((A=1))赋值,((A==B))判等&lt;/h2&gt;
+
+&lt;p&gt;##7、如果需要在文件中替换多个相同的字符串，需要添加global参数g，即:&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sed -i &quot;.bak&quot; &quot;s/1.*/aa\/bb/g&quot; test.txt
+或者
+#https://blog.csdn.net/toopoo/article/details/104432196
+sed -i &quot;.bak&quot; &quot;s|1.*|aa/bb|g&quot; test.txt
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;##8、字符串操作&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;${#string} : $string 的长度
+${string:position} : 从$position位置开始的子字符串
+${string:position:length} : 从$position位置开始，长度为length的子字符串
+${string#substring} : 从头开始，删除最短匹配$substring的字符串
+${string##substring} : 从头开始，删除最长匹配$substring的字符串
+${string%substring} : 从结尾开始，删除最短匹配$substring的字符串
+${string%%substring} : 从结尾开始，删除最长匹配$substring的字符串
+${string/str1/str2} : 使用str2替换第一个匹配的$str1
+${string//str1/str2} : 使用str2替换所有匹配的$str1
+${string/#str1/str2} : 如果$string的前缀和$str1匹配,用$str2替换$str1
+${string/%str1/str2} : 如果$string的后缀和$str1匹配，用$str2替换$str1
+
+
+${file-my.file.txt} ：假如$file 沒有设定，則使用my.file.txt 作传回值。(空值及非空值時不作处理) 
+${file:-my.file.txt} ：假如$file 沒有設定或為空值，則使用my.file.txt 作傳回值。(非空值時不作处理)
+${file+my.file.txt} ：假如$file 設為空值或非空值，均使用my.file.txt 作傳回值。(沒設定時不作处理)
+${file:+my.file.txt} ：若$file 為非空值，則使用my.file.txt 作傳回值。(沒設定及空值時不作处理)
+${file=my.file.txt} ：若$file 沒設定，則使用my.file.txt 作傳回值，同時將$file 賦值為my.file.txt 。(空值及非空值時不作处理)
+${file:=my.file.txt} ：若$file 沒設定或為空值，則使用my.file.txt 作傳回值，同時將$file 賦值為my.file.txt 。(非空值時不作处理)
+${file?my.file.txt} ：若$file 沒設定，則將my.file.txt 輸出至STDERR。(空值及非空值時不作处理)
+${file:?my.file.txt} ：若$file 没设定或为空值，则将my.file.txt 输出至STDERR。(非空值時不作处理)
+
+${#var} 可计算出变量值的长度：
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;##9、从文本中读取字符串命令执行&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;awk '/^TN/{ cmd=$0; system(cmd) }' $SRCROOT/../README.md
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;##10、获取当前目录&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;project_path=$(cd &quot;`dirname &quot;$0&quot;`&quot;; pwd)
+#当前目录
+cur_dir=$(pwd)
+#上级目录
+highter_dir=$(dirname &quot;$(pwd)&quot;)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;获取路径最后一个名字&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;project_path=$(cd &quot;`dirname &quot;$0&quot;`&quot;; pwd)
+#当前目录
+cur_dir=$(pwd)
+#上级目录
+highter_dir=$(dirname &quot;$(pwd)&quot;)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;##11、懒加载代码&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;#!/bin/bash&lt;/span&gt;
+iosBatchLazyCode&lt;span class=&quot;o&quot;&gt;(){&lt;/span&gt;
+	
+	&lt;span class=&quot;k&quot;&gt;if &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;test&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;UIButton&quot;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;then
+   		&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;str&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;[&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$1&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt; buttonWithType:UIButtonTypeCustom];&quot;&lt;/span&gt;
+   	&lt;span class=&quot;k&quot;&gt;else
+   		&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;str&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;[[&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$1&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt; alloc]init];&quot;&lt;/span&gt;
+	&lt;span class=&quot;k&quot;&gt;fi
+  &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-e&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;
+- (&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$1&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt; *)&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$2&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;{
+    if (_&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$2&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt; == nil) {
+        _&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$2&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt; = &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$str&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;
+    }
+    return _&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$2&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;;
+}&quot;&lt;/span&gt; 
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;#追加一行空格&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-e&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'\n'&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&lt;/span&gt; propertys.txt
+
+&lt;span class=&quot;c&quot;&gt;#读取文件存数组&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;0
+&lt;span class=&quot;k&quot;&gt;while &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;read &lt;/span&gt;line
+&lt;span class=&quot;k&quot;&gt;do
+	&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;lineStr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$line&lt;/span&gt;
+	&lt;span class=&quot;nv&quot;&gt;noneSpaceStr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;lineStr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;// /&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;
+    ARR[&lt;span class=&quot;nv&quot;&gt;$i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]=&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$noneSpaceStr&lt;/span&gt;
+    &lt;span class=&quot;nb&quot;&gt;let &lt;/span&gt;i+&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;1
+&lt;span class=&quot;k&quot;&gt;done&lt;/span&gt; &amp;lt; propertys.txt
+
+&lt;span class=&quot;c&quot;&gt;#格式化输出到out.txt&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;for &lt;/span&gt;str &lt;span class=&quot;k&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;ARR&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[*]&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;do
+	&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;str&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;#*)&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;
+	&lt;span class=&quot;nv&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;*&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;
+
+	&lt;span class=&quot;nv&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;str&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;#*&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;*&quot;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;
+	&lt;span class=&quot;nv&quot;&gt;d&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;%*;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;
+	iosBatchLazyCode &lt;span class=&quot;nv&quot;&gt;$b&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$d&lt;/span&gt; 
+&lt;span class=&quot;k&quot;&gt;done&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&lt;/span&gt; out.txt 
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;##12、创建文件&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;RESOURCES_TO_COPY=${PODS_ROOT}/resources-to-copy-${TARGETNAME}.txt
+&amp;gt; &quot;$RESOURCES_TO_COPY&quot;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;##13、字符串正则匹配&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;str1=我是中国人
+if [[ &quot;$str1&quot; == 我是* ]]; then
+     echo 有前缀
+else
+     echo 没有前缀
+fi
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+</description>
+        <pubDate>Thu, 01 Apr 2021 00:00:00 +0800</pubDate>
+        <link>http://localhost:4000/2021/04/Shell_note/</link>
+        <guid isPermaLink="true">http://localhost:4000/2021/04/Shell_note/</guid>
+        
+        <category>Shell</category>
+        
+        
+      </item>
+    
+      <item>
+        <title>博客模板功能介绍</title>
+        <description>&lt;p&gt;这篇文章主要讲的是如何使用和修改我的博客主题，文章内容含以下几点：&lt;/p&gt;
+
+&lt;h2 id=&quot;博客特性&quot;&gt;博客特性&lt;/h2&gt;
+
+&lt;ul class=&quot;task-list&quot;&gt;
+  &lt;li class=&quot;task-list-item&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;task-list-item-checkbox&quot; disabled=&quot;disabled&quot; checked=&quot;checked&quot; /&gt;适配电脑、手机、平板等各屏幕&lt;/li&gt;
+  &lt;li class=&quot;task-list-item&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;task-list-item-checkbox&quot; disabled=&quot;disabled&quot; checked=&quot;checked&quot; /&gt;响应式设计&lt;/li&gt;
+  &lt;li class=&quot;task-list-item&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;task-list-item-checkbox&quot; disabled=&quot;disabled&quot; checked=&quot;checked&quot; /&gt;个性化头像&lt;/li&gt;
+  &lt;li class=&quot;task-list-item&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;task-list-item-checkbox&quot; disabled=&quot;disabled&quot; checked=&quot;checked&quot; /&gt;每篇文章自动添加打赏功能&lt;/li&gt;
+  &lt;li class=&quot;task-list-item&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;task-list-item-checkbox&quot; disabled=&quot;disabled&quot; checked=&quot;checked&quot; /&gt;支持Disqus、livere评论系统&lt;/li&gt;
+  &lt;li class=&quot;task-list-item&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;task-list-item-checkbox&quot; disabled=&quot;disabled&quot; checked=&quot;checked&quot; /&gt;支持站点总数访问统计，每篇文章访问统计&lt;/li&gt;
+  &lt;li class=&quot;task-list-item&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;task-list-item-checkbox&quot; disabled=&quot;disabled&quot; checked=&quot;checked&quot; /&gt;支持文章自动生成目录&lt;/li&gt;
+  &lt;li class=&quot;task-list-item&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;task-list-item-checkbox&quot; disabled=&quot;disabled&quot; checked=&quot;checked&quot; /&gt;支持标签分类&lt;/li&gt;
+  &lt;li class=&quot;task-list-item&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;task-list-item-checkbox&quot; disabled=&quot;disabled&quot; checked=&quot;checked&quot; /&gt;支持代码高亮&lt;/li&gt;
+  &lt;li class=&quot;task-list-item&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;task-list-item-checkbox&quot; disabled=&quot;disabled&quot; checked=&quot;checked&quot; /&gt;支持文章H1、H2、H3、H4标题样式多样化&lt;/li&gt;
+  &lt;li class=&quot;task-list-item&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;task-list-item-checkbox&quot; disabled=&quot;disabled&quot; checked=&quot;checked&quot; /&gt;支持多种三方社交icon展示，能从博客直接跳转到自己的三方社交主页&lt;/li&gt;
+  &lt;li class=&quot;task-list-item&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;task-list-item-checkbox&quot; disabled=&quot;disabled&quot; checked=&quot;checked&quot; /&gt;支持三方社交分享(facebook、twitter)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;博客主要模块介绍&quot;&gt;博客主要模块介绍&lt;/h2&gt;
+
+&lt;h3 id=&quot;_configyml&quot;&gt;_config.yml&lt;/h3&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;_config.yml&lt;/code&gt; 是博客的配置文件，整个站点的信息都在这修改，想要把我的模板改成你自己的也需要修改&lt;code class=&quot;highlighter-rouge&quot;&gt;_config.yml&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;重要字段说明&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;enableToc: 是否开启文章自动生成目录，设置为false文章不会自动生成目录&lt;/li&gt;
+  &lt;li&gt;comment/livere: livere评论系统，支持微信、qq、微博、豆瓣、twitter等登录后可以直接评论&lt;/li&gt;
+  &lt;li&gt;comment/disqus: disqus评论系统，支持facebook、twitter等登录后可以直接评论&lt;/li&gt;
+  &lt;li&gt;social/weibo、github、zhihu、jianshu等: 个人站底部展示的微博等三方社交按钮，点击后直接跳转到个人微博或其他社交主页&lt;/li&gt;
+  &lt;li&gt;baidu/id: 百度统计，用来统计你个人站点的用户访问情况&lt;/li&gt;
+  &lt;li&gt;ga/id: google统计，用来统计你个人站点的用户访问情况&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;_config.yml 文件除以上字段还有一些可以自行修改，例如title之类的字段&lt;/p&gt;
+
+&lt;h3 id=&quot;_posts&quot;&gt;_posts&lt;/h3&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;_posts&lt;/code&gt; 目录是用来存放文章的目录，写新文章，直接放在这个目录即可&lt;/p&gt;
+
+&lt;p&gt;使用博客模板时，请把博客自带的文章给去掉，如果想使用博客自带的文章请 &lt;code class=&quot;highlighter-rouge&quot;&gt;注明出处&lt;/code&gt;。&lt;/p&gt;
+
+&lt;h3 id=&quot;自定义页面&quot;&gt;自定义页面&lt;/h3&gt;
+
+&lt;p&gt;about.md、support.md 等为自定义页面，如果你想添加自动以页面可以直接复制about.md 文件修改文件名和里面的内容即可。&lt;/p&gt;
+
+&lt;p&gt;如果需要在导航显示你新增的页面，直接在&lt;code class=&quot;highlighter-rouge&quot;&gt;_config.yml&lt;/code&gt; 文件的nav字段中添加你新页面配置即可&lt;/p&gt;
+
+&lt;h3 id=&quot;修改说明&quot;&gt;修改说明&lt;/h3&gt;
+
+&lt;p&gt;如果要修改博客模板信息建议只修改&lt;code class=&quot;highlighter-rouge&quot;&gt;_config.yml&lt;/code&gt; 文件内容和 &lt;code class=&quot;highlighter-rouge&quot;&gt;_posts&lt;/code&gt; 里面的文章信息。因为博客模板一直在更新迭代，改动多了以免你后期更新博客模板的时候不方便。&lt;/p&gt;
+
+&lt;p&gt;如果你想改动模板的样式又想继续更新迭代博客模板，你可以提交在github上提交&lt;code class=&quot;highlighter-rouge&quot;&gt;pull request&lt;/code&gt; 或者直接给我发邮件建议改成什么样，如果你的提议确实可以，我会采纳的，并且非常感谢你的建议。&lt;/p&gt;
+
+</description>
+        <pubDate>Sat, 11 Jul 2020 00:00:00 +0800</pubDate>
+        <link>http://localhost:4000/2020/07/blog_info/</link>
+        <guid isPermaLink="true">http://localhost:4000/2020/07/blog_info/</guid>
+        
+        <category>jekyll</category>
+        
+        
+      </item>
+    
+      <item>
+        <title>文档支持的Markdown语法</title>
+        <description>&lt;h2 id=&quot;什么是-markdown&quot;&gt;什么是 Markdown&lt;/h2&gt;
+
+&lt;p&gt;Markdown 是一种方便记忆、书写的纯文本标记语言，用户可以使用这些标记符号以最小的输入代价生成极富表现力的文档：如您正在阅读的这篇文章。它使用简单的符号标记不同的标题，分割不同的段落，&lt;strong&gt;粗体&lt;/strong&gt; 或者 &lt;em&gt;斜体&lt;/em&gt; 某些文字.&lt;/p&gt;
+
+&lt;p&gt;很多产品的文档也是用markdown编写的，并且以“README.MD”的文件名保存在软件的目录下面。
+　　&lt;/p&gt;
+&lt;h2 id=&quot;一些基本语法&quot;&gt;一些基本语法&lt;/h2&gt;
+
+&lt;p&gt;标题          &lt;br /&gt;
+H1 :# Header 1          &lt;br /&gt;
+H2 :## Header 2         &lt;br /&gt;
+H3 :### Header 3         &lt;br /&gt;
+H4 :#### Header 4         &lt;br /&gt;
+H5 :##### Header 5          &lt;br /&gt;
+H6 :###### Header 6    &lt;br /&gt;
+链接 :&lt;a href=&quot;URL&quot;&gt;Title&lt;/a&gt;      &lt;br /&gt;
+加粗 :&lt;strong&gt;Bold&lt;/strong&gt;      &lt;br /&gt;
+斜体字 :&lt;em&gt;Italics&lt;/em&gt;       &lt;br /&gt;
+*删除线 :&lt;del&gt;text&lt;/del&gt;        &lt;br /&gt;
+内嵌代码 : &lt;code class=&quot;highlighter-rouge&quot;&gt;alert('Hello World');&lt;/code&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;列表&quot;&gt;列表&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;列表1&lt;/li&gt;
+  &lt;li&gt;列表2&lt;/li&gt;
+  &lt;li&gt;列表3&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;列表引用&quot;&gt;列表引用&lt;/h3&gt;
+
+&lt;blockquote&gt;
+  &lt;ul&gt;
+    &lt;li&gt;列表1&lt;/li&gt;
+    &lt;li&gt;列表2&lt;/li&gt;
+    &lt;li&gt;列表3&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/blockquote&gt;
+
+&lt;h3 id=&quot;插入一张图片&quot;&gt;插入一张图片&lt;/h3&gt;
+
+&lt;p&gt;打赏一个吧&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/payimg/weipayimg.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;css 的大部分语法同样可以在 markdown 上使用，但不同的渲染器渲染出来的 markdown 内容样式也不一样，下面这些链接里面有 markdown 基本语法，你也可以在下面几个平台上尝试着写一些。&lt;/p&gt;
+
+&lt;h2 id=&quot;博客支持的高级语法&quot;&gt;博客支持的高级语法&lt;/h2&gt;
+
+&lt;h3 id=&quot;1-制作一份待办事宜&quot;&gt;1. 制作一份待办事宜&lt;/h3&gt;
+
+&lt;ul class=&quot;task-list&quot;&gt;
+  &lt;li class=&quot;task-list-item&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;task-list-item-checkbox&quot; disabled=&quot;disabled&quot; /&gt;支持以 PDF 格式导出文稿&lt;/li&gt;
+  &lt;li class=&quot;task-list-item&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;task-list-item-checkbox&quot; disabled=&quot;disabled&quot; /&gt;改进 Cmd 渲染算法，使用局部渲染技术提高渲染效率&lt;/li&gt;
+  &lt;li class=&quot;task-list-item&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;task-list-item-checkbox&quot; disabled=&quot;disabled&quot; checked=&quot;checked&quot; /&gt;新增 Todo 列表功能&lt;/li&gt;
+  &lt;li class=&quot;task-list-item&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;task-list-item-checkbox&quot; disabled=&quot;disabled&quot; checked=&quot;checked&quot; /&gt;修复 图标功能&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;2-高亮一段代码&quot;&gt;2. 高亮一段代码&lt;/h3&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
+&lt;span class=&quot;o&quot;&gt;@&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;requires_authorization&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;SomeClass&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;pass&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;__name__&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'__main__'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;# A comment
+&lt;/span&gt;    &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'hello world'&lt;/span&gt;
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;3-绘制表格&quot;&gt;3. 绘制表格&lt;/h4&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;项目&lt;/th&gt;
+      &lt;th style=&quot;text-align: right&quot;&gt;价格&lt;/th&gt;
+      &lt;th style=&quot;text-align: center&quot;&gt;数量&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;计算机&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;$1600&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;5&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;手机&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;$12&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;12&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;管线&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;$1&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;234&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+</description>
+        <pubDate>Sun, 20 Nov 2016 00:00:00 +0800</pubDate>
+        <link>http://localhost:4000/2016/11/markdownTool/</link>
+        <guid isPermaLink="true">http://localhost:4000/2016/11/markdownTool/</guid>
+        
+        <category>markdown</category>
+        
+        
+      </item>
+    
+      <item>
+        <title>Jekyll搭建个人博客</title>
+        <description>&lt;h3 id=&quot;介绍&quot;&gt;介绍&lt;/h3&gt;
+
+&lt;p&gt;　Jekyll 是一个简单的博客形态的静态站点生产机器。它有一个模版目录，其中包含原始文本格式的文档，通过 Markdown （或者 Textile） 以及 Liquid 转化成一个完整的可发布的静态网站，你可以发布在任何你喜爱的服务器上。Jekyll 也可以运行在 GitHub Page 上，也就是说，你可以使用 GitHub 的服务来搭建你的项目页面、博客或者网站，而且是完全免费的&lt;/p&gt;
+
+&lt;p&gt;　使用 Jekyll 搭建博客之前要确认下本机环境，Git 环境（用于部署到远端）、&lt;a href=&quot;http://www.ruby-lang.org/en/downloads/&quot;&gt;Ruby&lt;/a&gt; 环境（Jekyll 是基于 Ruby 开发的）、包管理器 &lt;a href=&quot;http://rubygems.org/pages/download&quot;&gt;RubyGems&lt;/a&gt;              &lt;br /&gt;
+　　如果你是 Mac 用户，你就需要安装 Xcode 和 Command-Line Tools了。下载方式 Preferences → Downloads → Components。&lt;/p&gt;
+
+&lt;p&gt;　　Jekyll 是一个免费的简单静态网页生成工具，可以配合第三方服务例如： Disqus（评论）、多说(评论) 以及分享 等等扩展功能，Jekyll 可以直接部署在 Github（国外） 或 Coding（国内） 上，可以绑定自己的域名。&lt;a href=&quot;http://jekyll.bootcss.com/&quot;&gt;Jekyll中文文档&lt;/a&gt;、&lt;a href=&quot;https://jekyllrb.com/&quot;&gt;Jekyll英文文档&lt;/a&gt;、&lt;a href=&quot;http://jekyllthemes.org/&quot;&gt;Jekyll主题列表&lt;/a&gt;。&lt;/p&gt;
+
+&lt;h3 id=&quot;jekyll-环境配置&quot;&gt;Jekyll 环境配置&lt;/h3&gt;
+
+&lt;p&gt;安装 jekyll&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ gem install jekyll     
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;创建博客&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ jekyll new myBlog    
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;进入博客目录&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ cd myBlog  
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;启动本地服务&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ jekyll serve
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;在浏览器里输入： &lt;a href=&quot;http://localhost:4000&quot;&gt;http://localhost:4000&lt;/a&gt;，就可以看到你的博客效果了。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/posts/jekyll/image1.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;so easy !&lt;/p&gt;
+
+&lt;h3 id=&quot;目录结构&quot;&gt;目录结构&lt;/h3&gt;
+&lt;p&gt;　
+　Jekyll 的核心其实是一个文本转换引擎。它的概念其实就是： 你用你最喜欢的标记语言来写文章，可以是 Markdown，也可以是 Textile,或者就是简单的 HTML, 然后 Jekyll 就会帮你套入一个或一系列的布局中。在整个过程中你可以设置URL路径, 你的文本在布局中的显示样式等等。这些都可以通过纯文本编辑来实现，最终生成的静态页面就是你的成品了。&lt;/p&gt;
+
+&lt;p&gt;一个基本的 Jekyll 网站的目录结构一般是像这样的：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;.
+├── _config.yml
+├── _includes
+|   ├── footer.html
+|   └── header.html
+├── _layouts
+|   ├── default.html
+|   ├── post.html
+|   └── page.html
+├── _posts
+|   └── 2016-10-08-welcome-to-jekyll.markdown
+├── _sass
+|   ├── _base.scss
+|   ├── _layout.scss
+|   └── _syntax-highlighting.scss
+├── about.md
+├── css
+|   └── main.scss
+├── feed.xml
+└── index.html
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;这些目录结构以及具体的作用可以参考 &lt;a href=&quot;http://jekyll.com.cn/docs/structure/&quot;&gt;官网文档&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;进入 _config.yml 里面，修改成你想看到的信息，重新 jekyll server ，刷新浏览器就可以看到你刚刚修改的信息了。&lt;/p&gt;
+
+&lt;p&gt;到此，博客初步搭建算是完成了，&lt;/p&gt;
+
+&lt;h3 id=&quot;博客部署到远端&quot;&gt;博客部署到远端&lt;/h3&gt;
+
+&lt;p&gt;　我这里讲的是部署到 Github Page 创建一个 github 账号，然后创建一个跟你账户名一样的仓库，如我的 github 账户名叫 &lt;a href=&quot;https://github.com/lijingbiao&quot;&gt;leopardpan&lt;/a&gt;，我的 github 仓库名就叫 &lt;a href=&quot;https://github.com/lijingbiao/lijingbiao.github.io&quot;&gt;leopardpan.github.io&lt;/a&gt;，创建好了之后，把刚才建立的 myBlog 项目 push 到 username.github.io仓库里去（username指的是你的github用户名），检查你远端仓库已经跟你本地 myBlog 同步了，然后你在浏览器里输入 username.github.io ，就可以访问你的博客了。&lt;/p&gt;
+
+&lt;h3 id=&quot;编写文章&quot;&gt;编写文章&lt;/h3&gt;
+
+&lt;p&gt;　　所有的文章都是 _posts 目录下面，文章格式为 mardown 格式，文章文件名可以是 .mardown 或者 .md。&lt;/p&gt;
+
+&lt;p&gt;　　编写一篇新文章很简单，你可以直接从 _posts/ 目录下复制一份出来 &lt;code class=&quot;highlighter-rouge&quot;&gt;2016-10-16-welcome-to-jekyll副本.markdown&lt;/code&gt; ，修改名字为 2016-10-16-article1.markdown ，注意：文章名的格式前面必须为 2016-10-16- ，日期可以修改，但必须为 年-月-日- 格式，后面的 article1 是整个文章的连接 URL，如果文章名为中文，那么文章的连接URL就会变成这样的：http://leopardpan.cn/2015/08/%E6%90%AD%E5/ ， 所以建议文章名最好是英文的或者阿拉伯数字。 双击 2016-10-16-article1.markdown 打开&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
+---
+layout: post
+title:  &quot;Welcome to Jekyll!&quot;
+date:   2016-10-16 11:29:08 +0800
+categories: jekyll update
+---
+
+正文...
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;title: 显示的文章名， 如：title: 我的第一篇文章                  &lt;br /&gt;
+date:  显示的文章发布日期，如：date: 2016-10-16                        &lt;br /&gt;
+categories: tag标签的分类，如：categories: 随笔&lt;/p&gt;
+
+&lt;p&gt;注意：文章头部格式必须为上面的，…. 就是文章的正文内容。&lt;/p&gt;
+
+&lt;p&gt;我写文章使用的是 Sublime Text2 编辑器，如果你对 markdown 语法不熟悉的话，可以看看&lt;a href=&quot;https://www.zybuluo.com/&quot;&gt;作业部落的教程&lt;/a&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ jekyll server   
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;如果你本机没配置过任何jekyll的环境可能会报错&quot;&gt;如果你本机没配置过任何jekyll的环境，可能会报错&lt;/h3&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/Users/xxxxxxxx/.rvm/rubies/ruby-2.2.2/lib/ruby/site_ruby/2.2.0/rubygems/core_ext/kernel_require.rb:54:in `require': cannot load such file -- bundler (LoadError)
+	from /Users/xxxxxxxx/.rvm/rubies/ruby-2.2.2/lib/ruby/site_ruby/2.2.0/rubygems/core_ext/kernel_require.rb:54:in `require'
+	from /Users/xxxxxxxx/.rvm/gems/ruby-2.2.2/gems/jekyll-3.3.0/lib/jekyll/plugin_manager.rb:34:in `require_from_bundler'
+	from /Users/xxxxxxxx/.rvm/gems/ruby-2.2.2/gems/jekyll-3.3.0/exe/jekyll:9:in `&amp;lt;top (required)&amp;gt;'
+	from /Users/xxxxxxxx/.rvm/gems/ruby-2.2.2/bin/jekyll:23:in `load'
+	from /Users/xxxxxxxx/.rvm/gems/ruby-2.2.2/bin/jekyll:23:in `&amp;lt;main&amp;gt;'
+	from /Users/xxxxxxxx/.rvm/gems/ruby-2.2.2/bin/ruby_executable_hooks:15:in `eval'
+	from /Users/xxxxxxxx/.rvm/gems/ruby-2.2.2/bin/ruby_executable_hooks:15:in `&amp;lt;main&amp;gt;'
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;原因： 没有安装 bundler ，执行安装 bundler 命令&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
+$ gem install bundler
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;提示：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Fetching: bundler-1.13.5.gem (100%)
+Successfully installed bundler-1.13.5
+Parsing documentation for bundler-1.13.5
+Installing ri documentation for bundler-1.13.5
+Done installing documentation for bundler after 5 seconds
+1 gem installed
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;再次执行 $ jekyll server  ，提示&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
+Could not find proper version of jekyll (3.1.1) in any of the sources
+Run `bundle install` to install missing gems.
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;跟着提示运行命令&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ bundle install
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;这个时候你可能会发现 bundle install 运行卡主不动了。&lt;/p&gt;
+
+&lt;p&gt;如果很长时间都没任何提示的话，你可以尝试修改 gem 的 source&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ gem sources --remove https://rubygems.org/
+$ gem sources -a http://ruby.taobao.org/
+$ gem sources -l
+*** CURRENT SOURCES ***
+
+http://ruby.taobao.org
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;再次执行命令 $ bundle install，发现开始有动静了&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Fetching gem metadata from https://rubygems.org/...........
+Fetching version metadata from https://rubygems.org/..
+Fetching dependency metadata from https://rubygems.org/.
+。。。
+Installing jekyll-watch 1.3.1
+Installing jekyll 3.1.1
+Bundle complete! 3 Gemfile dependencies, 17 gems now installed.
+Use `bundle show [gemname]` to see where a bundled gem is installed.
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;bundler安装完成，后再次启动本地服务&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ jekyll server
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;继续报错&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Configuration file: /Users/tendcloud-Caroline/Desktop/leopardpan.github.io/_config.yml
+  Dependency Error: Yikes! It looks like you don't have jekyll-sitemap or one of its dependencies installed. In order to use Jekyll as currently configured, you'll need to install this gem. The full error message from Ruby is: 'cannot load such file -- jekyll-sitemap' If you run into trouble, you can find helpful resources at http://jekyllrb.com/help/! 
+jekyll 3.1.1 | Error:  jekyll-sitemap
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;表示 当前的 jekyll 版本是 3.1.1 ，无法使用 jekyll-sitemap&lt;/p&gt;
+
+&lt;p&gt;解决方法有两个&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;1、打开当前目录下的 _config.yml 文件，把 gems: [jekyll-paginate,jekyll-sitemap] 换成 gems: [jekyll-paginate] ，也就是去掉jekyll-sitemap。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;2、升级 jekyll 版本，我当前的是 jekyll 3.1.2 。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;修改完成后保存配置，再次执行&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ jekyll server
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;提示&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Configuration file: /Users/baixinpan/Desktop/OpenSource/Mine/Page-Blog/leopardpan.github.io-github/_config.yml
+            Source: /Users/baixinpan/Desktop/OpenSource/Mine/Page-Blog/leopardpan.github.io-github
+       Destination: /Users/baixinpan/Desktop/OpenSource/Mine/Page-Blog/leopardpan.github.io-github/_site
+ Incremental build: disabled. Enable with --incremental
+      Generating... 
+                    done in 0.901 seconds.
+ Auto-regeneration: enabled for '/Users/baixinpan/Desktop/OpenSource/Mine/Page-Blog/leopardpan.github.io-github'
+Configuration file: /Users/baixinpan/Desktop/OpenSource/Mine/Page-Blog/leopardpan.github.io-github/_config.yml
+    Server address: http://127.0.0.1:4000/
+  Server running... press ctrl-c to stop.
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;表示本地服务部署成功。&lt;/p&gt;
+
+&lt;p&gt;在浏览器输入 &lt;a href=&quot;127.0.0.1:4000&quot;&gt;127.0.0.1:4000&lt;/a&gt; ， 就可以看到博客效果了。&lt;/p&gt;
+
+&lt;h3 id=&quot;修改成你自己的博客&quot;&gt;修改成你自己的博客&lt;/h3&gt;
+
+&lt;blockquote&gt;
+  &lt;ul&gt;
+    &lt;li&gt;如果你想使用我的模板请把 _posts/ 目录下的文章都去掉。&lt;/li&gt;
+    &lt;li&gt;修改 _config.yml 文件里面的内容为你自己的。&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;然后使用 git push 到你自己的仓库里面去，检查你远端仓库，在浏览器输入 username.github.io 就会发现，你有一个漂亮的主题模板了。&lt;/p&gt;
+
+&lt;h3 id=&quot;为什么要是用-jekyll&quot;&gt;为什么要是用 Jekyll&lt;/h3&gt;
+
+&lt;p&gt;使用了 Jekyll 你会发现如果你想使用多台电脑发博客都很方便，只要把远端 github 仓库里的博客 clone 下来，写文章后再提交就可以了，Hexo 由于远端提交的是静态网页，所有无法直接写 Markdown 的文章。&lt;/p&gt;
+
+</description>
+        <pubDate>Fri, 14 Oct 2016 00:00:00 +0800</pubDate>
+        <link>http://localhost:4000/2016/10/jekyll_tutorials1/</link>
+        <guid isPermaLink="true">http://localhost:4000/2016/10/jekyll_tutorials1/</guid>
+        
+        <category>jekyll</category>
         
         
       </item>

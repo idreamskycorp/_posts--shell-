@@ -6,17 +6,17 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <title>Shell批量重命名</title>
-  <meta name="description" content="第一种方法```CURRENT_DIR=pwd">
+  <title>Shell笔记</title>
+  <meta name="description" content="1、Mac下shell别名，可以在/etc/bashrc 或者~/.bash_profile添加alias grep='grep --color=auto'2、变量赋值等号两边每空格A="Hello world"3、expr 运算符两边有空格expr 2 + 34、条件判断[ 条件判断 ] [[ 条件判断 ]]两...">
   <meta name="author" content="leopardpan">
 
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="Shell批量重命名">
-  <meta name="twitter:description" content="第一种方法```CURRENT_DIR=pwd">
+  <meta name="twitter:title" content="Shell笔记">
+  <meta name="twitter:description" content="1、Mac下shell别名，可以在/etc/bashrc 或者~/.bash_profile添加alias grep='grep --color=auto'2、变量赋值等号两边每空格A="Hello world"3、expr 运算符两边有空格expr 2 + 34、条件判断[ 条件判断 ] [[ 条件判断 ]]两...">
   
   <meta property="og:type" content="article">
-  <meta property="og:title" content="Shell批量重命名">
-  <meta property="og:description" content="第一种方法```CURRENT_DIR=pwd">
+  <meta property="og:title" content="Shell笔记">
+  <meta property="og:description" content="1、Mac下shell别名，可以在/etc/bashrc 或者~/.bash_profile添加alias grep='grep --color=auto'2、变量赋值等号两边每空格A="Hello world"3、expr 运算符两边有空格expr 2 + 34、条件判断[ 条件判断 ] [[ 条件判断 ]]两...">
   
   <link rel="icon" type="image/png" href="/images/favicon.png" />
   <link href="/images/favicon.png" rel="shortcut icon" type="image/png">
@@ -24,7 +24,7 @@
   <link rel="stylesheet" href="/css/main.css">
   <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 
-  <link rel="canonical" href="http://localhost:4000/2021/04/Shell_rename/">
+  <link rel="canonical" href="http://localhost:4000/2021/04/Shell_note/">
   <link rel="alternate" type="application/rss+xml" title="LiJingBiao" href="http://localhost:4000/feed.xml">
   
   <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
@@ -179,10 +179,10 @@
 
 <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
   <header class="post-header">
-    <h1 class="post-title">Shell批量重命名</h1>
+    <h1 class="post-title">Shell笔记</h1>
     <div class="post-meta">
       <img src="/images/calendar.png" width="20px"/> 
-      <time datetime="2021-04-17 00:00:00 +0800" itemprop="datePublished" class="post-meta__date date">2021-04-17</time>  
+      <time datetime="2021-04-01 00:00:00 +0800" itemprop="datePublished" class="post-meta__date date">2021-04-01</time>  
 
       <span id="busuanzi_container_page_pv"> | 阅读：<span id="busuanzi_value_page_pv"></span>次</span>
     </p>
@@ -192,134 +192,143 @@
   
     <h2 class="post-title">目录</h2>
     <ul>
-  <li><a href="#第一种方法">第一种方法</a></li>
-  <li><a href="#其他实现">其他实现</a></li>
+  <li><a href="#1mac下shell别名可以在etcbashrc-或者bash_profile添加">1、Mac下shell别名，可以在<code class="highlighter-rouge">/etc/bashrc</code> 或者<code class="highlighter-rouge">~/.bash_profile</code>添加</a></li>
+  <li><a href="#2变量赋值等号两边每空格">2、变量赋值等号两边每空格</a></li>
+  <li><a href="#3expr-运算符两边有空格">3、expr 运算符两边有空格</a></li>
+  <li><a href="#4条件判断-条件判断---条件判断-两边有空格">4、条件判断[ 条件判断 ] [[ 条件判断 ]]两边有空格</a></li>
+  <li><a href="#5条件判断中运算符两边有空格">5、条件判断中运算符两边有空格</a></li>
+  <li><a href="#5表达式">5、表达式</a></li>
+  <li><a href="#6类c风格a1赋值ab判等">6、类C风格((A=1))赋值,((A==B))判等</a></li>
 </ul>
 
   
 
   <section class="post">
-    <h2 id="第一种方法">第一种方法</h2>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>CURRENT_DIR=`pwd`
-
-for dir in *
-do
-    if [ -d $dir ];then
-        for file in $dir/*
-        do
-            NEW_FILE=${file/XXXXXXX/}
-            if [ "$NEW_FILE" != "$file" ] ;then
-                mv "${CURRENT_DIR}/$file" "${CURRENT_DIR}/${NEW_FILE}"
-                if [ $? -eq 0 ] ;then
-                    echo "${CURRENT_DIR}/${NEW_FILE}"
-                    echo "替换成功"
-                fi
-            fi
-            #echo $CURRENT_DIR ----- $dir --- $file
-            
-        done
-    fi
-    
-done
+    <h2 id="1mac下shell别名可以在etcbashrc-或者bash_profile添加">1、Mac下shell别名，可以在<code class="highlighter-rouge">/etc/bashrc</code> 或者<code class="highlighter-rouge">~/.bash_profile</code>添加</h2>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>alias grep='grep --color=auto'
 </code></pre></div></div>
-<h2 id="其他实现">其他实现</h2>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>0、用类似 GPRename 这样的图形软件进行批量重命名
-
-#1、删除所有的 .bak 后缀：
-rename 's/\.bak$//' *.bak
-
-#2、把 .jpe 文件后缀修改为 .jpg：
-rename 's/\.jpe$/\.jpg/' *.jpe
-
-#3、把所有文件的文件名改为小写：
-rename 'y/A-Z/a-z/' *
-
-#4、将 abcd.jpg 重命名为 abcd_efg.jpg：
-for var in *.jpg; do mv "$var" "${var%.jpg}_efg.jpg"; done
-
-#5、将 abcd_efg.jpg 重命名为 abcd_lmn.jpg：
-for var in *.jpg; do mv "$var" "${var%_efg.jpg}_lmn.jpg"; done
-
-#6、把文件名中所有小写字母改为大写字母：
-for var in `ls`; do mv -f "$var" `echo "$var" |tr a-z A-Z`; done
-
-#7、把格式 *_?.jpg 的文件改为 *_0?.jpg：
-for var in `ls *_?.jpg`; do mv "$var" `echo "$var" |awk -F '_' '{print $1 "_0" $2}'`; done
-
-#8、把文件名的前三个字母变为 vzomik：
-for var in `ls`; do mv -f "$var" `echo "$var" |sed 's/^.../vzomik/'`; done
-
-#9、把文件名的后四个字母变为 vzomik：
-for var in `ls`; do mv -f "$var" `echo "$var" |sed 's/....$/vzomik/'`; done
-
-#10. 把.txt变成.txt_bak 的后缀
-ls *.txt|xargs -n1 -i{} mv {} {}_bak
-# xargs -n1 –i{} 类似for循环，-n1意思是一个一个对象的去处理，-i{} 把前面的对象使用{}取代，mv {} {}_bak 相当于 mv 1.txt 1.txt_bak
-
-find ./*.txt -exec mv {} {}_bak \;  
-#这个命令中也是把{}作为前面find出来的文件的替代符，后面的”\”为”;”的脱意符，不然shell会把分号作为该行命令的结尾.
-
-
-==================================================================
-
-既然要批量替换文件名，那么肯定得用一个for循环依次遍历指定目录下的每个文件。对于每个文件，假如该文件的名称为name.oldext，那么我们必须原始文件名中挖出name，再将它与新的文件扩展名newext拼接形成新的文件名name.newext。依照这样的思路，就诞生了下面的脚本：
-#!/bin/bash
-oldext="JPG"
-newext="jpg"
-dir=$(eval pwd)
-
-for file in $(ls $dir | grep .$oldext)
-        do
-        name=$(ls $file | cut -d. -f1)
-        mv $file ${name}.$newext
-        done
-echo "change JPG=====&gt;jpg done!"
-
-        下面对针对这个程序作简单说明：
-1.变量oldext和newext分别指定旧的扩展名和新的扩展名。dir指定文件所在目录；
-2.“ls $dir | grep .$oldext”用来在指定目录dir中获取扩展名为旧扩展名的所有文件；
-3.在循环体内先利用cut命令将文件名中“.”之前的字符串剪切出来，并赋值给name变量；接着将当前的文件名重命名为新的文件名。
-        通过这个脚本，所有照片的扩展名都成功修改。为了使这个脚本更具有通用型，我们可以增加几条read命令实现脚本和用户之间的交互。改进版的脚本如下：
-#!/bin/bash
-read -p "old extension:" oldext
-read -p "new extension:" newext
-read -p "The directory:" dir
-cd $dir
-
-for file in $(ls $dir | grep .$oldext)
-        do
-        name=$(ls $file | cut -d. -f1)
-        mv $file ${name}.$newext
-        echo "$name.$oldext ====&gt; $name.$newext"
-        done
-
-echo "all files has been modified."
-        修改后的脚本可以批量修改任意扩展名。
-
+<h2 id="2变量赋值等号两边每空格">2、变量赋值等号两边每空格</h2>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>A="Hello world"
 </code></pre></div></div>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Shell批量重命名文件名
-#!/bin/sh
-#替换文件名中的空格
-find . -name "* *"|
-while read name;do
-    na=$(echo $name | tr ' ' '_')
-    mv "$name" $na
-done
-
-#将文件名替换成1、2、3、4、5、6等文件名，后缀名保持不变（例如test.log --&gt;1.log）
-for file in `find . -type f -name "*"`;do 
-dirname=`dirname $file`
-
- i=`expr $i + 1`;
-#获取文件后缀名
- P="${file##*.}"
-echo $file $dirname/$i.$P;
-
-mv $file $dirname/$i.$P;
-done
-
+<h2 id="3expr-运算符两边有空格">3、expr 运算符两边有空格</h2>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>expr 2 + 3
+</code></pre></div></div>
+<h2 id="4条件判断-条件判断---条件判断-两边有空格">4、条件判断[ 条件判断 ] [[ 条件判断 ]]两边有空格</h2>
+<h2 id="5条件判断中运算符两边有空格">5、条件判断中运算符两边有空格</h2>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[ ! $(id -u) -eq 0 ] &amp;&amp; echo "ABC"
+</code></pre></div></div>
+<h2 id="5表达式">5、表达式</h2>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#表达式空格可有可无，两个表达式相等
+$((1+3))
+$[1+3]
 </code></pre></div></div>
 
+<h2 id="6类c风格a1赋值ab判等">6、类C风格((A=1))赋值,((A==B))判等</h2>
+
+<p>##7、如果需要在文件中替换多个相同的字符串，需要添加global参数g，即:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sed -i ".bak" "s/1.*/aa\/bb/g" test.txt
+或者
+#https://blog.csdn.net/toopoo/article/details/104432196
+sed -i ".bak" "s|1.*|aa/bb|g" test.txt
+</code></pre></div></div>
+
+<p>##8、字符串操作</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>${#string} : $string 的长度
+${string:position} : 从$position位置开始的子字符串
+${string:position:length} : 从$position位置开始，长度为length的子字符串
+${string#substring} : 从头开始，删除最短匹配$substring的字符串
+${string##substring} : 从头开始，删除最长匹配$substring的字符串
+${string%substring} : 从结尾开始，删除最短匹配$substring的字符串
+${string%%substring} : 从结尾开始，删除最长匹配$substring的字符串
+${string/str1/str2} : 使用str2替换第一个匹配的$str1
+${string//str1/str2} : 使用str2替换所有匹配的$str1
+${string/#str1/str2} : 如果$string的前缀和$str1匹配,用$str2替换$str1
+${string/%str1/str2} : 如果$string的后缀和$str1匹配，用$str2替换$str1
+
+
+${file-my.file.txt} ：假如$file 沒有设定，則使用my.file.txt 作传回值。(空值及非空值時不作处理) 
+${file:-my.file.txt} ：假如$file 沒有設定或為空值，則使用my.file.txt 作傳回值。(非空值時不作处理)
+${file+my.file.txt} ：假如$file 設為空值或非空值，均使用my.file.txt 作傳回值。(沒設定時不作处理)
+${file:+my.file.txt} ：若$file 為非空值，則使用my.file.txt 作傳回值。(沒設定及空值時不作处理)
+${file=my.file.txt} ：若$file 沒設定，則使用my.file.txt 作傳回值，同時將$file 賦值為my.file.txt 。(空值及非空值時不作处理)
+${file:=my.file.txt} ：若$file 沒設定或為空值，則使用my.file.txt 作傳回值，同時將$file 賦值為my.file.txt 。(非空值時不作处理)
+${file?my.file.txt} ：若$file 沒設定，則將my.file.txt 輸出至STDERR。(空值及非空值時不作处理)
+${file:?my.file.txt} ：若$file 没设定或为空值，则将my.file.txt 输出至STDERR。(非空值時不作处理)
+
+${#var} 可计算出变量值的长度：
+</code></pre></div></div>
+<p>##9、从文本中读取字符串命令执行</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>awk '/^TN/{ cmd=$0; system(cmd) }' $SRCROOT/../README.md
+</code></pre></div></div>
+<p>##10、获取当前目录</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>project_path=$(cd "`dirname "$0"`"; pwd)
+#当前目录
+cur_dir=$(pwd)
+#上级目录
+highter_dir=$(dirname "$(pwd)")
+</code></pre></div></div>
+<p>获取路径最后一个名字</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>project_path=$(cd "`dirname "$0"`"; pwd)
+#当前目录
+cur_dir=$(pwd)
+#上级目录
+highter_dir=$(dirname "$(pwd)")
+</code></pre></div></div>
+<p>##11、懒加载代码</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
+iosBatchLazyCode<span class="o">(){</span>
+	
+	<span class="k">if </span><span class="nb">test</span> <span class="nv">$1</span> <span class="o">=</span> <span class="s2">"UIButton"</span> <span class="p">;</span> <span class="k">then
+   		</span><span class="nv">str</span><span class="o">=</span><span class="s2">"[</span><span class="nv">$1</span><span class="s2"> buttonWithType:UIButtonTypeCustom];"</span>
+   	<span class="k">else
+   		</span><span class="nv">str</span><span class="o">=</span><span class="s2">"[[</span><span class="nv">$1</span><span class="s2"> alloc]init];"</span>
+	<span class="k">fi
+  </span><span class="nb">echo</span> <span class="nt">-e</span> <span class="s2">"
+- (</span><span class="nv">$1</span><span class="s2"> *)</span><span class="nv">$2</span><span class="s2">{
+    if (_</span><span class="nv">$2</span><span class="s2"> == nil) {
+        _</span><span class="nv">$2</span><span class="s2"> = </span><span class="nv">$str</span><span class="s2">
+    }
+    return _</span><span class="nv">$2</span><span class="s2">;
+}"</span> 
+<span class="o">}</span>
+
+<span class="c">#追加一行空格</span>
+<span class="nb">echo</span> <span class="nt">-e</span> <span class="s1">'\n'</span> <span class="o">&gt;&gt;</span> propertys.txt
+
+<span class="c">#读取文件存数组</span>
+<span class="nv">i</span><span class="o">=</span>0
+<span class="k">while </span><span class="nb">read </span>line
+<span class="k">do
+	</span><span class="nv">lineStr</span><span class="o">=</span><span class="nv">$line</span>
+	<span class="nv">noneSpaceStr</span><span class="o">=</span><span class="k">${</span><span class="nv">lineStr</span><span class="p">// /</span><span class="k">}</span>
+    ARR[<span class="nv">$i</span><span class="o">]=</span><span class="nv">$noneSpaceStr</span>
+    <span class="nb">let </span>i+<span class="o">=</span>1
+<span class="k">done</span> &lt; propertys.txt
+
+<span class="c">#格式化输出到out.txt</span>
+<span class="k">for </span>str <span class="k">in</span> <span class="k">${</span><span class="nv">ARR</span><span class="p">[*]</span><span class="k">}</span>
+<span class="k">do
+	</span><span class="nv">a</span><span class="o">=</span><span class="k">${</span><span class="nv">str</span><span class="p">#*)</span><span class="k">}</span>
+	<span class="nv">b</span><span class="o">=</span><span class="k">${</span><span class="nv">a</span><span class="p">%</span><span class="s2">"*"</span><span class="p">*</span><span class="k">}</span>
+
+	<span class="nv">c</span><span class="o">=</span><span class="k">${</span><span class="nv">str</span><span class="p">#*</span><span class="s2">"*"</span><span class="k">}</span>
+	<span class="nv">d</span><span class="o">=</span><span class="k">${</span><span class="nv">c</span><span class="p">%*;</span><span class="k">}</span>
+	iosBatchLazyCode <span class="nv">$b</span> <span class="nv">$d</span> 
+<span class="k">done</span> <span class="o">&gt;&gt;</span> out.txt 
+
+</code></pre></div></div>
+<p>##12、创建文件</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>RESOURCES_TO_COPY=${PODS_ROOT}/resources-to-copy-${TARGETNAME}.txt
+&gt; "$RESOURCES_TO_COPY"
+</code></pre></div></div>
+<p>##13、字符串正则匹配</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>str1=我是中国人
+if [[ "$str1" == 我是* ]]; then
+     echo 有前缀
+else
+     echo 没有前缀
+fi
+</code></pre></div></div>
 
   </section>
 
@@ -389,13 +398,13 @@ done
        <ul class="pager">
         
         <li class="previous">
-            <a href="/2021/04/Shell_note/" data-toggle="tooltip" data-placement="top" title="Shell笔记">上一篇：  <span>Shell笔记</span>
+            <a href="/2020/07/blog_info/" data-toggle="tooltip" data-placement="top" title="博客模板功能介绍">上一篇：  <span>博客模板功能介绍</span>
             </a>
         </li>
         
         
         <li class="next">
-            <a href="/2021/04/Ruby_note/" data-toggle="tooltip" data-placement="top" title="Ruby笔记">下一篇：  <span>Ruby笔记</span>
+            <a href="/2021/04/Shell_rename/" data-toggle="tooltip" data-placement="top" title="Shell批量重命名">下一篇：  <span>Shell批量重命名</span>
             </a>
         </li>
         
