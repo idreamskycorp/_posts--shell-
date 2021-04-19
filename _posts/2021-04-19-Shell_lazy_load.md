@@ -1,53 +1,16 @@
 ---
 layout: post
-title: Shell 批量实现iOS的懒加载
+title: 运行jekyll报错
 date: 2021-04-19
-tags: shell   
+tags: jekyll   
 ---
 
+运行 `jekyll serve`报错`You have already activated public_suffix 4.0.6, but your Gemfile requires public_suffix 3.0.3. Prepending 'bundle exec'to your command may solve this. (Gem::LoadError)`
 
+
+执行命令
 ```
-#!/bin/bash
-iosBatchLazyCode(){
-    
-    if test $1 = "UIButton" ; then
-           str="[$1 buttonWithType:UIButtonTypeCustom];"
-       else
-           str="[[$1 alloc]init];"
-    fi
-  echo -e "
-- ($1 *)$2{
-    if (_$2 == nil) {
-        _$2 = $str
-    }
-    return _$2;
-}" 
-}
-
-#追加一行空格
-echo -e '\n' >> propertys.txt
-
-#读取文件存数组
-i=0
-while read line
-do
-    lineStr=$line
-    noneSpaceStr=${lineStr// /}
-    ARR[$i]=$noneSpaceStr
-    let i+=1
-done < propertys.txt
-
-#格式化输出到out.txt
-for str in ${ARR[*]}
-do
-    a=${str#*)}
-    b=${a%"*"*}
-
-    c=${str#*"*"}
-    d=${c%*;}
-    iosBatchLazyCode $b $d 
-done >> out.txt 
-
+bundle exec jekyll serve
 
 ```
 
