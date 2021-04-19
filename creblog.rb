@@ -1,16 +1,4 @@
 
-# puts "输入文件名"
-# filename = gets
-# puts "你输入的文件名为#{filename}"
-
-# $fileName = "xxxx"
-# def input_file_name
-#     # puts "输入文件名"
-#     puts $fileName
-# end
-
-# input_file_name
-
 class BlogCreateManager
     attr_accessor :fileName, :createDate, :title, :tag, :fullFileName
     def input_file_name
@@ -51,6 +39,7 @@ class BlogCreateManager
             month = rand(1..12)
             day = rand(1..28)
             date = Time.new(year, month, day)
+            puts date.to_s
             if date > Time.now
                 @createDate = Time.now.strftime("%Y-%m-%d")
             else
@@ -80,15 +69,19 @@ class BlogCreateManager
             puts "输入标题不合法"
             input_tag
         else
-            @tag = @tag.lstrip
+            @tag = @tag.chomp
         end
     end
 
     def start_input
         input_file_name
+        sleep 0.3
         input_create_date
+        sleep 0.3
         input_title
+        sleep 0.3
         input_tag
+        sleep 0.3
     end
 
     def create_blog_file
@@ -96,14 +89,12 @@ class BlogCreateManager
             puts Dir.pwd
             @fullFileName = @createDate + '-' + @fileName + ".md"
             File.open(@fullFileName,"w+") do |f|
-                content = %Q{
----
+                content = %Q{---
 layout: post
 title: #{@title}
 date: #{createDate}
-tags: #{tag}   
----
-                }
+tags: #{tag}
+---}
                 f.puts content
             end
           end
@@ -123,6 +114,7 @@ puts manager.createDate
 puts "你输入的tag为"
 puts manager.tag
 manager.create_blog_file
+sleep 0.5
 puts "---------创建完毕------------"
 system("open ./_posts/#{manager.fullFileName} -a XCode")
 #"2014-04-01" =~ /\d{4}-\d{2}-\d{2}/
