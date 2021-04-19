@@ -5,8 +5,8 @@
     <description>欢迎来到我的个人站~</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 19 Apr 2021 16:48:12 +0800</pubDate>
-    <lastBuildDate>Mon, 19 Apr 2021 16:48:12 +0800</lastBuildDate>
+    <pubDate>Mon, 19 Apr 2021 16:56:13 +0800</pubDate>
+    <lastBuildDate>Mon, 19 Apr 2021 16:56:13 +0800</lastBuildDate>
     <generator>Jekyll v3.8.5</generator>
     
       <item>
@@ -287,14 +287,14 @@ $[1+3]
 
 &lt;h2 id=&quot;6类c风格a1赋值ab判等&quot;&gt;6、类C风格((A=1))赋值,((A==B))判等&lt;/h2&gt;
 
-&lt;p&gt;##7、如果需要在文件中替换多个相同的字符串，需要添加global参数g，即:&lt;/p&gt;
+&lt;h2 id=&quot;7如果需要在文件中替换多个相同的字符串需要添加global参数g即&quot;&gt;7、如果需要在文件中替换多个相同的字符串，需要添加global参数g，即:&lt;/h2&gt;
 &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sed -i &quot;.bak&quot; &quot;s/1.*/aa\/bb/g&quot; test.txt
 或者
 #https://blog.csdn.net/toopoo/article/details/104432196
 sed -i &quot;.bak&quot; &quot;s|1.*|aa/bb|g&quot; test.txt
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;##8、字符串操作&lt;/p&gt;
+&lt;h2 id=&quot;8字符串操作&quot;&gt;8、字符串操作&lt;/h2&gt;
 &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;${#string} : $string 的长度
 ${string:position} : 从$position位置开始的子字符串
 ${string:position:length} : 从$position位置开始，长度为length的子字符串
@@ -319,10 +319,10 @@ ${file:?my.file.txt} ：若$file 没设定或为空值，则将my.file.txt 输�
 
 ${#var} 可计算出变量值的长度：
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;##9、从文本中读取字符串命令执行&lt;/p&gt;
+&lt;h2 id=&quot;9从文本中读取字符串命令执行&quot;&gt;9、从文本中读取字符串命令执行&lt;/h2&gt;
 &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;awk '/^TN/{ cmd=$0; system(cmd) }' $SRCROOT/../README.md
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;##10、获取当前目录&lt;/p&gt;
+&lt;h2 id=&quot;10获取当前目录&quot;&gt;10、获取当前目录&lt;/h2&gt;
 &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;project_path=$(cd &quot;`dirname &quot;$0&quot;`&quot;; pwd)
 #当前目录
 cur_dir=$(pwd)
@@ -336,7 +336,7 @@ cur_dir=$(pwd)
 #上级目录
 highter_dir=$(dirname &quot;$(pwd)&quot;)
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;##11、懒加载代码&lt;/p&gt;
+&lt;h2 id=&quot;11懒加载代码&quot;&gt;11、懒加载代码&lt;/h2&gt;
 &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;#!/bin/bash&lt;/span&gt;
 iosBatchLazyCode&lt;span class=&quot;o&quot;&gt;(){&lt;/span&gt;
 	
@@ -379,11 +379,11 @@ iosBatchLazyCode&lt;span class=&quot;o&quot;&gt;(){&lt;/span&gt;
 &lt;span class=&quot;k&quot;&gt;done&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&lt;/span&gt; out.txt 
 
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;##12、创建文件&lt;/p&gt;
+&lt;h2 id=&quot;12创建文件&quot;&gt;12、创建文件&lt;/h2&gt;
 &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;RESOURCES_TO_COPY=${PODS_ROOT}/resources-to-copy-${TARGETNAME}.txt
 &amp;gt; &quot;$RESOURCES_TO_COPY&quot;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;##13、字符串正则匹配&lt;/p&gt;
+&lt;h2 id=&quot;13字符串正则匹配&quot;&gt;13、字符串正则匹配&lt;/h2&gt;
 &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;str1=我是中国人
 if [[ &quot;$str1&quot; == 我是* ]]; then
      echo 有前缀

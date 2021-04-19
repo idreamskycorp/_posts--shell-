@@ -199,6 +199,13 @@
   <li><a href="#5条件判断中运算符两边有空格">5、条件判断中运算符两边有空格</a></li>
   <li><a href="#5表达式">5、表达式</a></li>
   <li><a href="#6类c风格a1赋值ab判等">6、类C风格((A=1))赋值,((A==B))判等</a></li>
+  <li><a href="#7如果需要在文件中替换多个相同的字符串需要添加global参数g即">7、如果需要在文件中替换多个相同的字符串，需要添加global参数g，即:</a></li>
+  <li><a href="#8字符串操作">8、字符串操作</a></li>
+  <li><a href="#9从文本中读取字符串命令执行">9、从文本中读取字符串命令执行</a></li>
+  <li><a href="#10获取当前目录">10、获取当前目录</a></li>
+  <li><a href="#11懒加载代码">11、懒加载代码</a></li>
+  <li><a href="#12创建文件">12、创建文件</a></li>
+  <li><a href="#13字符串正则匹配">13、字符串正则匹配</a></li>
 </ul>
 
   
@@ -225,14 +232,14 @@ $[1+3]
 
 <h2 id="6类c风格a1赋值ab判等">6、类C风格((A=1))赋值,((A==B))判等</h2>
 
-<p>##7、如果需要在文件中替换多个相同的字符串，需要添加global参数g，即:</p>
+<h2 id="7如果需要在文件中替换多个相同的字符串需要添加global参数g即">7、如果需要在文件中替换多个相同的字符串，需要添加global参数g，即:</h2>
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sed -i ".bak" "s/1.*/aa\/bb/g" test.txt
 或者
 #https://blog.csdn.net/toopoo/article/details/104432196
 sed -i ".bak" "s|1.*|aa/bb|g" test.txt
 </code></pre></div></div>
 
-<p>##8、字符串操作</p>
+<h2 id="8字符串操作">8、字符串操作</h2>
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>${#string} : $string 的长度
 ${string:position} : 从$position位置开始的子字符串
 ${string:position:length} : 从$position位置开始，长度为length的子字符串
@@ -257,10 +264,10 @@ ${file:?my.file.txt} ：若$file 没设定或为空值，则将my.file.txt 输�
 
 ${#var} 可计算出变量值的长度：
 </code></pre></div></div>
-<p>##9、从文本中读取字符串命令执行</p>
+<h2 id="9从文本中读取字符串命令执行">9、从文本中读取字符串命令执行</h2>
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>awk '/^TN/{ cmd=$0; system(cmd) }' $SRCROOT/../README.md
 </code></pre></div></div>
-<p>##10、获取当前目录</p>
+<h2 id="10获取当前目录">10、获取当前目录</h2>
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>project_path=$(cd "`dirname "$0"`"; pwd)
 #当前目录
 cur_dir=$(pwd)
@@ -274,7 +281,7 @@ cur_dir=$(pwd)
 #上级目录
 highter_dir=$(dirname "$(pwd)")
 </code></pre></div></div>
-<p>##11、懒加载代码</p>
+<h2 id="11懒加载代码">11、懒加载代码</h2>
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
 iosBatchLazyCode<span class="o">(){</span>
 	
@@ -317,11 +324,11 @@ iosBatchLazyCode<span class="o">(){</span>
 <span class="k">done</span> <span class="o">&gt;&gt;</span> out.txt 
 
 </code></pre></div></div>
-<p>##12、创建文件</p>
+<h2 id="12创建文件">12、创建文件</h2>
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>RESOURCES_TO_COPY=${PODS_ROOT}/resources-to-copy-${TARGETNAME}.txt
 &gt; "$RESOURCES_TO_COPY"
 </code></pre></div></div>
-<p>##13、字符串正则匹配</p>
+<h2 id="13字符串正则匹配">13、字符串正则匹配</h2>
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>str1=我是中国人
 if [[ "$str1" == 我是* ]]; then
      echo 有前缀

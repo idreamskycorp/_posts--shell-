@@ -31,7 +31,7 @@ $[1+3]
 
 ## 6、类C风格((A=1))赋值,((A==B))判等
 
-##7、如果需要在文件中替换多个相同的字符串，需要添加global参数g，即:
+## 7、如果需要在文件中替换多个相同的字符串，需要添加global参数g，即:
 ```
 sed -i ".bak" "s/1.*/aa\/bb/g" test.txt
 或者
@@ -39,7 +39,7 @@ sed -i ".bak" "s/1.*/aa\/bb/g" test.txt
 sed -i ".bak" "s|1.*|aa/bb|g" test.txt
 ```
 
-##8、字符串操作
+## 8、字符串操作
 ```
 ${#string} : $string 的长度
 ${string:position} : 从$position位置开始的子字符串
@@ -65,11 +65,11 @@ ${file:?my.file.txt} ：若$file 没设定或为空值，则将my.file.txt 输�
 
 ${#var} 可计算出变量值的长度：
 ```
-##9、从文本中读取字符串命令执行
+## 9、从文本中读取字符串命令执行
 ```
 awk '/^TN/{ cmd=$0; system(cmd) }' $SRCROOT/../README.md
 ```
-##10、获取当前目录
+## 10、获取当前目录
 ```
 project_path=$(cd "`dirname "$0"`"; pwd)
 #当前目录
@@ -85,7 +85,7 @@ cur_dir=$(pwd)
 #上级目录
 highter_dir=$(dirname "$(pwd)")
 ```
-##11、懒加载代码
+## 11、懒加载代码
 ```
 #!/bin/bash
 iosBatchLazyCode(){
@@ -129,12 +129,12 @@ do
 done >> out.txt 
 
 ```
-##12、创建文件
+## 12、创建文件
 ```
 RESOURCES_TO_COPY=${PODS_ROOT}/resources-to-copy-${TARGETNAME}.txt
 > "$RESOURCES_TO_COPY"
 ```
-##13、字符串正则匹配
+## 13、字符串正则匹配
 ```
 str1=我是中国人
 if [[ "$str1" == 我是* ]]; then
