@@ -5,8 +5,8 @@
     <description>欢迎来到我的个人站~</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 19 Apr 2021 17:20:28 +0800</pubDate>
-    <lastBuildDate>Mon, 19 Apr 2021 17:20:28 +0800</lastBuildDate>
+    <pubDate>Tue, 20 Apr 2021 10:38:45 +0800</pubDate>
+    <lastBuildDate>Tue, 20 Apr 2021 10:38:45 +0800</lastBuildDate>
     <generator>Jekyll v3.8.5</generator>
     
       <item>
@@ -84,6 +84,72 @@ iosBatchLazyCode&lt;span class=&quot;o&quot;&gt;(){&lt;/span&gt;
         <guid isPermaLink="true">http://localhost:4000/2021/04/run_jekyll_error/</guid>
         
         <category>shell</category>
+        
+        
+      </item>
+    
+      <item>
+        <title>ruby字符串格式化、进制转换、小数位数控制</title>
+        <description>&lt;h2 id=&quot;ruby-字符串格式化和进制转换&quot;&gt;ruby 字符串格式化和进制转换&lt;/h2&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&quot;%05d&quot; % 123 结果是 &quot;00123&quot;
+&quot;%02X&quot; % 10 结果是 &quot;0A&quot;
+&quot;%03x&quot; % 10 结果是 &quot;00a&quot;
+&quot;%010x&quot; % 10 结果是 &quot;000000000a&quot; (前缀9个0)
+&quot;%10x&quot; %10 结果是 &quot;         a&quot;  （前缀9个空格）
+'ff'.to_i(16)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h3 id=&quot;ruby实现ip转数字&quot;&gt;ruby实现ip转数字&lt;/h3&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;#数字转ip=》先将数字转换为16进制，然后拆分转十进制
+def conver_ip(data)
+    @str=&quot;%x&quot; % data
+    @str=@str.reverse
+    # p @str,@str.length
+    ip1=(@str[1]+@str[0]).to_i(16).to_s
+    ip2=(@str[3]+@str[2]).to_i(16).to_s
+    ip3=(@str[5]+@str[4]).to_i(16).to_s
+    if @str.length &amp;lt;= 7
+        ip4=@str[6].to_i(16).to_s
+    else 
+        ip4=(@str[7]+@str[6]).to_i(16).to_s
+    end
+    puts ip4+&quot;.&quot;+ip3+&quot;.&quot;+ip2+&quot;.&quot;+ip1
+end
+#ip转数字=》先将ip拆分转16进制，连接后转十进制
+def ip_conver(str_ip)
+    @ip_16=''
+    str_ip.split('.').each do |k|
+        k=&quot;%02x&quot; % k
+        @ip_16=@ip_16+k.to_s
+    end
+    puts @ip_16.to_i(16)
+end
+#测试通过
+conver_ip('16777471')
+ip_conver('1.0.0.255')
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;小数位数控制&quot;&gt;小数位数控制&lt;/h2&gt;
+
+&lt;p&gt;ruby的Kernal.sprintf()可以实现保留两位小数的方法，format是sprintf的alias。format(pattern, value)：其中pattern表示要格式化形式，在这里我们用“%.2f”,表示保留小数点后2位数字，当然我们还可以写成“%05.2f”,表示整个字符串最少5位数(不包括小数点)，如果value少于5位用”0”占位。&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&quot;%0.2f&quot;% 11.329    
+format(&quot;%0.2f&quot;, 11.329)    
+2. 11.329.round(1)  # -----&amp;gt;  11.3      
+11.329.round(2)   #-----&amp;gt;  11.33
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h2 id=&quot;转义字符&quot;&gt;转义字符&lt;/h2&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;strstr = str.gsub('&amp;lt;', '&amp;amp;lt;')  
+strstr = str.gsub('&amp;gt;', '&amp;amp;gt;')  
+strstr = str.gsub(/['&quot;]/, '&amp;amp;quot;')  
+strstr = str.lstrip                            #去掉前后空格  
+strstr = str.delete(&quot;\n\r&quot;)                #去掉换行符  
+strstr = str.delete(&quot; &quot;)                    #去掉tab
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+</description>
+        <pubDate>Mon, 19 Apr 2021 00:00:00 +0800</pubDate>
+        <link>http://localhost:4000/2021/04/ruby%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%A0%BC%E5%BC%8F%E5%8C%96-%E8%BF%9B%E5%88%B6%E8%BD%AC%E6%8D%A2-%E5%B0%8F%E6%95%B0%E4%BD%8D%E6%95%B0%E6%8E%A7%E5%88%B6/</link>
+        <guid isPermaLink="true">http://localhost:4000/2021/04/ruby%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%A0%BC%E5%BC%8F%E5%8C%96-%E8%BF%9B%E5%88%B6%E8%BD%AC%E6%8D%A2-%E5%B0%8F%E6%95%B0%E4%BD%8D%E6%95%B0%E6%8E%A7%E5%88%B6/</guid>
+        
+        <category>ruby</category>
         
         
       </item>
@@ -470,364 +536,933 @@ fi
       </item>
     
       <item>
-        <title>文档支持的Markdown语法</title>
-        <description>&lt;h2 id=&quot;什么是-markdown&quot;&gt;什么是 Markdown&lt;/h2&gt;
+        <title>09_SHELL编程之xarg使用</title>
+        <description>&lt;p&gt;&lt;em&gt;xargs 是给命令传递参数的一个过滤器，可以将管道或标准输入的数据转换成参数，默认的命令是 echo，这意味着通过管道传递给 xargs 的输入将会包含换行，不过通过 xargs 的处理，换行将被空格取代。&lt;/em&gt;&lt;/p&gt;
 
-&lt;p&gt;Markdown 是一种方便记忆、书写的纯文本标记语言，用户可以使用这些标记符号以最小的输入代价生成极富表现力的文档：如您正在阅读的这篇文章。它使用简单的符号标记不同的标题，分割不同的段落，&lt;strong&gt;粗体&lt;/strong&gt; 或者 &lt;em&gt;斜体&lt;/em&gt; 某些文字.&lt;/p&gt;
+&lt;h1 id=&quot;1-如何使用xargs命令&quot;&gt;1. 如何使用xargs命令&lt;/h1&gt;
+&lt;p&gt;语法：&lt;/p&gt;
 
-&lt;p&gt;很多产品的文档也是用markdown编写的，并且以“README.MD”的文件名保存在软件的目录下面。
-　　&lt;/p&gt;
-&lt;h2 id=&quot;一些基本语法&quot;&gt;一些基本语法&lt;/h2&gt;
-
-&lt;p&gt;标题          &lt;br /&gt;
-H1 :# Header 1          &lt;br /&gt;
-H2 :## Header 2         &lt;br /&gt;
-H3 :### Header 3         &lt;br /&gt;
-H4 :#### Header 4         &lt;br /&gt;
-H5 :##### Header 5          &lt;br /&gt;
-H6 :###### Header 6    &lt;br /&gt;
-链接 :&lt;a href=&quot;URL&quot;&gt;Title&lt;/a&gt;      &lt;br /&gt;
-加粗 :&lt;strong&gt;Bold&lt;/strong&gt;      &lt;br /&gt;
-斜体字 :&lt;em&gt;Italics&lt;/em&gt;       &lt;br /&gt;
-*删除线 :&lt;del&gt;text&lt;/del&gt;        &lt;br /&gt;
-内嵌代码 : &lt;code class=&quot;highlighter-rouge&quot;&gt;alert('Hello World');&lt;/code&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;列表&quot;&gt;列表&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;列表1&lt;/li&gt;
-  &lt;li&gt;列表2&lt;/li&gt;
-  &lt;li&gt;列表3&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;列表引用&quot;&gt;列表引用&lt;/h3&gt;
-
-&lt;blockquote&gt;
-  &lt;ul&gt;
-    &lt;li&gt;列表1&lt;/li&gt;
-    &lt;li&gt;列表2&lt;/li&gt;
-    &lt;li&gt;列表3&lt;/li&gt;
-  &lt;/ul&gt;
-&lt;/blockquote&gt;
-
-&lt;h3 id=&quot;插入一张图片&quot;&gt;插入一张图片&lt;/h3&gt;
-
-&lt;p&gt;打赏一个吧&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/payimg/weipayimg.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;css 的大部分语法同样可以在 markdown 上使用，但不同的渲染器渲染出来的 markdown 内容样式也不一样，下面这些链接里面有 markdown 基本语法，你也可以在下面几个平台上尝试着写一些。&lt;/p&gt;
-
-&lt;h2 id=&quot;博客支持的高级语法&quot;&gt;博客支持的高级语法&lt;/h2&gt;
-
-&lt;h3 id=&quot;1-制作一份待办事宜&quot;&gt;1. 制作一份待办事宜&lt;/h3&gt;
-
-&lt;ul class=&quot;task-list&quot;&gt;
-  &lt;li class=&quot;task-list-item&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;task-list-item-checkbox&quot; disabled=&quot;disabled&quot; /&gt;支持以 PDF 格式导出文稿&lt;/li&gt;
-  &lt;li class=&quot;task-list-item&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;task-list-item-checkbox&quot; disabled=&quot;disabled&quot; /&gt;改进 Cmd 渲染算法，使用局部渲染技术提高渲染效率&lt;/li&gt;
-  &lt;li class=&quot;task-list-item&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;task-list-item-checkbox&quot; disabled=&quot;disabled&quot; checked=&quot;checked&quot; /&gt;新增 Todo 列表功能&lt;/li&gt;
-  &lt;li class=&quot;task-list-item&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;task-list-item-checkbox&quot; disabled=&quot;disabled&quot; checked=&quot;checked&quot; /&gt;修复 图标功能&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;2-高亮一段代码&quot;&gt;2. 高亮一段代码&lt;/h3&gt;
-
-&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
-&lt;span class=&quot;o&quot;&gt;@&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;requires_authorization&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;SomeClass&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;pass&lt;/span&gt;
-
-&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;__name__&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'__main__'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;c1&quot;&gt;# A comment
-&lt;/span&gt;    &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'hello world'&lt;/span&gt;
-
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;xargs [OPTIONS] [COMMAND [initial-arguments]]
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;h4 id=&quot;3-绘制表格&quot;&gt;3. 绘制表格&lt;/h4&gt;
+&lt;p&gt;举一个例子：我们用管道符传输到xargs，并为每个参数运行touch命令，-t表示在执行之前先打印，创建三个文件：&lt;/p&gt;
 
-&lt;table&gt;
-  &lt;thead&gt;
-    &lt;tr&gt;
-      &lt;th&gt;项目&lt;/th&gt;
-      &lt;th style=&quot;text-align: right&quot;&gt;价格&lt;/th&gt;
-      &lt;th style=&quot;text-align: center&quot;&gt;数量&lt;/th&gt;
-    &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;计算机&lt;/td&gt;
-      &lt;td style=&quot;text-align: right&quot;&gt;$1600&lt;/td&gt;
-      &lt;td style=&quot;text-align: center&quot;&gt;5&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;手机&lt;/td&gt;
-      &lt;td style=&quot;text-align: right&quot;&gt;$12&lt;/td&gt;
-      &lt;td style=&quot;text-align: center&quot;&gt;12&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;管线&lt;/td&gt;
-      &lt;td style=&quot;text-align: right&quot;&gt;$1&lt;/td&gt;
-      &lt;td style=&quot;text-align: center&quot;&gt;234&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;[root@localhost ~]# echo &quot;file1 file2 file3&quot;|xargs -t touch
+touch file1 file2 file3
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
+&lt;h1 id=&quot;2-如何限制参数的数量&quot;&gt;2. &lt;em&gt;如何限制参数的数量&lt;/em&gt;&lt;/h1&gt;
+&lt;p&gt;默认情况下，传递给命令的参数数量由系统限制决定。-n选项指定要传递给命令的参数个数。xargs根据需要多次运行指定的命令，直到所有参数都用完为止。&lt;/p&gt;
+
+&lt;p&gt;下面例子指定每次传递一个参数：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;[root@localhost ~]# echo &quot;file1 file2 file3&quot;|xargs -n1 -t touch
+touch file1 
+touch file2 
+touch file3
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h1 id=&quot;3-如何运行多个命令&quot;&gt;3. 如何运行多个命令&lt;/h1&gt;
+&lt;p&gt;要使用xargs运行多个命令，请使用-i或者-I选项。在-i或者-I后面自定义一个传递参数符号，所有匹配的项都会替换为传递给xargs的参数。&lt;/p&gt;
+
+&lt;p&gt;下面例子时xargs运行两条命令，先touch创建文件，然后ls列出来：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;[root@localhost ~]# echo &quot;file1 file2 file3&quot;|xargs -t -I % sh -c 'touch %;ls -l %'
+sh -c touch file1 file2 file3;ls -l file1 file2 file3 
+-rw-r--r--. 1 root root 0 Jan 30 00:18 file1
+-rw-r--r--. 1 root root 0 Jan 30 00:18 file2
+-rw-r--r--. 1 root root 0 Jan 30 00:18 file3
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h1 id=&quot;4-如何指定一个分隔符&quot;&gt;4. 如何指定一个分隔符&lt;/h1&gt;
+&lt;p&gt;使用-d或者–delimiter选项设置自定义分隔符，可以是单个字符，也可以是以\ 开头的转义字符。&lt;/p&gt;
+
+&lt;p&gt;下面例子使用#做分隔符，echo命令使用了-n选项，意思是不输出新行：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;[root@localhost ~]# echo -n file1#file2#file3#file4|xargs -d \# -t touch
+touch file1 file2 file3 file4
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h1 id=&quot;5-如何从文件中读取条目&quot;&gt;5. 如何从文件中读取条目&lt;/h1&gt;
+&lt;p&gt;xargs命令还可以从文件读取条目，而不是从标准输入读取条目。使用-a选项，后跟文件名。
+创建一个ip.txt的文件，一会使用xargs命令ping里面的每一个地址：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;[root@localhost ~]# cat ip.txt 
+114.114.114.114
+www.linuxprobe.com
+202.102.128.68
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;使用-L 1选项，该选项表示xargs一次读取一行。如果省略此选项，xargs将把所有ip传递给一个ping命令。&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;[root@localhost ~]# xargs -a ip.txt -t -L 1 ping -c 1
+ping -c 1 114.114.114.114 
+PING 114.114.114.114 (114.114.114.114) 56(84) bytes of data.
+64 bytes from 114.114.114.114: icmp_seq=1 ttl=93 time=11.0 ms
+
+--- 114.114.114.114 ping statistics ---
+1 packets transmitted, 1 received, 0% packet loss, time 0ms
+rtt min/avg/max/mdev = 11.026/11.026/11.026/0.000 ms
+ping -c 1 www.linuxprobe.com 
+PING www.linuxprobe.com.w.kunlunno.com (221.15.65.202) 56(84) bytes of data.
+64 bytes from hn.kd.jz.adsl (221.15.65.202): icmp_seq=1 ttl=48 time=20.9 ms
+
+--- www.linuxprobe.com.w.kunlunno.com ping statistics ---
+1 packets transmitted, 1 received, 0% packet loss, time 0ms
+rtt min/avg/max/mdev = 20.934/20.934/20.934/0.000 ms
+ping -c 1 202.102.128.68 
+PING 202.102.128.68 (202.102.128.68) 56(84) bytes of data.
+64 bytes from 202.102.128.68: icmp_seq=1 ttl=83 time=8.71 ms
+
+--- 202.102.128.68 ping statistics ---
+1 packets transmitted, 1 received, 0% packet loss, time 0ms
+rtt min/avg/max/mdev = 8.710/8.710/8.710/0.000 ms
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h1 id=&quot;6-xargs与find一起使用&quot;&gt;6. xargs与find一起使用&lt;/h1&gt;
+&lt;p&gt;xargs通常与find命令结合使用。您可以使用find搜索特定文件，然后使用xargs对这些文件执行操作。&lt;/p&gt;
+
+&lt;p&gt;若要避免包含换行符或其他特殊字符的文件名出现问题，请始终使用find的-print0选项，这样可以使find打印完整的文件名，配合xargs命令使用-0或者–null选项可以正确的解释。&lt;/p&gt;
+
+&lt;p&gt;下面例子中，查找log文件夹下面的类型为file的所有文件，打包压缩起来：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;[root@localhost ~]# find log/ -type f -print0|xargs --null tar -zcvf logs.tar.gz
+log/anaconda/anaconda.log
+log/anaconda/syslog
+log/anaconda/program.log
+log/anaconda/packaging.log
+log/anaconda/storage.log
+log/anaconda/ifcfg.log
+log/anaconda/ks-script-TOLvJc.log
+log/anaconda/ks-script-VRY9yQ.log
+log/anaconda/ks-script-pjDijm.log
+log/anaconda/journal.log
+log/audit/audit.log
+log/boot.log
+log/boot.log-20200126
+log/btmp
+log/btmp-20200126
+…
+[root@localhost ~]# ll
+total 604
+-rw-------. 1 root root   1285 Dec 21 17:19 anaconda-ks.cfg
+drwxr-xr-x. 8 root root   4096 Jan 29 23:02 log
+-rw-r--r--. 1 root root 607566 Jan 30 00:58 logs.tar.gz
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h1 id=&quot;总结&quot;&gt;总结&lt;/h1&gt;
+&lt;p&gt;之所以能用到这个命令，关键是由于很多命令不支持管道符来传递参数，xargs可以解决这个问题，而且使用起来很方便，跟能强大。&lt;/p&gt;
 </description>
-        <pubDate>Sun, 20 Nov 2016 00:00:00 +0800</pubDate>
-        <link>http://localhost:4000/2016/11/markdownTool/</link>
-        <guid isPermaLink="true">http://localhost:4000/2016/11/markdownTool/</guid>
+        <pubDate>Thu, 03 May 2018 00:00:00 +0800</pubDate>
+        <link>http://localhost:4000/2018/05/09_SHELL/</link>
+        <guid isPermaLink="true">http://localhost:4000/2018/05/09_SHELL/</guid>
         
-        <category>markdown</category>
+        <category>Shell</category>
         
         
       </item>
     
       <item>
-        <title>Jekyll搭建个人博客</title>
-        <description>&lt;h3 id=&quot;介绍&quot;&gt;介绍&lt;/h3&gt;
+        <title>08_SHELL编程之文本处理工具awk</title>
+        <description>&lt;h1 id=&quot;课程目标&quot;&gt;课程目标&lt;/h1&gt;
 
-&lt;p&gt;　Jekyll 是一个简单的博客形态的静态站点生产机器。它有一个模版目录，其中包含原始文本格式的文档，通过 Markdown （或者 Textile） 以及 Liquid 转化成一个完整的可发布的静态网站，你可以发布在任何你喜爱的服务器上。Jekyll 也可以运行在 GitHub Page 上，也就是说，你可以使用 GitHub 的服务来搭建你的项目页面、博客或者网站，而且是完全免费的&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;熟悉awk的&lt;strong&gt;命令行模式&lt;/strong&gt;基本语法结构&lt;/li&gt;
+  &lt;li&gt;熟悉awk的相关内部变量&lt;/li&gt;
+  &lt;li&gt;熟悉awk常用的打印函数print&lt;/li&gt;
+  &lt;li&gt;能够在awk中匹配正则表达式打印相关的行&lt;/li&gt;
+&lt;/ul&gt;
 
-&lt;p&gt;　使用 Jekyll 搭建博客之前要确认下本机环境，Git 环境（用于部署到远端）、&lt;a href=&quot;http://www.ruby-lang.org/en/downloads/&quot;&gt;Ruby&lt;/a&gt; 环境（Jekyll 是基于 Ruby 开发的）、包管理器 &lt;a href=&quot;http://rubygems.org/pages/download&quot;&gt;RubyGems&lt;/a&gt;              &lt;br /&gt;
-　　如果你是 Mac 用户，你就需要安装 Xcode 和 Command-Line Tools了。下载方式 Preferences → Downloads → Components。&lt;/p&gt;
+&lt;h1 id=&quot;一awk介绍&quot;&gt;一、awk介绍&lt;/h1&gt;
 
-&lt;p&gt;　　Jekyll 是一个免费的简单静态网页生成工具，可以配合第三方服务例如： Disqus（评论）、多说(评论) 以及分享 等等扩展功能，Jekyll 可以直接部署在 Github（国外） 或 Coding（国内） 上，可以绑定自己的域名。&lt;a href=&quot;http://jekyll.bootcss.com/&quot;&gt;Jekyll中文文档&lt;/a&gt;、&lt;a href=&quot;https://jekyllrb.com/&quot;&gt;Jekyll英文文档&lt;/a&gt;、&lt;a href=&quot;http://jekyllthemes.org/&quot;&gt;Jekyll主题列表&lt;/a&gt;。&lt;/p&gt;
+&lt;h2 id=&quot;1-awk概述&quot;&gt;1. awk概述&lt;/h2&gt;
 
-&lt;h3 id=&quot;jekyll-环境配置&quot;&gt;Jekyll 环境配置&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;awk是一种编程语言，主要用于在linux/unix下对文本和数据进行处理，是linux/unix下的一个工具。数据可以来自标准输入、一个或多个文件，或其它命令的输出。&lt;/li&gt;
+  &lt;li&gt;awk的处理文本和数据的方式：&lt;strong&gt;逐行扫描文件&lt;/strong&gt;，默认从第一行到最后一行，寻找匹配的特定模式的行，并在这些行上进行你想要的操作。&lt;/li&gt;
+  &lt;li&gt;awk分别代表其作者姓氏的第一个字母。因为它的作者是三个人，分别是Alfred Aho、Brian Kernighan、Peter Weinberger。&lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;gawk是awk的GNU版本，它提供了Bell实验室和GNU的一些扩展。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;下面介绍的awk是以GNU的gawk为例的，在linux系统中已把awk链接到gawk，所以下面全部以awk进行介绍。&lt;/li&gt;
+&lt;/ul&gt;
 
-&lt;p&gt;安装 jekyll&lt;/p&gt;
+&lt;h2 id=&quot;2-awk能干啥&quot;&gt;2. awk能干啥?&lt;/h2&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ gem install jekyll     
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;ol&gt;
+  &lt;li&gt;awk用来处理文件和数据的，是类unix下的一个工具，也是一种编程语言&lt;/li&gt;
+  &lt;li&gt;可以用来统计数据，比如网站的访问量，访问的IP量等等&lt;/li&gt;
+  &lt;li&gt;支持条件判断，支持for和while循环&lt;/li&gt;
+&lt;/ol&gt;
 
-&lt;p&gt;创建博客&lt;/p&gt;
+&lt;h1 id=&quot;二awk使用方式&quot;&gt;二、awk使用方式&lt;/h1&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ jekyll new myBlog    
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h2 id=&quot;1-命令行模式使用&quot;&gt;1. 命令行模式使用&lt;/h2&gt;
 
-&lt;p&gt;进入博客目录&lt;/p&gt;
+&lt;h3 id=&quot;-语法结构&quot;&gt;㈠ 语法结构&lt;/h3&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ cd myBlog  
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;div class=&quot;language-powershell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;awk &lt;/span&gt;选项 &lt;span class=&quot;s1&quot;&gt;'命令部分'&lt;/span&gt; 文件名
 
-&lt;p&gt;启动本地服务&lt;/p&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ jekyll serve
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;在浏览器里输入： &lt;a href=&quot;http://localhost:4000&quot;&gt;http://localhost:4000&lt;/a&gt;，就可以看到你的博客效果了。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/posts/jekyll/image1.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;so easy !&lt;/p&gt;
-
-&lt;h3 id=&quot;目录结构&quot;&gt;目录结构&lt;/h3&gt;
-&lt;p&gt;　
-　Jekyll 的核心其实是一个文本转换引擎。它的概念其实就是： 你用你最喜欢的标记语言来写文章，可以是 Markdown，也可以是 Textile,或者就是简单的 HTML, 然后 Jekyll 就会帮你套入一个或一系列的布局中。在整个过程中你可以设置URL路径, 你的文本在布局中的显示样式等等。这些都可以通过纯文本编辑来实现，最终生成的静态页面就是你的成品了。&lt;/p&gt;
-
-&lt;p&gt;一个基本的 Jekyll 网站的目录结构一般是像这样的：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;.
-├── _config.yml
-├── _includes
-|   ├── footer.html
-|   └── header.html
-├── _layouts
-|   ├── default.html
-|   ├── post.html
-|   └── page.html
-├── _posts
-|   └── 2016-10-08-welcome-to-jekyll.markdown
-├── _sass
-|   ├── _base.scss
-|   ├── _layout.scss
-|   └── _syntax-highlighting.scss
-├── about.md
-├── css
-|   └── main.scss
-├── feed.xml
-└── index.html
+特别说明：
+引用shell变量需用双引号引起
 
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;这些目录结构以及具体的作用可以参考 &lt;a href=&quot;http://jekyll.com.cn/docs/structure/&quot;&gt;官网文档&lt;/a&gt;&lt;/p&gt;
+&lt;h3 id=&quot;-常用选项介绍&quot;&gt;㈡ 常用选项介绍&lt;/h3&gt;
 
-&lt;p&gt;进入 _config.yml 里面，修改成你想看到的信息，重新 jekyll server ，刷新浏览器就可以看到你刚刚修改的信息了。&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;-F  定义字段分割符号，默认的分隔符是空格&lt;/li&gt;
+  &lt;li&gt;-v  定义变量并赋值&lt;/li&gt;
+&lt;/ul&gt;
 
-&lt;p&gt;到此，博客初步搭建算是完成了，&lt;/p&gt;
+&lt;h3 id=&quot;--命名部分说明&quot;&gt;㈢  &lt;strong&gt;‘&lt;/strong&gt;命名部分说明&lt;strong&gt;‘&lt;/strong&gt;&lt;/h3&gt;
 
-&lt;h3 id=&quot;博客部署到远端&quot;&gt;博客部署到远端&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;正则表达式，地址定位&lt;/li&gt;
+&lt;/ul&gt;
 
-&lt;p&gt;　我这里讲的是部署到 Github Page 创建一个 github 账号，然后创建一个跟你账户名一样的仓库，如我的 github 账户名叫 &lt;a href=&quot;https://github.com/lijingbiao&quot;&gt;leopardpan&lt;/a&gt;，我的 github 仓库名就叫 &lt;a href=&quot;https://github.com/lijingbiao/lijingbiao.github.io&quot;&gt;leopardpan.github.io&lt;/a&gt;，创建好了之后，把刚才建立的 myBlog 项目 push 到 username.github.io仓库里去（username指的是你的github用户名），检查你远端仓库已经跟你本地 myBlog 同步了，然后你在浏览器里输入 username.github.io ，就可以访问你的博客了。&lt;/p&gt;
+&lt;div class=&quot;language-powershell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;s1&quot;&gt;'/root/{awk语句}'&lt;/span&gt;                sed中： &lt;span class=&quot;s1&quot;&gt;'/root/p'&lt;/span&gt;
+&lt;span class=&quot;s1&quot;&gt;'NR==1,NR==5{awk语句}'&lt;/span&gt;            sed中： &lt;span class=&quot;s1&quot;&gt;'1,5p'&lt;/span&gt;
+&lt;span class=&quot;s1&quot;&gt;'/^root/,/^ftp/{awk语句}'&lt;/span&gt;      sed中：&lt;span class=&quot;s1&quot;&gt;'/^root/,/^ftp/p'&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;h3 id=&quot;编写文章&quot;&gt;编写文章&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;{awk语句1&lt;strong&gt;;&lt;/strong&gt;awk语句2&lt;strong&gt;;&lt;/strong&gt;…}&lt;/li&gt;
+&lt;/ul&gt;
 
-&lt;p&gt;　　所有的文章都是 _posts 目录下面，文章格式为 mardown 格式，文章文件名可以是 .mardown 或者 .md。&lt;/p&gt;
+&lt;div class=&quot;language-powershell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;s1&quot;&gt;'{print $0;print $1}'&lt;/span&gt;        sed中：&lt;span class=&quot;s1&quot;&gt;'p'&lt;/span&gt;
+&lt;span class=&quot;s1&quot;&gt;'NR==5{print $0}'&lt;/span&gt;                sed中：&lt;span class=&quot;s1&quot;&gt;'5p'&lt;/span&gt;
+注：awk命令语句间用分号间隔
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;　　编写一篇新文章很简单，你可以直接从 _posts/ 目录下复制一份出来 &lt;code class=&quot;highlighter-rouge&quot;&gt;2016-10-16-welcome-to-jekyll副本.markdown&lt;/code&gt; ，修改名字为 2016-10-16-article1.markdown ，注意：文章名的格式前面必须为 2016-10-16- ，日期可以修改，但必须为 年-月-日- 格式，后面的 article1 是整个文章的连接 URL，如果文章名为中文，那么文章的连接URL就会变成这样的：http://leopardpan.cn/2015/08/%E6%90%AD%E5/ ， 所以建议文章名最好是英文的或者阿拉伯数字。 双击 2016-10-16-article1.markdown 打开&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;BEGIN…END….&lt;/li&gt;
+&lt;/ul&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
----
-layout: post
-title:  &quot;Welcome to Jekyll!&quot;
-date:   2016-10-16 11:29:08 +0800
-categories: jekyll update
----
+&lt;div class=&quot;language-powershell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;s1&quot;&gt;'BEGIN{awk语句};{处理中};END{awk语句}'&lt;/span&gt;
+&lt;span class=&quot;s1&quot;&gt;'BEGIN{awk语句};{处理中}'&lt;/span&gt;
+&lt;span class=&quot;s1&quot;&gt;'{处理中};END{awk语句}'&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-正文...
+&lt;h2 id=&quot;2-脚本模式使用&quot;&gt;2. 脚本模式使用&lt;/h2&gt;
+
+&lt;h3 id=&quot;-脚本编写&quot;&gt;㈠ 脚本编写&lt;/h3&gt;
+
+&lt;div class=&quot;language-powershell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;#!/bin/awk -f         定义魔法字符&lt;/span&gt;
+以下是awk引号里的命令清单，不要用引号保护命令，多个命令用分号间隔
+&lt;span class=&quot;k&quot;&gt;BEGIN&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;FS&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;:&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;NR&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;==&lt;/span&gt;1,NR&lt;span class=&quot;o&quot;&gt;==&lt;/span&gt;3&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;print &lt;span class=&quot;nv&quot;&gt;$1&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;\t&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$NF&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+...
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;-脚本执行&quot;&gt;㈡ 脚本执行&lt;/h3&gt;
+
+&lt;div class=&quot;language-powershell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;方法1：
+&lt;span class=&quot;nb&quot;&gt;awk &lt;/span&gt;选项 -f awk的脚本文件  要处理的文本文件
+&lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; -f awk.sh filename
+
+&lt;span class=&quot;nb&quot;&gt;sed&lt;/span&gt; -f sed.sh -i filename
+
+方法2：
+./awk的脚本文件&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;或者绝对路径&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;    要处理的文本文件
+./awk.sh filename
+
+./sed.sh filename
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h1 id=&quot;三-awk内部相关变量&quot;&gt;三、 awk内部相关变量&lt;/h1&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;变量&lt;/th&gt;
+      &lt;th&gt;变量说明&lt;/th&gt;
+      &lt;th&gt;备注&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;$0&lt;/td&gt;
+      &lt;td&gt;当前处理行的所有记录&lt;/td&gt;
+      &lt;td&gt; &lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;$1,$2,$3…$n&lt;/td&gt;
+      &lt;td&gt;文件中每行以间隔符号分割的不同字段&lt;/td&gt;
+      &lt;td&gt;awk -F: ‘{print $1,$3}’&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;NF&lt;/td&gt;
+      &lt;td&gt;当前记录的字段数（列数）&lt;/td&gt;
+      &lt;td&gt;awk -F: ‘{print NF}’&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;$NF&lt;/td&gt;
+      &lt;td&gt;最后一列&lt;/td&gt;
+      &lt;td&gt;$(NF-1)表示倒数第二列&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;FNR/NR&lt;/td&gt;
+      &lt;td&gt;行号&lt;/td&gt;
+      &lt;td&gt; &lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;FS&lt;/td&gt;
+      &lt;td&gt;定义间隔符&lt;/td&gt;
+      &lt;td&gt;‘BEGIN{FS=”:”};{print $1,$3}’&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;OFS&lt;/td&gt;
+      &lt;td&gt;定义输出字段分隔符，默认空格&lt;/td&gt;
+      &lt;td&gt;‘BEGIN{OFS=”\t”};print $1,$3}’&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;RS&lt;/td&gt;
+      &lt;td&gt;输入记录分割符，默认换行&lt;/td&gt;
+      &lt;td&gt;‘BEGIN{RS=”\t”};{print $0}’&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;ORS&lt;/td&gt;
+      &lt;td&gt;输出记录分割符，默认换行&lt;/td&gt;
+      &lt;td&gt;‘BEGIN{ORS=”\n\n”};{print $1,$3}’&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;FILENAME&lt;/td&gt;
+      &lt;td&gt;当前输入的文件名&lt;/td&gt;
+      &lt;td&gt; &lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;h2 id=&quot;1常用内置变量举例&quot;&gt;1、常用内置变量举例&lt;/h2&gt;
+
+&lt;div class=&quot;language-powershell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# awk -F: '{print $1,$(NF-1)}' 1.txt&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;# awk -F: '{print $1,$(NF-1),$NF,NF}' 1.txt&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;# awk '/root/{print $0}' 1.txt&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;# awk '/root/' 1.txt&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;# awk -F: '/root/{print $1,$NF}' 1.txt &lt;/span&gt;
+root /bin/bash
+&lt;span class=&quot;c1&quot;&gt;# awk -F: '/root/{print $0}' 1.txt      &lt;/span&gt;
+root:x:0:0:root:/root:/bin/bash
+&lt;span class=&quot;c1&quot;&gt;# awk 'NR==1,NR==5' 1.txt &lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;# awk 'NR==1,NR==5{print $0}' 1.txt&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;# awk 'NR==1,NR==5;/^root/{print $0}' 1.txt &lt;/span&gt;
+root:x:0:0:root:/root:/bin/bash
+root:x:0:0:root:/root:/bin/bash
+bin:x:1:1:bin:/bin:/sbin/nologin
+daemon:x:2:2:daemon:/sbin:/sbin/nologin
+adm:x:3:4:adm:/var/adm:/sbin/nologin
+&lt;span class=&quot;nb&quot;&gt;lp&lt;/span&gt;:x:4:7:lp:/var/spool/lpd:/sbin/nologin
 
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;title: 显示的文章名， 如：title: 我的第一篇文章                  &lt;br /&gt;
-date:  显示的文章发布日期，如：date: 2016-10-16                        &lt;br /&gt;
-categories: tag标签的分类，如：categories: 随笔&lt;/p&gt;
+&lt;h2 id=&quot;2内置变量分隔符举例&quot;&gt;2、内置变量分隔符举例&lt;/h2&gt;
 
-&lt;p&gt;注意：文章头部格式必须为上面的，…. 就是文章的正文内容。&lt;/p&gt;
+&lt;div class=&quot;language-powershell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;FS和OFS:
+&lt;span class=&quot;c1&quot;&gt;# awk 'BEGIN{FS=&quot;:&quot;};/^root/,/^lp/{print $1,$NF}' 1.txt&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;# awk -F: 'BEGIN{OFS=&quot;\t\t&quot;};/^root/,/^lp/{print $1,$NF}' 1.txt        &lt;/span&gt;
+root            /bin/bash
+bin             /sbin/nologin
+daemon          /sbin/nologin
+adm             /sbin/nologin
+&lt;span class=&quot;nb&quot;&gt;lp&lt;/span&gt;              /sbin/nologin
+&lt;span class=&quot;c1&quot;&gt;# awk -F: 'BEGIN{OFS=&quot;@@@&quot;};/^root/,/^lp/{print $1,$NF}' 1.txt     &lt;/span&gt;
+root@@@/bin/bash
+bin@@@/sbin/nologin
+daemon@@@/sbin/nologin
+adm@@@/sbin/nologin
+&lt;span class=&quot;nb&quot;&gt;lp&lt;/span&gt;@@@/sbin/nologin
+&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;root@server shell07]# 
 
-&lt;p&gt;我写文章使用的是 Sublime Text2 编辑器，如果你对 markdown 语法不熟悉的话，可以看看&lt;a href=&quot;https://www.zybuluo.com/&quot;&gt;作业部落的教程&lt;/a&gt;&lt;/p&gt;
+RS和ORS：
+修改源文件前2行增加制表符和内容：
+vim 1.txt
+root:x:0:0:root:/root:/bin/bash hello   world
+bin:x:1:1:bin:/bin:/sbin/nologin        test1   test2
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ jekyll server   
+&lt;span class=&quot;c1&quot;&gt;# awk 'BEGIN{RS=&quot;\t&quot;};{print $0}' 1.txt&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;# awk 'BEGIN{ORS=&quot;\t&quot;};{print $0}' 1.txt&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;h3 id=&quot;如果你本机没配置过任何jekyll的环境可能会报错&quot;&gt;如果你本机没配置过任何jekyll的环境，可能会报错&lt;/h3&gt;
+&lt;h1 id=&quot;四-awk工作原理&quot;&gt;四、 awk工作原理&lt;/h1&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/Users/xxxxxxxx/.rvm/rubies/ruby-2.2.2/lib/ruby/site_ruby/2.2.0/rubygems/core_ext/kernel_require.rb:54:in `require': cannot load such file -- bundler (LoadError)
-	from /Users/xxxxxxxx/.rvm/rubies/ruby-2.2.2/lib/ruby/site_ruby/2.2.0/rubygems/core_ext/kernel_require.rb:54:in `require'
-	from /Users/xxxxxxxx/.rvm/gems/ruby-2.2.2/gems/jekyll-3.3.0/lib/jekyll/plugin_manager.rb:34:in `require_from_bundler'
-	from /Users/xxxxxxxx/.rvm/gems/ruby-2.2.2/gems/jekyll-3.3.0/exe/jekyll:9:in `&amp;lt;top (required)&amp;gt;'
-	from /Users/xxxxxxxx/.rvm/gems/ruby-2.2.2/bin/jekyll:23:in `load'
-	from /Users/xxxxxxxx/.rvm/gems/ruby-2.2.2/bin/jekyll:23:in `&amp;lt;main&amp;gt;'
-	from /Users/xxxxxxxx/.rvm/gems/ruby-2.2.2/bin/ruby_executable_hooks:15:in `eval'
-	from /Users/xxxxxxxx/.rvm/gems/ruby-2.2.2/bin/ruby_executable_hooks:15:in `&amp;lt;main&amp;gt;'
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;awk -F: '{print $1,$3}' /etc/passwd&lt;/code&gt;&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;awk使用一行作为输入，并将这一行赋给内部变量$0，每一行也可称为一个记录，以换行符(RS)结束&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;每行被间隔符&lt;strong&gt;:&lt;/strong&gt;(默认为空格或制表符)分解成字段(或域)，每个字段存储在已编号的变量中，从$1开始&lt;/p&gt;
+
+    &lt;p&gt;问：awk如何知道用空格来分隔字段的呢？&lt;/p&gt;
+
+    &lt;p&gt;答：因为有一个内部变量FS来确定字段分隔符。初始时，FS赋为空格&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;awk使用print函数打印字段，打印出来的字段会以空格分隔，因为$1,$3之间有一个逗号。逗号比较特殊，它映射为另一个内部变量，称为输出字段分隔符OFS，OFS默认为空格&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;awk处理完一行后，将从文件中获取另一行，并将其存储在$0中，覆盖原来的内容，然后将新的字符串分隔成字段并进行处理。该过程将持续到所有行处理完毕&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h1 id=&quot;五awk使用进阶&quot;&gt;五、awk使用进阶&lt;/h1&gt;
+
+&lt;h2 id=&quot;1-格式化输出print和printf&quot;&gt;1. 格式化输出&lt;code class=&quot;highlighter-rouge&quot;&gt;print&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;printf&lt;/code&gt;&lt;/h2&gt;
+
+&lt;div class=&quot;language-powershell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;print函数        类似echo &lt;span class=&quot;s2&quot;&gt;&quot;hello world&quot;&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;# date |awk '{print &quot;Month: &quot;$2 &quot;\nYear: &quot;$NF}'&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;# awk -F: '{print &quot;username is: &quot; $1 &quot;\t uid is: &quot;$3}' /etc/passwd&lt;/span&gt;
+
+
+printf函数        类似echo -n
+&lt;span class=&quot;c1&quot;&gt;# awk -F: '{printf &quot;%-15s %-10s %-15s\n&quot;, $1,$2,$3}'  /etc/passwd&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;# awk -F: '{printf &quot;|%15s| %10s| %15s|\n&quot;, $1,$2,$3}' /etc/passwd&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;# awk -F: '{printf &quot;|%-15s| %-10s| %-15s|\n&quot;, $1,$2,$3}' /etc/passwd&lt;/span&gt;
+
+&lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'BEGIN{FS=&quot;:&quot;};{printf &quot;%-15s %-15s %-15s\n&quot;,$1,$6,$NF}'&lt;/span&gt; a.txt
+
+%s 字符类型  strings            %-20s
+%d 数值类型    
+占15字符
+- 表示左对齐，默认是右对齐
+printf默认不会在行尾自动换行，加\n
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;2-awk变量定义&quot;&gt;2. awk变量定义&lt;/h2&gt;
+
+&lt;div class=&quot;language-powershell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# awk -v NUM=3 -F: '{ print $NUM }' /etc/passwd&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;# awk -v NUM=3 -F: '{ print NUM }' /etc/passwd&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;# awk -v num=1 'BEGIN{print num}' &lt;/span&gt;
+1
+&lt;span class=&quot;c1&quot;&gt;# awk -v num=1 'BEGIN{print $num}' &lt;/span&gt;
+注意：
+awk中调用定义的变量不需要加&lt;span class=&quot;err&quot;&gt;$&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;3-awk中beginend使用&quot;&gt;3. awk中BEGIN…END使用&lt;/h2&gt;
+
+&lt;p&gt;​    ①BEGIN：表示在程序开始前执行&lt;/p&gt;
+
+&lt;p&gt;​    ②END ：表示所有文件处理完后执行&lt;/p&gt;
+
+&lt;p&gt;​    ③用法：&lt;code class=&quot;highlighter-rouge&quot;&gt;'BEGIN{开始处理之前};{处理中};END{处理结束后}'&lt;/code&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;-举例说明1&quot;&gt;㈠ 举例说明1&lt;/h3&gt;
+
+&lt;p&gt;&lt;strong&gt;打印最后一列和倒数第二列（登录shell和家目录）&lt;/strong&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-powershell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; -F: &lt;span class=&quot;s1&quot;&gt;'BEGIN{ print &quot;Login_shell\t\tLogin_home\n*******************&quot;};{print $NF&quot;\t\t&quot;$(NF-1)};END{print &quot;************************&quot;}'&lt;/span&gt; 1.txt
+
+&lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'BEGIN{ FS=&quot;:&quot;;print &quot;Login_shell\tLogin_home\n*******************&quot;};{print $NF&quot;\t&quot;$(NF-1)};END{print &quot;************************&quot;}'&lt;/span&gt; 1.txt
+
+Login_shell        Login_home
+&lt;span class=&quot;k&quot;&gt;************************&lt;/span&gt;
+/bin/bash        /root
+/sbin/nologin        /bin
+/sbin/nologin        /sbin
+/sbin/nologin        /var/adm
+/sbin/nologin        /var/spool/lpd
+/bin/bash        /home/redhat
+/bin/bash        /home/user01
+/sbin/nologin        /var/named
+/bin/bash        /home/u01
+/bin/bash        /home/YUNWEI
+&lt;span class=&quot;k&quot;&gt;************************************&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;-举例说明2&quot;&gt;㈡ 举例说明2&lt;/h3&gt;
+
+&lt;p&gt;&lt;strong&gt;打印/etc/passwd里的用户名、家目录及登录shell&lt;/strong&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-powershell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;u_name      h_dir       shell
+&lt;span class=&quot;k&quot;&gt;***************************&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;***************************&lt;/span&gt;
+
+&lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; -F: &lt;span class=&quot;s1&quot;&gt;'BEGIN{OFS=&quot;\t\t&quot;;print&quot;u_name\t\th_dir\t\tshell\n***************************&quot;};{printf &quot;%-20s %-20s %-20s\n&quot;,$1,$(NF-1),$NF};END{print &quot;****************************&quot;}'&lt;/span&gt;
+
+
+&lt;span class=&quot;c1&quot;&gt;# awk -F: 'BEGIN{print &quot;u_name\t\th_dir\t\tshell&quot; RS &quot;*****************&quot;}  {printf &quot;%-15s %-20s %-20s\n&quot;,$1,$(NF-1),$NF}END{print &quot;***************************&quot;}'  /etc/passwd&lt;/span&gt;
+
+格式化输出：
+&lt;span class=&quot;nb&quot;&gt;echo        &lt;/span&gt;print
+&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; -n    &lt;span class=&quot;nb&quot;&gt;printf&lt;/span&gt;
+
+&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;printf&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;%-15s %-20s %-20s\n&quot;&lt;/span&gt;,&lt;span class=&quot;nv&quot;&gt;$1&lt;/span&gt;,&lt;span class=&quot;k&quot;&gt;$(&lt;/span&gt;NF-1&lt;span class=&quot;k&quot;&gt;)&lt;/span&gt;,&lt;span class=&quot;nv&quot;&gt;$NF&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;4-awk和正则的综合运用&quot;&gt;4. awk和正则的综合运用&lt;/h2&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;运算符&lt;/th&gt;
+      &lt;th&gt;说明&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;==&lt;/td&gt;
+      &lt;td&gt;等于&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;!=&lt;/td&gt;
+      &lt;td&gt;不等于&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&amp;gt;&lt;/td&gt;
+      &lt;td&gt;大于&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&amp;lt;&lt;/td&gt;
+      &lt;td&gt;小于&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&amp;gt;=&lt;/td&gt;
+      &lt;td&gt;大于等于&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&amp;lt;=&lt;/td&gt;
+      &lt;td&gt;小于等于&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;~&lt;/td&gt;
+      &lt;td&gt;匹配&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;!~&lt;/td&gt;
+      &lt;td&gt;不匹配&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;!&lt;/td&gt;
+      &lt;td&gt;逻辑非&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&amp;amp;&amp;amp;&lt;/td&gt;
+      &lt;td&gt;逻辑与&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;||&lt;/td&gt;
+      &lt;td&gt;逻辑或&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;h3 id=&quot;-举例说明&quot;&gt;㈠ 举例说明&lt;/h3&gt;
+
+&lt;div class=&quot;language-powershell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;从第一行开始匹配到以lp开头行
+&lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; -F: &lt;span class=&quot;s1&quot;&gt;'NR==1,/^lp/{print $0 }'&lt;/span&gt; passwd  
+从第一行到第5行          
+&lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; -F: &lt;span class=&quot;s1&quot;&gt;'NR==1,NR==5{print $0 }'&lt;/span&gt; passwd
+从以lp开头的行匹配到第10行       
+&lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; -F: &lt;span class=&quot;s1&quot;&gt;'/^lp/,NR==10{print $0 }'&lt;/span&gt; passwd 
+从以root开头的行匹配到以lp开头的行       
+&lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; -F: &lt;span class=&quot;s1&quot;&gt;'/^root/,/^lp/{print $0}'&lt;/span&gt; passwd
+打印以root开头或者以lp开头的行            
+&lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; -F: &lt;span class=&quot;s1&quot;&gt;'/^root/ || /^lp/{print $0}'&lt;/span&gt; passwd
+&lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; -F: &lt;span class=&quot;s1&quot;&gt;'/^root/;/^lp/{print $0}'&lt;/span&gt; passwd
+显示5-10行   
+&lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; -F&lt;span class=&quot;s1&quot;&gt;':'&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'NR&amp;gt;=5 &amp;amp;&amp;amp; NR&amp;lt;=10 {print $0}'&lt;/span&gt; /etc/passwd     
+&lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; -F: &lt;span class=&quot;s1&quot;&gt;'NR&amp;lt;10 &amp;amp;&amp;amp; NR&amp;gt;5 {print $0}'&lt;/span&gt; passwd 
+
+打印30-39行以bash结尾的内容：
+&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;root@MissHou shell06]# &lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'NR&amp;gt;=30 &amp;amp;&amp;amp; NR&amp;lt;=39 &amp;amp;&amp;amp; $0 ~ /bash$/{print $0}'&lt;/span&gt; passwd 
+stu1:x:500:500::/home/stu1:/bin/bash
+yunwei:x:501:501::/home/yunwei:/bin/bash
+user01:x:502:502::/home/user01:/bin/bash
+user02:x:503:503::/home/user02:/bin/bash
+user03:x:504:504::/home/user03:/bin/bash
+
+&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;root@MissHou shell06]# &lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'NR&amp;gt;=3 &amp;amp;&amp;amp; NR&amp;lt;=8 &amp;amp;&amp;amp; /bash$/'&lt;/span&gt; 1.txt  
+stu7:x:1007:1007::/rhome/stu7:/bin/bash
+stu8:x:1008:1008::/rhome/stu8:/bin/bash
+stu9:x:1009:1009::/rhome/stu9:/bin/bash
+
+打印文件中1-5并且以root开头的行
+&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;root@MissHou shell06]# &lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'NR&amp;gt;=1 &amp;amp;&amp;amp; NR&amp;lt;=5 &amp;amp;&amp;amp; $0 ~ /^root/{print $0}'&lt;/span&gt; 1.txt
+root:x:0:0:root:/root:/bin/bash
+&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;root@MissHou shell06]# &lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'NR&amp;gt;=1 &amp;amp;&amp;amp; NR&amp;lt;=5 &amp;amp;&amp;amp; $0 !~ /^root/{print $0}'&lt;/span&gt; 1.txt
+bin:x:1:1:bin:/bin:/sbin/nologin
+daemon:x:2:2:daemon:/sbin:/sbin/nologin
+adm:x:3:4:adm:/var/adm:/sbin/nologin
+&lt;span class=&quot;nb&quot;&gt;lp&lt;/span&gt;:x:4:7:lp:/var/spool/lpd:/sbin/nologin
+
+
+理解;号和||的含义：
+&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;root@MissHou shell06]# &lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'NR&amp;gt;=3 &amp;amp;&amp;amp; NR&amp;lt;=8 || /bash$/'&lt;/span&gt; 1.txt
+&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;root@MissHou shell06]# &lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'NR&amp;gt;=3 &amp;amp;&amp;amp; NR&amp;lt;=8;/bash$/'&lt;/span&gt; 1.txt
+
+
+打印IP地址
+&lt;span class=&quot;c1&quot;&gt;# ifconfig eth0|awk 'NR&amp;gt;1 {print $2}'|awk -F':' 'NR&amp;lt;2 {print $2}'    &lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;# ifconfig eth0|grep Bcast|awk -F':' '{print $2}'|awk '{print $1}'&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;# ifconfig eth0|grep Bcast|awk '{print $2}'|awk -F: '{print $2}'&lt;/span&gt;
+
+
+&lt;span class=&quot;c1&quot;&gt;# ifconfig eth0|awk NR==2|awk -F '[ :]+' '{print $4RS$6RS$8}'&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;# ifconfig eth0|awk -F&quot;[ :]+&quot; '/inet addr:/{print $4}'&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;4-课堂练习&quot;&gt;4. 课堂练习&lt;/h2&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;显示可以登录操作系统的用户所有信息     从第7列匹配以bash结尾，输出整行（当前行所有的列）&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;div class=&quot;language-powershell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;root@MissHou ~] &lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'/bash$/{print $0}'&lt;/span&gt;    /etc/passwd
+&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;root@MissHou ~] &lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'/bash$/{print $0}'&lt;/span&gt; /etc/passwd
+&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;root@MissHou ~] &lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'/bash$/'&lt;/span&gt; /etc/passwd
+&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;root@MissHou ~] &lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; -F: &lt;span class=&quot;s1&quot;&gt;'$7 ~ /bash/'&lt;/span&gt; /etc/passwd
+&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;root@MissHou ~] &lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; -F: &lt;span class=&quot;s1&quot;&gt;'$NF ~ /bash/'&lt;/span&gt; /etc/passwd
+&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;root@MissHou ~] &lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; -F: &lt;span class=&quot;s1&quot;&gt;'$0 ~ /bash/'&lt;/span&gt; /etc/passwd
+&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;root@MissHou ~] &lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; -F: &lt;span class=&quot;s1&quot;&gt;'$0 ~ /\/bin\/bash/'&lt;/span&gt; /etc/passwd
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;显示可以登录系统的用户名&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;div class=&quot;language-powershell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# awk -F: '$0 ~ /\/bin\/bash/{print $1}' /etc/passwd&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;打印出系统中普通用户的UID和用户名&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;div class=&quot;language-powershell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;500    stu1
+501    yunwei
+502    user01
+503    user02
+504    user03
+
+
+&lt;span class=&quot;c1&quot;&gt;# awk -F: 'BEGIN{print &quot;UID\tUSERNAME&quot;} {if($3&amp;gt;=500 &amp;amp;&amp;amp; $3 !=65534 ) {print $3&quot;\t&quot;$1} }' /etc/passwdUID    USERNAME&lt;/span&gt;
+
+
+&lt;span class=&quot;c1&quot;&gt;# awk -F: '{if($3 &amp;gt;= 500 &amp;amp;&amp;amp; $3 != 65534) print $1,$3}' a.txt &lt;/span&gt;
+redhat 508
+user01 509
+u01 510
+YUNWEI 511
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;5-awk的脚本编程&quot;&gt;5. awk的脚本编程&lt;/h2&gt;
+
+&lt;h3 id=&quot;-流程控制语句&quot;&gt;㈠ 流程控制语句&lt;/h3&gt;
+
+&lt;h4 id=&quot;-if结构&quot;&gt;① if结构&lt;/h4&gt;
+
+&lt;div class=&quot;language-powershell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;if语句：
+
+&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; xxx &lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;;&lt;span class=&quot;k&quot;&gt;then
+&lt;/span&gt;xxx
+&lt;span class=&quot;k&quot;&gt;fi
+
+&lt;/span&gt;格式：
+&lt;span class=&quot;nb&quot;&gt;awk &lt;/span&gt;选项 &lt;span class=&quot;s1&quot;&gt;'正则，地址定位{awk语句}'&lt;/span&gt;  文件名
+
+&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;表达式&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;｛语句1;语句2;...｝&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; -F: &lt;span class=&quot;s1&quot;&gt;'{if($3&amp;gt;=500 &amp;amp;&amp;amp; $3&amp;lt;=60000) {print $1,$3} }'&lt;/span&gt; passwd
+
+&lt;span class=&quot;c1&quot;&gt;# awk -F: '{if($3==0) {print $1&quot;是管理员&quot;} }' passwd &lt;/span&gt;
+root是管理员
+
+&lt;span class=&quot;c1&quot;&gt;# awk 'BEGIN{if('$(id -u)'==0) {print &quot;admin&quot;} }'&lt;/span&gt;
+admin
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;-ifelse结构&quot;&gt;② if…else结构&lt;/h4&gt;
+
+&lt;div class=&quot;language-powershell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;...else语句:
+&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; xxx &lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;;&lt;span class=&quot;k&quot;&gt;then
+    &lt;/span&gt;xxxxx
+    
+&lt;span class=&quot;k&quot;&gt;else
+    &lt;/span&gt;xxx
+&lt;span class=&quot;k&quot;&gt;fi
+
+&lt;/span&gt;格式：
+&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;表达式&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;｛语句;语句;...｝else｛语句;语句;...&lt;span class=&quot;o&quot;&gt;}}&lt;/span&gt;
+
+&lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; -F: &lt;span class=&quot;s1&quot;&gt;'{ if($3&amp;gt;=500 &amp;amp;&amp;amp; $3 != 65534) {print $1&quot;是普通用户&quot;} else {print $1,&quot;不是普通用户&quot;}}'&lt;/span&gt; passwd 
+
+&lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'BEGIN{if( '&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;$(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;id&lt;/span&gt; -u&lt;span class=&quot;k&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'&amp;gt;=500 &amp;amp;&amp;amp; '&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;$(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;id&lt;/span&gt; -u&lt;span class=&quot;k&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;' !=65534 ) {print &quot;是普通用户&quot;} else {print &quot;不是普通用户&quot;}}'&lt;/span&gt;
 
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;原因： 没有安装 bundler ，执行安装 bundler 命令&lt;/p&gt;
+&lt;h4 id=&quot;-ifelifelse结构&quot;&gt;③ if…elif…else结构&lt;/h4&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
-$ gem install bundler
+&lt;div class=&quot;language-powershell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;xxxx];then
+    xxxx
+&lt;span class=&quot;k&quot;&gt;elif&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;xxx];then
+    xxx
+....
+&lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;
+...
+&lt;span class=&quot;k&quot;&gt;fi
+
+
+if&lt;/span&gt;...else &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;...else语句：
+
+格式：
+&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;表达式1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;｛语句;语句；...｝else &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;表达式2&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;｛语句;语句；...｝else &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;表达式3&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;｛语句;语句；...｝else｛语句;语句；...｝&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; -F: &lt;span class=&quot;s1&quot;&gt;'{ if($3==0) {print $1,&quot;:是管理员&quot;} else if($3&amp;gt;=1 &amp;amp;&amp;amp; $3&amp;lt;=499 || $3==65534 ) {print $1,&quot;:是系统用户&quot;} else {print $1,&quot;:是普通用户&quot;}}'&lt;/span&gt;
+
+
+&lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; -F: &lt;span class=&quot;s1&quot;&gt;'{ if($3==0) {i++} else if($3&amp;gt;=1 &amp;amp;&amp;amp; $3&amp;lt;=499 || $3==65534 ) {j++} else {k++}};END{print &quot;管理员个数为:&quot;i &quot;\n系统用户个数为:&quot;j&quot;\n普通用户的个数为:&quot;k }'&lt;/span&gt;
+
+
+&lt;span class=&quot;c1&quot;&gt;# awk -F: '{if($3==0) {print $1,&quot;is admin&quot;} else if($3&amp;gt;=1 &amp;amp;&amp;amp; $3&amp;lt;=499 || $3==65534) {print $1,&quot;is sys users&quot;} else {print $1,&quot;is general user&quot;} }' a.txt &lt;/span&gt;
+
+root is admin
+bin is sys &lt;span class=&quot;nb&quot;&gt;users
+&lt;/span&gt;daemon is sys &lt;span class=&quot;nb&quot;&gt;users
+&lt;/span&gt;adm is sys &lt;span class=&quot;nb&quot;&gt;users
+lp &lt;/span&gt;is sys &lt;span class=&quot;nb&quot;&gt;users
+&lt;/span&gt;redhat is general user
+user01 is general user
+named is sys &lt;span class=&quot;nb&quot;&gt;users
+&lt;/span&gt;u01 is general user
+YUNWEI is general user
+
+&lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; -F: &lt;span class=&quot;s1&quot;&gt;'{  if($3==0) {print $1&quot;:管理员&quot;} else if($3&amp;gt;=1 &amp;amp;&amp;amp; $3&amp;lt;500 || $3==65534 ) {print $1&quot;:是系统用户&quot;} else {print $1&quot;:是普通用户&quot;}}'&lt;/span&gt;   /etc/passwd
+
+
+&lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; -F: &lt;span class=&quot;s1&quot;&gt;'{if($3==0) {i++} else if($3&amp;gt;=1 &amp;amp;&amp;amp; $3&amp;lt;500 || $3==65534){j++} else {k++}};END{print &quot;管理员个数为:&quot; i RS &quot;系统用户个数为:&quot;j RS &quot;普通用户的个数为:&quot;k }'&lt;/span&gt; /etc/passwd
+管理员个数为:1
+系统用户个数为:28
+普通用户的个数为:27
+
+
+&lt;span class=&quot;c1&quot;&gt;# awk -F: '{ if($3==0) {print $1&quot;:是管理员&quot;} else if($3&amp;gt;=500 &amp;amp;&amp;amp; $3!=65534) {print $1&quot;:是普通用户&quot;} else {print $1&quot;:是系统用户&quot;}}' passwd &lt;/span&gt;
+
+&lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; -F: &lt;span class=&quot;s1&quot;&gt;'{if($3==0){i++} else if($3&amp;gt;=500){k++} else{j++}} END{print i; print k; print j}'&lt;/span&gt; /etc/passwd
+
+&lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; -F: &lt;span class=&quot;s1&quot;&gt;'{if($3==0){i++} else if($3&amp;gt;999){k++} else{j++}} END{print &quot;管理员个数: &quot;i; print &quot;普通用个数: &quot;k; print &quot;系统用户: &quot;j}'&lt;/span&gt; /etc/passwd 
+
+如果是普通用户打印默认shell，如果是系统用户打印用户名
+&lt;span class=&quot;c1&quot;&gt;# awk -F: '{if($3&amp;gt;=1 &amp;amp;&amp;amp; $3&amp;lt;500 || $3 == 65534) {print $1} else if($3&amp;gt;=500 &amp;amp;&amp;amp; $3&amp;lt;=60000 ) {print $NF} }' /etc/passwd&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;-循环语句&quot;&gt;㈡ 循环语句&lt;/h3&gt;
+
+&lt;h4 id=&quot;-for循环&quot;&gt;① for循环&lt;/h4&gt;
+
+&lt;div class=&quot;language-powershell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;打印1~5
+&lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;((&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;1;i&amp;lt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;5;i++&lt;span class=&quot;o&quot;&gt;))&lt;/span&gt;;&lt;span class=&quot;k&quot;&gt;do &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$i&lt;/span&gt;;&lt;span class=&quot;k&quot;&gt;done&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;# awk 'BEGIN { for(i=1;i&amp;lt;=5;i++) {print i} }'&lt;/span&gt;
+打印1~10中的奇数
+&lt;span class=&quot;c1&quot;&gt;# for ((i=1;i&amp;lt;=10;i+=2));do echo $i;done|awk '{sum+=$0};END{print sum}'&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;# awk 'BEGIN{ for(i=1;i&amp;lt;=10;i+=2) {print i} }'&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;# awk 'BEGIN{ for(i=1;i&amp;lt;=10;i+=2) print i }'&lt;/span&gt;
+
+计算1-5的和
+&lt;span class=&quot;c1&quot;&gt;# awk 'BEGIN{sum=0;for(i=1;i&amp;lt;=5;i++) sum+=i;print sum}'&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;# awk 'BEGIN{for(i=1;i&amp;lt;=5;i++) (sum+=i);{print sum}}'&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;# awk 'BEGIN{for(i=1;i&amp;lt;=5;i++) (sum+=i);print sum}'&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;-while循环&quot;&gt;② while循环&lt;/h4&gt;
+
+&lt;div class=&quot;language-powershell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;打印1-5
+&lt;span class=&quot;c1&quot;&gt;# i=1;while (($i&amp;lt;=5));do echo $i;let i++;done&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;# awk 'BEGIN { i=1;while(i&amp;lt;=5) {print i;i++} }'&lt;/span&gt;
+打印1~10中的奇数
+&lt;span class=&quot;c1&quot;&gt;# awk 'BEGIN{i=1;while(i&amp;lt;=10) {print i;i+=2} }'&lt;/span&gt;
+计算1-5的和
+&lt;span class=&quot;c1&quot;&gt;# awk 'BEGIN{i=1;sum=0;while(i&amp;lt;=5) {sum+=i;i++}; print sum }'&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;# awk 'BEGIN {i=1;while(i&amp;lt;=5) {(sum+=i) i++};print sum }'&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;-嵌套循环&quot;&gt;③ 嵌套循环&lt;/h4&gt;
+
+&lt;div class=&quot;language-powershell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;嵌套循环：
+&lt;span class=&quot;c1&quot;&gt;#!/bin/bash&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;((&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;1;y&amp;lt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;5;y++&lt;span class=&quot;o&quot;&gt;))&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;do
+    for&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;((&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;1;x&amp;lt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$y&lt;/span&gt;;x++&lt;span class=&quot;o&quot;&gt;))&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;do
+        &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; -n &lt;span class=&quot;nv&quot;&gt;$x&lt;/span&gt;    
+    &lt;span class=&quot;k&quot;&gt;done
+&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo
+&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;done
+
+&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'BEGIN{ for(y=1;y&amp;lt;=5;y++) {for(x=1;x&amp;lt;=y;x++) {printf x} ;print } }'&lt;/span&gt;
+
+
+&lt;span class=&quot;c1&quot;&gt;# awk 'BEGIN { for(y=1;y&amp;lt;=5;y++) { for(x=1;x&amp;lt;=y;x++) {printf x};print} }'&lt;/span&gt;
+1
+12
+123
+1234
+12345
+
+&lt;span class=&quot;c1&quot;&gt;# awk 'BEGIN{ y=1;while(y&amp;lt;=5) { for(x=1;x&amp;lt;=y;x++) {printf x};y++;print}}'&lt;/span&gt;
+1
+12
+123
+1234
+12345
+
+尝试用三种方法打印99口诀表：
+&lt;span class=&quot;c1&quot;&gt;#awk 'BEGIN{for(y=1;y&amp;lt;=9;y++) { for(x=1;x&amp;lt;=y;x++) {printf x&quot;*&quot;y&quot;=&quot;x*y&quot;\t&quot;};print} }'&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;#awk 'BEGIN{for(y=1;y&amp;lt;=9;y++) { for(x=1;x&amp;lt;=y;x++) printf x&quot;*&quot;y&quot;=&quot;x*y&quot;\t&quot;;print} }'&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;#awk 'BEGIN{i=1;while(i&amp;lt;=9){for(j=1;j&amp;lt;=i;j++) {printf j&quot;*&quot;i&quot;=&quot;j*i&quot;\t&quot;};print;i++ }}'&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;#awk 'BEGIN{for(i=1;i&amp;lt;=9;i++){j=1;while(j&amp;lt;=i) {printf j&quot;*&quot;i&quot;=&quot;i*j&quot;\t&quot;;j++};print}}'&lt;/span&gt;
+
+循环的控制：
+&lt;span class=&quot;k&quot;&gt;break        &lt;/span&gt;条件满足的时候中断循环
+&lt;span class=&quot;k&quot;&gt;continue    &lt;/span&gt;条件满足的时候跳过循环
+&lt;span class=&quot;c1&quot;&gt;# awk 'BEGIN{for(i=1;i&amp;lt;=5;i++) {if(i==3) break;print i} }'&lt;/span&gt;
+1
+2
+&lt;span class=&quot;c1&quot;&gt;# awk 'BEGIN{for(i=1;i&amp;lt;=5;i++){if(i==3) continue;print i}}'&lt;/span&gt;
+1
+2
+4
+5
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;6-awk算数运算&quot;&gt;6. awk算数运算&lt;/h2&gt;
+
+&lt;div class=&quot;language-powershell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;+ - &lt;span class=&quot;k&quot;&gt;*&lt;/span&gt; / %&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;模&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; ^&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;幂2^3&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+可以在模式中执行计算，awk都将按浮点数方式执行算术运算
+&lt;span class=&quot;c1&quot;&gt;# awk 'BEGIN{print 1+1}'&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;# awk 'BEGIN{print 1**1}'&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;# awk 'BEGIN{print 2**3}'&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;# awk 'BEGIN{print 2/3}'&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h1 id=&quot;六awk统计案例&quot;&gt;六、awk统计案例&lt;/h1&gt;
+
+&lt;h2 id=&quot;1统计系统中各种类型的shell&quot;&gt;1、统计系统中各种类型的shell&lt;/h2&gt;
+
+&lt;div class=&quot;language-powershell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# awk -F: '{ shells[$NF]++ };END{for (i in shells) {print i,shells[i]} }' /etc/passwd&lt;/span&gt;
+
+books[linux]++
+books[linux]&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;1
+shells[/bin/bash]++
+shells[/sbin/nologin]++
+
+/bin/bash 5
+/sbin/nologin 6
+
+shells[/bin/bash]++            a
+shells[/sbin/nologin]++        b
+shells[/sbin/shutdown]++    c
+
+books[linux]++
+books[php]++
 
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;提示：&lt;/p&gt;
+&lt;h2 id=&quot;2统计网站访问状态&quot;&gt;2、统计网站访问状态&lt;/h2&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Fetching: bundler-1.13.5.gem (100%)
-Successfully installed bundler-1.13.5
-Parsing documentation for bundler-1.13.5
-Installing ri documentation for bundler-1.13.5
-Done installing documentation for bundler after 5 seconds
-1 gem installed
+&lt;div class=&quot;language-powershell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# ss -antp|grep 80|awk '{states[$1]++};END{for(i in states){print i,states[i]}}'&lt;/span&gt;
+TIME_WAIT 578
+ESTABLISHED 1
+LISTEN 1
 
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;span class=&quot;c1&quot;&gt;# ss -an |grep :80 |awk '{states[$2]++};END{for(i in states){print i,states[i]}}'&lt;/span&gt;
+LISTEN 1
+ESTAB 5
+TIME-WAIT 25
 
-&lt;p&gt;再次执行 $ jekyll server  ，提示&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
-Could not find proper version of jekyll (3.1.1) in any of the sources
-Run `bundle install` to install missing gems.
-
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;跟着提示运行命令&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ bundle install
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;这个时候你可能会发现 bundle install 运行卡主不动了。&lt;/p&gt;
-
-&lt;p&gt;如果很长时间都没任何提示的话，你可以尝试修改 gem 的 source&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ gem sources --remove https://rubygems.org/
-$ gem sources -a http://ruby.taobao.org/
-$ gem sources -l
-*** CURRENT SOURCES ***
-
-http://ruby.taobao.org
+&lt;span class=&quot;c1&quot;&gt;# ss -an |grep :80 |awk '{states[$2]++};END{for(i in states){print i,states[i]}}' |sort -k2 -rn&lt;/span&gt;
+TIME-WAIT 18
+ESTAB 8
+LISTEN 1
 
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;再次执行命令 $ bundle install，发现开始有动静了&lt;/p&gt;
+&lt;h2 id=&quot;3统计访问网站的每个ip的数量&quot;&gt;3、统计访问网站的每个IP的数量&lt;/h2&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Fetching gem metadata from https://rubygems.org/...........
-Fetching version metadata from https://rubygems.org/..
-Fetching dependency metadata from https://rubygems.org/.
-。。。
-Installing jekyll-watch 1.3.1
-Installing jekyll 3.1.1
-Bundle complete! 3 Gemfile dependencies, 17 gems now installed.
-Use `bundle show [gemname]` to see where a bundled gem is installed.
+&lt;div class=&quot;language-powershell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# netstat -ant |grep :80 |awk -F: '{ip_count[$8]++};END{for(i in ip_count){print i,ip_count[i]} }' |sort&lt;/span&gt;
+
+
+&lt;span class=&quot;c1&quot;&gt;# ss -an |grep :80 |awk -F&quot;:&quot; '!/LISTEN/{ip_count[$(NF-1)]++};END{for(i in ip_count){print i,ip_count[i]}}' |sort -k2 -rn |head&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;4统计网站日志中pv量&quot;&gt;4、统计网站日志中PV量&lt;/h2&gt;
+
+&lt;div class=&quot;language-powershell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;统计Apache/Nginx日志中某一天的PV量 　&amp;lt;统计日志&amp;gt;
+&lt;span class=&quot;c1&quot;&gt;# grep '27/Jul/2017' mysqladmin.cc-access_log |wc -l&lt;/span&gt;
+14519
+
+统计Apache/Nginx日志中某一天不同IP的访问量　&amp;lt;统计日志&amp;gt;
+&lt;span class=&quot;c1&quot;&gt;# grep '27/Jul/2017' mysqladmin.cc-access_log |awk '{ips[$1]++};END{for(i in ips){print i,ips[i]} }' |sort -k2 -rn |head&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;# grep '07/Aug/2017' access.log |awk '{ips[$1]++};END{for(i in ips){print i,ips[i]} }' |awk '$2&amp;gt;100' |sort -k2 -rn&lt;/span&gt;
 
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;bundler安装完成，后再次启动本地服务&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;名词解释：&lt;/strong&gt;&lt;/p&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ jekyll server
+&lt;p&gt;网站浏览量（PV）
+名词：PV=PageView (网站浏览量)
+说明：指页面的浏览次数，用以衡量网站用户访问的网页数量。多次打开同一页面则浏览量累计。用户每打开一个页面便记录1次PV。&lt;/p&gt;
 
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;名词：VV = Visit View（访问次数）
+说明：从访客来到您网站到最终关闭网站的所有页面离开，计为1次访问。若访客连续30分钟没有新开和刷新页面，或者访客关闭了浏览器，则被计算为本次访问结束。&lt;/p&gt;
 
-&lt;p&gt;继续报错&lt;/p&gt;
+&lt;p&gt;独立访客（UV）
+名词：UV= Unique Visitor（独立访客数）
+说明：1天内相同的访客多次访问您的网站只计算1个UV。&lt;/p&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Configuration file: /Users/tendcloud-Caroline/Desktop/leopardpan.github.io/_config.yml
-  Dependency Error: Yikes! It looks like you don't have jekyll-sitemap or one of its dependencies installed. In order to use Jekyll as currently configured, you'll need to install this gem. The full error message from Ruby is: 'cannot load such file -- jekyll-sitemap' If you run into trouble, you can find helpful resources at http://jekyllrb.com/help/! 
-jekyll 3.1.1 | Error:  jekyll-sitemap
+&lt;p&gt;独立IP（IP）
+名词：IP=独立IP数
+说明：指1天内使用不同IP地址的用户访问网站的数量。同一IP无论访问了几个页面，独立IP数均为1&lt;/p&gt;
 
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;表示 当前的 jekyll 版本是 3.1.1 ，无法使用 jekyll-sitemap&lt;/p&gt;
+&lt;h1 id=&quot;七课后作业&quot;&gt;七、课后作业&lt;/h1&gt;
 
-&lt;p&gt;解决方法有两个&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;作业1：&lt;/strong&gt;
+1、写一个自动检测磁盘使用率的脚本，当磁盘使用空间达到90%以上时，需要发送邮件给相关人员
+2、写一个脚本监控系统内存和交换分区使用情况&lt;/p&gt;
 
-&lt;blockquote&gt;
-  &lt;p&gt;1、打开当前目录下的 _config.yml 文件，把 gems: [jekyll-paginate,jekyll-sitemap] 换成 gems: [jekyll-paginate] ，也就是去掉jekyll-sitemap。&lt;/p&gt;
-&lt;/blockquote&gt;
+&lt;p&gt;&lt;strong&gt;作业2：&lt;/strong&gt;
+输入一个IP地址，使用脚本判断其合法性：
+必须符合ip地址规范，第1、4位不能以0开头，不能大于255不能小于0&lt;/p&gt;
 
-&lt;blockquote&gt;
-  &lt;p&gt;2、升级 jekyll 版本，我当前的是 jekyll 3.1.2 。&lt;/p&gt;
-&lt;/blockquote&gt;
+&lt;h1 id=&quot;八企业实战案例&quot;&gt;八、企业实战案例&lt;/h1&gt;
 
-&lt;p&gt;修改完成后保存配置，再次执行&lt;/p&gt;
+&lt;h2 id=&quot;1-任务背景&quot;&gt;1. 任务/背景&lt;/h2&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ jekyll server
+&lt;p&gt;web服务器集群中总共有9台机器，上面部署的是Apache服务。由于业务不断增长，每天每台机器上都会产生大量的访问日志，现需要将每台web服务器上的apache访问日志&lt;strong&gt;保留最近3天&lt;/strong&gt;的，3天以前的日志&lt;strong&gt;转储&lt;/strong&gt;到一台专门的日志服务器上，已做后续分析。如何实现每台服务器上只保留3天以内的日志？&lt;/p&gt;
 
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;提示&lt;/p&gt;
+&lt;h2 id=&quot;2-具体要求&quot;&gt;2. 具体要求&lt;/h2&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Configuration file: /Users/baixinpan/Desktop/OpenSource/Mine/Page-Blog/leopardpan.github.io-github/_config.yml
-            Source: /Users/baixinpan/Desktop/OpenSource/Mine/Page-Blog/leopardpan.github.io-github
-       Destination: /Users/baixinpan/Desktop/OpenSource/Mine/Page-Blog/leopardpan.github.io-github/_site
- Incremental build: disabled. Enable with --incremental
-      Generating... 
-                    done in 0.901 seconds.
- Auto-regeneration: enabled for '/Users/baixinpan/Desktop/OpenSource/Mine/Page-Blog/leopardpan.github.io-github'
-Configuration file: /Users/baixinpan/Desktop/OpenSource/Mine/Page-Blog/leopardpan.github.io-github/_config.yml
-    Server address: http://127.0.0.1:4000/
-  Server running... press ctrl-c to stop.
+&lt;ol&gt;
+  &lt;li&gt;每台web服务器的日志对应日志服务器相应的目录里。如：web1——&amp;gt;web1.log（在日志服务器上）&lt;/li&gt;
+  &lt;li&gt;每台web服务器上保留最近3天的访问日志，3天以前的日志每天凌晨5:03分转储到日志服务器&lt;/li&gt;
+  &lt;li&gt;如果脚本转储失败，运维人员需要通过跳板机的菜单选择手动清理日志&lt;/li&gt;
+&lt;/ol&gt;
 
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h2 id=&quot;3-涉及知识点&quot;&gt;3. 涉及知识点&lt;/h2&gt;
 
-&lt;p&gt;表示本地服务部署成功。&lt;/p&gt;
-
-&lt;p&gt;在浏览器输入 &lt;a href=&quot;127.0.0.1:4000&quot;&gt;127.0.0.1:4000&lt;/a&gt; ， 就可以看到博客效果了。&lt;/p&gt;
-
-&lt;h3 id=&quot;修改成你自己的博客&quot;&gt;修改成你自己的博客&lt;/h3&gt;
-
-&lt;blockquote&gt;
-  &lt;ul&gt;
-    &lt;li&gt;如果你想使用我的模板请把 _posts/ 目录下的文章都去掉。&lt;/li&gt;
-    &lt;li&gt;修改 _config.yml 文件里面的内容为你自己的。&lt;/li&gt;
-  &lt;/ul&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;然后使用 git push 到你自己的仓库里面去，检查你远端仓库，在浏览器输入 username.github.io 就会发现，你有一个漂亮的主题模板了。&lt;/p&gt;
-
-&lt;h3 id=&quot;为什么要是用-jekyll&quot;&gt;为什么要是用 Jekyll&lt;/h3&gt;
-
-&lt;p&gt;使用了 Jekyll 你会发现如果你想使用多台电脑发博客都很方便，只要把远端 github 仓库里的博客 clone 下来，写文章后再提交就可以了，Hexo 由于远端提交的是静态网页，所有无法直接写 Markdown 的文章。&lt;/p&gt;
+&lt;ol&gt;
+  &lt;li&gt;shell的基本语法结构&lt;/li&gt;
+  &lt;li&gt;文件同步rsync&lt;/li&gt;
+  &lt;li&gt;文件查找命令find&lt;/li&gt;
+  &lt;li&gt;计划任务crontab&lt;/li&gt;
+  &lt;li&gt;apache日志切割&lt;/li&gt;
+  &lt;li&gt;其他&lt;/li&gt;
+&lt;/ol&gt;
 
 </description>
-        <pubDate>Fri, 14 Oct 2016 00:00:00 +0800</pubDate>
-        <link>http://localhost:4000/2016/10/jekyll_tutorials1/</link>
-        <guid isPermaLink="true">http://localhost:4000/2016/10/jekyll_tutorials1/</guid>
+        <pubDate>Tue, 01 May 2018 00:00:00 +0800</pubDate>
+        <link>http://localhost:4000/2018/05/08_SHELL/</link>
+        <guid isPermaLink="true">http://localhost:4000/2018/05/08_SHELL/</guid>
         
-        <category>jekyll</category>
+        <category>Shell</category>
         
         
       </item>

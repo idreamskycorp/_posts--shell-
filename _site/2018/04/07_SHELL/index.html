@@ -1,0 +1,1200 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>07_SHELL编程之文本处理工具</title>
+  <meta name="description" content="课程目标">
+  <meta name="author" content="leopardpan">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="07_SHELL编程之文本处理工具">
+  <meta name="twitter:description" content="课程目标">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="07_SHELL编程之文本处理工具">
+  <meta property="og:description" content="课程目标">
+  
+  <link rel="icon" type="image/png" href="/images/favicon.png" />
+  <link href="/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://localhost:4000/2018/04/07_SHELL/">
+  <link rel="alternate" type="application/rss+xml" title="LiJingBiao" href="http://localhost:4000/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+
+<!-- 站点统计 -->
+  <script 
+  async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js">
+  </script>  
+
+<!-- 百度统计 -->
+  
+  <script>
+      var _hmt = _hmt || [];
+      (function() {
+        var hm = document.createElement("script");
+        hm.src = "//hm.baidu.com/hm.js?8ba1c6be0953b6f9c2ba38e57f615421";
+        var s = document.getElementsByTagName("script")[0]; 
+        s.parentNode.insertBefore(hm, s);
+      })();
+  </script>
+  
+
+<!-- google 统计 -->
+  
+  <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+      ga('create', 'UA-84134159-3', 'auto');
+      ga('send', 'pageview');
+  </script>
+  
+
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-9005224472374751",
+    enable_page_level_ads: true
+  });
+</script>
+
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">        
+      <div class="nav_container">
+         <nav class="nav-menu-item" style = "float:right">
+            <i class="nav-menu-item">
+              <a href="/#blog" title="" class="blog-button">  博客主页
+              </a>
+            </i>
+            
+                <i class="nav-menu-item">
+
+                  <a href="/archive" title="archive" class="btn-mobile-menu__icon">
+                      所有文章
+                  </a>
+                </i>
+            
+                <i class="nav-menu-item">
+
+                  <a href="/tags" title="tags" class="btn-mobile-menu__icon">
+                      标签
+                  </a>
+                </i>
+            
+                <i class="nav-menu-item">
+
+                  <a href="/about" title="about" class="btn-mobile-menu__icon">
+                      关于我
+                  </a>
+                </i>
+            
+          </nav>
+      </div>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+        <!-- 头像效果-start -->
+        <div class="ih-item circle effect right_to_left">            
+            <a href="/#blog" title="前往 LiJingBiao 的主页" class="blog-button">
+                <div class="img"><img src="/images/avatar.jpg" alt="img"></div>
+                <div class="info">
+                    <div class="info-back">
+                        <h2> 
+                            
+                                天道酬勤
+                            
+                        </h2>
+                        <p>
+                           
+                                iOS / Ruby /Shell
+                            
+                        </p>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <!-- 头像效果-end -->
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for LiJingBiao" class="blog-button">LiJingBiao</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">个人站</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">欢迎来到我的个人站~</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        
+
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="" class="blog-button">博客主页</a></li>
+                
+                  <li class="navigation__item"><a href="/archive" title="archive">所有文章</a></li>
+                
+                  <li class="navigation__item"><a href="/tags" title="tags">标签</a></li>
+                
+                  <li class="navigation__item"><a href="/about" title="about">关于我</a></li>
+                
+              </ul>
+            </nav>
+          </div>          
+        </div>
+
+
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-clear"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <head>
+  <link rel="stylesheet" href="/css/post.css">
+</head>
+
+<article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <h1 class="post-title">07_SHELL编程之文本处理工具</h1>
+    <div class="post-meta">
+      <img src="/images/calendar.png" width="20px"/> 
+      <time datetime="2018-04-28 00:00:00 +0800" itemprop="datePublished" class="post-meta__date date">2018-04-28</time>  
+
+      <span id="busuanzi_container_page_pv"> | 阅读：<span id="busuanzi_value_page_pv"></span>次</span>
+    </p>
+    </div>
+  </header>
+
+  
+    <h2 class="post-title">目录</h2>
+    <ul>
+  <li><a href="#课程目标">课程目标</a></li>
+  <li><a href="#一文件编辑器知多少">一、文件编辑器知多少</a></li>
+  <li><a href="#二强悍的sed介绍">二、强悍的sed介绍</a>
+    <ul>
+      <li><a href="#1-sed用来做啥">1. sed用来做啥？</a></li>
+      <li><a href="#2-sed如何处理文件">2. sed如何处理文件？</a></li>
+    </ul>
+  </li>
+  <li><a href="#三sed使用方法介绍">三、sed使用方法介绍</a>
+    <ul>
+      <li><a href="#1-命令行格式">1. 命令行格式</a>
+        <ul>
+          <li><a href="#-语法格式">㈠ 语法格式</a></li>
+          <li><a href="#-举例说明">㈡ 举例说明</a>
+            <ul>
+              <li><a href="#-对文件进行增删改查操作">① 对文件进行增、删、改、查操作</a>
+                <ul>
+                  <li><a href="#1打印文件内容">1）打印文件内容</a></li>
+                  <li><a href="#2增加文件内容">2）增加文件内容</a></li>
+                  <li><a href="#3修改文件内容">3）修改文件内容</a></li>
+                  <li><a href="#4删除文件内容">4）删除文件内容</a></li>
+                </ul>
+              </li>
+              <li><a href="#-对文件进行搜索替换操作">② 对文件进行搜索替换操作</a></li>
+              <li><a href="#-其他命令">③ 其他命令</a></li>
+              <li><a href="#-其他选项">④ 其他选项</a></li>
+              <li><a href="#-sed结合正则使用">⑤ sed结合正则使用</a></li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li><a href="#2-脚本格式">2. 脚本格式</a>
+        <ul>
+          <li><a href="#-用法">㈠ 用法</a></li>
+          <li><a href="#-注意事项">㈡ 注意事项</a></li>
+          <li><a href="#举例说明">㈢举例说明</a></li>
+        </ul>
+      </li>
+      <li><a href="#3-补充扩展总结">3. 补充扩展总结</a></li>
+    </ul>
+  </li>
+  <li><a href="#四课堂练习">四、课堂练习</a></li>
+  <li><a href="#五课后实战">五、课后实战</a></li>
+</ul>
+
+  
+
+  <section class="post">
+    <h1 id="课程目标">课程目标</h1>
+
+<ul>
+  <li>掌握sed的基本语法结构</li>
+  <li>熟悉sed常用的命令，如打印p，删除d，插入i等</li>
+</ul>
+
+<h1 id="一文件编辑器知多少">一、文件编辑器知多少</h1>
+
+<ul>
+  <li><strong>Windows系统​</strong></li>
+</ul>
+
+<p><img src="./edit.png" alt="edit" /></p>
+
+<ul>
+  <li><strong>Linux系统</strong></li>
+</ul>
+
+<p>​    vim      vi     gedit  nano  emacs</p>
+
+<h1 id="二强悍的sed介绍">二、强悍的sed介绍</h1>
+
+<h2 id="1-sed用来做啥">1. sed用来做啥？</h2>
+
+<p>sed是Stream Editor（流编辑器）的缩写，简称流编辑器；用来处理文件的。</p>
+
+<h2 id="2-sed如何处理文件">2. sed如何处理文件？</h2>
+
+<blockquote>
+  <p>sed是一行一行读取文件内容并按照要求进行处理，把处理后的结果输出到屏幕。</p>
+</blockquote>
+
+<p><img src="./sed.png" alt="sed" /></p>
+
+<ol>
+  <li>首先sed读取文件中的一行内容，把其保存在一个临时缓存区中（也称为模式空间）</li>
+  <li>然后根据需求处理临时缓冲区中的行，完成后把该行发送到屏幕上</li>
+</ol>
+
+<p><strong>总结：</strong></p>
+
+<ol>
+  <li>由于sed把每一行都存在临时缓冲区中，对这个<strong>副本</strong>进行编辑，所以不会直接修改原文件</li>
+  <li>Sed主要用来自动编辑一个或多个文件；简化对文件的反复操作,对文件进行过滤和转换操作</li>
+</ol>
+
+<h1 id="三sed使用方法介绍">三、sed使用方法介绍</h1>
+
+<blockquote>
+  <p>sed常见的语法格式有两种，一种叫命令行模式，另一种叫脚本模式。</p>
+</blockquote>
+
+<h2 id="1-命令行格式">1. 命令行格式</h2>
+
+<h3 id="-语法格式">㈠ 语法格式</h3>
+
+<p>sed  [options]    <strong>‘</strong>处理动作<strong>‘</strong>   文件名</p>
+
+<ul>
+  <li><strong>常用选项</strong></li>
+</ul>
+
+<table>
+  <thead>
+    <tr>
+      <th>选项</th>
+      <th>说明</th>
+      <th>备注</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>-e</td>
+      <td>进行多项(多次)编辑</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>-n</td>
+      <td>取消默认输出</td>
+      <td>不自动打印模式空间</td>
+    </tr>
+    <tr>
+      <td>-r</td>
+      <td>使用扩展正则表达式</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>-i</td>
+      <td>原地编辑（修改源文件）</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>-f</td>
+      <td>指定sed脚本的文件名</td>
+      <td> </td>
+    </tr>
+  </tbody>
+</table>
+
+<ul>
+  <li><strong>常见处理动作</strong></li>
+</ul>
+
+<p><strong>丑话说在前面</strong>：以下所有的动作都要在<strong>单引号</strong>里，你敢出轨，回家跪搓衣板</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>动作</th>
+      <th>说明</th>
+      <th>备注</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>‘p’</td>
+      <td>打印</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>‘i’</td>
+      <td>在指定行之前插入内容</td>
+      <td>类似vim里的大写O</td>
+    </tr>
+    <tr>
+      <td>‘a’</td>
+      <td>在指定行之后插入内容</td>
+      <td>类似vim里的小写o</td>
+    </tr>
+    <tr>
+      <td>‘c’</td>
+      <td>替换指定行所有内容</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>‘d’</td>
+      <td>删除指定行</td>
+      <td> </td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="-举例说明">㈡ 举例说明</h3>
+
+<ul>
+  <li>文件准备</li>
+</ul>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># vim a.txt </span>
+root:x:0:0:root:/root:/bin/bash
+bin:x:1:1:bin:/bin:/sbin/nologin
+daemon:x:2:2:daemon:/sbin:/sbin/nologin
+adm:x:3:4:adm:/var/adm:/sbin/nologin
+<span class="nb">lp</span>:x:4:7:lp:/var/spool/lpd:/sbin/nologin
+298374837483
+172.16.0.254
+10.1.1.1
+</code></pre></div></div>
+
+<h4 id="-对文件进行增删改查操作">① 对文件进行增、删、改、查操作</h4>
+
+<blockquote>
+  <p>语法：sed  选项    <strong>‘</strong>定位+命令<strong>‘</strong>    需要处理的文件</p>
+</blockquote>
+
+<h5 id="1打印文件内容">1）打印文件内容</h5>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">[</span>root@server ~]# <span class="nb">sed</span> <span class="s1">''</span>  a.txt                        对文件什么都不做
+<span class="o">[</span>root@server ~]# <span class="nb">sed</span> -n <span class="s1">'p'</span>  a.txt                    打印每一行，并取消默认输出
+<span class="o">[</span>root@server ~]# <span class="nb">sed</span> -n <span class="s1">'1p'</span>  a.txt                    打印第1行
+<span class="o">[</span>root@server ~]# <span class="nb">sed</span> -n <span class="s1">'2p'</span>  a.txt                    打印第2行
+<span class="o">[</span>root@server ~]# <span class="nb">sed</span> -n <span class="s1">'1,5p'</span>  a.txt                打印1到5行
+<span class="o">[</span>root@server ~]# <span class="nb">sed</span> -n <span class="s1">'$p'</span> a.txt                     打印最后1行
+</code></pre></div></div>
+
+<h5 id="2增加文件内容">2）增加文件内容</h5>
+
+<p>i    地址定位的上面插入</p>
+
+<p>a   下面插入</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">[</span>root@server ~]# <span class="nb">sed</span> <span class="s1">'$a99999'</span> a.txt                 文件最后一行下面增加内容
+<span class="o">[</span>root@server ~]# <span class="nb">sed</span> <span class="s1">'a99999'</span> a.txt                 文件每行下面增加内容
+<span class="o">[</span>root@server ~]# <span class="nb">sed</span> <span class="s1">'5a99999'</span> a.txt                 文件第5行下面增加内容
+<span class="o">[</span>root@server ~]# <span class="nb">sed</span> <span class="s1">'$i99999'</span> a.txt                 文件最后一行上一行增加内容
+<span class="o">[</span>root@server ~]# <span class="nb">sed</span> <span class="s1">'i99999'</span> a.txt                 文件每行上一行增加内容
+<span class="o">[</span>root@server ~]# <span class="nb">sed</span> <span class="s1">'6i99999'</span> a.txt                 文件第6行上一行增加内容
+<span class="o">[</span>root@server ~]# <span class="nb">sed</span> <span class="s1">'/^uucp/ihello'</span>                以uucp开头行的上一行插入内容
+</code></pre></div></div>
+
+<h5 id="3修改文件内容">3）修改文件内容</h5>
+
+<p>c   替换指定的整行内容</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">[</span>root@server ~]# <span class="nb">sed</span> <span class="s1">'5chello world'</span> a.txt         替换文件第5行内容
+<span class="o">[</span>root@server ~]# <span class="nb">sed</span> <span class="s1">'chello world'</span> a.txt         替换文件所有内容
+<span class="o">[</span>root@server ~]# <span class="nb">sed</span> <span class="s1">'1,5chello world'</span> a.txt     替换文件1到5号内容为hello world
+<span class="o">[</span>root@server ~]# <span class="nb">sed</span> <span class="s1">'/^user01/c888888'</span> a.txt    替换以user01开头的行
+</code></pre></div></div>
+
+<h5 id="4删除文件内容">4）删除文件内容</h5>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">[</span>root@server ~]# <span class="nb">sed</span> <span class="s1">'1d'</span> a.txt                         删除文件第1行
+<span class="o">[</span>root@server ~]# <span class="nb">sed</span> <span class="s1">'1,5d'</span> a.txt                     删除文件1到5行
+<span class="o">[</span>root@server ~]# <span class="nb">sed</span> <span class="s1">'$d'</span> a.txt                        删除文件最后一行
+</code></pre></div></div>
+
+<h4 id="-对文件进行搜索替换操作">② 对文件进行搜索替换操作</h4>
+
+<blockquote>
+  <p>语法：sed   选项   <strong>’s/搜索的内容/替换的内容/动作’</strong>  需要处理的文件</p>
+
+  <p>其中，<strong>s</strong>表示search搜索；斜杠<strong>/</strong>表示分隔符，可以自己定义;动作一般是打印<strong>p</strong>和全局替换<strong>g</strong></p>
+</blockquote>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">[</span>root@server ~]# <span class="nb">sed</span> -n <span class="s1">'s/root/ROOT/p'</span> 1.txt 
+<span class="o">[</span>root@server ~]# <span class="nb">sed</span> -n <span class="s1">'s/root/ROOT/gp'</span> 1.txt 
+<span class="o">[</span>root@server ~]# <span class="nb">sed</span> -n <span class="s1">'s/^#//gp'</span> 1.txt 
+<span class="o">[</span>root@server ~]# <span class="nb">sed</span> -n <span class="s1">'s@/sbin/nologin@itcast@gp'</span> a.txt
+<span class="o">[</span>root@server ~]# <span class="nb">sed</span> -n <span class="s1">'s/\/sbin\/nologin/itcast/gp'</span> a.txt
+<span class="o">[</span>root@server ~]# <span class="nb">sed</span> -n <span class="s1">'10s#/sbin/nologin#itcast#p'</span> a.txt 
+uucp:x:10:14:uucp:/var/spool/uucp:itcast
+<span class="o">[</span>root@server ~]# <span class="nb">sed</span> -n <span class="s1">'s@/sbin/nologin@itcastheima@p'</span> 2.txt 
+注意：搜索替换中的分隔符可以自己指定
+
+<span class="o">[</span>root@server ~]# <span class="nb">sed</span> -n <span class="s1">'1,5s/^/#/p'</span> a.txt         注释掉文件的1-5行内容
+<span class="c1">#root:x:0:0:root:/root:/bin/bash</span>
+<span class="c1">#bin:x:1:1:bin:/bin:/sbin/nologin</span>
+<span class="c1">#daemon:x:2:2:daemon:/sbin:/sbin/nologin</span>
+<span class="c1">#adm:x:3:4:adm:/var/adm:/sbin/nologin</span>
+<span class="c1">#lp:x:4:7:lp:/var/spool/lpd:/sbin/nologin</span>
+</code></pre></div></div>
+
+<h4 id="-其他命令">③ 其他命令</h4>
+
+<table>
+  <thead>
+    <tr>
+      <th>命令</th>
+      <th>解释</th>
+      <th>备注</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>r</td>
+      <td>从另外文件中读取内容</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>w</td>
+      <td>内容另存为</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>&amp;</td>
+      <td>保存查找串以便在替换串中引用</td>
+      <td>和\(\)相同</td>
+    </tr>
+    <tr>
+      <td>=</td>
+      <td>打印行号</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>！</td>
+      <td>对所选行以外的所有行应用命令，放到行数之后</td>
+      <td>‘1,5!’</td>
+    </tr>
+    <tr>
+      <td>q</td>
+      <td>退出</td>
+      <td> </td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>举例说明：</strong></p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">r    </span>从文件中读取输入行
+w    将所选的行写入文件
+<span class="o">[</span>root@server ~]# <span class="nb">sed</span> <span class="s1">'3r /etc/hosts'</span> 2.txt 
+<span class="o">[</span>root@server ~]# <span class="nb">sed</span> <span class="s1">'$r /etc/hosts'</span> 2.txt
+<span class="o">[</span>root@server ~]# <span class="nb">sed</span> <span class="s1">'/root/w a.txt'</span> 2.txt 
+<span class="o">[</span>root@server ~]# <span class="nb">sed</span> <span class="s1">'/[0-9]{4}/w a.txt'</span> 2.txt
+<span class="o">[</span>root@server ~]# <span class="nb">sed</span>  -r <span class="s1">'/([0-9]{1,3}\.){3}[0-9]{1,3}/w b.txt'</span> 2.txt
+
+<span class="o">!</span>    对所选行以外的所有行应用命令，放到行数之后
+<span class="o">[</span>root@server ~]# <span class="nb">sed</span> -n <span class="s1">'1!p'</span> 1.txt 
+<span class="o">[</span>root@server ~]# <span class="nb">sed</span> -n <span class="s1">'4p'</span> 1.txt 
+<span class="o">[</span>root@server ~]# <span class="nb">sed</span> -n <span class="s1">'4!p'</span> 1.txt 
+<span class="o">[</span>root@server ~]# <span class="nb">cat</span> -n 1.txt 
+<span class="o">[</span>root@server ~]# <span class="nb">sed</span> -n <span class="s1">'1,17p'</span> 1.txt 
+<span class="o">[</span>root@server ~]# <span class="nb">sed</span> -n <span class="s1">'1,17!p'</span> 1.txt 
+
+&amp;   保存查找串以便在替换串中引用   \<span class="o">(</span>\<span class="o">)</span>
+
+<span class="o">[</span>root@server ~]# <span class="nb">sed</span> -n <span class="s1">'/root/p'</span> a.txt 
+root:x:0:0:root:/root:/bin/bash
+<span class="o">[</span>root@server ~]# <span class="nb">sed</span> -n <span class="s1">'s/root/#&amp;/p'</span> a.txt 
+<span class="c1">#root:x:0:0:root:/root:/bin/bash</span>
+
+<span class="c1"># sed -n 's/^root/#&amp;/p' passwd   注释掉以root开头的行</span>
+<span class="c1"># sed -n -r 's/^root|^stu/#&amp;/p' /etc/passwd    注释掉以root开头或者以stu开头的行</span>
+<span class="c1"># sed -n '1,5s/^[a-z].*/#&amp;/p' passwd  注释掉1~5行中以任意小写字母开头的行</span>
+<span class="c1"># sed -n '1,5s/^/#/p' /etc/passwd  注释1~5行</span>
+或者
+<span class="nb">sed</span> -n <span class="s1">'1,5s/^/#/p'</span> passwd 以空开头的加上#
+<span class="nb">sed</span> -n <span class="s1">'1,5s/^#//p'</span> passwd 以#开头的替换成空
+
+<span class="o">[</span>root@server ~]# <span class="nb">sed</span> -n <span class="s1">'/^root/p'</span> 1.txt 
+<span class="o">[</span>root@server ~]# <span class="nb">sed</span> -n <span class="s1">'s/^root/#&amp;/p'</span> 1.txt 
+<span class="o">[</span>root@server ~]# <span class="nb">sed</span> -n <span class="s1">'s/\(^root\)/#\1/p'</span> 1.txt 
+<span class="o">[</span>root@server ~]# <span class="nb">sed</span> -nr <span class="s1">'/^root|^stu/p'</span> 1.txt 
+<span class="o">[</span>root@server ~]# <span class="nb">sed</span> -nr <span class="s1">'s/^root|^stu/#&amp;/p'</span> 1.txt 
+
+
+<span class="o">=</span>     打印行号
+<span class="c1"># sed -n '/bash$/=' passwd    打印以bash结尾的行的行号</span>
+<span class="c1"># sed -ne '/root/=' -ne '/root/p' passwd </span>
+<span class="c1"># sed -n '/nologin$/=;/nologin$/p' 1.txt</span>
+<span class="c1"># sed -ne '/nologin$/=' -ne '/nologin$/p' 1.txt</span>
+
+q    退出
+<span class="c1"># sed '5q' 1.txt</span>
+<span class="c1"># sed '/mail/q' 1.txt</span>
+<span class="c1"># sed -r '/^yunwei|^mail/q' 1.txt</span>
+<span class="o">[</span>root@server ~]# <span class="nb">sed</span> -n <span class="s1">'/bash$/p;10q'</span> 1.txt
+ROOT:x:0:0:root:/root:/bin/bash
+
+
+综合运用：
+<span class="o">[</span>root@server ~]# <span class="nb">sed</span> -n <span class="s1">'1,5s/^/#&amp;/p'</span> 1.txt 
+<span class="c1">#root:x:0:0:root:/root:/bin/bash</span>
+<span class="c1">#bin:x:1:1:bin:/bin:/sbin/nologin</span>
+<span class="c1">#daemon:x:2:2:daemon:/sbin:/sbin/nologin</span>
+<span class="c1">#adm:x:3:4:adm:/var/adm:/sbin/nologin</span>
+<span class="c1">#lp:x:4:7:lp:/var/spool/lpd:/sbin/nologin</span>
+
+<span class="o">[</span>root@server ~]# <span class="nb">sed</span> -n <span class="s1">'1,5s/\(^\)/#\1/p'</span> 1.txt 
+<span class="c1">#root:x:0:0:root:/root:/bin/bash</span>
+<span class="c1">#bin:x:1:1:bin:/bin:/sbin/nologin</span>
+<span class="c1">#daemon:x:2:2:daemon:/sbin:/sbin/nologin</span>
+<span class="c1">#adm:x:3:4:adm:/var/adm:/sbin/nologin</span>
+<span class="c1">#lp:x:4:7:lp:/var/spool/lpd:/sbin/nologin</span>
+</code></pre></div></div>
+
+<h4 id="-其他选项">④ 其他选项</h4>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>-e 多项编辑
+-r    扩展正则
+-i 修改原文件
+
+<span class="o">[</span>root@server ~]# <span class="nb">sed</span> -ne <span class="s1">'/root/p'</span> 1.txt -ne <span class="s1">'/root/='</span>
+root:x:0:0:root:/root:/bin/bash
+1
+<span class="o">[</span>root@server ~]# <span class="nb">sed</span> -ne <span class="s1">'/root/='</span> -ne <span class="s1">'/root/p'</span> 1.txt 
+1
+root:x:0:0:root:/root:/bin/bash
+
+在1.txt文件中的第5行的前面插入“hello world”;在1.txt文件的第8行下面插入“哈哈哈哈”
+
+<span class="o">[</span>root@server ~]# <span class="nb">sed</span> -e <span class="s1">'5ihello world'</span> -e <span class="s1">'8a哈哈哈哈哈'</span> 1.txt  -e <span class="s1">'5=;8='</span>
+
+<span class="nb">sed</span> -n <span class="s1">'1,5p'</span> 1.txt
+<span class="nb">sed</span> -ne <span class="s1">'1p'</span> -ne <span class="s1">'5p'</span> 1.txt
+<span class="nb">sed</span> -ne <span class="s1">'1p;5p'</span> 1.txt
+
+过滤vsftpd.conf文件中以#开头和空行：
+<span class="o">[</span>root@server ~]# <span class="nb">grep</span> -Ev <span class="s1">'^#|^$'</span> /etc/vsftpd/vsftpd.conf
+<span class="o">[</span>root@server ~]# <span class="nb">sed</span> -e <span class="s1">'/^#/d'</span> -e <span class="s1">'/^$/d'</span> /etc/vsftpd/vsftpd.conf
+<span class="o">[</span>root@server ~]# <span class="nb">sed</span> <span class="s1">'/^#/d;/^$/d'</span> /etc/vsftpd/vsftpd.conf
+<span class="o">[</span>root@server ~]# <span class="nb">sed</span> -r <span class="s1">'/^#|^$/d'</span> /etc/vsftpd/vsftpd.conf
+
+过滤smb.conf文件中生效的行：
+<span class="c1"># sed -e '/^#/d' -e '/^;/d' -e '/^$/d' -e '/^\t$/d' -e '/^\t#/d' smb.conf</span>
+<span class="c1"># sed -r '/^(#|$|;|\t#|\t$)/d' smb.conf </span>
+
+<span class="c1"># sed -e '/^#/d' -e '/^;/d' -e '/^$/d' -e '/^\t$/d' -e '/^\t#/' smb.conf</span>
+
+
+<span class="o">[</span>root@server ~]# <span class="nb">grep</span> <span class="s1">'^[^a-z]'</span> 1.txt
+
+<span class="o">[</span>root@server ~]# <span class="nb">sed</span> -n <span class="s1">'/^[^a-z]/p'</span> 1.txt
+
+过滤出文件中的IP地址：
+<span class="o">[</span>root@server ~]# <span class="nb">grep</span> -E <span class="s1">'([0-9]{1,3}\.){3}[0-9]{1,3}'</span> 1.txt 
+192.168.0.254
+<span class="o">[</span>root@server ~]# <span class="nb">sed</span> -nr <span class="s1">'/([0-9]{1,3}\.){3}[0-9]{1,3}/p'</span> 1.txt 
+192.168.0.254
+
+<span class="o">[</span>root@server ~]# <span class="nb">grep</span> -o -E <span class="s1">'([0-9]{1,3}\.){3}[0-9]{1,3}'</span> 2.txt 
+10.1.1.1
+10.1.1.255
+255.255.255.0
+
+<span class="o">[</span>root@server ~]# <span class="nb">sed</span> -nr <span class="s1">'/([0-9]{1,3}\.){3}[0-9]{1,3}/p'</span> 2.txt
+10.1.1.1
+10.1.1.255
+255.255.255.0
+过滤出ifcfg-eth0文件中的IP、子网掩码、广播地址
+<span class="o">[</span>root@server shell06]# <span class="nb">grep</span> -Eo <span class="s1">'([0-9]{1,3}\.){3}[0-9]{1,3}'</span> ifcfg-eth0 
+10.1.1.1
+255.255.255.0
+10.1.1.254
+<span class="o">[</span>root@server shell06]# <span class="nb">sed</span> -nr <span class="s1">'/([0-9]{1,3}\.){3}[0-9]{1,3}/p'</span> ifcfg-eth0|cut -d<span class="s1">'='</span> -f2
+10.1.1.1
+255.255.255.0
+10.1.1.254
+<span class="o">[</span>root@server shell06]# <span class="nb">sed</span> -nr <span class="s1">'/([0-9]{1,3}\.){3}[0-9]{1,3}/p'</span> ifcfg-eth0|sed -n <span class="s1">'s/[A-Z=]//gp'</span>
+10.1.1.1
+255.255.255.0
+10.1.1.254
+
+<span class="o">[</span>root@server shell06]# ifconfig eth0|sed -n <span class="s1">'2p'</span>|sed -n <span class="s1">'s/[:a-Z]//gp'</span>|sed -n <span class="s1">'s/ /\n/gp'</span>|sed <span class="s1">'/^$/d'</span>
+10.1.1.1
+10.1.1.255
+255.255.255.0
+<span class="o">[</span>root@server shell06]# ifconfig | <span class="nb">sed</span> -nr <span class="s1">'/([0-9]{1,3}\.)[0-9]{1,3}/p'</span> | <span class="nb">head</span> -1|sed -r <span class="s1">'s/([a-z:]|[A-Z/t])//g'</span>|sed <span class="s1">'s/ /\n/g'</span>|sed  <span class="s1">'/^$/d'</span>
+
+<span class="o">[</span>root@server shell06]# ifconfig eth0|sed -n <span class="s1">'2p'</span>|sed -n <span class="s1">'s/.*addr:\(.*\) Bcast:\(.*\) Mask:\(.*\)/\1\n\2\n\3/p'</span>
+10.1.1.1 
+10.1.1.255 
+255.255.255.0
+
+-i 选项  直接修改原文件
+<span class="c1"># sed -i 's/root/ROOT/;s/stu/STU/' 11.txt</span>
+<span class="c1"># sed -i '17{s/YUNWEI/yunwei/;s#/bin/bash#/sbin/nologin#}' 1.txt</span>
+<span class="c1"># sed -i '1,5s/^/#&amp;/' a.txt</span>
+注意：
+-ni  不要一起使用
+p命令 不要再使用-i时使用
+</code></pre></div></div>
+
+<h4 id="-sed结合正则使用">⑤ sed结合正则使用</h4>
+
+<blockquote>
+  <p>sed  选项  ‘sed命令或者正则表达式或者地址定位’  文件名</p>
+</blockquote>
+
+<ol>
+  <li>定址用于决定对哪些行进行编辑。地址的形式可以是数字、正则表达式、或二者的结合。</li>
+  <li>如果没有指定地址，sed将处理输入文件的所有行。</li>
+</ol>
+
+<table>
+  <thead>
+    <tr>
+      <th>正则</th>
+      <th>说明</th>
+      <th>备注</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>/key/</td>
+      <td>查询包含关键字的行</td>
+      <td>sed -n ‘/root/p’ 1.txt</td>
+    </tr>
+    <tr>
+      <td>/key1/,/key2/</td>
+      <td>匹配包含两个关键字之间的行</td>
+      <td>sed -n ‘/\^adm/,/^mysql/p’ 1.txt</td>
+    </tr>
+    <tr>
+      <td>/key/,x</td>
+      <td>从匹配关键字的行开始到文件第x行之间的行（包含关键字所在行）</td>
+      <td>sed -n ‘/^ftp/,7p’</td>
+    </tr>
+    <tr>
+      <td>x,/key/</td>
+      <td>从文件的第x行开始到与关键字的匹配行之间的行</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>x,y!</td>
+      <td>不包含x到y行</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>/key/!</td>
+      <td>不包括关键字的行</td>
+      <td>sed -n ‘/bash$/!p’ 1.txt</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="2-脚本格式">2. 脚本格式</h2>
+
+<h3 id="-用法">㈠ 用法</h3>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># sed -f scripts.sh  file        //使用脚本处理文件</span>
+建议使用   ./sed.sh   file
+
+脚本的第一行写上
+<span class="c1">#!/bin/sed -f</span>
+1,5d
+s/root/hello/g
+3i777
+5i888
+a999
+p
+</code></pre></div></div>
+
+<h3 id="-注意事项">㈡ 注意事项</h3>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>１）　脚本文件是一个sed的命令行清单。<span class="s1">'commands'</span>
+２）　在每行的末尾不能有任何空格、制表符（tab）或其它文本。
+３）　如果在一行中有多个命令，应该用分号分隔。
+４）　不需要且不可用引号保护命令
+５）　#号开头的行为注释
+
+</code></pre></div></div>
+
+<h3 id="举例说明">㈢举例说明</h3>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># cat passwd</span>
+stu3:x:509:512::/home/user3:/bin/bash
+stu4:x:510:513::/home/user4:/bin/bash
+stu5:x:511:514::/home/user5:/bin/bash
+
+<span class="c1"># cat sed.sh </span>
+<span class="c1">#!/bin/sed -f</span>
+2a\
+<span class="k">******************</span>
+2,<span class="nv">$s</span>/stu/user/
+<span class="nv">$a</span>\
+we inster new line
+s/^[a-z].<span class="k">*</span>/#&amp;/
+
+<span class="o">[</span>root@server ~]# <span class="nb">cat </span>1.sed 
+<span class="c1">#!/bin/sed -f</span>
+3a<span class="k">**********************</span>
+<span class="nv">$chelloworld</span>
+1,3s/^/#&amp;/
+
+<span class="o">[</span>root@server ~]# <span class="nb">sed</span> -f 1.sed -i 11.txt 
+<span class="o">[</span>root@server ~]# <span class="nb">cat </span>11.txt 
+<span class="c1">#root:x:0:0:root:/root:/bin/bash</span>
+<span class="c1">#bin:x:1:1:bin:/bin:/sbin/nologin</span>
+<span class="c1">#daemon:x:2:2:daemon:/sbin:/sbin/nologin</span>
+<span class="k">**********************</span>
+adm:x:3:4:adm:/var/adm:/sbin/nologin
+helloworld
+
+</code></pre></div></div>
+
+<h2 id="3-补充扩展总结">3. 补充扩展总结</h2>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1、正则表达式必须以”/“前后规范间隔
+例如：sed <span class="s1">'/root/d'</span> file
+例如：sed <span class="s1">'/^root/d'</span> file
+
+2、如果匹配的是扩展正则表达式，需要使用-r选来扩展sed
+<span class="nb">grep</span> -E
+<span class="nb">sed</span> -r
++ ? <span class="o">()</span> <span class="o">{</span>n,m<span class="o">}</span> | \d
+
+注意：         
+在正则表达式中如果出现特殊字符<span class="o">(</span>^<span class="nv">$.</span><span class="k">*</span>/[]<span class="o">)</span>,需要以前导 <span class="s2">"\"</span> 号做转义
+eg：sed <span class="s1">'/\$foo/p'</span> file
+
+3、逗号分隔符
+例如：sed <span class="s1">'5,7d'</span> file                  删除5到7行
+例如：sed <span class="s1">'/root/,/ftp/d'</span> file    
+删除第一个匹配字符串<span class="s2">"root"</span>到第一个匹配字符串<span class="s2">"ftp"</span>的所有行本行不找 循环执行
+       
+4、组合方式
+例如：sed <span class="s1">'1,/foo/d'</span> file            删除第一行到第一个匹配字符串<span class="s2">"foo"</span>的所有行
+例如：sed <span class="s1">'/foo/,+4d'</span> file            删除从匹配字符串”foo“开始到其后四行为止的行
+例如：sed <span class="s1">'/foo/,~3d'</span> file            删除从匹配字符串”foo“开始删除到3的倍数行（文件中）
+例如：sed <span class="s1">'1~5d'</span> file                从第一行开始删每五行删除一行
+例如：sed -nr <span class="s1">'/foo|bar/p'</span> file    显示配置字符串<span class="s2">"foo"</span>或<span class="s2">"bar"</span>的行
+例如：sed -n <span class="s1">'/foo/,/bar/p'</span> file    显示匹配从foo到bar的行
+例如：sed <span class="s1">'1~2d'</span>  file                删除奇数行
+例如：sed <span class="s1">'0-2d'</span>   file                删除偶数行 <span class="nb">sed</span> <span class="s1">'1~2!d'</span>  file
+
+5、特殊情况
+例如：sed <span class="s1">'$d'</span> file                    删除最后一行
+例如：sed <span class="s1">'1d'</span> file                    删除第一行
+    
+6、其他：
+<span class="nb">sed</span> <span class="s1">'s/.//'</span> a.txt                        删除每一行中的第一个字符
+<span class="nb">sed</span> <span class="s1">'s/.//2'</span> a.txt                    删除每一行中的第二个字符
+<span class="nb">sed</span> <span class="s1">'s/.//N'</span> a.txt                    从文件中第N行开始，删除每行中第N个字符（N&gt;2）
+<span class="nb">sed</span> <span class="s1">'s/.$//'</span> a.txt                    删除每一行中的最后一个字符
+
+
+<span class="o">[</span>root@server ~]# <span class="nb">cat </span>2.txt 
+1 a
+2 b
+3 c
+4 d
+5 e
+6 f
+7 u
+8 k
+9 o
+<span class="o">[</span>root@server ~]# <span class="nb">sed</span> <span class="s1">'/c/,~2d'</span> 2.txt 
+1 a
+2 b
+5 e
+6 f
+7 u
+8 k
+9 o
+
+</code></pre></div></div>
+
+<h1 id="四课堂练习">四、课堂练习</h1>
+
+<ol>
+  <li>将任意数字替换成空或者制表符</li>
+  <li>去掉文件1-5行中的数字、冒号、斜杠</li>
+  <li>匹配root关键字替换成hello itcast，并保存到test.txt文件中</li>
+  <li>删除vsftpd.conf、smb.conf、main.cf配置文件里所有注释的行及空行（不要直接修改原文件）</li>
+  <li>使用sed命令截取自己的ip地址</li>
+  <li>使用sed命令一次性截取ip地址、广播地址、子网掩码</li>
+  <li>注释掉文件的2-3行和匹配到以root开头或者以ftp开头的行</li>
+</ol>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+1、将文件中任意数字替换成空或者制表符
+2、去掉文件1-5行中的数字、冒号、斜杠
+3、匹配root关键字的行替换成hello itcast，并保存到test.txt文件中
+4、删除vsftpd.conf、smb.conf、main.cf配置文件里所有注释的行及空行（不要直接修改原文件）
+5、使用sed命令截取自己的ip地址
+<span class="c1"># ifconfig eth0|sed -n '2p'|sed -n 's/.*addr://pg'|sed -n 's/Bcast.*//gp'</span>
+10.1.1.1  
+<span class="c1"># ifconfig eth0|sed -n '2p'|sed 's/.*addr://g'|sed 's/ Bcast:.*//g'</span>
+6、使用sed命令一次性截取ip地址、广播地址、子网掩码
+<span class="c1"># ifconfig eth0|sed -n '2p'|sed -n 's#.*addr:\(.*\) Bcast:\(.*\) Mask:\(.*\)#\1\n\2\n\3#p'</span>
+10.1.1.1 
+10.1.1.255 
+255.255.255.0
+
+7、注释掉文件的2-3行和匹配到以root开头或者以ftp开头的行
+<span class="c1"># sed -nr '2,3s/^/#&amp;/p;s/^ROOT|^ftp/#&amp;/p' 1.txt</span>
+<span class="c1">#ROOT:x:0:0:root:/root:/bin/bash</span>
+<span class="c1">#bin:x:1:1:bin:/bin:/sbin/nologin</span>
+<span class="c1">#3daemon:x:2:2:daemon:/sbin:/sbin/nologin</span>
+
+<span class="c1"># sed -ne '1,2s/^/#&amp;/gp' a.txt -nre 's/^lp|^mail/#&amp;/gp'</span>
+<span class="c1"># sed -nr '1,2s/^/#&amp;/gp;s/^lp|^mail/#&amp;/gp' a.txt</span>
+</code></pre></div></div>
+
+<h1 id="五课后实战">五、课后实战</h1>
+
+<p>1、写一个初始化系统的脚本
+1）自动修改主机名（如：ip是192.168.0.88，则主机名改为server88.itcast.cc）</p>
+
+<p>a. 更改文件非交互式 sed</p>
+
+<p>/etc/sysconfig/network</p>
+
+<p>b.将本主机的IP截取出来赋值给一个变量ip;再然后将ip变量里以.分割的最后一位赋值给另一个变量ip1</p>
+
+<p>2）自动配置可用的yum源</p>
+
+<p>3）自动关闭防火墙和selinux</p>
+
+<p>2、写一个搭建ftp服务的脚本，要求如下：
+1）不支持本地用户登录        local_enable=NO
+2） 匿名用户可以上传 新建 删除     anon_upload_enable=YES  anon_mkdir_write_enable=YES  <br />
+3） 匿名用户限速500KBps  anon_max_rate=500000</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>仅供参考：
+<span class="c1">#!/bin/bash</span>
+<span class="nv">ipaddr</span><span class="o">=</span><span class="se">`i</span>fconfig eth0|sed -n <span class="s1">'2p'</span>|sed -e <span class="s1">'s/.*inet addr:\(.*\) Bcast.*/\1/g'</span><span class="se">`</span>
+<span class="nv">iptail</span><span class="o">=</span><span class="se">`e</span>cho <span class="nv">$ipaddr</span>|cut -d<span class="s1">'.'</span> -f4<span class="se">`</span>
+<span class="nv">ipremote</span><span class="o">=</span>192.168.1.10
+<span class="c1">#修改主机名</span>
+<span class="nb">hostname </span>server<span class="nv">$iptail</span>.itcast.com
+<span class="nb">sed</span> -i <span class="s2">"/HOSTNAME/cHOSTNAME=server</span><span class="nv">$iptail</span><span class="s2">.itcast.com"</span> /etc/sysconfig/network
+<span class="nb">echo</span> <span class="s2">"</span><span class="nv">$ipaddr</span><span class="s2"> server</span><span class="nv">$iptail</span><span class="s2">.itcast.cc"</span> <span class="o">&gt;&gt;</span>/etc/hosts
+<span class="c1">#关闭防火墙和selinux</span>
+service iptables stop
+setenforce 0 <span class="o">&gt;</span>/dev/null 2&gt;&amp;1
+<span class="nb">sed</span> -i <span class="s1">'/^SELINUX=/cSELINUX=disabled'</span> /etc/selinux/config
+<span class="c1">#配置yum源(一般是内网源)</span>
+<span class="c1">#test network</span>
+ping -c 1 <span class="nv">$ipremote</span> <span class="o">&gt;</span> /dev/null 2&gt;&amp;1
+<span class="k">if</span> <span class="o">[</span> <span class="nv">$?</span> -ne 0 <span class="o">]</span>;<span class="k">then
+    </span><span class="nb">echo</span> <span class="s2">"你的网络不通，请先检查你的网络"</span>
+    <span class="k">exit </span>1
+<span class="k">else
+    </span><span class="nb">echo</span> <span class="s2">"网络ok."</span>
+<span class="k">fi
+</span><span class="nb">cat</span> <span class="o">&gt;</span> /etc/yum.repos.d/server.repo <span class="o">&lt;&lt;</span> <span class="no">end</span><span class="sh">
+[server]
+name=server
+baseurl=ftp://</span><span class="nv">$ipremote</span><span class="sh">
+enabled=1
+gpgcheck=0
+</span><span class="no">end
+
+</span><span class="c1">#安装软件</span>
+<span class="nb">read</span> -p <span class="s2">"请输入需要安装的软件，多个用空格隔开："</span> soft
+yum -y <span class="nb">install</span> <span class="nv">$soft</span> &amp;&gt;/dev/null
+
+<span class="c1">#备份配置文件</span>
+<span class="nv">conf</span><span class="o">=</span>/etc/vsftpd/vsftpd.conf
+\cp <span class="nv">$conf</span> <span class="nv">$conf</span>.default
+<span class="c1">#根据需求修改配置文件</span>
+<span class="nb">sed</span> -ir <span class="s1">'/^#|^$/d'</span> <span class="nv">$conf</span>
+<span class="nb">sed</span> -i <span class="s1">'/local_enable/c\local_enable=NO'</span> <span class="nv">$conf</span>
+<span class="nb">sed</span> -i <span class="s1">'$a anon_upload_enable=YES'</span> <span class="nv">$conf</span>
+<span class="nb">sed</span> -i <span class="s1">'$a anon_mkdir_write_enable=YES'</span> <span class="nv">$conf</span>
+<span class="nb">sed</span> -i <span class="s1">'$a anon_other_write_enable=YES'</span> <span class="nv">$conf</span>
+<span class="nb">sed</span> -i <span class="s1">'$a anon_max_rate=512000'</span> <span class="nv">$conf</span>
+<span class="c1">#启动服务</span>
+service vsftpd restart &amp;&gt;/dev/null <span class="o">&amp;&amp;</span> <span class="nb">echo</span><span class="s2">"vsftpd服务启动成功"</span>
+
+<span class="c1">#测试验证</span>
+<span class="nb">chmod </span>777 /var/ftp/pub
+<span class="nb">cp</span> /etc/hosts /var/ftp/pub
+<span class="c1">#测试下载</span>
+<span class="nb">cd</span> /tmp
+lftp <span class="nv">$ipaddr</span> <span class="o">&lt;&lt;</span><span class="no">end</span><span class="sh">
+cd pub
+get hosts
+exit
+</span><span class="no">end
+
+</span><span class="k">if</span> <span class="o">[</span> -f /tmp/hosts <span class="o">]</span>;<span class="k">then
+    </span><span class="nb">echo</span> <span class="s2">"匿名用户下载成功"</span>
+    <span class="nb">rm</span> -f /tmp/hosts
+<span class="k">else
+    </span><span class="nb">echo</span> <span class="s2">"匿名用户下载失败"</span>
+<span class="k">fi</span>
+<span class="c1">#测试上传、创建目录、删除目录等</span>
+<span class="nb">cd</span> /tmp
+lftp <span class="nv">$ipaddr</span> <span class="o">&lt;&lt;</span> <span class="no">end</span><span class="sh">
+cd pub
+mkdir test1
+mkdir test2
+put /etc/group
+rmdir test2
+exit
+</span><span class="no">end
+
+</span><span class="k">if</span> <span class="o">[</span> -d /var/ftp/pub/test1 <span class="o">]</span>;<span class="k">then
+    </span><span class="nb">echo</span> <span class="s2">"创建目录成功"</span>
+    <span class="k">if</span> <span class="o">[</span> <span class="o">!</span> -d /var/ftp/pub/test2 <span class="o">]</span>;<span class="k">then
+        </span><span class="nb">echo</span> <span class="s2">"文件删除成功"</span>
+        <span class="k">fi
+else
+    if</span> <span class="o">[</span> -f /var/ftp/pub/group <span class="o">]</span>;<span class="k">then
+    </span><span class="nb">echo</span> <span class="s2">"文件上传成功"</span>
+        <span class="k">else
+        </span><span class="nb">echo</span> <span class="s2">"上传、创建目录删除目录部ok"</span>
+        <span class="k">fi 
+fi</span>   
+<span class="o">[</span> -f /var/ftp/pub/group <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s2">"上传文件成功"</span>
+</code></pre></div></div>
+
+
+  </section>
+
+</article>
+
+<section>
+
+            <div class="content-play">
+              <p><a href="javascript:void(0)" onclick="dashangToggle()" class="dashang" title="打赏，支持一下">打赏一个呗</a></p>
+              <div class="hide_box-play"></div>
+              <div class="shang_box-play">
+                <a class="shang_close-play" href="javascript:void(0)" onclick="dashangToggle()" title="关闭"><img src="/images/payimg/close.jpg" alt="取消" /></a>
+                <div class="shang_tit-play">
+                  <p>感谢您的支持，我会继续努力的!</p>
+                </div>
+                <div class="shang_payimg">
+                    <img src="/images/payimg/alipayimg.jpg" alt="扫码支持" title="扫一扫" />
+                </div>
+              <div class="shang_payimg">    
+                    <img src="/images/payimg/weipayimg.jpg" alt="扫码支持" title="扫一扫" />
+                </div>
+                <div class="pay_explain">扫码打赏，你说多少就多少</div>
+                <div class="shang_payselect">
+                  <div class="pay_item checked" data-id="alipay">
+                    <span class="pay_logo"><img src="/images/payimg/alipay.jpg" alt="支付宝" /></span>
+                  </div>
+                  <div class="pay_item" data-id="weipay">
+                    <span class="pay_logo"><img src="/images/payimg/wechat.jpg" alt="微信" /></span>
+                  </div>
+                </div>
+                <div class="shang_info-play">
+                  <p>打开<span id="shang_pay_txt">支付宝</span>扫一扫，即可进行扫码打赏哦</p>
+                </div>
+              </div>
+            </div>
+            <script type="text/javascript">
+            function dashangToggle(){
+              $(".hide_box-play").fadeToggle();
+              $(".shang_box-play").fadeToggle();
+            }
+            </script>
+
+            <div style="text-align:center;margin:50px 0; font:normal 14px/24px 'MicroSoft YaHei';"></div>
+
+            <style type="text/css">
+              .content-play{width:80%;margin-top: 20px;margin-bottom: 10px;height:40px;}
+              .hide_box-play{z-index:999;filter:alpha(opacity=50);background:#666;opacity: 0.5;-moz-opacity: 0.5;left:0;top:0;height:99%;width:100%;position:fixed;display:none;}
+              .shang_box-play{width:540px;height:540px;padding:10px;background-color:#fff;border-radius:10px;position:fixed;z-index:1000;left:50%;top:50%;margin-left:-280px;margin-top:-280px;border:1px dotted #dedede;display:none;}
+              .shang_box-play img{border:none;border-width:0;}
+              .dashang{display:block;width:100px;margin:5px auto;height:25px;line-height:25px;padding:10px;background-color:#E74851;color:#fff;text-align:center;text-decoration:none;border-radius:10px;font-weight:bold;font-size:16px;transition: all 0.3s;}
+              .dashang:hover{opacity:0.8;padding:15px;font-size:18px;}
+              .shang_close-play{float:right;display:inline-block;
+                margin-right: 10px;margin-top: 20px;
+              }
+              .shang_logo{display:block;text-align:center;margin:20px auto;}
+              .shang_tit-play{width: 100%;height: 75px;text-align: center;line-height: 66px;color: #a3a3a3;font-size: 16px;background: url('/images/payimg/cy-reward-title-bg.jpg');font-family: 'Microsoft YaHei';margin-top: 7px;margin-right:2px;}
+              .shang_tit-play p{color:#a3a3a3;text-align:center;font-size:16px;}
+              .shang_payimg{width:140px;padding:10px;padding-left: 80px; /*border:6px solid #EA5F00;**/margin:0 auto;border-radius:3px;height:140px;display:inline-block;}
+              .shang_payimg img{display:inline-block;margin-right:10px;float:left;text-align:center;width:140px;height:140px; }
+              .pay_explain{text-align:center;margin:10px auto;font-size:12px;color:#545454;}
+              .shang_payselect{text-align:center;margin:0 auto;margin-top:40px;cursor:pointer;height:60px;width:500px;margin-left:110px;}
+              .shang_payselect .pay_item{display:inline-block;margin-right:140px;float:left;}
+              .shang_info-play{clear:both;}
+              .shang_info-play p,.shang_info-play a{color:#C3C3C3;text-align:center;font-size:12px;text-decoration:none;line-height:2em;}
+            </style>
+
+       <ul class="pager">
+        
+        <li class="previous">
+            <a href="/2018/04/06_SHELL/" data-toggle="tooltip" data-placement="top" title="06_SHELL编程之CASE语句+函数+正则">上一篇：  <span>06_SHELL编程之CASE语句+函数+正则</span>
+            </a>
+        </li>
+        
+        
+        <li class="next">
+            <a href="/2018/05/08_SHELL/" data-toggle="tooltip" data-placement="top" title="08_SHELL编程之文本处理工具awk">下一篇：  <span>08_SHELL编程之文本处理工具awk</span>
+            </a>
+        </li>
+        
+    </ul>
+</section>
+
+<section class="post-comments">
+
+  
+
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zMDUwNi83MDYw">
+      <script type="text/javascript">
+         (function(d, s) {
+             var j, e = d.getElementsByTagName(s)[0];
+
+             if (typeof LivereTower === 'function') { return; }
+             j = d.createElement(s);
+             j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+             j.async = true;
+             e.parentNode.insertBefore(j, e);
+         })(document, 'script');
+      </script>
+      <noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+      </div>
+
+  
+
+</section>
+
+
+            <section class="footer">
+    <footer>
+        <div class = "footer_div">  
+        <nav class="cover-navigation navigation--social">
+          <ul class="navigation">
+
+          
+          <!-- Github -->
+          <li class="navigation__item_social">
+            <a href="https://github.com/lijingbiao" title="@lijingbiao 的 Github" target="_blank">
+              <div class="footer-social-icon" style="background:url(/images/github.png);"></div>
+            </a>
+          </li>
+          
+
+          
+
+          
+
+          
+          <!-- Zhihu -->
+          <li class="navigation__item_social">
+            <a href="https://www.jianshu.com/u/e66c74545d7e" title="@e66c74545d7e" target="_blank">
+              <div class="footer-social-icon" style="background:url(/images/jianshu.png);"></div>
+            </a>
+          </li>
+
+          
+
+          
+
+          
+          
+
+
+          
+          <!-- Email -->
+          <li class="navigation__item_social">
+            <a href="mailto:694292399@qq.com" title="Contact me">
+              <div class="footer-social-icon" style="background:url(/images/email.png);"></div>
+            </a>
+          </li>
+          
+          
+          <!-- RSS -->
+          <li class="navigation__item_social">
+            <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+              <div class="footer-social-icon" style="background:url(/images/rss.png);"></div>
+              <span class="label">RSS</span>
+            </a>
+          </li>
+
+          </ul>
+        </nav>
+
+        </div>
+
+        <div class = "footer_div">  
+           <p class="copyright text-muted">
+            Copyright &copy; LiJingBiao 2021  |
+            <iframe
+                style="margin-left: 2px; margin-bottom:-5px;"
+                frameborder="0" scrolling="0" width="91px" height="20px"
+                src="https://ghbtns.com/github-btn.html?user=lijingbiao&repo=lijingbiao.github.io&type=star&count=true" >
+            </iframe>
+            </p>
+        	<div align="right">
+    			<link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+          <!-- 访问统计 -->
+          <span id="busuanzi_container_site_pv">
+            本站总访问量
+            <span id="busuanzi_value_site_pv"></span>次
+          </span>
+
+        </div>
+        <div>
+    </footer>
+</section>
+
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+<script type="text/javascript" src="/js/main.js"></script>
+
+<script type="text/javascript" src="/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+    
+  </body>
+
+</html>

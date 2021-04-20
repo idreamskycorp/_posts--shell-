@@ -74,9 +74,9 @@ class BlogCreateManager
     end
 
     def start_input
-        input_file_name
-        sleep 0.3
         input_create_date
+        sleep 0.3
+        input_file_name
         sleep 0.3
         input_title
         sleep 0.3

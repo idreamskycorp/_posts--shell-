@@ -1,0 +1,1277 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>08_SHELL编程之文本处理工具awk</title>
+  <meta name="description" content="课程目标">
+  <meta name="author" content="leopardpan">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="08_SHELL编程之文本处理工具awk">
+  <meta name="twitter:description" content="课程目标">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="08_SHELL编程之文本处理工具awk">
+  <meta property="og:description" content="课程目标">
+  
+  <link rel="icon" type="image/png" href="/images/favicon.png" />
+  <link href="/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://localhost:4000/2018/05/08_SHELL/">
+  <link rel="alternate" type="application/rss+xml" title="LiJingBiao" href="http://localhost:4000/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+
+<!-- 站点统计 -->
+  <script 
+  async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js">
+  </script>  
+
+<!-- 百度统计 -->
+  
+  <script>
+      var _hmt = _hmt || [];
+      (function() {
+        var hm = document.createElement("script");
+        hm.src = "//hm.baidu.com/hm.js?8ba1c6be0953b6f9c2ba38e57f615421";
+        var s = document.getElementsByTagName("script")[0]; 
+        s.parentNode.insertBefore(hm, s);
+      })();
+  </script>
+  
+
+<!-- google 统计 -->
+  
+  <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+      ga('create', 'UA-84134159-3', 'auto');
+      ga('send', 'pageview');
+  </script>
+  
+
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-9005224472374751",
+    enable_page_level_ads: true
+  });
+</script>
+
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">        
+      <div class="nav_container">
+         <nav class="nav-menu-item" style = "float:right">
+            <i class="nav-menu-item">
+              <a href="/#blog" title="" class="blog-button">  博客主页
+              </a>
+            </i>
+            
+                <i class="nav-menu-item">
+
+                  <a href="/archive" title="archive" class="btn-mobile-menu__icon">
+                      所有文章
+                  </a>
+                </i>
+            
+                <i class="nav-menu-item">
+
+                  <a href="/tags" title="tags" class="btn-mobile-menu__icon">
+                      标签
+                  </a>
+                </i>
+            
+                <i class="nav-menu-item">
+
+                  <a href="/about" title="about" class="btn-mobile-menu__icon">
+                      关于我
+                  </a>
+                </i>
+            
+          </nav>
+      </div>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+        <!-- 头像效果-start -->
+        <div class="ih-item circle effect right_to_left">            
+            <a href="/#blog" title="前往 LiJingBiao 的主页" class="blog-button">
+                <div class="img"><img src="/images/avatar.jpg" alt="img"></div>
+                <div class="info">
+                    <div class="info-back">
+                        <h2> 
+                            
+                                天道酬勤
+                            
+                        </h2>
+                        <p>
+                           
+                                iOS / Ruby /Shell
+                            
+                        </p>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <!-- 头像效果-end -->
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for LiJingBiao" class="blog-button">LiJingBiao</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">个人站</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">欢迎来到我的个人站~</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        
+
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="" class="blog-button">博客主页</a></li>
+                
+                  <li class="navigation__item"><a href="/archive" title="archive">所有文章</a></li>
+                
+                  <li class="navigation__item"><a href="/tags" title="tags">标签</a></li>
+                
+                  <li class="navigation__item"><a href="/about" title="about">关于我</a></li>
+                
+              </ul>
+            </nav>
+          </div>          
+        </div>
+
+
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-clear"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <head>
+  <link rel="stylesheet" href="/css/post.css">
+</head>
+
+<article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <h1 class="post-title">08_SHELL编程之文本处理工具awk</h1>
+    <div class="post-meta">
+      <img src="/images/calendar.png" width="20px"/> 
+      <time datetime="2018-05-01 00:00:00 +0800" itemprop="datePublished" class="post-meta__date date">2018-05-01</time>  
+
+      <span id="busuanzi_container_page_pv"> | 阅读：<span id="busuanzi_value_page_pv"></span>次</span>
+    </p>
+    </div>
+  </header>
+
+  
+    <h2 class="post-title">目录</h2>
+    <ul>
+  <li><a href="#课程目标">课程目标</a></li>
+  <li><a href="#一awk介绍">一、awk介绍</a>
+    <ul>
+      <li><a href="#1-awk概述">1. awk概述</a></li>
+      <li><a href="#2-awk能干啥">2. awk能干啥?</a></li>
+    </ul>
+  </li>
+  <li><a href="#二awk使用方式">二、awk使用方式</a>
+    <ul>
+      <li><a href="#1-命令行模式使用">1. 命令行模式使用</a>
+        <ul>
+          <li><a href="#-语法结构">㈠ 语法结构</a></li>
+          <li><a href="#-常用选项介绍">㈡ 常用选项介绍</a></li>
+          <li><a href="#--命名部分说明">㈢  <strong>‘</strong>命名部分说明<strong>‘</strong></a></li>
+        </ul>
+      </li>
+      <li><a href="#2-脚本模式使用">2. 脚本模式使用</a>
+        <ul>
+          <li><a href="#-脚本编写">㈠ 脚本编写</a></li>
+          <li><a href="#-脚本执行">㈡ 脚本执行</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><a href="#三-awk内部相关变量">三、 awk内部相关变量</a>
+    <ul>
+      <li><a href="#1常用内置变量举例">1、常用内置变量举例</a></li>
+      <li><a href="#2内置变量分隔符举例">2、内置变量分隔符举例</a></li>
+    </ul>
+  </li>
+  <li><a href="#四-awk工作原理">四、 awk工作原理</a></li>
+  <li><a href="#五awk使用进阶">五、awk使用进阶</a>
+    <ul>
+      <li><a href="#1-格式化输出print和printf">1. 格式化输出<code class="highlighter-rouge">print</code>和<code class="highlighter-rouge">printf</code></a></li>
+      <li><a href="#2-awk变量定义">2. awk变量定义</a></li>
+      <li><a href="#3-awk中beginend使用">3. awk中BEGIN…END使用</a>
+        <ul>
+          <li><a href="#-举例说明1">㈠ 举例说明1</a></li>
+          <li><a href="#-举例说明2">㈡ 举例说明2</a></li>
+        </ul>
+      </li>
+      <li><a href="#4-awk和正则的综合运用">4. awk和正则的综合运用</a>
+        <ul>
+          <li><a href="#-举例说明">㈠ 举例说明</a></li>
+        </ul>
+      </li>
+      <li><a href="#4-课堂练习">4. 课堂练习</a></li>
+      <li><a href="#5-awk的脚本编程">5. awk的脚本编程</a>
+        <ul>
+          <li><a href="#-流程控制语句">㈠ 流程控制语句</a>
+            <ul>
+              <li><a href="#-if结构">① if结构</a></li>
+              <li><a href="#-ifelse结构">② if…else结构</a></li>
+              <li><a href="#-ifelifelse结构">③ if…elif…else结构</a></li>
+            </ul>
+          </li>
+          <li><a href="#-循环语句">㈡ 循环语句</a>
+            <ul>
+              <li><a href="#-for循环">① for循环</a></li>
+              <li><a href="#-while循环">② while循环</a></li>
+              <li><a href="#-嵌套循环">③ 嵌套循环</a></li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li><a href="#6-awk算数运算">6. awk算数运算</a></li>
+    </ul>
+  </li>
+  <li><a href="#六awk统计案例">六、awk统计案例</a>
+    <ul>
+      <li><a href="#1统计系统中各种类型的shell">1、统计系统中各种类型的shell</a></li>
+      <li><a href="#2统计网站访问状态">2、统计网站访问状态</a></li>
+      <li><a href="#3统计访问网站的每个ip的数量">3、统计访问网站的每个IP的数量</a></li>
+      <li><a href="#4统计网站日志中pv量">4、统计网站日志中PV量</a></li>
+    </ul>
+  </li>
+  <li><a href="#七课后作业">七、课后作业</a></li>
+  <li><a href="#八企业实战案例">八、企业实战案例</a>
+    <ul>
+      <li><a href="#1-任务背景">1. 任务/背景</a></li>
+      <li><a href="#2-具体要求">2. 具体要求</a></li>
+      <li><a href="#3-涉及知识点">3. 涉及知识点</a></li>
+    </ul>
+  </li>
+</ul>
+
+  
+
+  <section class="post">
+    <h1 id="课程目标">课程目标</h1>
+
+<ul>
+  <li>熟悉awk的<strong>命令行模式</strong>基本语法结构</li>
+  <li>熟悉awk的相关内部变量</li>
+  <li>熟悉awk常用的打印函数print</li>
+  <li>能够在awk中匹配正则表达式打印相关的行</li>
+</ul>
+
+<h1 id="一awk介绍">一、awk介绍</h1>
+
+<h2 id="1-awk概述">1. awk概述</h2>
+
+<ul>
+  <li>awk是一种编程语言，主要用于在linux/unix下对文本和数据进行处理，是linux/unix下的一个工具。数据可以来自标准输入、一个或多个文件，或其它命令的输出。</li>
+  <li>awk的处理文本和数据的方式：<strong>逐行扫描文件</strong>，默认从第一行到最后一行，寻找匹配的特定模式的行，并在这些行上进行你想要的操作。</li>
+  <li>awk分别代表其作者姓氏的第一个字母。因为它的作者是三个人，分别是Alfred Aho、Brian Kernighan、Peter Weinberger。</li>
+  <li>
+    <p>gawk是awk的GNU版本，它提供了Bell实验室和GNU的一些扩展。</p>
+  </li>
+  <li>下面介绍的awk是以GNU的gawk为例的，在linux系统中已把awk链接到gawk，所以下面全部以awk进行介绍。</li>
+</ul>
+
+<h2 id="2-awk能干啥">2. awk能干啥?</h2>
+
+<ol>
+  <li>awk用来处理文件和数据的，是类unix下的一个工具，也是一种编程语言</li>
+  <li>可以用来统计数据，比如网站的访问量，访问的IP量等等</li>
+  <li>支持条件判断，支持for和while循环</li>
+</ol>
+
+<h1 id="二awk使用方式">二、awk使用方式</h1>
+
+<h2 id="1-命令行模式使用">1. 命令行模式使用</h2>
+
+<h3 id="-语法结构">㈠ 语法结构</h3>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">awk </span>选项 <span class="s1">'命令部分'</span> 文件名
+
+
+特别说明：
+引用shell变量需用双引号引起
+
+</code></pre></div></div>
+
+<h3 id="-常用选项介绍">㈡ 常用选项介绍</h3>
+
+<ul>
+  <li>-F  定义字段分割符号，默认的分隔符是空格</li>
+  <li>-v  定义变量并赋值</li>
+</ul>
+
+<h3 id="--命名部分说明">㈢  <strong>‘</strong>命名部分说明<strong>‘</strong></h3>
+
+<ul>
+  <li>正则表达式，地址定位</li>
+</ul>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="s1">'/root/{awk语句}'</span>                sed中： <span class="s1">'/root/p'</span>
+<span class="s1">'NR==1,NR==5{awk语句}'</span>            sed中： <span class="s1">'1,5p'</span>
+<span class="s1">'/^root/,/^ftp/{awk语句}'</span>      sed中：<span class="s1">'/^root/,/^ftp/p'</span>
+</code></pre></div></div>
+
+<ul>
+  <li>{awk语句1<strong>;</strong>awk语句2<strong>;</strong>…}</li>
+</ul>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="s1">'{print $0;print $1}'</span>        sed中：<span class="s1">'p'</span>
+<span class="s1">'NR==5{print $0}'</span>                sed中：<span class="s1">'5p'</span>
+注：awk命令语句间用分号间隔
+</code></pre></div></div>
+
+<ul>
+  <li>BEGIN…END….</li>
+</ul>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="s1">'BEGIN{awk语句};{处理中};END{awk语句}'</span>
+<span class="s1">'BEGIN{awk语句};{处理中}'</span>
+<span class="s1">'{处理中};END{awk语句}'</span>
+</code></pre></div></div>
+
+<h2 id="2-脚本模式使用">2. 脚本模式使用</h2>
+
+<h3 id="-脚本编写">㈠ 脚本编写</h3>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#!/bin/awk -f         定义魔法字符</span>
+以下是awk引号里的命令清单，不要用引号保护命令，多个命令用分号间隔
+<span class="k">BEGIN</span><span class="o">{</span><span class="nv">FS</span><span class="o">=</span><span class="s2">":"</span><span class="o">}</span>
+<span class="nv">NR</span><span class="o">==</span>1,NR<span class="o">==</span>3<span class="o">{</span>print <span class="nv">$1</span><span class="s2">"\t"</span><span class="nv">$NF</span><span class="o">}</span>
+...
+</code></pre></div></div>
+
+<h3 id="-脚本执行">㈡ 脚本执行</h3>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>方法1：
+<span class="nb">awk </span>选项 -f awk的脚本文件  要处理的文本文件
+<span class="nb">awk</span> -f awk.sh filename
+
+<span class="nb">sed</span> -f sed.sh -i filename
+
+方法2：
+./awk的脚本文件<span class="o">(</span>或者绝对路径<span class="o">)</span>    要处理的文本文件
+./awk.sh filename
+
+./sed.sh filename
+</code></pre></div></div>
+
+<h1 id="三-awk内部相关变量">三、 awk内部相关变量</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>变量</th>
+      <th>变量说明</th>
+      <th>备注</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>$0</td>
+      <td>当前处理行的所有记录</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>$1,$2,$3…$n</td>
+      <td>文件中每行以间隔符号分割的不同字段</td>
+      <td>awk -F: ‘{print $1,$3}’</td>
+    </tr>
+    <tr>
+      <td>NF</td>
+      <td>当前记录的字段数（列数）</td>
+      <td>awk -F: ‘{print NF}’</td>
+    </tr>
+    <tr>
+      <td>$NF</td>
+      <td>最后一列</td>
+      <td>$(NF-1)表示倒数第二列</td>
+    </tr>
+    <tr>
+      <td>FNR/NR</td>
+      <td>行号</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>FS</td>
+      <td>定义间隔符</td>
+      <td>‘BEGIN{FS=”:”};{print $1,$3}’</td>
+    </tr>
+    <tr>
+      <td>OFS</td>
+      <td>定义输出字段分隔符，默认空格</td>
+      <td>‘BEGIN{OFS=”\t”};print $1,$3}’</td>
+    </tr>
+    <tr>
+      <td>RS</td>
+      <td>输入记录分割符，默认换行</td>
+      <td>‘BEGIN{RS=”\t”};{print $0}’</td>
+    </tr>
+    <tr>
+      <td>ORS</td>
+      <td>输出记录分割符，默认换行</td>
+      <td>‘BEGIN{ORS=”\n\n”};{print $1,$3}’</td>
+    </tr>
+    <tr>
+      <td>FILENAME</td>
+      <td>当前输入的文件名</td>
+      <td> </td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="1常用内置变量举例">1、常用内置变量举例</h2>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># awk -F: '{print $1,$(NF-1)}' 1.txt</span>
+<span class="c1"># awk -F: '{print $1,$(NF-1),$NF,NF}' 1.txt</span>
+<span class="c1"># awk '/root/{print $0}' 1.txt</span>
+<span class="c1"># awk '/root/' 1.txt</span>
+<span class="c1"># awk -F: '/root/{print $1,$NF}' 1.txt </span>
+root /bin/bash
+<span class="c1"># awk -F: '/root/{print $0}' 1.txt      </span>
+root:x:0:0:root:/root:/bin/bash
+<span class="c1"># awk 'NR==1,NR==5' 1.txt </span>
+<span class="c1"># awk 'NR==1,NR==5{print $0}' 1.txt</span>
+<span class="c1"># awk 'NR==1,NR==5;/^root/{print $0}' 1.txt </span>
+root:x:0:0:root:/root:/bin/bash
+root:x:0:0:root:/root:/bin/bash
+bin:x:1:1:bin:/bin:/sbin/nologin
+daemon:x:2:2:daemon:/sbin:/sbin/nologin
+adm:x:3:4:adm:/var/adm:/sbin/nologin
+<span class="nb">lp</span>:x:4:7:lp:/var/spool/lpd:/sbin/nologin
+
+</code></pre></div></div>
+
+<h2 id="2内置变量分隔符举例">2、内置变量分隔符举例</h2>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>FS和OFS:
+<span class="c1"># awk 'BEGIN{FS=":"};/^root/,/^lp/{print $1,$NF}' 1.txt</span>
+<span class="c1"># awk -F: 'BEGIN{OFS="\t\t"};/^root/,/^lp/{print $1,$NF}' 1.txt        </span>
+root            /bin/bash
+bin             /sbin/nologin
+daemon          /sbin/nologin
+adm             /sbin/nologin
+<span class="nb">lp</span>              /sbin/nologin
+<span class="c1"># awk -F: 'BEGIN{OFS="@@@"};/^root/,/^lp/{print $1,$NF}' 1.txt     </span>
+root@@@/bin/bash
+bin@@@/sbin/nologin
+daemon@@@/sbin/nologin
+adm@@@/sbin/nologin
+<span class="nb">lp</span>@@@/sbin/nologin
+<span class="o">[</span>root@server shell07]# 
+
+RS和ORS：
+修改源文件前2行增加制表符和内容：
+vim 1.txt
+root:x:0:0:root:/root:/bin/bash hello   world
+bin:x:1:1:bin:/bin:/sbin/nologin        test1   test2
+
+<span class="c1"># awk 'BEGIN{RS="\t"};{print $0}' 1.txt</span>
+<span class="c1"># awk 'BEGIN{ORS="\t"};{print $0}' 1.txt</span>
+</code></pre></div></div>
+
+<h1 id="四-awk工作原理">四、 awk工作原理</h1>
+
+<p><code class="highlighter-rouge">awk -F: '{print $1,$3}' /etc/passwd</code></p>
+
+<ol>
+  <li>
+    <p>awk使用一行作为输入，并将这一行赋给内部变量$0，每一行也可称为一个记录，以换行符(RS)结束</p>
+  </li>
+  <li>
+    <p>每行被间隔符<strong>:</strong>(默认为空格或制表符)分解成字段(或域)，每个字段存储在已编号的变量中，从$1开始</p>
+
+    <p>问：awk如何知道用空格来分隔字段的呢？</p>
+
+    <p>答：因为有一个内部变量FS来确定字段分隔符。初始时，FS赋为空格</p>
+  </li>
+  <li>
+    <p>awk使用print函数打印字段，打印出来的字段会以空格分隔，因为$1,$3之间有一个逗号。逗号比较特殊，它映射为另一个内部变量，称为输出字段分隔符OFS，OFS默认为空格</p>
+  </li>
+  <li>
+    <p>awk处理完一行后，将从文件中获取另一行，并将其存储在$0中，覆盖原来的内容，然后将新的字符串分隔成字段并进行处理。该过程将持续到所有行处理完毕</p>
+  </li>
+</ol>
+
+<h1 id="五awk使用进阶">五、awk使用进阶</h1>
+
+<h2 id="1-格式化输出print和printf">1. 格式化输出<code class="highlighter-rouge">print</code>和<code class="highlighter-rouge">printf</code></h2>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>print函数        类似echo <span class="s2">"hello world"</span>
+<span class="c1"># date |awk '{print "Month: "$2 "\nYear: "$NF}'</span>
+<span class="c1"># awk -F: '{print "username is: " $1 "\t uid is: "$3}' /etc/passwd</span>
+
+
+printf函数        类似echo -n
+<span class="c1"># awk -F: '{printf "%-15s %-10s %-15s\n", $1,$2,$3}'  /etc/passwd</span>
+<span class="c1"># awk -F: '{printf "|%15s| %10s| %15s|\n", $1,$2,$3}' /etc/passwd</span>
+<span class="c1"># awk -F: '{printf "|%-15s| %-10s| %-15s|\n", $1,$2,$3}' /etc/passwd</span>
+
+<span class="nb">awk</span> <span class="s1">'BEGIN{FS=":"};{printf "%-15s %-15s %-15s\n",$1,$6,$NF}'</span> a.txt
+
+%s 字符类型  strings            %-20s
+%d 数值类型    
+占15字符
+- 表示左对齐，默认是右对齐
+printf默认不会在行尾自动换行，加\n
+</code></pre></div></div>
+
+<h2 id="2-awk变量定义">2. awk变量定义</h2>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># awk -v NUM=3 -F: '{ print $NUM }' /etc/passwd</span>
+<span class="c1"># awk -v NUM=3 -F: '{ print NUM }' /etc/passwd</span>
+<span class="c1"># awk -v num=1 'BEGIN{print num}' </span>
+1
+<span class="c1"># awk -v num=1 'BEGIN{print $num}' </span>
+注意：
+awk中调用定义的变量不需要加<span class="err">$</span>
+</code></pre></div></div>
+
+<h2 id="3-awk中beginend使用">3. awk中BEGIN…END使用</h2>
+
+<p>​    ①BEGIN：表示在程序开始前执行</p>
+
+<p>​    ②END ：表示所有文件处理完后执行</p>
+
+<p>​    ③用法：<code class="highlighter-rouge">'BEGIN{开始处理之前};{处理中};END{处理结束后}'</code></p>
+
+<h3 id="-举例说明1">㈠ 举例说明1</h3>
+
+<p><strong>打印最后一列和倒数第二列（登录shell和家目录）</strong></p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">awk</span> -F: <span class="s1">'BEGIN{ print "Login_shell\t\tLogin_home\n*******************"};{print $NF"\t\t"$(NF-1)};END{print "************************"}'</span> 1.txt
+
+<span class="nb">awk</span> <span class="s1">'BEGIN{ FS=":";print "Login_shell\tLogin_home\n*******************"};{print $NF"\t"$(NF-1)};END{print "************************"}'</span> 1.txt
+
+Login_shell        Login_home
+<span class="k">************************</span>
+/bin/bash        /root
+/sbin/nologin        /bin
+/sbin/nologin        /sbin
+/sbin/nologin        /var/adm
+/sbin/nologin        /var/spool/lpd
+/bin/bash        /home/redhat
+/bin/bash        /home/user01
+/sbin/nologin        /var/named
+/bin/bash        /home/u01
+/bin/bash        /home/YUNWEI
+<span class="k">************************************</span>
+</code></pre></div></div>
+
+<h3 id="-举例说明2">㈡ 举例说明2</h3>
+
+<p><strong>打印/etc/passwd里的用户名、家目录及登录shell</strong></p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>u_name      h_dir       shell
+<span class="k">***************************</span>
+
+<span class="k">***************************</span>
+
+<span class="nb">awk</span> -F: <span class="s1">'BEGIN{OFS="\t\t";print"u_name\t\th_dir\t\tshell\n***************************"};{printf "%-20s %-20s %-20s\n",$1,$(NF-1),$NF};END{print "****************************"}'</span>
+
+
+<span class="c1"># awk -F: 'BEGIN{print "u_name\t\th_dir\t\tshell" RS "*****************"}  {printf "%-15s %-20s %-20s\n",$1,$(NF-1),$NF}END{print "***************************"}'  /etc/passwd</span>
+
+格式化输出：
+<span class="nb">echo        </span>print
+<span class="nb">echo</span> -n    <span class="nb">printf</span>
+
+<span class="o">{</span><span class="nb">printf</span> <span class="s2">"%-15s %-20s %-20s\n"</span>,<span class="nv">$1</span>,<span class="k">$(</span>NF-1<span class="k">)</span>,<span class="nv">$NF</span><span class="o">}</span>
+</code></pre></div></div>
+
+<h2 id="4-awk和正则的综合运用">4. awk和正则的综合运用</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>运算符</th>
+      <th>说明</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>==</td>
+      <td>等于</td>
+    </tr>
+    <tr>
+      <td>!=</td>
+      <td>不等于</td>
+    </tr>
+    <tr>
+      <td>&gt;</td>
+      <td>大于</td>
+    </tr>
+    <tr>
+      <td>&lt;</td>
+      <td>小于</td>
+    </tr>
+    <tr>
+      <td>&gt;=</td>
+      <td>大于等于</td>
+    </tr>
+    <tr>
+      <td>&lt;=</td>
+      <td>小于等于</td>
+    </tr>
+    <tr>
+      <td>~</td>
+      <td>匹配</td>
+    </tr>
+    <tr>
+      <td>!~</td>
+      <td>不匹配</td>
+    </tr>
+    <tr>
+      <td>!</td>
+      <td>逻辑非</td>
+    </tr>
+    <tr>
+      <td>&amp;&amp;</td>
+      <td>逻辑与</td>
+    </tr>
+    <tr>
+      <td>||</td>
+      <td>逻辑或</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="-举例说明">㈠ 举例说明</h3>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>从第一行开始匹配到以lp开头行
+<span class="nb">awk</span> -F: <span class="s1">'NR==1,/^lp/{print $0 }'</span> passwd  
+从第一行到第5行          
+<span class="nb">awk</span> -F: <span class="s1">'NR==1,NR==5{print $0 }'</span> passwd
+从以lp开头的行匹配到第10行       
+<span class="nb">awk</span> -F: <span class="s1">'/^lp/,NR==10{print $0 }'</span> passwd 
+从以root开头的行匹配到以lp开头的行       
+<span class="nb">awk</span> -F: <span class="s1">'/^root/,/^lp/{print $0}'</span> passwd
+打印以root开头或者以lp开头的行            
+<span class="nb">awk</span> -F: <span class="s1">'/^root/ || /^lp/{print $0}'</span> passwd
+<span class="nb">awk</span> -F: <span class="s1">'/^root/;/^lp/{print $0}'</span> passwd
+显示5-10行   
+<span class="nb">awk</span> -F<span class="s1">':'</span> <span class="s1">'NR&gt;=5 &amp;&amp; NR&lt;=10 {print $0}'</span> /etc/passwd     
+<span class="nb">awk</span> -F: <span class="s1">'NR&lt;10 &amp;&amp; NR&gt;5 {print $0}'</span> passwd 
+
+打印30-39行以bash结尾的内容：
+<span class="o">[</span>root@MissHou shell06]# <span class="nb">awk</span> <span class="s1">'NR&gt;=30 &amp;&amp; NR&lt;=39 &amp;&amp; $0 ~ /bash$/{print $0}'</span> passwd 
+stu1:x:500:500::/home/stu1:/bin/bash
+yunwei:x:501:501::/home/yunwei:/bin/bash
+user01:x:502:502::/home/user01:/bin/bash
+user02:x:503:503::/home/user02:/bin/bash
+user03:x:504:504::/home/user03:/bin/bash
+
+<span class="o">[</span>root@MissHou shell06]# <span class="nb">awk</span> <span class="s1">'NR&gt;=3 &amp;&amp; NR&lt;=8 &amp;&amp; /bash$/'</span> 1.txt  
+stu7:x:1007:1007::/rhome/stu7:/bin/bash
+stu8:x:1008:1008::/rhome/stu8:/bin/bash
+stu9:x:1009:1009::/rhome/stu9:/bin/bash
+
+打印文件中1-5并且以root开头的行
+<span class="o">[</span>root@MissHou shell06]# <span class="nb">awk</span> <span class="s1">'NR&gt;=1 &amp;&amp; NR&lt;=5 &amp;&amp; $0 ~ /^root/{print $0}'</span> 1.txt
+root:x:0:0:root:/root:/bin/bash
+<span class="o">[</span>root@MissHou shell06]# <span class="nb">awk</span> <span class="s1">'NR&gt;=1 &amp;&amp; NR&lt;=5 &amp;&amp; $0 !~ /^root/{print $0}'</span> 1.txt
+bin:x:1:1:bin:/bin:/sbin/nologin
+daemon:x:2:2:daemon:/sbin:/sbin/nologin
+adm:x:3:4:adm:/var/adm:/sbin/nologin
+<span class="nb">lp</span>:x:4:7:lp:/var/spool/lpd:/sbin/nologin
+
+
+理解;号和||的含义：
+<span class="o">[</span>root@MissHou shell06]# <span class="nb">awk</span> <span class="s1">'NR&gt;=3 &amp;&amp; NR&lt;=8 || /bash$/'</span> 1.txt
+<span class="o">[</span>root@MissHou shell06]# <span class="nb">awk</span> <span class="s1">'NR&gt;=3 &amp;&amp; NR&lt;=8;/bash$/'</span> 1.txt
+
+
+打印IP地址
+<span class="c1"># ifconfig eth0|awk 'NR&gt;1 {print $2}'|awk -F':' 'NR&lt;2 {print $2}'    </span>
+<span class="c1"># ifconfig eth0|grep Bcast|awk -F':' '{print $2}'|awk '{print $1}'</span>
+<span class="c1"># ifconfig eth0|grep Bcast|awk '{print $2}'|awk -F: '{print $2}'</span>
+
+
+<span class="c1"># ifconfig eth0|awk NR==2|awk -F '[ :]+' '{print $4RS$6RS$8}'</span>
+<span class="c1"># ifconfig eth0|awk -F"[ :]+" '/inet addr:/{print $4}'</span>
+</code></pre></div></div>
+
+<h2 id="4-课堂练习">4. 课堂练习</h2>
+
+<ol>
+  <li>显示可以登录操作系统的用户所有信息     从第7列匹配以bash结尾，输出整行（当前行所有的列）</li>
+</ol>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">[</span>root@MissHou ~] <span class="nb">awk</span> <span class="s1">'/bash$/{print $0}'</span>    /etc/passwd
+<span class="o">[</span>root@MissHou ~] <span class="nb">awk</span> <span class="s1">'/bash$/{print $0}'</span> /etc/passwd
+<span class="o">[</span>root@MissHou ~] <span class="nb">awk</span> <span class="s1">'/bash$/'</span> /etc/passwd
+<span class="o">[</span>root@MissHou ~] <span class="nb">awk</span> -F: <span class="s1">'$7 ~ /bash/'</span> /etc/passwd
+<span class="o">[</span>root@MissHou ~] <span class="nb">awk</span> -F: <span class="s1">'$NF ~ /bash/'</span> /etc/passwd
+<span class="o">[</span>root@MissHou ~] <span class="nb">awk</span> -F: <span class="s1">'$0 ~ /bash/'</span> /etc/passwd
+<span class="o">[</span>root@MissHou ~] <span class="nb">awk</span> -F: <span class="s1">'$0 ~ /\/bin\/bash/'</span> /etc/passwd
+</code></pre></div></div>
+
+<ol>
+  <li>显示可以登录系统的用户名</li>
+</ol>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># awk -F: '$0 ~ /\/bin\/bash/{print $1}' /etc/passwd</span>
+</code></pre></div></div>
+
+<ol>
+  <li>打印出系统中普通用户的UID和用户名</li>
+</ol>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>500    stu1
+501    yunwei
+502    user01
+503    user02
+504    user03
+
+
+<span class="c1"># awk -F: 'BEGIN{print "UID\tUSERNAME"} {if($3&gt;=500 &amp;&amp; $3 !=65534 ) {print $3"\t"$1} }' /etc/passwdUID    USERNAME</span>
+
+
+<span class="c1"># awk -F: '{if($3 &gt;= 500 &amp;&amp; $3 != 65534) print $1,$3}' a.txt </span>
+redhat 508
+user01 509
+u01 510
+YUNWEI 511
+</code></pre></div></div>
+
+<h2 id="5-awk的脚本编程">5. awk的脚本编程</h2>
+
+<h3 id="-流程控制语句">㈠ 流程控制语句</h3>
+
+<h4 id="-if结构">① if结构</h4>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>if语句：
+
+<span class="k">if</span> <span class="o">[</span> xxx <span class="o">]</span>;<span class="k">then
+</span>xxx
+<span class="k">fi
+
+</span>格式：
+<span class="nb">awk </span>选项 <span class="s1">'正则，地址定位{awk语句}'</span>  文件名
+
+<span class="o">{</span> <span class="k">if</span><span class="o">(</span>表达式<span class="o">)</span>｛语句1;语句2;...｝<span class="o">}</span>
+
+<span class="nb">awk</span> -F: <span class="s1">'{if($3&gt;=500 &amp;&amp; $3&lt;=60000) {print $1,$3} }'</span> passwd
+
+<span class="c1"># awk -F: '{if($3==0) {print $1"是管理员"} }' passwd </span>
+root是管理员
+
+<span class="c1"># awk 'BEGIN{if('$(id -u)'==0) {print "admin"} }'</span>
+admin
+</code></pre></div></div>
+
+<h4 id="-ifelse结构">② if…else结构</h4>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if</span>...else语句:
+<span class="k">if</span> <span class="o">[</span> xxx <span class="o">]</span>;<span class="k">then
+    </span>xxxxx
+    
+<span class="k">else
+    </span>xxx
+<span class="k">fi
+
+</span>格式：
+<span class="o">{</span><span class="k">if</span><span class="o">(</span>表达式<span class="o">)</span>｛语句;语句;...｝else｛语句;语句;...<span class="o">}}</span>
+
+<span class="nb">awk</span> -F: <span class="s1">'{ if($3&gt;=500 &amp;&amp; $3 != 65534) {print $1"是普通用户"} else {print $1,"不是普通用户"}}'</span> passwd 
+
+<span class="nb">awk</span> <span class="s1">'BEGIN{if( '</span><span class="k">$(</span><span class="nb">id</span> -u<span class="k">)</span><span class="s1">'&gt;=500 &amp;&amp; '</span><span class="k">$(</span><span class="nb">id</span> -u<span class="k">)</span><span class="s1">' !=65534 ) {print "是普通用户"} else {print "不是普通用户"}}'</span>
+
+</code></pre></div></div>
+
+<h4 id="-ifelifelse结构">③ if…elif…else结构</h4>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if</span> <span class="o">[</span>xxxx];then
+    xxxx
+<span class="k">elif</span> <span class="o">[</span>xxx];then
+    xxx
+....
+<span class="k">else</span>
+...
+<span class="k">fi
+
+
+if</span>...else <span class="k">if</span>...else语句：
+
+格式：
+<span class="o">{</span> <span class="k">if</span><span class="o">(</span>表达式1<span class="o">)</span>｛语句;语句；...｝else <span class="k">if</span><span class="o">(</span>表达式2<span class="o">)</span>｛语句;语句；...｝else <span class="k">if</span><span class="o">(</span>表达式3<span class="o">)</span>｛语句;语句；...｝else｛语句;语句；...｝<span class="o">}</span>
+
+<span class="nb">awk</span> -F: <span class="s1">'{ if($3==0) {print $1,":是管理员"} else if($3&gt;=1 &amp;&amp; $3&lt;=499 || $3==65534 ) {print $1,":是系统用户"} else {print $1,":是普通用户"}}'</span>
+
+
+<span class="nb">awk</span> -F: <span class="s1">'{ if($3==0) {i++} else if($3&gt;=1 &amp;&amp; $3&lt;=499 || $3==65534 ) {j++} else {k++}};END{print "管理员个数为:"i "\n系统用户个数为:"j"\n普通用户的个数为:"k }'</span>
+
+
+<span class="c1"># awk -F: '{if($3==0) {print $1,"is admin"} else if($3&gt;=1 &amp;&amp; $3&lt;=499 || $3==65534) {print $1,"is sys users"} else {print $1,"is general user"} }' a.txt </span>
+
+root is admin
+bin is sys <span class="nb">users
+</span>daemon is sys <span class="nb">users
+</span>adm is sys <span class="nb">users
+lp </span>is sys <span class="nb">users
+</span>redhat is general user
+user01 is general user
+named is sys <span class="nb">users
+</span>u01 is general user
+YUNWEI is general user
+
+<span class="nb">awk</span> -F: <span class="s1">'{  if($3==0) {print $1":管理员"} else if($3&gt;=1 &amp;&amp; $3&lt;500 || $3==65534 ) {print $1":是系统用户"} else {print $1":是普通用户"}}'</span>   /etc/passwd
+
+
+<span class="nb">awk</span> -F: <span class="s1">'{if($3==0) {i++} else if($3&gt;=1 &amp;&amp; $3&lt;500 || $3==65534){j++} else {k++}};END{print "管理员个数为:" i RS "系统用户个数为:"j RS "普通用户的个数为:"k }'</span> /etc/passwd
+管理员个数为:1
+系统用户个数为:28
+普通用户的个数为:27
+
+
+<span class="c1"># awk -F: '{ if($3==0) {print $1":是管理员"} else if($3&gt;=500 &amp;&amp; $3!=65534) {print $1":是普通用户"} else {print $1":是系统用户"}}' passwd </span>
+
+<span class="nb">awk</span> -F: <span class="s1">'{if($3==0){i++} else if($3&gt;=500){k++} else{j++}} END{print i; print k; print j}'</span> /etc/passwd
+
+<span class="nb">awk</span> -F: <span class="s1">'{if($3==0){i++} else if($3&gt;999){k++} else{j++}} END{print "管理员个数: "i; print "普通用个数: "k; print "系统用户: "j}'</span> /etc/passwd 
+
+如果是普通用户打印默认shell，如果是系统用户打印用户名
+<span class="c1"># awk -F: '{if($3&gt;=1 &amp;&amp; $3&lt;500 || $3 == 65534) {print $1} else if($3&gt;=500 &amp;&amp; $3&lt;=60000 ) {print $NF} }' /etc/passwd</span>
+</code></pre></div></div>
+
+<h3 id="-循环语句">㈡ 循环语句</h3>
+
+<h4 id="-for循环">① for循环</h4>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>打印1~5
+<span class="k">for</span> <span class="o">((</span><span class="nv">i</span><span class="o">=</span>1;i&lt;<span class="o">=</span>5;i++<span class="o">))</span>;<span class="k">do </span><span class="nb">echo</span> <span class="nv">$i</span>;<span class="k">done</span>
+
+<span class="c1"># awk 'BEGIN { for(i=1;i&lt;=5;i++) {print i} }'</span>
+打印1~10中的奇数
+<span class="c1"># for ((i=1;i&lt;=10;i+=2));do echo $i;done|awk '{sum+=$0};END{print sum}'</span>
+<span class="c1"># awk 'BEGIN{ for(i=1;i&lt;=10;i+=2) {print i} }'</span>
+<span class="c1"># awk 'BEGIN{ for(i=1;i&lt;=10;i+=2) print i }'</span>
+
+计算1-5的和
+<span class="c1"># awk 'BEGIN{sum=0;for(i=1;i&lt;=5;i++) sum+=i;print sum}'</span>
+<span class="c1"># awk 'BEGIN{for(i=1;i&lt;=5;i++) (sum+=i);{print sum}}'</span>
+<span class="c1"># awk 'BEGIN{for(i=1;i&lt;=5;i++) (sum+=i);print sum}'</span>
+</code></pre></div></div>
+
+<h4 id="-while循环">② while循环</h4>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>打印1-5
+<span class="c1"># i=1;while (($i&lt;=5));do echo $i;let i++;done</span>
+
+<span class="c1"># awk 'BEGIN { i=1;while(i&lt;=5) {print i;i++} }'</span>
+打印1~10中的奇数
+<span class="c1"># awk 'BEGIN{i=1;while(i&lt;=10) {print i;i+=2} }'</span>
+计算1-5的和
+<span class="c1"># awk 'BEGIN{i=1;sum=0;while(i&lt;=5) {sum+=i;i++}; print sum }'</span>
+<span class="c1"># awk 'BEGIN {i=1;while(i&lt;=5) {(sum+=i) i++};print sum }'</span>
+</code></pre></div></div>
+
+<h4 id="-嵌套循环">③ 嵌套循环</h4>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>嵌套循环：
+<span class="c1">#!/bin/bash</span>
+<span class="k">for</span> <span class="o">((</span><span class="nv">y</span><span class="o">=</span>1;y&lt;<span class="o">=</span>5;y++<span class="o">))</span>
+<span class="k">do
+    for</span> <span class="o">((</span><span class="nv">x</span><span class="o">=</span>1;x&lt;<span class="o">=</span><span class="nv">$y</span>;x++<span class="o">))</span>
+    <span class="k">do
+        </span><span class="nb">echo</span> -n <span class="nv">$x</span>    
+    <span class="k">done
+</span><span class="nb">echo
+</span><span class="k">done
+
+</span><span class="nb">awk</span> <span class="s1">'BEGIN{ for(y=1;y&lt;=5;y++) {for(x=1;x&lt;=y;x++) {printf x} ;print } }'</span>
+
+
+<span class="c1"># awk 'BEGIN { for(y=1;y&lt;=5;y++) { for(x=1;x&lt;=y;x++) {printf x};print} }'</span>
+1
+12
+123
+1234
+12345
+
+<span class="c1"># awk 'BEGIN{ y=1;while(y&lt;=5) { for(x=1;x&lt;=y;x++) {printf x};y++;print}}'</span>
+1
+12
+123
+1234
+12345
+
+尝试用三种方法打印99口诀表：
+<span class="c1">#awk 'BEGIN{for(y=1;y&lt;=9;y++) { for(x=1;x&lt;=y;x++) {printf x"*"y"="x*y"\t"};print} }'</span>
+
+<span class="c1">#awk 'BEGIN{for(y=1;y&lt;=9;y++) { for(x=1;x&lt;=y;x++) printf x"*"y"="x*y"\t";print} }'</span>
+<span class="c1">#awk 'BEGIN{i=1;while(i&lt;=9){for(j=1;j&lt;=i;j++) {printf j"*"i"="j*i"\t"};print;i++ }}'</span>
+
+<span class="c1">#awk 'BEGIN{for(i=1;i&lt;=9;i++){j=1;while(j&lt;=i) {printf j"*"i"="i*j"\t";j++};print}}'</span>
+
+循环的控制：
+<span class="k">break        </span>条件满足的时候中断循环
+<span class="k">continue    </span>条件满足的时候跳过循环
+<span class="c1"># awk 'BEGIN{for(i=1;i&lt;=5;i++) {if(i==3) break;print i} }'</span>
+1
+2
+<span class="c1"># awk 'BEGIN{for(i=1;i&lt;=5;i++){if(i==3) continue;print i}}'</span>
+1
+2
+4
+5
+</code></pre></div></div>
+
+<h2 id="6-awk算数运算">6. awk算数运算</h2>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>+ - <span class="k">*</span> / %<span class="o">(</span>模<span class="o">)</span> ^<span class="o">(</span>幂2^3<span class="o">)</span>
+可以在模式中执行计算，awk都将按浮点数方式执行算术运算
+<span class="c1"># awk 'BEGIN{print 1+1}'</span>
+<span class="c1"># awk 'BEGIN{print 1**1}'</span>
+<span class="c1"># awk 'BEGIN{print 2**3}'</span>
+<span class="c1"># awk 'BEGIN{print 2/3}'</span>
+</code></pre></div></div>
+
+<h1 id="六awk统计案例">六、awk统计案例</h1>
+
+<h2 id="1统计系统中各种类型的shell">1、统计系统中各种类型的shell</h2>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># awk -F: '{ shells[$NF]++ };END{for (i in shells) {print i,shells[i]} }' /etc/passwd</span>
+
+books[linux]++
+books[linux]<span class="o">=</span>1
+shells[/bin/bash]++
+shells[/sbin/nologin]++
+
+/bin/bash 5
+/sbin/nologin 6
+
+shells[/bin/bash]++            a
+shells[/sbin/nologin]++        b
+shells[/sbin/shutdown]++    c
+
+books[linux]++
+books[php]++
+
+</code></pre></div></div>
+
+<h2 id="2统计网站访问状态">2、统计网站访问状态</h2>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># ss -antp|grep 80|awk '{states[$1]++};END{for(i in states){print i,states[i]}}'</span>
+TIME_WAIT 578
+ESTABLISHED 1
+LISTEN 1
+
+<span class="c1"># ss -an |grep :80 |awk '{states[$2]++};END{for(i in states){print i,states[i]}}'</span>
+LISTEN 1
+ESTAB 5
+TIME-WAIT 25
+
+<span class="c1"># ss -an |grep :80 |awk '{states[$2]++};END{for(i in states){print i,states[i]}}' |sort -k2 -rn</span>
+TIME-WAIT 18
+ESTAB 8
+LISTEN 1
+
+</code></pre></div></div>
+
+<h2 id="3统计访问网站的每个ip的数量">3、统计访问网站的每个IP的数量</h2>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># netstat -ant |grep :80 |awk -F: '{ip_count[$8]++};END{for(i in ip_count){print i,ip_count[i]} }' |sort</span>
+
+
+<span class="c1"># ss -an |grep :80 |awk -F":" '!/LISTEN/{ip_count[$(NF-1)]++};END{for(i in ip_count){print i,ip_count[i]}}' |sort -k2 -rn |head</span>
+</code></pre></div></div>
+
+<h2 id="4统计网站日志中pv量">4、统计网站日志中PV量</h2>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>统计Apache/Nginx日志中某一天的PV量 　&lt;统计日志&gt;
+<span class="c1"># grep '27/Jul/2017' mysqladmin.cc-access_log |wc -l</span>
+14519
+
+统计Apache/Nginx日志中某一天不同IP的访问量　&lt;统计日志&gt;
+<span class="c1"># grep '27/Jul/2017' mysqladmin.cc-access_log |awk '{ips[$1]++};END{for(i in ips){print i,ips[i]} }' |sort -k2 -rn |head</span>
+
+<span class="c1"># grep '07/Aug/2017' access.log |awk '{ips[$1]++};END{for(i in ips){print i,ips[i]} }' |awk '$2&gt;100' |sort -k2 -rn</span>
+
+</code></pre></div></div>
+
+<p><strong>名词解释：</strong></p>
+
+<p>网站浏览量（PV）
+名词：PV=PageView (网站浏览量)
+说明：指页面的浏览次数，用以衡量网站用户访问的网页数量。多次打开同一页面则浏览量累计。用户每打开一个页面便记录1次PV。</p>
+
+<p>名词：VV = Visit View（访问次数）
+说明：从访客来到您网站到最终关闭网站的所有页面离开，计为1次访问。若访客连续30分钟没有新开和刷新页面，或者访客关闭了浏览器，则被计算为本次访问结束。</p>
+
+<p>独立访客（UV）
+名词：UV= Unique Visitor（独立访客数）
+说明：1天内相同的访客多次访问您的网站只计算1个UV。</p>
+
+<p>独立IP（IP）
+名词：IP=独立IP数
+说明：指1天内使用不同IP地址的用户访问网站的数量。同一IP无论访问了几个页面，独立IP数均为1</p>
+
+<h1 id="七课后作业">七、课后作业</h1>
+
+<p><strong>作业1：</strong>
+1、写一个自动检测磁盘使用率的脚本，当磁盘使用空间达到90%以上时，需要发送邮件给相关人员
+2、写一个脚本监控系统内存和交换分区使用情况</p>
+
+<p><strong>作业2：</strong>
+输入一个IP地址，使用脚本判断其合法性：
+必须符合ip地址规范，第1、4位不能以0开头，不能大于255不能小于0</p>
+
+<h1 id="八企业实战案例">八、企业实战案例</h1>
+
+<h2 id="1-任务背景">1. 任务/背景</h2>
+
+<p>web服务器集群中总共有9台机器，上面部署的是Apache服务。由于业务不断增长，每天每台机器上都会产生大量的访问日志，现需要将每台web服务器上的apache访问日志<strong>保留最近3天</strong>的，3天以前的日志<strong>转储</strong>到一台专门的日志服务器上，已做后续分析。如何实现每台服务器上只保留3天以内的日志？</p>
+
+<h2 id="2-具体要求">2. 具体要求</h2>
+
+<ol>
+  <li>每台web服务器的日志对应日志服务器相应的目录里。如：web1——&gt;web1.log（在日志服务器上）</li>
+  <li>每台web服务器上保留最近3天的访问日志，3天以前的日志每天凌晨5:03分转储到日志服务器</li>
+  <li>如果脚本转储失败，运维人员需要通过跳板机的菜单选择手动清理日志</li>
+</ol>
+
+<h2 id="3-涉及知识点">3. 涉及知识点</h2>
+
+<ol>
+  <li>shell的基本语法结构</li>
+  <li>文件同步rsync</li>
+  <li>文件查找命令find</li>
+  <li>计划任务crontab</li>
+  <li>apache日志切割</li>
+  <li>其他</li>
+</ol>
+
+
+  </section>
+
+</article>
+
+<section>
+
+            <div class="content-play">
+              <p><a href="javascript:void(0)" onclick="dashangToggle()" class="dashang" title="打赏，支持一下">打赏一个呗</a></p>
+              <div class="hide_box-play"></div>
+              <div class="shang_box-play">
+                <a class="shang_close-play" href="javascript:void(0)" onclick="dashangToggle()" title="关闭"><img src="/images/payimg/close.jpg" alt="取消" /></a>
+                <div class="shang_tit-play">
+                  <p>感谢您的支持，我会继续努力的!</p>
+                </div>
+                <div class="shang_payimg">
+                    <img src="/images/payimg/alipayimg.jpg" alt="扫码支持" title="扫一扫" />
+                </div>
+              <div class="shang_payimg">    
+                    <img src="/images/payimg/weipayimg.jpg" alt="扫码支持" title="扫一扫" />
+                </div>
+                <div class="pay_explain">扫码打赏，你说多少就多少</div>
+                <div class="shang_payselect">
+                  <div class="pay_item checked" data-id="alipay">
+                    <span class="pay_logo"><img src="/images/payimg/alipay.jpg" alt="支付宝" /></span>
+                  </div>
+                  <div class="pay_item" data-id="weipay">
+                    <span class="pay_logo"><img src="/images/payimg/wechat.jpg" alt="微信" /></span>
+                  </div>
+                </div>
+                <div class="shang_info-play">
+                  <p>打开<span id="shang_pay_txt">支付宝</span>扫一扫，即可进行扫码打赏哦</p>
+                </div>
+              </div>
+            </div>
+            <script type="text/javascript">
+            function dashangToggle(){
+              $(".hide_box-play").fadeToggle();
+              $(".shang_box-play").fadeToggle();
+            }
+            </script>
+
+            <div style="text-align:center;margin:50px 0; font:normal 14px/24px 'MicroSoft YaHei';"></div>
+
+            <style type="text/css">
+              .content-play{width:80%;margin-top: 20px;margin-bottom: 10px;height:40px;}
+              .hide_box-play{z-index:999;filter:alpha(opacity=50);background:#666;opacity: 0.5;-moz-opacity: 0.5;left:0;top:0;height:99%;width:100%;position:fixed;display:none;}
+              .shang_box-play{width:540px;height:540px;padding:10px;background-color:#fff;border-radius:10px;position:fixed;z-index:1000;left:50%;top:50%;margin-left:-280px;margin-top:-280px;border:1px dotted #dedede;display:none;}
+              .shang_box-play img{border:none;border-width:0;}
+              .dashang{display:block;width:100px;margin:5px auto;height:25px;line-height:25px;padding:10px;background-color:#E74851;color:#fff;text-align:center;text-decoration:none;border-radius:10px;font-weight:bold;font-size:16px;transition: all 0.3s;}
+              .dashang:hover{opacity:0.8;padding:15px;font-size:18px;}
+              .shang_close-play{float:right;display:inline-block;
+                margin-right: 10px;margin-top: 20px;
+              }
+              .shang_logo{display:block;text-align:center;margin:20px auto;}
+              .shang_tit-play{width: 100%;height: 75px;text-align: center;line-height: 66px;color: #a3a3a3;font-size: 16px;background: url('/images/payimg/cy-reward-title-bg.jpg');font-family: 'Microsoft YaHei';margin-top: 7px;margin-right:2px;}
+              .shang_tit-play p{color:#a3a3a3;text-align:center;font-size:16px;}
+              .shang_payimg{width:140px;padding:10px;padding-left: 80px; /*border:6px solid #EA5F00;**/margin:0 auto;border-radius:3px;height:140px;display:inline-block;}
+              .shang_payimg img{display:inline-block;margin-right:10px;float:left;text-align:center;width:140px;height:140px; }
+              .pay_explain{text-align:center;margin:10px auto;font-size:12px;color:#545454;}
+              .shang_payselect{text-align:center;margin:0 auto;margin-top:40px;cursor:pointer;height:60px;width:500px;margin-left:110px;}
+              .shang_payselect .pay_item{display:inline-block;margin-right:140px;float:left;}
+              .shang_info-play{clear:both;}
+              .shang_info-play p,.shang_info-play a{color:#C3C3C3;text-align:center;font-size:12px;text-decoration:none;line-height:2em;}
+            </style>
+
+       <ul class="pager">
+        
+        <li class="previous">
+            <a href="/2018/04/07_SHELL/" data-toggle="tooltip" data-placement="top" title="07_SHELL编程之文本处理工具">上一篇：  <span>07_SHELL编程之文本处理工具</span>
+            </a>
+        </li>
+        
+        
+        <li class="next">
+            <a href="/2018/05/09_SHELL/" data-toggle="tooltip" data-placement="top" title="09_SHELL编程之xarg使用">下一篇：  <span>09_SHELL编程之xarg使用</span>
+            </a>
+        </li>
+        
+    </ul>
+</section>
+
+<section class="post-comments">
+
+  
+
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zMDUwNi83MDYw">
+      <script type="text/javascript">
+         (function(d, s) {
+             var j, e = d.getElementsByTagName(s)[0];
+
+             if (typeof LivereTower === 'function') { return; }
+             j = d.createElement(s);
+             j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+             j.async = true;
+             e.parentNode.insertBefore(j, e);
+         })(document, 'script');
+      </script>
+      <noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+      </div>
+
+  
+
+</section>
+
+
+            <section class="footer">
+    <footer>
+        <div class = "footer_div">  
+        <nav class="cover-navigation navigation--social">
+          <ul class="navigation">
+
+          
+          <!-- Github -->
+          <li class="navigation__item_social">
+            <a href="https://github.com/lijingbiao" title="@lijingbiao 的 Github" target="_blank">
+              <div class="footer-social-icon" style="background:url(/images/github.png);"></div>
+            </a>
+          </li>
+          
+
+          
+
+          
+
+          
+          <!-- Zhihu -->
+          <li class="navigation__item_social">
+            <a href="https://www.jianshu.com/u/e66c74545d7e" title="@e66c74545d7e" target="_blank">
+              <div class="footer-social-icon" style="background:url(/images/jianshu.png);"></div>
+            </a>
+          </li>
+
+          
+
+          
+
+          
+          
+
+
+          
+          <!-- Email -->
+          <li class="navigation__item_social">
+            <a href="mailto:694292399@qq.com" title="Contact me">
+              <div class="footer-social-icon" style="background:url(/images/email.png);"></div>
+            </a>
+          </li>
+          
+          
+          <!-- RSS -->
+          <li class="navigation__item_social">
+            <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+              <div class="footer-social-icon" style="background:url(/images/rss.png);"></div>
+              <span class="label">RSS</span>
+            </a>
+          </li>
+
+          </ul>
+        </nav>
+
+        </div>
+
+        <div class = "footer_div">  
+           <p class="copyright text-muted">
+            Copyright &copy; LiJingBiao 2021  |
+            <iframe
+                style="margin-left: 2px; margin-bottom:-5px;"
+                frameborder="0" scrolling="0" width="91px" height="20px"
+                src="https://ghbtns.com/github-btn.html?user=lijingbiao&repo=lijingbiao.github.io&type=star&count=true" >
+            </iframe>
+            </p>
+        	<div align="right">
+    			<link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+          <!-- 访问统计 -->
+          <span id="busuanzi_container_site_pv">
+            本站总访问量
+            <span id="busuanzi_value_site_pv"></span>次
+          </span>
+
+        </div>
+        <div>
+    </footer>
+</section>
+
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+<script type="text/javascript" src="/js/main.js"></script>
+
+<script type="text/javascript" src="/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+    
+  </body>
+
+</html>

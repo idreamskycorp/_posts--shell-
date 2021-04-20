@@ -1,0 +1,1028 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>01_SHELL编程前奏_小工具</title>
+  <meta name="description" content="本节课程目标">
+  <meta name="author" content="leopardpan">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="01_SHELL编程前奏_小工具">
+  <meta name="twitter:description" content="本节课程目标">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="01_SHELL编程前奏_小工具">
+  <meta property="og:description" content="本节课程目标">
+  
+  <link rel="icon" type="image/png" href="/images/favicon.png" />
+  <link href="/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://localhost:4000/2018/04/01_SHELL/">
+  <link rel="alternate" type="application/rss+xml" title="LiJingBiao" href="http://localhost:4000/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+
+<!-- 站点统计 -->
+  <script 
+  async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js">
+  </script>  
+
+<!-- 百度统计 -->
+  
+  <script>
+      var _hmt = _hmt || [];
+      (function() {
+        var hm = document.createElement("script");
+        hm.src = "//hm.baidu.com/hm.js?8ba1c6be0953b6f9c2ba38e57f615421";
+        var s = document.getElementsByTagName("script")[0]; 
+        s.parentNode.insertBefore(hm, s);
+      })();
+  </script>
+  
+
+<!-- google 统计 -->
+  
+  <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+      ga('create', 'UA-84134159-3', 'auto');
+      ga('send', 'pageview');
+  </script>
+  
+
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-9005224472374751",
+    enable_page_level_ads: true
+  });
+</script>
+
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">        
+      <div class="nav_container">
+         <nav class="nav-menu-item" style = "float:right">
+            <i class="nav-menu-item">
+              <a href="/#blog" title="" class="blog-button">  博客主页
+              </a>
+            </i>
+            
+                <i class="nav-menu-item">
+
+                  <a href="/archive" title="archive" class="btn-mobile-menu__icon">
+                      所有文章
+                  </a>
+                </i>
+            
+                <i class="nav-menu-item">
+
+                  <a href="/tags" title="tags" class="btn-mobile-menu__icon">
+                      标签
+                  </a>
+                </i>
+            
+                <i class="nav-menu-item">
+
+                  <a href="/about" title="about" class="btn-mobile-menu__icon">
+                      关于我
+                  </a>
+                </i>
+            
+          </nav>
+      </div>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+        <!-- 头像效果-start -->
+        <div class="ih-item circle effect right_to_left">            
+            <a href="/#blog" title="前往 LiJingBiao 的主页" class="blog-button">
+                <div class="img"><img src="/images/avatar.jpg" alt="img"></div>
+                <div class="info">
+                    <div class="info-back">
+                        <h2> 
+                            
+                                天道酬勤
+                            
+                        </h2>
+                        <p>
+                           
+                                iOS / Ruby /Shell
+                            
+                        </p>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <!-- 头像效果-end -->
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for LiJingBiao" class="blog-button">LiJingBiao</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">个人站</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">欢迎来到我的个人站~</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        
+
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="" class="blog-button">博客主页</a></li>
+                
+                  <li class="navigation__item"><a href="/archive" title="archive">所有文章</a></li>
+                
+                  <li class="navigation__item"><a href="/tags" title="tags">标签</a></li>
+                
+                  <li class="navigation__item"><a href="/about" title="about">关于我</a></li>
+                
+              </ul>
+            </nav>
+          </div>          
+        </div>
+
+
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-clear"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <head>
+  <link rel="stylesheet" href="/css/post.css">
+</head>
+
+<article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <h1 class="post-title">01_SHELL编程前奏_小工具</h1>
+    <div class="post-meta">
+      <img src="/images/calendar.png" width="20px"/> 
+      <time datetime="2018-04-15 00:00:00 +0800" itemprop="datePublished" class="post-meta__date date">2018-04-15</time>  
+
+      <span id="busuanzi_container_page_pv"> | 阅读：<span id="busuanzi_value_page_pv"></span>次</span>
+    </p>
+    </div>
+  </header>
+
+  
+    <h2 class="post-title">目录</h2>
+    <ul>
+  <li><a href="#本节课程目标">本节课程目标</a></li>
+  <li><a href="#一文本处理工具">一、文本处理工具</a>
+    <ul>
+      <li><a href="#1-grep工具">1. grep工具</a>
+        <ul>
+          <li><a href="#语法和选项">语法和选项</a></li>
+        </ul>
+      </li>
+      <li><a href="#2-cut工具">2. cut工具</a>
+        <ul>
+          <li><a href="#语法和选项-1">语法和选项</a></li>
+        </ul>
+      </li>
+      <li><a href="#3-sort工具">3. sort工具</a>
+      - {:.} <a href="#语法和选项-2">语法和选项</a></li>
+      <li><a href="#4uniq工具">4.uniq工具</a></li>
+      <li><a href="#5tee工具">5.tee工具</a></li>
+      <li><a href="#6diff工具">6.diff工具</a>
+        <ul>
+          <li><a href="#语法和选项-3">语法和选项</a></li>
+        </ul>
+      </li>
+      <li><a href="#7-paste工具">7. paste工具</a></li>
+      <li><a href="#8-tr工具">8. tr工具</a>
+        <ul>
+          <li><a href="#语法和选项-4">语法和选项</a>
+            <ul>
+              <li><a href="#小试牛刀">小试牛刀</a></li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><a href="#二bash的特性">二、bash的特性</a>
+    <ul>
+      <li><a href="#1命令和文件自动补全">1、命令和文件自动补全</a></li>
+      <li><a href="#2常见的快捷键">2、常见的快捷键</a></li>
+      <li><a href="#3-常用的通配符重点">3 、常用的通配符（重点）</a></li>
+      <li><a href="#4bash中的引号重点">4、bash中的引号（重点）</a></li>
+    </ul>
+  </li>
+</ul>
+
+  
+
+  <section class="post">
+    <h1 id="本节课程目标">本节课程目标</h1>
+
+<ul>
+  <li>了解shell中的通配符</li>
+  <li>熟悉grep、cut、sort等小工具和shell中的通配符的使用</li>
+</ul>
+
+<h1 id="一文本处理工具">一、文本处理工具</h1>
+
+<h2 id="1-grep工具">1. grep工具</h2>
+
+<blockquote>
+  <p>grep是<strong>行</strong>过滤工具；用于根据关键字进行行过滤</p>
+</blockquote>
+
+<h3 id="语法和选项">语法和选项</h3>
+
+<p><strong>语法：</strong></p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># grep [选项] '关键字' 文件名</span>
+</code></pre></div></div>
+
+<p><strong>常见选项：</strong></p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>OPTIONS:
+    -i: 不区分大小写
+    -v: 查找不包含指定内容的行,反向选择
+    -w: 按单词搜索
+    -o: 打印匹配关键字
+    -c: 统计匹配到的行数
+    -n: 显示行号
+    -r: 逐层遍历目录查找
+    -A: 显示匹配行及后面多少行    
+    -B: 显示匹配行及前面多少行
+    -C: 显示匹配行前后多少行
+    -l：只列出匹配的文件名
+    -L：列出不匹配的文件名
+    -e: 使用正则匹配
+    -E:使用扩展正则匹配
+    ^key:以关键字开头
+    key<span class="nv">$:</span>以关键字结尾
+    ^<span class="nv">$:</span>匹配空行
+    --color<span class="o">=</span>auto ：可以将找到的关键词部分加上颜色的显示
+</code></pre></div></div>
+
+<p><strong>颜色显示（别名设置）：</strong></p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>临时设置：
+<span class="c1"># alias grep='grep --color=auto'            //只针对当前终端和当前用户生效</span>
+
+永久设置：
+1）全局（针对所有用户生效）
+vim /etc/bashrc
+<span class="nb">alias grep</span><span class="o">=</span><span class="s1">'grep --color=auto'</span>
+<span class="nb">source</span> /etc/bashrc
+
+2）局部（针对具体的某个用户）
+vim ~/.bashrc
+<span class="nb">alias grep</span><span class="o">=</span><span class="s1">'grep --color=auto'</span>
+<span class="nb">source</span> ~/.bashrc
+</code></pre></div></div>
+
+<p><strong>举例说明：</strong></p>
+
+<p>说明：不要直接使用/etc/passwd文件，将其拷贝到/tmp下做实验！</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># grep -i root passwd                        忽略大小写匹配包含root的行</span>
+<span class="c1"># grep -w ftp passwd                         精确匹配ftp单词</span>
+<span class="c1"># grep -w hello passwd                         精确匹配hello单词;自己添加包含hello的行到文件</span>
+<span class="c1"># grep -wo ftp passwd                         打印匹配到的关键字ftp</span>
+<span class="c1"># grep -n root passwd                         打印匹配到root关键字的行好</span>
+<span class="c1"># grep -ni root passwd                         忽略大小写匹配统计包含关键字root的行</span>
+<span class="c1"># grep -nic root passwd                        忽略大小写匹配统计包含关键字root的行数</span>
+<span class="c1"># grep -i ^root passwd                         忽略大小写匹配以root开头的行</span>
+<span class="c1"># grep bash$ passwd                             匹配以bash结尾的行</span>
+<span class="c1"># grep -n ^$ passwd                             匹配空行并打印行号</span>
+<span class="c1"># grep ^# /etc/vsftpd/vsftpd.conf        匹配以#号开头的行</span>
+<span class="c1"># grep -v ^# /etc/vsftpd/vsftpd.conf    匹配不以#号开头的行</span>
+<span class="c1"># grep -A 5 mail passwd                      匹配包含mail关键字及其后5行</span>
+<span class="c1"># grep -B 5 mail passwd                      匹配包含mail关键字及其前5行</span>
+<span class="c1"># grep -C 5 mail passwd                     匹配包含mail关键字及其前后5行</span>
+</code></pre></div></div>
+
+<h2 id="2-cut工具">2. cut工具</h2>
+
+<blockquote>
+  <p>cut是<strong>列</strong>截取工具，用于列的截取</p>
+</blockquote>
+
+<h3 id="语法和选项-1">语法和选项</h3>
+
+<p><strong>语法：</strong></p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># cut 选项  文件名</span>
+</code></pre></div></div>
+
+<p><strong>常见选项：</strong></p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>-c:    以字符为单位进行分割,截取
+-d:    自定义分隔符，默认为制表符\t
+-f:    与-d一起使用，指定截取哪个区域
+</code></pre></div></div>
+
+<p><strong>举例说明:</strong></p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># cut -d: -f1 1.txt             以:冒号分割，截取第1列内容</span>
+<span class="c1"># cut -d: -f1,6,7 1.txt     以:冒号分割，截取第1,6,7列内容</span>
+<span class="c1"># cut -c4 1.txt                 截取文件中每行第4个字符</span>
+<span class="c1"># cut -c1-4 1.txt             截取文件中每行的1-4个字符</span>
+<span class="c1"># cut -c4-10 1.txt             截取文件中每行的4-10个字符</span>
+<span class="c1"># cut -c5- 1.txt                 从第5个字符开始截取后面所有字符</span>
+</code></pre></div></div>
+
+<p><strong>课堂练习：</strong>
+用小工具列出你当系统的运行级别。5/3</p>
+
+<ol>
+  <li>如何查看系统运行级别
+    <ul>
+      <li>命令<code class="highlighter-rouge">runlevel</code></li>
+      <li>文件<code class="highlighter-rouge">/etc/inittab</code></li>
+    </ul>
+  </li>
+  <li>如何过滤运行级别</li>
+</ol>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>runlevel |cut -c3
+runlevel | <span class="nb">cut</span> -d <span class="s1">' '</span> -f2
+<span class="nb">grep</span> -v <span class="s1">'^#'</span> /etc/inittab | <span class="nb">cut</span> -d: -f2
+<span class="nb">grep</span> <span class="s1">'^id'</span> /etc/inittab |cut -d: -f2
+<span class="nb">grep</span> <span class="s2">"initdefault:$"</span> /etc/inittab | <span class="nb">cut</span> -c4
+<span class="nb">grep</span> -v ^# /etc/inittab |cut -c4
+<span class="nb">grep</span> <span class="s1">'id:'</span> /etc/inittab |cut -d: -f2
+<span class="nb">cut</span> -d<span class="s1">':'</span> -f2 /etc/inittab |grep -v ^#
+<span class="nb">cut</span> -c4 /etc/inittab |tail -1
+<span class="nb">cut</span> -d: -f2 /etc/inittab |tail -1
+</code></pre></div></div>
+
+<h2 id="3-sort工具">3. sort工具</h2>
+
+<blockquote>
+  <p>sort工具用于排序;它将文件的每一行作为一个单位，从首字符向后，依次按ASCII码值进行比较，最后将他们按升序输出。</p>
+</blockquote>
+
+<h4 id="语法和选项-2">语法和选项</h4>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>-u ：去除重复行
+-r ：降序排列，默认是升序
+-o : 将排序结果输出到文件中,类似重定向符号&gt;
+-n ：以数字排序，默认是按字符排序
+-t ：分隔符
+-k ：第N列
+-b ：忽略前导空格。
+-R ：随机排序，每次运行的结果均不同
+</code></pre></div></div>
+
+<p><strong>举例说明</strong></p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># sort -n -t: -k3 1.txt             按照用户的uid进行升序排列</span>
+<span class="c1"># sort -nr -t: -k3 1.txt             按照用户的uid进行降序排列</span>
+<span class="c1"># sort -n 2.txt                         按照数字排序</span>
+<span class="c1"># sort -nu 2.txt                         按照数字排序并且去重</span>
+<span class="c1"># sort -nr 2.txt </span>
+<span class="c1"># sort -nru 2.txt </span>
+<span class="c1"># sort -nru 2.txt </span>
+<span class="c1"># sort -n 2.txt -o 3.txt             按照数字排序并将结果重定向到文件</span>
+<span class="c1"># sort -R 2.txt </span>
+<span class="c1"># sort -u 2.txt </span>
+</code></pre></div></div>
+
+<h2 id="4uniq工具">4.uniq工具</h2>
+
+<blockquote>
+  <p>uniq用于去除<strong>连续</strong>的<strong>重复</strong>行</p>
+</blockquote>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>常见选项：
+-i: 忽略大小写
+-c: 统计重复行次数
+-d:只显示重复行
+
+举例说明：
+<span class="c1"># uniq 2.txt </span>
+<span class="c1"># uniq -d 2.txt </span>
+<span class="c1"># uniq -dc 2.txt </span>
+</code></pre></div></div>
+
+<h2 id="5tee工具">5.tee工具</h2>
+
+<blockquote>
+  <table>
+    <tbody>
+      <tr>
+        <td>tee工具是从标准输入读取并写入到标准输出和文件，即：双向覆盖重定向（屏幕输出</td>
+        <td>文本输入）</td>
+      </tr>
+    </tbody>
+  </table>
+</blockquote>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>选项：
+-a 双向追加重定向
+
+<span class="c1"># echo hello world</span>
+<span class="c1"># echo hello world|tee file1</span>
+<span class="c1"># cat file1 </span>
+<span class="c1"># echo 999|tee -a file1</span>
+<span class="c1"># cat file1 </span>
+</code></pre></div></div>
+
+<h2 id="6diff工具">6.diff工具</h2>
+
+<blockquote>
+  <p>diff工具用于逐行比较文件的不同</p>
+</blockquote>
+
+<p>注意：diff描述两个文件不同的方式是告诉我们怎样改变第一个文件之后与第二个文件匹配。</p>
+
+<h3 id="语法和选项-3">语法和选项</h3>
+
+<p><strong>语法：</strong></p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">diff</span> <span class="o">[</span>选项] 文件1 文件2
+</code></pre></div></div>
+
+<p><strong>常用选项：</strong></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>选项</th>
+      <th>含义</th>
+      <th>备注</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>-b</td>
+      <td>不检查空格</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>-B</td>
+      <td>不检查空白行</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>-i</td>
+      <td>不检查大小写</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>-w</td>
+      <td>忽略所有的空格</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>–normal</td>
+      <td>正常格式显示(默认)</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>-c</td>
+      <td>上下文格式显示</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>-u</td>
+      <td>合并格式显示</td>
+      <td> </td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>举例说明：</strong></p>
+
+<ul>
+  <li>比较两个普通文件异同，文件准备：</li>
+</ul>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">[</span>root@MissHou ~]# <span class="nb">cat </span>file1
+aaaa
+111
+hello world
+222
+333
+bbb
+<span class="o">[</span>root@MissHou ~]#
+<span class="o">[</span>root@MissHou ~]# <span class="nb">cat </span>file2
+aaa
+hello
+111
+222
+bbb
+333
+world
+</code></pre></div></div>
+
+<p>1）正常显示</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>diff目的：file1如何改变才能和file2匹配
+<span class="o">[</span>root@MissHou ~]# <span class="nb">diff </span>file1 file2
+1c1,2                    第一个文件的第1行需要改变<span class="o">(</span><span class="nv">c</span><span class="o">=</span>change<span class="o">)</span>才能和第二个文件的第1到2行匹配            
+&lt; aaaa                小于号<span class="s2">"&lt;"</span>表示左边文件<span class="o">(</span>file1<span class="o">)</span>文件内容
+---                    ---表示分隔符
+<span class="o">&gt;</span> aaa                    大于号<span class="s2">"&gt;"</span>表示右边文件<span class="o">(</span>file2<span class="o">)</span>文件内容
+<span class="o">&gt;</span> hello
+3d3                    第一个文件的第3行删除<span class="o">(</span><span class="nv">d</span><span class="o">=</span>delete<span class="o">)</span>后才能和第二个文件的第3行匹配
+&lt; hello world
+5d4                    第一个文件的第5行删除后才能和第二个文件的第4行匹配
+&lt; 333
+6a6,7                    第一个文件的第6行增加<span class="o">(</span><span class="nv">a</span><span class="o">=</span>add<span class="o">)</span>内容后才能和第二个文件的第6到7行匹配
+<span class="o">&gt;</span> 333                    需要增加的内容在第二个文件里是333和world
+<span class="o">&gt;</span> world
+</code></pre></div></div>
+
+<p>2）上下文格式显示</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">[</span>root@MissHou ~]# <span class="nb">diff</span> -c file1 file2
+前两行主要列出需要比较的文件名和文件的时间戳；文件名前面的符号<span class="k">***</span>表示file1，---表示file2
+<span class="k">***</span> file1       2019-04-16 16:26:05.748650262 +0800
+--- file2       2019-04-16 16:26:30.470646030 +0800
+<span class="k">***************</span>    我是分隔符
+<span class="k">***</span> 1,6 <span class="k">****</span>        以<span class="k">***</span>开头表示file1文件，1,6表示1到6行
+<span class="o">!</span> aaaa                <span class="o">!</span>表示该行需要修改才与第二个文件匹配
+  111
+- hello world        -表示需要删除该行才与第二个文件匹配
+  222
+- 333                    -表示需要删除该行才与第二个文件匹配
+  bbb
+--- 1,7 ----        以---开头表示file2文件，1,7表示1到7行
+<span class="o">!</span> aaa                    表示第一个文件需要修改才与第二个文件匹配
+<span class="o">!</span> hello                表示第一个文件需要修改才与第二个文件匹配
+  111
+  222
+  bbb
++ 333                    表示第一个文件需要加上该行才与第二个文件匹配
++ world                表示第一个文件需要加上该行才与第二个文件匹配
+
+</code></pre></div></div>
+
+<p>3）合并格式显示</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">[</span>root@MissHou ~]# <span class="nb">diff</span> -u file1 file2
+前两行主要列出需要比较的文件名和文件的时间戳；文件名前面的符号---表示file1，+++表示file2
+--- file1       2019-04-16 16:26:05.748650262 +0800
++++ file2       2019-04-16 16:26:30.470646030 +0800
+@@ -1,6 +1,7 @@
+-aaaa
++aaa
++hello
+ 111
+-hello world
+ 222
+-333
+ bbb
++333
++world
+</code></pre></div></div>
+
+<ul>
+  <li>比较两个目录不同</li>
+</ul>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>默认情况下也会比较两个目录里相同文件的内容
+<span class="o">[</span>root@MissHou  tmp]# <span class="nb">diff </span>dir1 dir2
+<span class="nb">diff </span>dir1/file1 dir2/file1
+0a1
+<span class="o">&gt;</span> hello
+Only <span class="k">in </span>dir1: file3
+Only <span class="k">in </span>dir2: test1
+如果只需要比较两个目录里文件的不同，不需要进一步比较文件内容，需要加-q选项
+<span class="o">[</span>root@MissHou  tmp]# <span class="nb">diff</span> -q dir1 dir2
+Files dir1/file1 and dir2/file1 differ
+Only <span class="k">in </span>dir1: file3
+Only <span class="k">in </span>dir2: test1
+
+</code></pre></div></div>
+
+<p><strong>其他小技巧：</strong></p>
+
+<p>有时候我们需要以一个文件为标准，去修改其他文件，并且修改的地方较多时，我们可以通过打补丁的方式完成。</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1）先找出文件不同，然后输出到一个文件
+<span class="o">[</span>root@MissHou ~]# <span class="nb">diff</span> -uN file1 file2 <span class="o">&gt;</span> file.patch
+-u:上下文模式
+-N:将不存在的文件当作空文件
+2）将不同内容打补丁到文件
+<span class="o">[</span>root@MissHou ~]# patch file1 file.patch
+patching file file1
+3）测试验证
+<span class="o">[</span>root@MissHou ~]# <span class="nb">diff </span>file1 file2
+<span class="o">[</span>root@MissHou ~]#
+
+</code></pre></div></div>
+
+<h2 id="7-paste工具">7. paste工具</h2>
+
+<blockquote>
+  <p>paste工具用于合并文件行</p>
+</blockquote>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>常用选项：
+-d：自定义间隔符，默认是tab
+-s：串行处理，非并行
+</code></pre></div></div>
+
+<h2 id="8-tr工具">8. tr工具</h2>
+
+<blockquote>
+  <p>tr用于字符转换，替换和删除；主要用于删除文件中控制字符或进行字符转换</p>
+</blockquote>
+
+<h3 id="语法和选项-4">语法和选项</h3>
+
+<p><strong>语法：</strong></p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>用法1：命令的执行结果交给tr处理，其中string1用于查询，string2用于转换处理
+
+ commands|tr  <span class="s1">'string1'</span>  <span class="s1">'string2'</span>
+
+用法2：tr处理的内容来自文件，记住要使用<span class="s2">"&lt;"</span>标准输入
+
+ <span class="nb">tr</span>  <span class="s1">'string1'</span>  <span class="s1">'string2'</span> &lt; filename
+
+用法3：匹配string1进行相应操作，如删除操作
+
+ <span class="nb">tr</span> <span class="o">[</span>options] <span class="s1">'string1'</span> &lt; filename
+</code></pre></div></div>
+
+<p><strong>常用选项：</strong></p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>-d 删除字符串1中所有输入字符。
+-s 删除所有重复出现字符序列，只保留第一个；即将重复出现字符串压缩为一个字符串
+</code></pre></div></div>
+
+<p><strong>常匹配字符串：</strong></p>
+
+<p>| 字符串             | 含义                 | 备注                                                         |
+| —————— | ——————– | ———————————————————————— |
+| a-z或[:lower:] | 匹配所有小写字母     | 所有大小写和数字[a-zA-Z0-9]|
+| A-Z或[:upper:] | 匹配所有大写字母     |                                                              |
+| 0-9或[:digit:] | 匹配所有数字         |                                                              |
+| [:alnum:]          | 匹配所有字母和数字   |                                                              |
+| [:alpha:]          | 匹配所有字母         |                                                              |
+| [:blank:]          | 所有水平空白         |                                                              |
+| [:punct:]          | 匹配所有标点符号     |                                                              |
+| [:space:]          | 所有水平或垂直的空格 |                                                              |
+| [:cntrl:]          | 所有控制字符         | \f Ctrl-L        走行换页<br />\n Ctrl-J      换行
+\r Ctrl-M        回车
+\t Ctrl-I      tab键 |</p>
+
+<p><strong>举例说明：</strong></p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">[</span>root@MissHou  shell01]# <span class="nb">cat </span>3.txt     自己创建该文件用于测试
+ROOT:x:0:0:root:/root:/bin/bash
+bin:x:1:1:bin:/bin:/sbin/nologin
+daemon:x:2:2:daemon:/sbin:/sbin/nologin
+adm:x:3:4:adm:/var/adm:/sbin/nologin
+<span class="nb">lp</span>:x:4:7:lp:/var/spool/lpd:/sbin/nologin
+<span class="nb">sync</span>:x:5:0:sync:/sbin:/bin/sync
+shutdown:x:6:0:shutdown:/sbin:/sbin/shutdown
+halt:x:7:0:halt:/sbin:/sbin/halt
+mail:x:8:12:mail:/var/spool/mail:/sbin/nologin
+uucp:x:10:14:uucp:/var/spool/uucp:/sbin/nologin
+boss02:x:516:511::/home/boss02:/bin/bash
+vip:x:517:517::/home/vip:/bin/bash
+stu1:x:518:518::/home/stu1:/bin/bash
+mailnull:x:47:47::/var/spool/mqueue:/sbin/nologin
+smmsp:x:51:51::/var/spool/mqueue:/sbin/nologin
+aaaaaaaaaaaaaaaaaaaa
+bbbbbb111111122222222222233333333cccccccc
+hello world 888
+666
+777
+999
+
+
+<span class="c1"># tr -d '[:/]' &lt; 3.txt                 删除文件中的:和/</span>
+<span class="c1"># cat 3.txt |tr -d '[:/]'            删除文件中的:和/</span>
+<span class="c1"># tr '[0-9]' '@' &lt; 3.txt             将文件中的数字替换为@符号</span>
+<span class="c1"># tr '[a-z]' '[A-Z]' &lt; 3.txt         将文件中的小写字母替换成大写字母</span>
+<span class="c1"># tr -s '[a-z]' &lt; 3.txt             匹配小写字母并将重复的压缩为一个</span>
+<span class="c1"># tr -s '[a-z0-9]' &lt; 3.txt         匹配小写字母和数字并将重复的压缩为一个</span>
+<span class="c1"># tr -d '[:digit:]' &lt; 3.txt         删除文件中的数字</span>
+<span class="c1"># tr -d '[:blank:]' &lt; 3.txt         删除水平空白</span>
+<span class="c1"># tr -d '[:space:]' &lt; 3.txt         删除所有水平和垂直空白</span>
+
+</code></pre></div></div>
+
+<h4 id="小试牛刀">小试牛刀</h4>
+
+<ol>
+  <li>使用小工具分别截取当前主机IP；截取NETMASK；截取广播地址；截取MAC地址</li>
+</ol>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># ifconfig eth0|grep 'Bcast'|tr -d '[a-zA-Z ]'|cut -d: -f2,3,4</span>
+10.1.1.1:10.1.1.255:255.255.255.0
+<span class="c1"># ifconfig eth0|grep 'Bcast'|tr -d '[a-zA-Z ]'|cut -d: -f2,3,4|tr ':' '\n'</span>
+10.1.1.1
+10.1.1.255
+255.255.255.0
+<span class="c1"># ifconfig eth0|grep 'HWaddr'|cut -d: -f2-|cut -d' ' -f4</span>
+00:0C:29:25:AE:54
+<span class="c1"># ifconfig eth0|grep 'HW'|tr -s ' '|cut -d' ' -f5</span>
+00:0C:29:B4:9E:4E
+
+<span class="c1"># ifconfig eth1|grep Bcast|cut -d: -f2|cut -d' ' -f1</span>
+<span class="c1"># ifconfig eth1|grep Bcast|cut -d: -f2|tr -d '[ a-zA-Z]'</span>
+<span class="c1"># ifconfig eth1|grep Bcast|tr -d '[:a-zA-Z]'|tr ' ' '@'|tr -s '@'|tr '@' '\n'|grep -v ^$</span>
+<span class="c1"># ifconfig eth0|grep 'Bcast'|tr -d [:alpha:]|tr '[ :]' '\n'|grep -v ^$</span>
+<span class="c1"># ifconfig eth1|grep HWaddr|cut -d ' ' -f11</span>
+<span class="c1"># ifconfig eth0|grep HWaddr|tr -s ' '|cut -d' ' -f5</span>
+<span class="c1"># ifconfig eth1|grep HWaddr|tr -s ' '|cut -d' ' -f5</span>
+<span class="c1"># ifconfig eth0|grep 'Bcast'|tr -d 'a-zA-Z:'|tr ' ' '\n'|grep -v '^$'</span>
+</code></pre></div></div>
+
+<ol>
+  <li>将系统中所有普通用户的用户名、密码和默认shell保存到一个文件中，要求用户名密码和默认shell之间用tab键分割</li>
+</ol>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># grep 'bash$' passwd |grep -v 'root'|cut -d: -f1,2,7|tr ':' '\t' |tee abc.txt</span>
+</code></pre></div></div>
+
+<h1 id="二bash的特性">二、bash的特性</h1>
+
+<h2 id="1命令和文件自动补全">1、命令和文件自动补全</h2>
+
+<p>Tab只能补全命令和文件 （RHEL6/Centos6）</p>
+
+<h2 id="2常见的快捷键">2、常见的快捷键</h2>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>^c               终止前台运行的程序
+^z                  将前台运行的程序挂起到后台
+^d               退出 等价exit
+^l               清屏 
+^a |home      光标移到命令行的最前端
+^e |end      光标移到命令行的后端
+^u               删除光标前所有字符
+^k               删除光标后所有字符
+^r                 搜索历史命令
+</code></pre></div></div>
+
+<h2 id="3-常用的通配符重点">3 、常用的通配符（重点）</h2>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">*</span>:    匹配0或多个任意字符
+?:    匹配任意单个字符
+<span class="o">[</span>list]:    匹配[list]中的任意单个字符,或者一组单个字符   <span class="o">[</span>a-z]
+<span class="o">[!</span>list]: 匹配除list中的任意单个字符
+<span class="o">{</span>string1,string2,...<span class="o">}</span>：匹配string1,string2或更多字符串
+
+
+<span class="c1"># rm -f file*</span>
+<span class="c1"># cp *.conf  /dir1</span>
+<span class="c1"># touch file{1..5}</span>
+</code></pre></div></div>
+
+<h2 id="4bash中的引号重点">4、bash中的引号（重点）</h2>
+
+<ul>
+  <li>双引号””   :会把引号的内容当成整体来看待，允许通过$符号引用其他变量值</li>
+  <li>单引号’’     :会把引号的内容当成整体来看待，禁止引用其他变量值，shell中特殊符号都被视为普通字符</li>
+  <li>反撇号``  :反撇号和$()一样，引号或括号里的命令会优先执行，如果存在嵌套，反撇号不能用</li>
+</ul>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">[</span>root@MissHou  dir1]# <span class="nb">echo</span> <span class="s2">"</span><span class="k">$(</span><span class="nb">hostname</span><span class="k">)</span><span class="s2">"</span>
+server
+<span class="o">[</span>root@MissHou  dir1]# <span class="nb">echo</span> <span class="s1">'$(hostname)'</span>
+<span class="k">$(</span><span class="nb">hostname</span><span class="k">)</span>
+<span class="o">[</span>root@MissHou  dir1]# <span class="nb">echo</span> <span class="s2">"hello world"</span>
+hello world
+<span class="o">[</span>root@MissHou  dir1]# <span class="nb">echo</span> <span class="s1">'hello world'</span>
+hello world
+
+<span class="o">[</span>root@MissHou  dir1]# <span class="nb">echo</span> <span class="k">$(</span><span class="nb">date</span> +%F<span class="k">)</span>
+2018-11-22
+<span class="o">[</span>root@MissHou  dir1]# <span class="nb">echo</span> <span class="se">`e</span>cho <span class="k">$(</span><span class="nb">date</span> +%F<span class="k">)</span><span class="se">`</span>
+2018-11-22
+<span class="o">[</span>root@MissHou  dir1]# <span class="nb">echo</span> <span class="se">`d</span>ate +%F<span class="se">`</span>
+2018-11-22
+<span class="o">[</span>root@MissHou  dir1]# <span class="nb">echo</span> <span class="se">`e</span>cho <span class="se">`d</span>ate +%F<span class="se">``</span>
+<span class="nb">date</span> +%F
+<span class="o">[</span>root@MissHou  dir1]# <span class="nb">echo</span> <span class="k">$(</span><span class="nb">echo</span> <span class="se">`d</span>ate +%F<span class="se">`)</span>
+2018-11-22
+</code></pre></div></div>
+
+
+  </section>
+
+</article>
+
+<section>
+
+            <div class="content-play">
+              <p><a href="javascript:void(0)" onclick="dashangToggle()" class="dashang" title="打赏，支持一下">打赏一个呗</a></p>
+              <div class="hide_box-play"></div>
+              <div class="shang_box-play">
+                <a class="shang_close-play" href="javascript:void(0)" onclick="dashangToggle()" title="关闭"><img src="/images/payimg/close.jpg" alt="取消" /></a>
+                <div class="shang_tit-play">
+                  <p>感谢您的支持，我会继续努力的!</p>
+                </div>
+                <div class="shang_payimg">
+                    <img src="/images/payimg/alipayimg.jpg" alt="扫码支持" title="扫一扫" />
+                </div>
+              <div class="shang_payimg">    
+                    <img src="/images/payimg/weipayimg.jpg" alt="扫码支持" title="扫一扫" />
+                </div>
+                <div class="pay_explain">扫码打赏，你说多少就多少</div>
+                <div class="shang_payselect">
+                  <div class="pay_item checked" data-id="alipay">
+                    <span class="pay_logo"><img src="/images/payimg/alipay.jpg" alt="支付宝" /></span>
+                  </div>
+                  <div class="pay_item" data-id="weipay">
+                    <span class="pay_logo"><img src="/images/payimg/wechat.jpg" alt="微信" /></span>
+                  </div>
+                </div>
+                <div class="shang_info-play">
+                  <p>打开<span id="shang_pay_txt">支付宝</span>扫一扫，即可进行扫码打赏哦</p>
+                </div>
+              </div>
+            </div>
+            <script type="text/javascript">
+            function dashangToggle(){
+              $(".hide_box-play").fadeToggle();
+              $(".shang_box-play").fadeToggle();
+            }
+            </script>
+
+            <div style="text-align:center;margin:50px 0; font:normal 14px/24px 'MicroSoft YaHei';"></div>
+
+            <style type="text/css">
+              .content-play{width:80%;margin-top: 20px;margin-bottom: 10px;height:40px;}
+              .hide_box-play{z-index:999;filter:alpha(opacity=50);background:#666;opacity: 0.5;-moz-opacity: 0.5;left:0;top:0;height:99%;width:100%;position:fixed;display:none;}
+              .shang_box-play{width:540px;height:540px;padding:10px;background-color:#fff;border-radius:10px;position:fixed;z-index:1000;left:50%;top:50%;margin-left:-280px;margin-top:-280px;border:1px dotted #dedede;display:none;}
+              .shang_box-play img{border:none;border-width:0;}
+              .dashang{display:block;width:100px;margin:5px auto;height:25px;line-height:25px;padding:10px;background-color:#E74851;color:#fff;text-align:center;text-decoration:none;border-radius:10px;font-weight:bold;font-size:16px;transition: all 0.3s;}
+              .dashang:hover{opacity:0.8;padding:15px;font-size:18px;}
+              .shang_close-play{float:right;display:inline-block;
+                margin-right: 10px;margin-top: 20px;
+              }
+              .shang_logo{display:block;text-align:center;margin:20px auto;}
+              .shang_tit-play{width: 100%;height: 75px;text-align: center;line-height: 66px;color: #a3a3a3;font-size: 16px;background: url('/images/payimg/cy-reward-title-bg.jpg');font-family: 'Microsoft YaHei';margin-top: 7px;margin-right:2px;}
+              .shang_tit-play p{color:#a3a3a3;text-align:center;font-size:16px;}
+              .shang_payimg{width:140px;padding:10px;padding-left: 80px; /*border:6px solid #EA5F00;**/margin:0 auto;border-radius:3px;height:140px;display:inline-block;}
+              .shang_payimg img{display:inline-block;margin-right:10px;float:left;text-align:center;width:140px;height:140px; }
+              .pay_explain{text-align:center;margin:10px auto;font-size:12px;color:#545454;}
+              .shang_payselect{text-align:center;margin:0 auto;margin-top:40px;cursor:pointer;height:60px;width:500px;margin-left:110px;}
+              .shang_payselect .pay_item{display:inline-block;margin-right:140px;float:left;}
+              .shang_info-play{clear:both;}
+              .shang_info-play p,.shang_info-play a{color:#C3C3C3;text-align:center;font-size:12px;text-decoration:none;line-height:2em;}
+            </style>
+
+       <ul class="pager">
+        
+        <li class="previous">
+            <a href="/2016/11/markdownTool/" data-toggle="tooltip" data-placement="top" title="文档支持的Markdown语法">上一篇：  <span>文档支持的Markdown语法</span>
+            </a>
+        </li>
+        
+        
+        <li class="next">
+            <a href="/2018/04/02_SHELL/" data-toggle="tooltip" data-placement="top" title="02_SHELL编程之变量定义">下一篇：  <span>02_SHELL编程之变量定义</span>
+            </a>
+        </li>
+        
+    </ul>
+</section>
+
+<section class="post-comments">
+
+  
+
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zMDUwNi83MDYw">
+      <script type="text/javascript">
+         (function(d, s) {
+             var j, e = d.getElementsByTagName(s)[0];
+
+             if (typeof LivereTower === 'function') { return; }
+             j = d.createElement(s);
+             j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+             j.async = true;
+             e.parentNode.insertBefore(j, e);
+         })(document, 'script');
+      </script>
+      <noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+      </div>
+
+  
+
+</section>
+
+
+            <section class="footer">
+    <footer>
+        <div class = "footer_div">  
+        <nav class="cover-navigation navigation--social">
+          <ul class="navigation">
+
+          
+          <!-- Github -->
+          <li class="navigation__item_social">
+            <a href="https://github.com/lijingbiao" title="@lijingbiao 的 Github" target="_blank">
+              <div class="footer-social-icon" style="background:url(/images/github.png);"></div>
+            </a>
+          </li>
+          
+
+          
+
+          
+
+          
+          <!-- Zhihu -->
+          <li class="navigation__item_social">
+            <a href="https://www.jianshu.com/u/e66c74545d7e" title="@e66c74545d7e" target="_blank">
+              <div class="footer-social-icon" style="background:url(/images/jianshu.png);"></div>
+            </a>
+          </li>
+
+          
+
+          
+
+          
+          
+
+
+          
+          <!-- Email -->
+          <li class="navigation__item_social">
+            <a href="mailto:694292399@qq.com" title="Contact me">
+              <div class="footer-social-icon" style="background:url(/images/email.png);"></div>
+            </a>
+          </li>
+          
+          
+          <!-- RSS -->
+          <li class="navigation__item_social">
+            <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+              <div class="footer-social-icon" style="background:url(/images/rss.png);"></div>
+              <span class="label">RSS</span>
+            </a>
+          </li>
+
+          </ul>
+        </nav>
+
+        </div>
+
+        <div class = "footer_div">  
+           <p class="copyright text-muted">
+            Copyright &copy; LiJingBiao 2021  |
+            <iframe
+                style="margin-left: 2px; margin-bottom:-5px;"
+                frameborder="0" scrolling="0" width="91px" height="20px"
+                src="https://ghbtns.com/github-btn.html?user=lijingbiao&repo=lijingbiao.github.io&type=star&count=true" >
+            </iframe>
+            </p>
+        	<div align="right">
+    			<link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+          <!-- 访问统计 -->
+          <span id="busuanzi_container_site_pv">
+            本站总访问量
+            <span id="busuanzi_value_site_pv"></span>次
+          </span>
+
+        </div>
+        <div>
+    </footer>
+</section>
+
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+<script type="text/javascript" src="/js/main.js"></script>
+
+<script type="text/javascript" src="/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+    
+  </body>
+
+</html>

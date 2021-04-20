@@ -1,0 +1,1745 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>06_SHELL编程之CASE语句+函数+正则</title>
+  <meta name="description" content="课程目标">
+  <meta name="author" content="leopardpan">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="06_SHELL编程之CASE语句+函数+正则">
+  <meta name="twitter:description" content="课程目标">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="06_SHELL编程之CASE语句+函数+正则">
+  <meta property="og:description" content="课程目标">
+  
+  <link rel="icon" type="image/png" href="/images/favicon.png" />
+  <link href="/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://localhost:4000/2018/04/06_SHELL/">
+  <link rel="alternate" type="application/rss+xml" title="LiJingBiao" href="http://localhost:4000/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+
+<!-- 站点统计 -->
+  <script 
+  async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js">
+  </script>  
+
+<!-- 百度统计 -->
+  
+  <script>
+      var _hmt = _hmt || [];
+      (function() {
+        var hm = document.createElement("script");
+        hm.src = "//hm.baidu.com/hm.js?8ba1c6be0953b6f9c2ba38e57f615421";
+        var s = document.getElementsByTagName("script")[0]; 
+        s.parentNode.insertBefore(hm, s);
+      })();
+  </script>
+  
+
+<!-- google 统计 -->
+  
+  <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+      ga('create', 'UA-84134159-3', 'auto');
+      ga('send', 'pageview');
+  </script>
+  
+
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-9005224472374751",
+    enable_page_level_ads: true
+  });
+</script>
+
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">        
+      <div class="nav_container">
+         <nav class="nav-menu-item" style = "float:right">
+            <i class="nav-menu-item">
+              <a href="/#blog" title="" class="blog-button">  博客主页
+              </a>
+            </i>
+            
+                <i class="nav-menu-item">
+
+                  <a href="/archive" title="archive" class="btn-mobile-menu__icon">
+                      所有文章
+                  </a>
+                </i>
+            
+                <i class="nav-menu-item">
+
+                  <a href="/tags" title="tags" class="btn-mobile-menu__icon">
+                      标签
+                  </a>
+                </i>
+            
+                <i class="nav-menu-item">
+
+                  <a href="/about" title="about" class="btn-mobile-menu__icon">
+                      关于我
+                  </a>
+                </i>
+            
+          </nav>
+      </div>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+        <!-- 头像效果-start -->
+        <div class="ih-item circle effect right_to_left">            
+            <a href="/#blog" title="前往 LiJingBiao 的主页" class="blog-button">
+                <div class="img"><img src="/images/avatar.jpg" alt="img"></div>
+                <div class="info">
+                    <div class="info-back">
+                        <h2> 
+                            
+                                天道酬勤
+                            
+                        </h2>
+                        <p>
+                           
+                                iOS / Ruby /Shell
+                            
+                        </p>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <!-- 头像效果-end -->
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for LiJingBiao" class="blog-button">LiJingBiao</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">个人站</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">欢迎来到我的个人站~</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        
+
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="" class="blog-button">博客主页</a></li>
+                
+                  <li class="navigation__item"><a href="/archive" title="archive">所有文章</a></li>
+                
+                  <li class="navigation__item"><a href="/tags" title="tags">标签</a></li>
+                
+                  <li class="navigation__item"><a href="/about" title="about">关于我</a></li>
+                
+              </ul>
+            </nav>
+          </div>          
+        </div>
+
+
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-clear"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <head>
+  <link rel="stylesheet" href="/css/post.css">
+</head>
+
+<article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <h1 class="post-title">06_SHELL编程之CASE语句+函数+正则</h1>
+    <div class="post-meta">
+      <img src="/images/calendar.png" width="20px"/> 
+      <time datetime="2018-04-25 00:00:00 +0800" itemprop="datePublished" class="post-meta__date date">2018-04-25</time>  
+
+      <span id="busuanzi_container_page_pv"> | 阅读：<span id="busuanzi_value_page_pv"></span>次</span>
+    </p>
+    </div>
+  </header>
+
+  
+    <h2 class="post-title">目录</h2>
+    <ul>
+  <li><a href="#课程目标">课程目标</a></li>
+  <li><a href="#一case语句">一、case语句</a>
+    <ul>
+      <li><a href="#1-语法结构">1. 语法结构</a></li>
+      <li><a href="#2-应用案例">2. 应用案例</a>
+        <ul>
+          <li><a href="#-脚本传不同值做不同事">㈠ 脚本传不同值做不同事</a></li>
+          <li><a href="#-根据用户需求选择做事">㈡ 根据用户需求选择做事</a></li>
+          <li><a href="#-菜单提示让用户选择需要做的事">㈢ 菜单提示让用户选择需要做的事</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><a href="#二函数">二、函数</a>
+    <ul>
+      <li><a href="#1-什么是函数">1. 什么是函数？</a></li>
+      <li><a href="#2-如何定义函数">2. 如何定义函数？</a></li>
+      <li><a href="#3-函数如何调用">3. 函数如何调用？</a>
+        <ul>
+          <li><a href="#-当前命令行调用">㈠ 当前命令行调用</a></li>
+          <li><a href="#-定义到用户的环境变量中">㈡ 定义到用户的环境变量中</a></li>
+          <li><a href="#-脚本中调用">㈢ 脚本中调用</a></li>
+        </ul>
+      </li>
+      <li><a href="#4-应用案例">4. 应用案例</a></li>
+    </ul>
+  </li>
+  <li><a href="#三综合案例">三、综合案例</a>
+    <ul>
+      <li><a href="#1-任务背景">1. 任务背景</a></li>
+      <li><a href="#2-具体要求">2. 具体要求</a></li>
+      <li><a href="#3-综合分析">3. 综合分析</a></li>
+      <li><a href="#4-落地实现">4. 落地实现</a></li>
+    </ul>
+  </li>
+  <li><a href="#四正则表达式">四、正则表达式</a>
+    <ul>
+      <li><a href="#2-正则能干什么">2. 正则能干什么？</a></li>
+      <li><a href="#3-正则当中名词解释">3. 正则当中名词解释</a>
+        <ul>
+          <li><a href="#-正则中普通常用的元字符">㈠ 正则中普通常用的元字符</a></li>
+          <li><a href="#-正则中其他常用元字符">㈡ 正则中其他常用元字符</a></li>
+          <li><a href="#-扩展类正则常用元字符">㈢ 扩展类正则常用元字符</a></li>
+        </ul>
+      </li>
+      <li><a href="#5-第二类正则">5. 第二类正则</a></li>
+      <li><a href="#6-正则表达式总结">6. 正则表达式总结</a></li>
+    </ul>
+  </li>
+  <li><a href="#五正则元字符一栏表">五、正则元字符一栏表</a></li>
+  <li><a href="#六正则练习作业">六、正则练习作业</a>
+    <ul>
+      <li><a href="#1-文件准备">1. 文件准备</a></li>
+      <li><a href="#2-具体要求-1">2. 具体要求</a></li>
+      <li><a href="#脚本搭建web服务">脚本搭建web服务</a></li>
+    </ul>
+  </li>
+</ul>
+
+  
+
+  <section class="post">
+    <h1 id="课程目标">课程目标</h1>
+
+<ul>
+  <li>掌握case语句的基本语法结构</li>
+  <li>掌握函数的定义及调用</li>
+  <li>掌握常用的正则表达式元字符含义</li>
+</ul>
+
+<h1 id="一case语句">一、case语句</h1>
+
+<p><strong>关键词：确认过眼神，你是对的人</strong>:couple_with_heart:</p>
+
+<ol>
+  <li>case语句为多重匹配语句</li>
+  <li>如果匹配成功，执行相匹配的命令</li>
+</ol>
+
+<h2 id="1-语法结构">1. 语法结构</h2>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>说明：pattern表示需要匹配的模式
+
+
+<span class="k">case</span> <span class="k">var in             </span>定义变量;var代表是变量名
+pattern 1<span class="p">)</span>              模式1;用 | 分割多个模式，相当于or
+    command1            需要执行的语句
+    <span class="p">;;</span>                  两个分号代表命令结束
+pattern 2<span class="p">)</span>
+    command2
+    <span class="p">;;</span>
+pattern 3<span class="p">)</span>
+    command3
+    <span class="p">;;</span>
+          <span class="k">*</span><span class="p">)</span>              default，不满足以上模式，默认执行<span class="k">*</span><span class="o">)</span>下面的语句
+    command4
+    <span class="p">;;</span>
+<span class="k">esac</span>                            esac表示case语句结束
+</code></pre></div></div>
+
+<h2 id="2-应用案例">2. 应用案例</h2>
+
+<h3 id="-脚本传不同值做不同事">㈠ 脚本传不同值做不同事</h3>
+
+<p><strong>具体需求：</strong>当给程序传入start、stop、restart三个不同参数时分别执行相应命令</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#!/bin/env bash</span>
+<span class="k">case</span> <span class="nv">$1</span> <span class="k">in
+        </span><span class="nb">start</span><span class="p">|</span>S<span class="p">)</span>
+        service apache <span class="nb">start</span> &amp;&gt;/dev/null <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s2">"apache 启动成功"</span>
+        <span class="p">;;</span>
+        stop|T<span class="p">)</span>
+        service apache stop &amp;&gt;/dev/null <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s2">"apache 停止成功"</span>
+        <span class="p">;;</span>
+        restart|R<span class="p">)</span>
+        service apache restart &amp;&gt;/dev/null <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s2">"apache 重启完毕"</span>
+        <span class="p">;;</span>
+        <span class="k">*</span><span class="p">)</span>
+        <span class="nb">echo</span> <span class="s2">"请输入要做的事情..."</span>
+        <span class="p">;;</span>
+<span class="k">esac</span>
+
+</code></pre></div></div>
+
+<h3 id="-根据用户需求选择做事">㈡ 根据用户需求选择做事</h3>
+
+<p><strong>具体需求：</strong></p>
+
+<p>脚本提示让用户输入需要管理的服务名，然后提示用户需要对服务做什么操作，如启动，关闭等操作</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#!/bin/env bash</span>
+<span class="nb">read</span> -p <span class="s2">"请输入你要管理的服务名称(vsftpd):"</span> service
+<span class="k">case</span> <span class="nv">$service</span> <span class="k">in
+        </span>vsftpd|ftp<span class="p">)</span>
+        <span class="nb">read</span> -p <span class="s2">"请选择你需要做的事情(restart|stop):"</span> action
+        <span class="k">case</span> <span class="nv">$action</span> <span class="k">in
+                </span>stop|S<span class="p">)</span>
+                service vsftpd stop &amp;&gt;/dev/null <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s2">"该</span><span class="nv">$serivce</span><span class="s2">服务已经停止成功"</span>
+                <span class="p">;;</span>
+                <span class="nb">start</span><span class="p">)</span>
+                service vsftpd <span class="nb">start</span> &amp;&gt;/dev/null <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s2">"该</span><span class="nv">$serivce</span><span class="s2">服务已经成功启动"</span>
+                <span class="p">;;</span>
+        <span class="k">esac</span>
+        <span class="p">;;</span>
+        httpd|apache<span class="p">)</span>
+        <span class="nb">echo</span> <span class="s2">"apache hello world"</span>
+        <span class="p">;;</span>
+        <span class="k">*</span><span class="p">)</span>
+        <span class="nb">echo</span> <span class="s2">"请输入你要管理的服务名称(vsftpd)"</span>
+        <span class="p">;;</span>
+<span class="k">esac</span>
+    
+</code></pre></div></div>
+
+<h3 id="-菜单提示让用户选择需要做的事">㈢ 菜单提示让用户选择需要做的事</h3>
+
+<p><strong>具体需求：</strong></p>
+
+<p>模拟一个多任务维护界面;当执行程序时先显示总菜单，然后进行选择后做相应维护监控操作</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">**********</span>请选择<span class="k">*********</span>
+<span class="nb">h    </span>显示命令帮助
+f    显示磁盘分区
+d    显示磁盘挂载
+m    查看内存使用
+u    查看系统负载
+q    退出程序
+<span class="k">*************************</span>
+</code></pre></div></div>
+
+<p><strong>思路：</strong></p>
+
+<ol>
+  <li>菜单打印出来</li>
+  <li>交互式让用户输入操作编号，然后做出相应处理</li>
+</ol>
+
+<p><strong>落地实现：</strong></p>
+
+<ol>
+  <li>菜单打印(分解动作)</li>
+</ol>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#!/bin/env bash</span>
+<span class="nb">cat</span> <span class="o">&lt;&lt;-</span><span class="no">EOF</span><span class="sh">
+    h    显示命令帮助
+    f    显示磁盘分区
+    d    显示磁盘挂载
+    m    查看内存使用
+    u    查看系统负载
+    q    退出程序
+</span><span class="no">    EOF
+</span></code></pre></div></div>
+
+<ol>
+  <li>最终实现</li>
+</ol>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#!/bin/bash</span>
+<span class="c1">#打印菜单</span>
+<span class="nb">cat</span> <span class="o">&lt;&lt;-</span><span class="no">EOF</span><span class="sh">
+    h    显示命令帮助
+    f    显示磁盘分区
+    d    显示磁盘挂载
+    m    查看内存使用
+    u    查看系统负载
+    q    退出程序
+</span><span class="no">    EOF
+
+</span><span class="c1">#让用户输入需要的操作</span>
+<span class="k">while </span><span class="nb">true
+</span><span class="k">do
+</span><span class="nb">read</span> -p <span class="s2">"请输入需要操作的选项[f|d]:"</span> var1
+<span class="k">case</span> <span class="nv">$var1</span> <span class="k">in
+    </span><span class="nb">h</span><span class="p">)</span>
+    <span class="nb">cat</span> <span class="o">&lt;&lt;-</span><span class="no">EOF</span><span class="sh">
+        h       显示命令帮助
+        f       显示磁盘分区
+        d       显示磁盘挂载
+        m       查看内存使用
+        u       查看系统负载
+        q       退出程序
+</span><span class="no">    EOF
+</span>    <span class="p">;;</span>
+    f<span class="p">)</span>
+    fdisk -l
+    <span class="p">;;</span>
+    d<span class="p">)</span>
+    <span class="nb">df</span> -h
+    <span class="p">;;</span>
+    m<span class="p">)</span>
+    free -m
+    <span class="p">;;</span>
+    u<span class="p">)</span>
+    <span class="nb">uptime</span>
+    <span class="p">;;</span>
+    q<span class="p">)</span>
+    <span class="k">exit</span>
+    <span class="p">;;</span>
+<span class="k">esac</span>
+<span class="k">done</span>
+
+
+
+<span class="c1">#!/bin/bash</span>
+<span class="c1">#打印菜单</span>
+menu<span class="o">(){</span>
+<span class="nb">cat</span> <span class="o">&lt;&lt;-</span><span class="no">END</span><span class="sh">
+    h    显示命令帮助
+    f    显示磁盘分区
+    d    显示磁盘挂载
+    m    查看内存使用
+    u    查看系统负载
+    q    退出程序
+</span><span class="no">    END
+</span><span class="o">}</span>
+menu
+<span class="k">while </span><span class="nb">true
+</span><span class="k">do
+</span><span class="nb">read</span> -p <span class="s2">"请输入你的操作[h for help]:"</span> var1
+<span class="k">case</span> <span class="nv">$var1</span> <span class="k">in
+    </span><span class="nb">h</span><span class="p">)</span>
+    menu
+    <span class="p">;;</span>
+    f<span class="p">)</span>
+    <span class="nb">read</span> -p <span class="s2">"请输入你要查看的设备名字[/dev/sdb]:"</span> var2
+    <span class="k">case</span> <span class="nv">$var2</span> <span class="k">in</span>
+        /dev/sda<span class="p">)</span>
+        fdisk -l /dev/sda
+        <span class="p">;;</span>
+        /dev/sdb<span class="p">)</span>
+        fdisk -l /dev/sdb
+        <span class="p">;;</span>
+    <span class="k">esac</span>
+    <span class="p">;;</span>
+    d<span class="p">)</span>
+    lsblk
+    <span class="p">;;</span>
+    m<span class="p">)</span>
+    free -m
+    <span class="p">;;</span>
+    u<span class="p">)</span>
+    <span class="nb">uptime</span>
+    <span class="p">;;</span>
+    q<span class="p">)</span>
+    <span class="k">exit</span>
+    <span class="p">;;</span>
+<span class="k">esac</span>
+<span class="k">done</span>
+
+</code></pre></div></div>
+
+<p><strong>课堂练习：</strong></p>
+
+<ol>
+  <li>输入一个等级（A-E），查看每个等级的成绩；如：输入A，则显示“90分~100分”，依次类推</li>
+  <li>判断用户输入的字符串，如果是”hello”,则显示”world”；如果是”world”,则显示”hello”,否则提示”请输入hello或者world，谢谢！”</li>
+</ol>
+
+<h1 id="二函数">二、函数</h1>
+
+<h2 id="1-什么是函数">1. 什么是函数？</h2>
+
+<ul>
+  <li>shell中允许将<strong>一组命令集合</strong>或<strong>语句</strong>形成一段<strong>可用代码</strong>，这些代码块称为shell函数</li>
+  <li>给这段代码起个名字称为函数名，后续可以直接调用该段代码的功能</li>
+</ul>
+
+<h2 id="2-如何定义函数">2. 如何定义函数？</h2>
+
+<p><strong>方法1：</strong></p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>函数名<span class="o">()</span>
+<span class="o">{</span>
+  函数体（一堆命令的集合，来实现某个功能）   
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p><strong>方法2：</strong></p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">function </span>函数名<span class="o">()</span>
+<span class="o">{</span>
+   函数体（一堆命令的集合，来实现某个功能）
+   <span class="nb">echo </span>hello
+   <span class="nb">echo </span>world
+<span class="o">}</span>
+
+</code></pre></div></div>
+
+<p><strong>函数中return说明:</strong></p>
+
+<ol>
+  <li>return可以结束一个函数。类似于循环控制语句break(结束当前循环，执行循环体后面的代码)。</li>
+  <li>return默认返回函数中最后一个命令状态值，也可以给定参数值，范围是0-256之间。</li>
+  <li>如果没有return命令，函数将返回最后一个指令的退出状态值。</li>
+</ol>
+
+<h2 id="3-函数如何调用">3. 函数如何调用？</h2>
+
+<h3 id="-当前命令行调用">㈠ 当前命令行调用</h3>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">[</span>root@MissHou shell04]# <span class="nb">cat </span>fun1.sh 
+<span class="c1">#!/bin/bash</span>
+hello<span class="o">(){</span>
+<span class="nb">echo</span> <span class="s2">"hello lilei </span><span class="nv">$1</span><span class="s2">"</span>
+<span class="nb">hostname</span>
+<span class="o">}</span>
+menu<span class="o">(){</span>
+<span class="nb">cat</span> <span class="o">&lt;&lt;-</span><span class="no">EOF</span><span class="sh">
+1. mysql
+2. web
+3. app
+4. exit
+</span><span class="no">EOF
+</span><span class="o">}</span>
+
+<span class="o">[</span>root@MissHou shell04]# <span class="nb">source </span>fun1.sh 
+<span class="o">[</span>root@MissHou shell04]# <span class="nb">.</span> fun1.sh 
+
+<span class="o">[</span>root@MissHou shell04]# hello 888
+hello lilei 888
+MissHou.itcast.cc
+<span class="o">[</span>root@MissHou shell04]# menu
+1. mysql
+2. web
+3. app
+4. <span class="k">exit</span>
+
+</code></pre></div></div>
+
+<h3 id="-定义到用户的环境变量中">㈡ 定义到用户的环境变量中</h3>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">[</span>root@MissHou shell05]# vim ~/.bashrc 
+文件中增加如下内容：
+hello<span class="o">(){</span>
+<span class="nb">echo</span> <span class="s2">"hello lilei </span><span class="nv">$1</span><span class="s2">"</span>
+<span class="nb">hostname</span>
+<span class="o">}</span>
+menu<span class="o">(){</span>
+<span class="nb">cat</span> <span class="o">&lt;&lt;-</span><span class="no">EOF</span><span class="sh">
+1. mysql
+2. web
+3. app
+4. exit
+</span><span class="no">EOF
+</span><span class="o">}</span>
+
+注意：
+当用户打开bash的时候会读取该文件
+</code></pre></div></div>
+
+<h3 id="-脚本中调用">㈢ 脚本中调用</h3>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#!/bin/bash</span>
+<span class="c1">#打印菜单</span>
+<span class="nb">source</span> ./fun1.sh
+menu<span class="o">(){</span>
+<span class="nb">cat</span> <span class="o">&lt;&lt;-</span><span class="no">END</span><span class="sh">
+    h    显示命令帮助
+    f    显示磁盘分区
+    d    显示磁盘挂载
+    m    查看内存使用
+    u    查看系统负载
+    q    退出程序
+</span><span class="no">    END
+</span><span class="o">}</span>
+menu        //调用函数
+
+</code></pre></div></div>
+
+<h2 id="4-应用案例">4. 应用案例</h2>
+
+<p><strong>具体需求：</strong></p>
+
+<ol>
+  <li>写一个脚本收集用户输入的基本信息(姓名，性别，年龄)，如不输入一直提示输入</li>
+  <li>最后根据用户的信息输出相对应的内容</li>
+</ol>
+
+<p><strong>思路：</strong></p>
+
+<ol>
+  <li>交互式定义多个变量来保存用户信息  姓名、性别、年龄</li>
+  <li>如果不输一直提示输入
+    <ul>
+      <li>循环直到输入字符串不为空  while  判断输入字符串是否为空</li>
+      <li>每个信息都必须不能为空，该功能可以定义为一个函数，方便下面脚本调用</li>
+    </ul>
+  </li>
+  <li>根据用户输入信息做出匹配判断</li>
+</ol>
+
+<p><strong>代码实现：</strong></p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#!/bin/bash</span>
+<span class="c1">#该函数实现用户如果不输入内容则一直循环直到用户输入为止，并且将用户输入的内容打印出来</span>
+input_fun<span class="o">()</span>
+<span class="o">{</span>
+  <span class="nv">input_var</span><span class="o">=</span><span class="s2">""</span>
+  <span class="nv">output_var</span><span class="o">=</span><span class="nv">$1</span>
+  <span class="k">while</span> <span class="o">[</span> -z <span class="nv">$input_var</span> <span class="o">]</span>
+    <span class="k">do
+    </span><span class="nb">read</span> -p <span class="s2">"</span><span class="nv">$output_var</span><span class="s2">"</span> input_var
+    <span class="k">done
+    </span><span class="nb">echo</span> <span class="nv">$input_var</span>
+<span class="o">}</span>
+
+input_fun 请输入你的姓名:
+
+或者
+<span class="c1">#!/bin/bash</span>
+fun<span class="o">()</span>
+<span class="o">{</span>
+    <span class="nb">read</span> -p <span class="s2">"</span><span class="nv">$1</span><span class="s2">"</span> <span class="k">var
+    if</span> <span class="o">[</span> -z <span class="nv">$var</span> <span class="o">]</span>;<span class="k">then
+        </span>fun <span class="nv">$1</span>
+    <span class="k">else
+        </span><span class="nb">echo</span> <span class="nv">$var</span>
+    <span class="k">fi</span>
+<span class="o">}</span>
+
+
+<span class="c1">#调用函数并且获取用户的姓名、性别、年龄分别赋值给name、sex、age变量</span>
+<span class="nv">name</span><span class="o">=</span><span class="k">$(</span>input_fun 请输入你的姓名:<span class="k">)</span>
+<span class="nv">sex</span><span class="o">=</span><span class="k">$(</span>input_fun 请输入你的性别:<span class="k">)</span>
+<span class="nv">age</span><span class="o">=</span><span class="k">$(</span>input_fun 请输入你的年龄:<span class="k">)</span>
+
+<span class="c1">#根据用户输入的性别进行匹配判断</span>
+<span class="k">case</span> <span class="nv">$sex</span> <span class="k">in
+            </span><span class="nb">man</span><span class="p">)</span>
+            <span class="k">if</span> <span class="o">[</span> <span class="nv">$age</span> -gt 18 -a <span class="nv">$age</span> -le 35 <span class="o">]</span>;<span class="k">then
+                </span><span class="nb">echo</span> <span class="s2">"中年大叔你油腻了吗？加油"</span>
+            <span class="k">elif</span> <span class="o">[</span> <span class="nv">$age</span> -gt 35 <span class="o">]</span>;<span class="k">then
+                </span><span class="nb">echo</span> <span class="s2">"保温杯里泡枸杞"</span>
+            <span class="k">else
+                </span><span class="nb">echo</span> <span class="s2">"年轻有为。。。"</span>
+            <span class="k">fi</span>
+            <span class="p">;;</span>
+            woman<span class="p">)</span>
+            xxx
+            <span class="p">;;</span>
+            <span class="k">*</span><span class="p">)</span>
+            xxx
+            <span class="p">;;</span>
+<span class="k">esac</span>
+
+</code></pre></div></div>
+
+<p><strong>扩展延伸：</strong></p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>描述以下代码含义：    
+:<span class="o">()</span>
+<span class="o">{</span>
+   :|:&amp;
+<span class="o">}</span>
+:
+</code></pre></div></div>
+
+<h1 id="三综合案例">三、综合案例</h1>
+
+<h2 id="1-任务背景">1. 任务背景</h2>
+
+<p>现有的跳板机虽然实现了统一入口来访问生产服务器，yunwei用户权限太大可以操作跳板机上的所有目录文件，存在数据被误删的安全隐患，所以希望你做一些安全策略来保证跳板机的正常使用。</p>
+
+<h2 id="2-具体要求">2. 具体要求</h2>
+
+<ol>
+  <li>只允许yunwei用户通过跳板机远程连接后台的应用服务器做一些维护操作</li>
+  <li>公司运维人员远程通过yunwei用户连接跳板机时，跳出以下菜单供选择：</li>
+</ol>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>欢迎使用Jumper-server，请选择你要操作的主机：
+1. DB1-Master
+2. DB2-Slave
+3. Web1
+4. Web2
+h. <span class="nb">help
+</span>q. <span class="k">exit</span>
+</code></pre></div></div>
+
+<ol>
+  <li>当用户选择相应主机后，直接<strong>免密码登录</strong>成功</li>
+  <li>如果用户不输入一直提示用户输入，直到用户选择退出</li>
+</ol>
+
+<h2 id="3-综合分析">3. 综合分析</h2>
+
+<ol>
+  <li>将脚本放到yunwei用户家目录里的.bashrc文件里（/shell05/jumper-server.sh）</li>
+  <li>将菜单定义为一个函数[打印菜单]，方便后面调用</li>
+  <li>用case语句来实现用户的选择【交互式定义变量】</li>
+  <li>当用户选择了某一台服务器后，进一步询问用户需要做的事情  case…esac  交互式定义变量</li>
+  <li>使用循环来实现用户不选择一直让其选择</li>
+  <li>限制用户退出后直接关闭终端  exit</li>
+</ol>
+
+<h2 id="4-落地实现">4. 落地实现</h2>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#!/bin/bash</span>
+<span class="c1"># jumper-server</span>
+<span class="c1"># 定义菜单打印功能的函数</span>
+menu<span class="o">()</span>
+<span class="o">{</span>
+<span class="nb">cat</span> <span class="o">&lt;&lt;-</span><span class="no">EOF</span><span class="sh">
+欢迎使用Jumper-server，请选择你要操作的主机：
+1. DB1-Master
+2. DB2-Slave
+3. Web1
+4. Web2
+h. help
+q. exit
+</span><span class="no">    EOF
+</span><span class="o">}</span>
+<span class="c1"># 屏蔽以下信号</span>
+<span class="k">trap</span> <span class="s1">''</span> 1 2 3 19
+<span class="c1"># 调用函数来打印菜单</span>
+menu
+<span class="c1">#循环等待用户选择</span>
+<span class="k">while </span><span class="nb">true
+</span><span class="k">do</span>
+<span class="c1"># 菜单选择，case...esac语句</span>
+<span class="nb">read</span> -p <span class="s2">"请选择你要访问的主机:"</span> host
+<span class="k">case</span> <span class="nv">$host</span> <span class="k">in
+    </span>1<span class="p">)</span>
+    ssh root@10.1.1.1
+    <span class="p">;;</span>
+    2<span class="p">)</span>
+    ssh root@10.1.1.2
+    <span class="p">;;</span>
+    3<span class="p">)</span>
+    ssh root@10.1.1.3
+    <span class="p">;;</span>
+    <span class="nb">h</span><span class="p">)</span>
+    <span class="nb">clear</span>;menu
+    <span class="p">;;</span>
+    q<span class="p">)</span>
+    <span class="k">exit</span>
+    <span class="p">;;</span>
+<span class="k">esac</span>
+<span class="k">done
+
+
+</span>将脚本放到yunwei用户家目录里的.bashrc里执行：
+bash ~/jumper-server.sh
+<span class="k">exit</span>
+
+</code></pre></div></div>
+
+<p><strong>进一步完善需求</strong></p>
+
+<p>为了进一步增强跳板机的安全性，工作人员通过跳板机访问生产环境，但是不能在跳板机上停留。</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#!/bin/bash</span>
+<span class="c1">#公钥推送成功</span>
+<span class="k">trap</span> <span class="s1">''</span> 1 2 3 19
+<span class="c1">#打印菜单用户选择</span>
+menu<span class="o">(){</span>
+<span class="nb">cat</span> <span class="o">&lt;&lt;-</span><span class="no">EOF</span><span class="sh">
+欢迎使用Jumper-server，请选择你要操作的主机：
+1. DB1-Master
+2. DB2-Slave
+3. Web1
+4. Web2
+h. help
+q. exit
+</span><span class="no">EOF
+</span><span class="o">}</span>
+
+<span class="c1">#调用函数来打印菜单</span>
+menu
+<span class="k">while </span><span class="nb">true
+</span><span class="k">do
+</span><span class="nb">read</span> -p <span class="s2">"请输入你要选择的主机[h for help]："</span> host
+
+<span class="c1">#通过case语句来匹配用户所输入的主机</span>
+<span class="k">case</span> <span class="nv">$host</span> <span class="k">in
+    </span>1|DB1<span class="p">)</span>
+    ssh root@10.1.1.1
+    <span class="p">;;</span>
+    2|DB2<span class="p">)</span>
+    ssh root@10.1.1.2
+    <span class="p">;;</span>
+    3|web1<span class="p">)</span>
+    ssh root@10.1.1.250
+    <span class="p">;;</span>
+    <span class="nb">h</span><span class="p">|</span><span class="nb">help</span><span class="p">)</span>
+    <span class="nb">clear</span>;menu
+    <span class="p">;;</span>
+    q|quit<span class="p">)</span>
+    <span class="k">exit</span>
+    <span class="p">;;</span>
+<span class="k">esac</span>
+<span class="k">done
+
+</span>自己完善功能：
+1. 用户选择主机后，需要事先推送公钥；如何判断公钥是否已推
+2. 比如选择web1时，再次提示需要做的操作，比如：
+clean log
+重启服务
+kill某个进程
+</code></pre></div></div>
+
+<p><strong>回顾信号：</strong></p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1<span class="o">)</span> SIGHUP             重新加载配置    
+2<span class="o">)</span> SIGINT            键盘中断^C
+3<span class="o">)</span> SIGQUIT          键盘退出
+9<span class="o">)</span> SIGKILL             强制终止
+15<span class="o">)</span> SIGTERM            终止（正常结束），缺省信号
+18<span class="o">)</span> SIGCONT           继续
+19<span class="o">)</span> SIGSTOP           停止
+20<span class="o">)</span> SIGTSTP         暂停^Z
+</code></pre></div></div>
+
+<h1 id="四正则表达式">四、正则表达式</h1>
+
+<p>##1. 正则表达式是什么？</p>
+
+<p><strong>正则表达式</strong>（Regular Expression、regex或regexp，缩写为RE），也译为正规表示法、常规表示法，是一种字符模式，用于在查找过程中匹配指定的字符。</p>
+
+<p>许多程序设计语言都支持利用正则表达式进行<strong>字符串操作</strong>。例如，在Perl中就内建了一个功能强大的正则表达式引擎。</p>
+
+<p>正则表达式这个概念最初是由Unix中的工具软件（例如sed和grep）普及开的。</p>
+
+<table>
+  <tbody>
+    <tr>
+      <td>支持正则表达式的程序如：locate</td>
+      <td>find</td>
+      <td>vim</td>
+      <td>grep</td>
+      <td>sed</td>
+      <td>awk</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="2-正则能干什么">2. 正则能干什么？</h2>
+
+<ol>
+  <li>匹配邮箱、匹配身份证号码、手机号、银行卡号等</li>
+  <li>匹配某些特定字符串，做特定处理等等</li>
+</ol>
+
+<h2 id="3-正则当中名词解释">3. 正则当中名词解释</h2>
+
+<ul>
+  <li>
+    <p><strong>元字符</strong></p>
+
+    <p>指那些在正则表达式中具有<strong>特殊意义的专用字符</strong>,如:点(.) 星(*) 问号(?)等</p>
+  </li>
+  <li>
+    <p><strong>前导字符</strong></p>
+
+    <p>位于<strong>元字符</strong>前面的字符.    ab<strong>c</strong>*   aoo<strong>o.</strong></p>
+  </li>
+</ul>
+
+<p>##4. 第一类正则表达式</p>
+
+<h3 id="-正则中普通常用的元字符">㈠ 正则中普通常用的元字符</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>元字符</th>
+      <th>功能</th>
+      <th>备注</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>.</td>
+      <td>匹配除了换行符以外的任意单个字符</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>*</td>
+      <td>前导字符出现0次或连续多次</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>.*</td>
+      <td>任意长度字符</td>
+      <td>ab.*</td>
+    </tr>
+    <tr>
+      <td>^</td>
+      <td>行首(以…开头)</td>
+      <td>^root</td>
+    </tr>
+    <tr>
+      <td>$</td>
+      <td>行尾(以…结尾)</td>
+      <td>bash$</td>
+    </tr>
+    <tr>
+      <td>^$</td>
+      <td>空行</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>[]</td>
+      <td>匹配括号里任意单个字符或一组单个字符</td>
+      <td>[abc]</td>
+    </tr>
+    <tr>
+      <td>[^]</td>
+      <td>匹配不包含括号里任一单个字符或一组单个字符</td>
+      <td>[^abc]</td>
+    </tr>
+    <tr>
+      <td>^[]</td>
+      <td>匹配以括号里任意单个字符或一组单个字符开头</td>
+      <td>^[abc]</td>
+    </tr>
+    <tr>
+      <td>\^[\^]</td>
+      <td>匹配不以括号里任意单个字符或一组单个字符开头</td>
+      <td>\^[^abc]</td>
+    </tr>
+  </tbody>
+</table>
+
+<ul>
+  <li>示例文本</li>
+</ul>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># cat 1.txt</span>
+ggle
+gogle
+google
+gooogle
+goooooogle
+gooooooogle
+taobao.com
+taotaobaobao.com
+
+jingdong.com
+dingdingdongdong.com
+10.1.1.1
+Adfjd8789JHfdsdf/
+a87fdjfkdLKJK
+7kdjfd989KJK;
+bSKJjkksdjf878.
+cidufKJHJ6576,
+
+hello world
+helloworld yourself
+</code></pre></div></div>
+
+<ul>
+  <li>举例说明</li>
+</ul>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+</code></pre></div></div>
+
+<h3 id="-正则中其他常用元字符">㈡ 正则中其他常用元字符</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>元字符</th>
+      <th>功能</th>
+      <th>备注</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>\&lt;</td>
+      <td>取单词的头</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>\&gt;</td>
+      <td>取单词的尾</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>\&lt;  \&gt;</td>
+      <td>精确匹配</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>\{n\}</td>
+      <td>匹配前导字符连续出现n次</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>\{n,\}</td>
+      <td>匹配前导字符至少出现n次</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>\{n,m\}</td>
+      <td>匹配前导字符出现n次与m次之间</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>\(   \)</td>
+      <td>保存被匹配的字符</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>\d</td>
+      <td>匹配数字（<strong>grep -P</strong>）</td>
+      <td>[0-9]</td>
+    </tr>
+    <tr>
+      <td>\w</td>
+      <td>匹配字母数字下划线（<strong>grep -P</strong>）</td>
+      <td>[a-zA-Z0-9_]</td>
+    </tr>
+    <tr>
+      <td>\s</td>
+      <td>匹配空格、制表符、换页符（<strong>grep -P</strong>）</td>
+      <td>[\t\r\n]</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>举例说明：</strong></p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>需求：将10.1.1.1替换成10.1.1.254
+
+1）vim编辑器支持正则表达式
+<span class="c1"># vim 1.txt</span>
+:%s#\<span class="o">(</span>10.1.1\<span class="o">)</span>.1#\1.254#g 
+:%s/\<span class="o">(</span>10.1.1\<span class="o">)</span>.1/\1.254/g 
+
+2）sed支持正则表达式【后面学】
+<span class="c1"># sed -n 's#\(10.1.1\).1#\1.254#p' 1.txt</span>
+10.1.1.254
+
+说明：
+找出含有10.1.1的行，同时保留10.1.1并标记为标签1，之后可以使用\1来引用它。
+最多可以定义9个标签，从左边开始编号，最左边的是第一个。
+
+
+需求：将helloworld yourself 换成hellolilei myself
+
+<span class="c1"># vim 1.txt</span>
+:%s#\<span class="o">(</span>hello\<span class="o">)</span>world your\<span class="o">(</span>self\<span class="o">)</span><span class="c1">#\1lilei my\2#g</span>
+
+<span class="c1"># sed -n 's/\(hello\)world your\(self\)/\1lilei my\2/p' 1.txt </span>
+hellolilei myself
+
+<span class="c1"># sed -n 's/helloworld yourself/hellolilei myself/p' 1.txt </span>
+hellolilei myself
+<span class="c1"># sed -n 's/\(hello\)world your\(self\)/\1lilei my\2/p' 1.txt </span>
+hellolilei myself
+
+Perl内置正则：
+\d      匹配数字  <span class="o">[</span>0-9]
+\w      匹配字母数字下划线[a-zA-Z0-9_]
+\s      匹配空格、制表符、换页符[\t\r\n]
+
+<span class="c1"># grep -P '\d' 1.txt</span>
+<span class="c1"># grep -P '\w' 2.txt</span>
+<span class="c1"># grep -P '\s' 3.txt</span>
+</code></pre></div></div>
+
+<h3 id="-扩展类正则常用元字符">㈢ 扩展类正则常用元字符</h3>
+
+<p><strong>丑话说在前面：</strong></p>
+
+<p>我说我比较特殊，你要相信！否则我错给你看:smirk:</p>
+
+<ul>
+  <li>
+    <p>grep你要用我，必须加 <strong>-E</strong>  或者  让你兄弟<code class="highlighter-rouge">egrep</code>来找我</p>
+  </li>
+  <li>
+    <p>sed你要用我，必须加 <strong>-r</strong></p>
+  </li>
+</ul>
+
+<table>
+  <thead>
+    <tr>
+      <th>扩展元字符</th>
+      <th>功能</th>
+      <th>备注</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>+</td>
+      <td>匹配一个或多个前导字符</td>
+      <td>bo+ 匹配boo、 bo</td>
+    </tr>
+    <tr>
+      <td>?</td>
+      <td>匹配零个或一个前导字符</td>
+      <td>bo? 匹配b、 bo</td>
+    </tr>
+    <tr>
+      <td>|</td>
+      <td>或</td>
+      <td>匹配a或b</td>
+    </tr>
+    <tr>
+      <td>()</td>
+      <td>组字符（看成整体）</td>
+      <td>(my|your)self：表示匹配myself或匹配yourself</td>
+    </tr>
+    <tr>
+      <td>{n}</td>
+      <td>前导字符重复n次</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>{n,}</td>
+      <td>前导字符重复至少n次</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>{n,m}</td>
+      <td>前导字符重复n到m次</td>
+      <td> </td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>举例说明：</strong></p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># grep "root|ftp|adm" /etc/passwd</span>
+<span class="c1"># egrep "root|ftp|adm" /etc/passwd</span>
+<span class="c1"># grep -E "root|ftp|adm" /etc/passwd</span>
+
+<span class="c1"># grep -E 'o+gle' test.txt </span>
+<span class="c1"># grep -E 'o?gle' test.txt </span>
+
+<span class="c1"># egrep 'go{2,}' 1.txt</span>
+<span class="c1"># egrep '(my|your)self' 1.txt</span>
+
+
+使用正则过滤出文件中的IP地址：
+<span class="c1"># grep '[0-9]\{2\}\.[0-9]\{1\}\.[0-9]\{1\}\.[0-9]\{1\}' 1.txt </span>
+10.1.1.1
+<span class="c1"># grep '[0-9]{2}\.[0-9]{1}\.[0-9]{1}\.[0-9]{1}' 1.txt </span>
+<span class="c1"># grep -E '[0-9]{2}\.[0-9]{1}\.[0-9]{1}\.[0-9]{1}' 1.txt </span>
+10.1.1.1
+<span class="c1"># grep -E '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' 1.txt </span>
+10.1.1.1
+<span class="c1"># grep -E '([0-9]{1,3}\.){3}[0-9]{1,3}' 1.txt </span>
+10.1.1.1
+
+</code></pre></div></div>
+
+<h2 id="5-第二类正则">5. 第二类正则</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>表达式</th>
+      <th>功能</th>
+      <th>示例</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>[:alnum:]</td>
+      <td>字母与数字字符</td>
+      <td>[[:alnum:]]+</td>
+    </tr>
+    <tr>
+      <td>[:alpha:]</td>
+      <td>字母字符(包括大小写字母)</td>
+      <td>[[:alpha:]]{4}</td>
+    </tr>
+    <tr>
+      <td>[:blank:]</td>
+      <td>空格与制表符</td>
+      <td>[[:blank:]]*</td>
+    </tr>
+    <tr>
+      <td>[:digit:]</td>
+      <td>数字</td>
+      <td>[[:digit:]]?</td>
+    </tr>
+    <tr>
+      <td>[:lower:]</td>
+      <td>小写字母</td>
+      <td>[[:lower:]]{4,}</td>
+    </tr>
+    <tr>
+      <td>[:upper:]</td>
+      <td>大写字母</td>
+      <td>[[:upper:]]+</td>
+    </tr>
+    <tr>
+      <td>[:punct:]</td>
+      <td>标点符号</td>
+      <td>[[:punct:]]</td>
+    </tr>
+    <tr>
+      <td>[:space:]</td>
+      <td>包括换行符，回车等在内的所有空白</td>
+      <td>[[:space:]]+</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">[</span>root@server shell05]# <span class="nb">grep</span> -E <span class="s1">'^[[:digit:]]+'</span> 1.txt
+<span class="o">[</span>root@server shell05]# <span class="nb">grep</span> -E <span class="s1">'^[^[:digit:]]+'</span> 1.txt
+<span class="o">[</span>root@server shell05]# <span class="nb">grep</span> -E <span class="s1">'[[:lower:]]{4,}'</span> 1.txt
+</code></pre></div></div>
+
+<h2 id="6-正则表达式总结">6. 正则表达式总结</h2>
+
+<p><strong>把握一个原则，让你轻松搞定可恶的正则符号：</strong></p>
+
+<ol>
+  <li>我要找什么？
+    <ul>
+      <li>找数字                            [0-9]</li>
+      <li>找字母                                    [a-zA-Z]</li>
+      <li>找标点符号                            [[:punct:]]</li>
+    </ul>
+  </li>
+  <li>我要如何找？看心情找
+    <ul>
+      <li>以什么为首                           ^key</li>
+      <li>以什么结尾                           key$</li>
+      <li>包含什么或不包含什么        [abc]  \^[abc]   [\^abc]   \^[\^abc]</li>
+    </ul>
+  </li>
+  <li>我要找多少呀？
+    <ul>
+      <li>找前导字符出现0次或连续多次             ab*</li>
+      <li>找任意单个(一次)字符                             ab.</li>
+      <li>找任意字符                                               ab.*</li>
+      <li>找前导字符连续出现几次                        {n}  {n,m}   {n,}</li>
+      <li>找前导字符出现1次或多次                      go+</li>
+      <li>找前到字符出现0次或1次                       go?</li>
+    </ul>
+  </li>
+</ol>
+
+<h1 id="五正则元字符一栏表">五、正则元字符一栏表</h1>
+
+<p><strong>元字符</strong>：在正则中，具有特殊意义的专用字符，如: 星号(*)、加号(+)等</p>
+
+<p><strong>前导字符</strong>：元字符前面的字符叫前导字符</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>元字符</th>
+      <th>功能</th>
+      <th>示例</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>*</td>
+      <td>前导字符出现0次或者连续多次</td>
+      <td>ab*  abbbb</td>
+    </tr>
+    <tr>
+      <td>.</td>
+      <td>除了换行符以外，任意单个字符</td>
+      <td>ab.   ab8 abu</td>
+    </tr>
+    <tr>
+      <td>.*</td>
+      <td>任意长度的字符</td>
+      <td>ab.*  adfdfdf</td>
+    </tr>
+    <tr>
+      <td>[]</td>
+      <td>括号里的任意单个字符或一组单个字符</td>
+      <td>[abc][0-9][a-z]</td>
+    </tr>
+    <tr>
+      <td>[^]</td>
+      <td>不匹配括号里的任意单个字符或一组单个字符</td>
+      <td>[^abc]</td>
+    </tr>
+    <tr>
+      <td>^[]</td>
+      <td>匹配以括号里的任意单个字符开头</td>
+      <td>^[abc]</td>
+    </tr>
+    <tr>
+      <td>\^[^]</td>
+      <td>不匹配以括号里的任意单个字符开头</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>^</td>
+      <td>行的开头</td>
+      <td>^root</td>
+    </tr>
+    <tr>
+      <td>$</td>
+      <td>行的结尾</td>
+      <td>bash$</td>
+    </tr>
+    <tr>
+      <td>^$</td>
+      <td>空行</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>\{n\}和{n}</td>
+      <td>前导字符连续出现n次</td>
+      <td>[0-9]\{3\}</td>
+    </tr>
+    <tr>
+      <td>\{n,\}和{n,}</td>
+      <td>前导字符至少出现n次</td>
+      <td>[a-z]{4,}</td>
+    </tr>
+    <tr>
+      <td>\{n,m\}和{n,m}</td>
+      <td>前导字符连续出现n-m次</td>
+      <td>go{2,4}</td>
+    </tr>
+    <tr>
+      <td>\&lt;\&gt;</td>
+      <td>精确匹配单词</td>
+      <td>\&lt;hello\&gt;</td>
+    </tr>
+    <tr>
+      <td>\(\)</td>
+      <td>保留匹配到的字符</td>
+      <td>\(hello\)</td>
+    </tr>
+    <tr>
+      <td>+</td>
+      <td>前导字符出现1次或者多次</td>
+      <td>[0-9]+</td>
+    </tr>
+    <tr>
+      <td>?</td>
+      <td>前导字符出现0次或者1次</td>
+      <td>go?</td>
+    </tr>
+    <tr>
+      <td>|</td>
+      <td>或</td>
+      <td>\^root|\^ftp</td>
+    </tr>
+    <tr>
+      <td>()</td>
+      <td>组字符</td>
+      <td>(hello|world)123</td>
+    </tr>
+    <tr>
+      <td>\d</td>
+      <td>perl内置正则</td>
+      <td>grep -P  \d+</td>
+    </tr>
+    <tr>
+      <td>\w</td>
+      <td>匹配字母数字下划线</td>
+      <td> </td>
+    </tr>
+  </tbody>
+</table>
+
+<h1 id="六正则练习作业">六、正则练习作业</h1>
+
+<h2 id="1-文件准备">1. 文件准备</h2>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># vim test.txt </span>
+Aieur45869Root0000
+9h847RkjfkIIIhello
+rootHllow88000dfjj
+8ikuioerhfhupliooking
+hello world
+192.168.0.254
+welcome to uplooking.
+abcderfkdjfkdtest
+rlllA899kdfkdfj
+iiiA848890ldkfjdkfj
+abc
+12345678908374
+123456@qq.com
+123456@163.com
+abcdefg@itcast.com23ed
+</code></pre></div></div>
+
+<h2 id="2-具体要求-1">2. 具体要求</h2>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1、查找不以大写字母开头的行（三种写法）。
+<span class="nb">grep</span> <span class="s1">'^[^A-Z]'</span> 2.txt
+<span class="nb">grep</span> -v <span class="s1">'^[A-Z]'</span> 2.txt
+<span class="nb">grep</span> <span class="s1">'^[^[:upper:]]'</span> 2.txt
+2、查找有数字的行（两种写法）
+<span class="nb">grep</span> <span class="s1">'[0-9]'</span> 2.txt
+<span class="nb">grep</span> -P <span class="s1">'\d'</span> 2.txt
+3、查找一个数字和一个字母连起来的
+<span class="nb">grep</span> -E <span class="s1">'[0-9][a-zA-Z]|[a-zA-Z][0-9]'</span> 2.txt
+4、查找不以r开头的行
+<span class="nb">grep</span> -v <span class="s1">'^r'</span> 2.txt
+<span class="nb">grep</span> <span class="s1">'^[^r]'</span> 2.txt
+5、查找以数字开头的
+<span class="nb">grep</span> <span class="s1">'^[0-9]'</span> 2.txt
+6、查找以大写字母开头的
+<span class="nb">grep</span> <span class="s1">'^[A-Z]'</span> 2.txt
+7、查找以小写字母开头的
+<span class="nb">grep</span> <span class="s1">'^[a-z]'</span> 2.txt
+8、查找以点结束的
+<span class="nb">grep</span> <span class="s1">'\.$'</span> 2.txt
+9、去掉空行
+<span class="nb">grep</span> -v <span class="s1">'^$'</span> 2.txt
+10、查找完全匹配abc的行
+<span class="nb">grep</span> <span class="s1">'\&lt;abc\&gt;'</span> 2.txt
+11、查找A后有三个数字的行
+<span class="nb">grep</span> -E <span class="s1">'A[0-9]{3}'</span> 2.txt
+<span class="nb">grep</span>  <span class="s1">'A[0-9]\{3\}'</span> 2.txt
+12、统计root在/etc/passwd里出现了几次
+<span class="nb">grep</span> -o <span class="s1">'root'</span> 1.txt |wc -l
+
+13、用正则表达式找出自己的IP地址、广播地址、子网掩码
+ifconfig eth0|grep Bcast|grep -o <span class="s1">'[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}'</span>
+ifconfig eth0|grep Bcast| <span class="nb">grep</span> -E -o <span class="s1">'([0-9]{1,3}.){3}[0-9]{1,3}'</span>
+ifconfig eth0|grep Bcast| <span class="nb">grep</span> -P -o <span class="s1">'\d{1,3}.\d{1,3}.\d{1,3}.\d{1,3}'</span>
+ifconfig eth0|grep Bcast| <span class="nb">grep</span> -P -o <span class="s1">'(\d{1,3}.){3}\d{1,3}'</span>
+ifconfig eth0|grep Bcast| <span class="nb">grep</span> -P -o <span class="s1">'(\d+.){3}\d+'</span>
+
+<span class="c1"># egrep --color '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' /etc/sysconfig/network-scripts/ifcfg-eth0</span>
+<span class="nv">IPADDR</span><span class="o">=</span>10.1.1.1
+<span class="nv">NETMASK</span><span class="o">=</span>255.255.255.0
+<span class="nv">GATEWAY</span><span class="o">=</span>10.1.1.254
+
+<span class="c1"># egrep --color '[[:digit:]]{1,3}\.[[:digit:]]{1,3}\.[[:digit:]]{1,3}\.[[:digit:]]{1,3}' /etc/sysconfig/network-scripts/ifcfg-eth0 </span>
+<span class="nv">IPADDR</span><span class="o">=</span>10.1.1.1
+<span class="nv">NETMASK</span><span class="o">=</span>255.255.255.0
+<span class="nv">GATEWAY</span><span class="o">=</span>10.1.1.254
+
+
+14、找出文件中的ip地址并且打印替换成172.16.2.254
+<span class="nb">grep</span> -o -E <span class="s1">'([0-9]{1,3}\.){3}[0-9]{1,3}'</span> 1.txt |sed -n <span class="s1">'s/192.168.0.\(254\)/172.16.2.\1/p'</span>
+
+15、找出文件中的ip地址
+<span class="nb">grep</span> -o -E <span class="s1">'([0-9]{1,3}\.){3}[0-9]{1,3}'</span> 1.txt
+
+16、找出全部是数字的行
+<span class="nb">grep</span> -E <span class="s1">'^[0-9]+$'</span> <span class="nb">test
+</span>17、找出邮箱地址
+<span class="nb">grep</span> -E <span class="s1">'^[0-9]+@[a-z0-9]+\.[a-z]+$'</span>
+
+
+<span class="nb">grep</span> --help:
+匹配模式选择：
+Regexp selection and interpretation:
+  -E, --extended-regexp     扩展正则
+  -G, --basic-regexp        基本正则
+  -P, --perl-regexp         调用perl的正则
+  -e, --regexp<span class="o">=</span>PATTERN      use PATTERN <span class="k">for </span>matching
+  -f, --file<span class="o">=</span>FILE           obtain PATTERN <span class="k">from </span>FILE
+  -i, --ignore-case         忽略大小写
+  -w, --word-regexp         匹配整个单词
+  
+</code></pre></div></div>
+
+<p>#七、课后作业</p>
+
+<h2 id="脚本搭建web服务">脚本搭建web服务</h2>
+
+<p><strong>要求如下</strong>：</p>
+
+<ol>
+  <li>用户输入web服务器的IP、域名以及数据根目录</li>
+  <li>如果用户不输入则一直提示输入，直到输入为止</li>
+  <li>当访问www.test.cc时可以访问到数据根目录里的首页文件“this is test page”</li>
+</ol>
+
+<p><strong>参考脚本：</strong></p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>参考：
+<span class="c1">#!/bin/bash</span>
+<span class="nv">conf</span><span class="o">=</span>/etc/httpd/conf/httpd.conf
+input_fun<span class="o">()</span>
+<span class="o">{</span>
+  <span class="nv">input_var</span><span class="o">=</span><span class="s2">""</span>
+  <span class="nv">output_var</span><span class="o">=</span><span class="nv">$1</span>
+  <span class="k">while</span> <span class="o">[</span> -z <span class="nv">$input_var</span> <span class="o">]</span>
+    <span class="k">do
+    </span><span class="nb">read</span> -p <span class="s2">"</span><span class="nv">$output_var</span><span class="s2">"</span> input_var
+    <span class="k">done
+    </span><span class="nb">echo</span> <span class="nv">$input_var</span>
+<span class="o">}</span>
+<span class="nv">ipaddr</span><span class="o">=</span><span class="k">$(</span>input_fun <span class="s2">"Input Host ip[192.168.0.1]:"</span><span class="k">)</span>
+<span class="nv">web_host_name</span><span class="o">=</span><span class="k">$(</span>input_fun <span class="s2">"Input VirtualHostName [www.test.cc]:"</span><span class="k">)</span>
+<span class="nv">root_dir</span><span class="o">=</span><span class="k">$(</span>input_fun <span class="s2">"Input host Documentroot dir:[/var/www/html]:"</span><span class="k">)</span>
+
+<span class="o">[</span> <span class="o">!</span> -d <span class="nv">$root_dir</span> <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="nb">mkdir</span> -p <span class="nv">$root_dir</span>
+<span class="nb">chown </span>apache.apache <span class="nv">$root_dir</span> <span class="o">&amp;&amp;</span> <span class="nb">chmod </span>755 <span class="nv">$root_dir</span>
+<span class="nb">echo </span>this is <span class="nv">$web_host_name</span> <span class="o">&gt;</span> <span class="nv">$root_dir</span>/index.html
+<span class="nb">echo</span> <span class="s2">"</span><span class="nv">$ipaddr</span><span class="s2"> </span><span class="nv">$web_host_name</span><span class="s2">"</span> <span class="o">&gt;&gt;</span> /etc/hosts
+
+<span class="o">[</span> -f <span class="nv">$conf</span> <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="nb">cat</span> <span class="o">&gt;&gt;</span> <span class="nv">$conf</span> <span class="o">&lt;&lt;</span><span class="no">end</span><span class="sh">
+NameVirtualHost </span><span class="nv">$ipaddr</span><span class="sh">:80
+&lt;VirtualHost </span><span class="nv">$ipaddr</span><span class="sh">:80&gt;
+    ServerAdmin webmaster@</span><span class="nv">$web_host_name</span><span class="sh">
+    DocumentRoot </span><span class="nv">$root_dir</span><span class="sh">
+    ServerName </span><span class="nv">$web_host_name</span><span class="sh">
+    ErrorLog logs/</span><span class="nv">$web_host_name</span><span class="sh">-error_log
+    CustomLog logs/</span><span class="nv">$web_host_name</span><span class="sh">-access_loh common
+&lt;/VirtualHost&gt;
+</span><span class="no">end
+</span></code></pre></div></div>
+
+
+  </section>
+
+</article>
+
+<section>
+
+            <div class="content-play">
+              <p><a href="javascript:void(0)" onclick="dashangToggle()" class="dashang" title="打赏，支持一下">打赏一个呗</a></p>
+              <div class="hide_box-play"></div>
+              <div class="shang_box-play">
+                <a class="shang_close-play" href="javascript:void(0)" onclick="dashangToggle()" title="关闭"><img src="/images/payimg/close.jpg" alt="取消" /></a>
+                <div class="shang_tit-play">
+                  <p>感谢您的支持，我会继续努力的!</p>
+                </div>
+                <div class="shang_payimg">
+                    <img src="/images/payimg/alipayimg.jpg" alt="扫码支持" title="扫一扫" />
+                </div>
+              <div class="shang_payimg">    
+                    <img src="/images/payimg/weipayimg.jpg" alt="扫码支持" title="扫一扫" />
+                </div>
+                <div class="pay_explain">扫码打赏，你说多少就多少</div>
+                <div class="shang_payselect">
+                  <div class="pay_item checked" data-id="alipay">
+                    <span class="pay_logo"><img src="/images/payimg/alipay.jpg" alt="支付宝" /></span>
+                  </div>
+                  <div class="pay_item" data-id="weipay">
+                    <span class="pay_logo"><img src="/images/payimg/wechat.jpg" alt="微信" /></span>
+                  </div>
+                </div>
+                <div class="shang_info-play">
+                  <p>打开<span id="shang_pay_txt">支付宝</span>扫一扫，即可进行扫码打赏哦</p>
+                </div>
+              </div>
+            </div>
+            <script type="text/javascript">
+            function dashangToggle(){
+              $(".hide_box-play").fadeToggle();
+              $(".shang_box-play").fadeToggle();
+            }
+            </script>
+
+            <div style="text-align:center;margin:50px 0; font:normal 14px/24px 'MicroSoft YaHei';"></div>
+
+            <style type="text/css">
+              .content-play{width:80%;margin-top: 20px;margin-bottom: 10px;height:40px;}
+              .hide_box-play{z-index:999;filter:alpha(opacity=50);background:#666;opacity: 0.5;-moz-opacity: 0.5;left:0;top:0;height:99%;width:100%;position:fixed;display:none;}
+              .shang_box-play{width:540px;height:540px;padding:10px;background-color:#fff;border-radius:10px;position:fixed;z-index:1000;left:50%;top:50%;margin-left:-280px;margin-top:-280px;border:1px dotted #dedede;display:none;}
+              .shang_box-play img{border:none;border-width:0;}
+              .dashang{display:block;width:100px;margin:5px auto;height:25px;line-height:25px;padding:10px;background-color:#E74851;color:#fff;text-align:center;text-decoration:none;border-radius:10px;font-weight:bold;font-size:16px;transition: all 0.3s;}
+              .dashang:hover{opacity:0.8;padding:15px;font-size:18px;}
+              .shang_close-play{float:right;display:inline-block;
+                margin-right: 10px;margin-top: 20px;
+              }
+              .shang_logo{display:block;text-align:center;margin:20px auto;}
+              .shang_tit-play{width: 100%;height: 75px;text-align: center;line-height: 66px;color: #a3a3a3;font-size: 16px;background: url('/images/payimg/cy-reward-title-bg.jpg');font-family: 'Microsoft YaHei';margin-top: 7px;margin-right:2px;}
+              .shang_tit-play p{color:#a3a3a3;text-align:center;font-size:16px;}
+              .shang_payimg{width:140px;padding:10px;padding-left: 80px; /*border:6px solid #EA5F00;**/margin:0 auto;border-radius:3px;height:140px;display:inline-block;}
+              .shang_payimg img{display:inline-block;margin-right:10px;float:left;text-align:center;width:140px;height:140px; }
+              .pay_explain{text-align:center;margin:10px auto;font-size:12px;color:#545454;}
+              .shang_payselect{text-align:center;margin:0 auto;margin-top:40px;cursor:pointer;height:60px;width:500px;margin-left:110px;}
+              .shang_payselect .pay_item{display:inline-block;margin-right:140px;float:left;}
+              .shang_info-play{clear:both;}
+              .shang_info-play p,.shang_info-play a{color:#C3C3C3;text-align:center;font-size:12px;text-decoration:none;line-height:2em;}
+            </style>
+
+       <ul class="pager">
+        
+        <li class="previous">
+            <a href="/2018/04/05_SHELL/" data-toggle="tooltip" data-placement="top" title="05_SHELL编程之嵌套循环+随机数及综合案例">上一篇：  <span>05_SHELL编程之嵌套循环+随机数及综合案例</span>
+            </a>
+        </li>
+        
+        
+        <li class="next">
+            <a href="/2018/04/07_SHELL/" data-toggle="tooltip" data-placement="top" title="07_SHELL编程之文本处理工具">下一篇：  <span>07_SHELL编程之文本处理工具</span>
+            </a>
+        </li>
+        
+    </ul>
+</section>
+
+<section class="post-comments">
+
+  
+
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zMDUwNi83MDYw">
+      <script type="text/javascript">
+         (function(d, s) {
+             var j, e = d.getElementsByTagName(s)[0];
+
+             if (typeof LivereTower === 'function') { return; }
+             j = d.createElement(s);
+             j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+             j.async = true;
+             e.parentNode.insertBefore(j, e);
+         })(document, 'script');
+      </script>
+      <noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+      </div>
+
+  
+
+</section>
+
+
+            <section class="footer">
+    <footer>
+        <div class = "footer_div">  
+        <nav class="cover-navigation navigation--social">
+          <ul class="navigation">
+
+          
+          <!-- Github -->
+          <li class="navigation__item_social">
+            <a href="https://github.com/lijingbiao" title="@lijingbiao 的 Github" target="_blank">
+              <div class="footer-social-icon" style="background:url(/images/github.png);"></div>
+            </a>
+          </li>
+          
+
+          
+
+          
+
+          
+          <!-- Zhihu -->
+          <li class="navigation__item_social">
+            <a href="https://www.jianshu.com/u/e66c74545d7e" title="@e66c74545d7e" target="_blank">
+              <div class="footer-social-icon" style="background:url(/images/jianshu.png);"></div>
+            </a>
+          </li>
+
+          
+
+          
+
+          
+          
+
+
+          
+          <!-- Email -->
+          <li class="navigation__item_social">
+            <a href="mailto:694292399@qq.com" title="Contact me">
+              <div class="footer-social-icon" style="background:url(/images/email.png);"></div>
+            </a>
+          </li>
+          
+          
+          <!-- RSS -->
+          <li class="navigation__item_social">
+            <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+              <div class="footer-social-icon" style="background:url(/images/rss.png);"></div>
+              <span class="label">RSS</span>
+            </a>
+          </li>
+
+          </ul>
+        </nav>
+
+        </div>
+
+        <div class = "footer_div">  
+           <p class="copyright text-muted">
+            Copyright &copy; LiJingBiao 2021  |
+            <iframe
+                style="margin-left: 2px; margin-bottom:-5px;"
+                frameborder="0" scrolling="0" width="91px" height="20px"
+                src="https://ghbtns.com/github-btn.html?user=lijingbiao&repo=lijingbiao.github.io&type=star&count=true" >
+            </iframe>
+            </p>
+        	<div align="right">
+    			<link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+          <!-- 访问统计 -->
+          <span id="busuanzi_container_site_pv">
+            本站总访问量
+            <span id="busuanzi_value_site_pv"></span>次
+          </span>
+
+        </div>
+        <div>
+    </footer>
+</section>
+
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+<script type="text/javascript" src="/js/main.js"></script>
+
+<script type="text/javascript" src="/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+    
+  </body>
+
+</html>

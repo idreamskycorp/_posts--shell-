@@ -1,0 +1,1183 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>03_SHELL编程之条件判断和流程控制</title>
+  <meta name="description" content="本节课程目标">
+  <meta name="author" content="leopardpan">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="03_SHELL编程之条件判断和流程控制">
+  <meta name="twitter:description" content="本节课程目标">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="03_SHELL编程之条件判断和流程控制">
+  <meta property="og:description" content="本节课程目标">
+  
+  <link rel="icon" type="image/png" href="/images/favicon.png" />
+  <link href="/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://localhost:4000/2018/04/03_SHELL/">
+  <link rel="alternate" type="application/rss+xml" title="LiJingBiao" href="http://localhost:4000/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+
+<!-- 站点统计 -->
+  <script 
+  async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js">
+  </script>  
+
+<!-- 百度统计 -->
+  
+  <script>
+      var _hmt = _hmt || [];
+      (function() {
+        var hm = document.createElement("script");
+        hm.src = "//hm.baidu.com/hm.js?8ba1c6be0953b6f9c2ba38e57f615421";
+        var s = document.getElementsByTagName("script")[0]; 
+        s.parentNode.insertBefore(hm, s);
+      })();
+  </script>
+  
+
+<!-- google 统计 -->
+  
+  <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+      ga('create', 'UA-84134159-3', 'auto');
+      ga('send', 'pageview');
+  </script>
+  
+
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-9005224472374751",
+    enable_page_level_ads: true
+  });
+</script>
+
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">        
+      <div class="nav_container">
+         <nav class="nav-menu-item" style = "float:right">
+            <i class="nav-menu-item">
+              <a href="/#blog" title="" class="blog-button">  博客主页
+              </a>
+            </i>
+            
+                <i class="nav-menu-item">
+
+                  <a href="/archive" title="archive" class="btn-mobile-menu__icon">
+                      所有文章
+                  </a>
+                </i>
+            
+                <i class="nav-menu-item">
+
+                  <a href="/tags" title="tags" class="btn-mobile-menu__icon">
+                      标签
+                  </a>
+                </i>
+            
+                <i class="nav-menu-item">
+
+                  <a href="/about" title="about" class="btn-mobile-menu__icon">
+                      关于我
+                  </a>
+                </i>
+            
+          </nav>
+      </div>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+        <!-- 头像效果-start -->
+        <div class="ih-item circle effect right_to_left">            
+            <a href="/#blog" title="前往 LiJingBiao 的主页" class="blog-button">
+                <div class="img"><img src="/images/avatar.jpg" alt="img"></div>
+                <div class="info">
+                    <div class="info-back">
+                        <h2> 
+                            
+                                天道酬勤
+                            
+                        </h2>
+                        <p>
+                           
+                                iOS / Ruby /Shell
+                            
+                        </p>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <!-- 头像效果-end -->
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for LiJingBiao" class="blog-button">LiJingBiao</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">个人站</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">欢迎来到我的个人站~</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        
+
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="" class="blog-button">博客主页</a></li>
+                
+                  <li class="navigation__item"><a href="/archive" title="archive">所有文章</a></li>
+                
+                  <li class="navigation__item"><a href="/tags" title="tags">标签</a></li>
+                
+                  <li class="navigation__item"><a href="/about" title="about">关于我</a></li>
+                
+              </ul>
+            </nav>
+          </div>          
+        </div>
+
+
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-clear"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <head>
+  <link rel="stylesheet" href="/css/post.css">
+</head>
+
+<article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <h1 class="post-title">03_SHELL编程之条件判断和流程控制</h1>
+    <div class="post-meta">
+      <img src="/images/calendar.png" width="20px"/> 
+      <time datetime="2018-04-19 00:00:00 +0800" itemprop="datePublished" class="post-meta__date date">2018-04-19</time>  
+
+      <span id="busuanzi_container_page_pv"> | 阅读：<span id="busuanzi_value_page_pv"></span>次</span>
+    </p>
+    </div>
+  </header>
+
+  
+    <h2 class="post-title">目录</h2>
+    <ul>
+  <li><a href="#本节课程目标">本节课程目标</a></li>
+  <li><a href="#一条件判断语法结构">一、条件判断语法结构</a>
+    <ul>
+      <li><a href="#1-条件判断语法格式">1. 条件判断语法格式</a></li>
+      <li><a href="#2-条件判断相关参数">2. 条件判断相关参数</a>
+        <ul>
+          <li><a href="#-判断文件类型">㈠ 判断文件类型</a></li>
+          <li><a href="#-判断文件权限">㈡ 判断文件权限</a></li>
+          <li><a href="#-判断文件新旧">㈢ 判断文件新旧</a></li>
+          <li><a href="#-判断整数">㈣ 判断整数</a></li>
+          <li><a href="#-判断字符串">㈤ 判断字符串</a></li>
+          <li><a href="#-多重条件判断">㈥ 多重条件判断</a>
+            <ul>
+              <li><a href="#-举例说明">① 举例说明</a></li>
+              <li><a href="#-逻辑运算符总结">② 逻辑运算符总结</a></li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><a href="#二流程控制语句">二、流程控制语句</a>
+    <ul>
+      <li><a href="#1-基本语法结构">1. 基本语法结构</a>
+        <ul>
+          <li><a href="#-if结构">㈠ if结构</a></li>
+          <li><a href="#-ifelse结构">㈡ if…else结构</a></li>
+          <li><a href="#-ifelifelse结构">㈢ if…elif…else结构</a></li>
+          <li><a href="#-层层嵌套结构">㈣ 层层嵌套结构</a></li>
+        </ul>
+      </li>
+      <li><a href="#2-应用案例">2. 应用案例</a>
+        <ul>
+          <li><a href="#-判断两台主机是否ping通">㈠ 判断两台主机是否ping通</a>
+            <ul>
+              <li><a href="#-思路">① 思路</a></li>
+              <li><a href="#-落地实现">② 落地实现</a></li>
+            </ul>
+          </li>
+          <li><a href="#-判断一个进程是否存在">㈡ 判断一个进程是否存在</a>
+            <ul>
+              <li><a href="#-思路-1">① 思路</a></li>
+              <li><a href="#-落地实现-1">② 落地实现</a></li>
+              <li><a href="#-补充命令">③ 补充命令</a></li>
+            </ul>
+          </li>
+          <li><a href="#-判断一个服务是否正常">㈢ 判断一个服务是否正常</a>
+            <ul>
+              <li><a href="#-思路-2">① 思路</a></li>
+              <li><a href="#-落地实现-2">② 落地实现</a></li>
+            </ul>
+          </li>
+          <li><a href="#-判断用户是否存在">㈠ 判断用户是否存在</a></li>
+          <li><a href="#-判断软件包是否安装">㈡ 判断软件包是否安装</a></li>
+          <li><a href="#-判断当前主机的内核版本">㈢ 判断当前主机的内核版本</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+  
+
+  <section class="post">
+    <h1 id="本节课程目标">本节课程目标</h1>
+
+<ul>
+  <li>熟悉条件判断语句，如判断整数、判断字符串等</li>
+  <li>熟悉流程控制语句基本语法，如if…else…</li>
+</ul>
+
+<h1 id="一条件判断语法结构">一、条件判断语法结构</h1>
+
+<p><strong>思考：何为真(true)？何为假(false)？</strong></p>
+
+<h2 id="1-条件判断语法格式">1. 条件判断语法格式</h2>
+
+<ul>
+  <li>格式1： <strong>test</strong> 条件表达式</li>
+  <li>格式2： <strong>[</strong> 条件表达式 ]</li>
+  <li>格式3： <strong>[[</strong> 条件表达式 ]]  支持正则 =~</li>
+</ul>
+
+<p><strong>特别说明：</strong></p>
+
+<p>1）[  亲亲，我两边都有空格，不空打死你呦  ] :imp:</p>
+
+<p>2）[[  亲亲，我两边都有空格，不空打死你呦  ]]:imp:</p>
+
+<p>3)  更多判断，<code class="highlighter-rouge">man test</code>去查看，很多的参数都用来进行条件判断</p>
+
+<h2 id="2-条件判断相关参数">2. 条件判断相关参数</h2>
+
+<p>问：你要判断什么？</p>
+
+<p>答：我要判断文件类型，判断文件新旧，判断字符串是否相等，判断权限等等…</p>
+
+<h3 id="-判断文件类型">㈠ 判断文件类型</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>判断参数</th>
+      <th>含义</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>-e</td>
+      <td>判断文件是否存在（任何类型文件）</td>
+    </tr>
+    <tr>
+      <td>-f</td>
+      <td>判断文件是否存在并且是一个普通文件</td>
+    </tr>
+    <tr>
+      <td>-d</td>
+      <td>判断文件是否存在并且是一个目录</td>
+    </tr>
+    <tr>
+      <td>-L</td>
+      <td>判断文件是否存在并且是一个软连接文件</td>
+    </tr>
+    <tr>
+      <td>-b</td>
+      <td>判断文件是否存在并且是一个块设备文件</td>
+    </tr>
+    <tr>
+      <td>-S</td>
+      <td>判断文件是否存在并且是一个套接字文件</td>
+    </tr>
+    <tr>
+      <td>-c</td>
+      <td>判断文件是否存在并且是一个字符设备文件</td>
+    </tr>
+    <tr>
+      <td>-p</td>
+      <td>判断文件是否存在并且是一个命名管道文件</td>
+    </tr>
+    <tr>
+      <td>-s</td>
+      <td>判断文件是否存在并且是一个非空文件（有内容）</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>举例说明：</strong></p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">test</span> -e file                    只要文件存在条件为真
+<span class="o">[</span> -d /shell01/dir1 <span class="o">]</span>             判断目录是否存在，存在条件为真
+<span class="o">[</span> <span class="o">!</span> -d /shell01/dir1 <span class="o">]</span>        判断目录是否存在,不存在条件为真
+<span class="o">[[</span> -f /shell01/1.sh <span class="o">]]</span>        判断文件是否存在，并且是一个普通的文件
+</code></pre></div></div>
+
+<h3 id="-判断文件权限">㈡ 判断文件权限</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>判断参数</th>
+      <th>含义</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>-r</td>
+      <td>当前用户对其是否可读</td>
+    </tr>
+    <tr>
+      <td>-w</td>
+      <td>当前用户对其是否可写</td>
+    </tr>
+    <tr>
+      <td>-x</td>
+      <td>当前用户对其是否可执行</td>
+    </tr>
+    <tr>
+      <td>-u</td>
+      <td>是否有suid，高级权限冒险位</td>
+    </tr>
+    <tr>
+      <td>-g</td>
+      <td>是否sgid，高级权限强制位</td>
+    </tr>
+    <tr>
+      <td>-k</td>
+      <td>是否有t位，高级权限粘滞位</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="-判断文件新旧">㈢ 判断文件新旧</h3>
+
+<p>说明：这里的新旧指的是文件的修改时间。</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>判断参数</th>
+      <th>含义</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>file1 -nt  file2</td>
+      <td>比较file1是否比file2新</td>
+    </tr>
+    <tr>
+      <td>file1 -ot  file2</td>
+      <td>比较file1是否比file2旧</td>
+    </tr>
+    <tr>
+      <td>file1 -ef  file2</td>
+      <td>比较是否为同一个文件，或者用于判断硬连接，是否指向同一个inode</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="-判断整数">㈣ 判断整数</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>判断参数</th>
+      <th>含义</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>-eq</td>
+      <td>相等</td>
+    </tr>
+    <tr>
+      <td>-ne</td>
+      <td>不等</td>
+    </tr>
+    <tr>
+      <td>-gt</td>
+      <td>大于</td>
+    </tr>
+    <tr>
+      <td>-lt</td>
+      <td>小于</td>
+    </tr>
+    <tr>
+      <td>-ge</td>
+      <td>大于等于</td>
+    </tr>
+    <tr>
+      <td>-le</td>
+      <td>小于等于</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="-判断字符串">㈤ 判断字符串</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>判断参数</th>
+      <th>含义</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>-z</td>
+      <td>判断是否为空字符串，字符串长度为0则成立</td>
+    </tr>
+    <tr>
+      <td>-n</td>
+      <td>判断是否为非空字符串，字符串长度不为0则成立</td>
+    </tr>
+    <tr>
+      <td>string1 = string2</td>
+      <td>判断字符串是否相等</td>
+    </tr>
+    <tr>
+      <td>string1 != string2</td>
+      <td>判断字符串是否相不等</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="-多重条件判断">㈥ 多重条件判断</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>判断符号</th>
+      <th>含义</th>
+      <th>举例</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>-a 和 &amp;&amp;</td>
+      <td>逻辑与</td>
+      <td>[ 1 -eq 1 -a 1 -ne 0 ]     [ 1 -eq 1 ] &amp;&amp; [ 1 -ne 0 ]</td>
+    </tr>
+    <tr>
+      <td>-o 和 ||</td>
+      <td>逻辑或</td>
+      <td>[ 1 -eq 1 -o 1 -ne 1 ]</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>特别说明：</strong></p>
+
+<p>&amp;&amp;    前面的表达式为真，才会执行后面的代码</p>
+
+<table>
+  <tbody>
+    <tr>
+      <td> </td>
+      <td>前面的表达式为假，才会执行后面的代码</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>;         只用于分割命令或表达式</p>
+
+<h4 id="-举例说明">① 举例说明</h4>
+
+<ul>
+  <li>数值比较</li>
+</ul>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">[</span>root@server ~]# <span class="o">[</span> <span class="k">$(</span><span class="nb">id</span> -u<span class="k">)</span> -eq 0 <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s2">"the user is admin"</span>
+<span class="o">[</span>root@server ~]<span class="nv">$ </span><span class="o">[</span> <span class="k">$(</span><span class="nb">id</span> -u<span class="k">)</span> -ne 0 <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s2">"the user is not admin"</span>
+<span class="o">[</span>root@server ~]<span class="nv">$ </span><span class="o">[</span> <span class="k">$(</span><span class="nb">id</span> -u<span class="k">)</span> -eq 0 <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s2">"the user is admin"</span> <span class="o">||</span> <span class="nb">echo</span> <span class="s2">"the user is not admin"</span>
+
+<span class="o">[</span>root@server ~]# <span class="nv">uid</span><span class="o">=</span><span class="se">`i</span>d -u<span class="se">`</span>
+<span class="o">[</span>root@server ~]# <span class="nb">test</span> <span class="nv">$uid</span> -eq 0 <span class="o">&amp;&amp;</span> <span class="nb">echo </span>this is admin
+this is admin
+<span class="o">[</span>root@server ~]# <span class="o">[</span> <span class="k">$(</span><span class="nb">id</span> -u<span class="k">)</span> -ne 0 <span class="o">]</span>  <span class="o">||</span> <span class="nb">echo </span>this is admin
+this is admin
+<span class="o">[</span>root@server ~]# <span class="o">[</span> <span class="k">$(</span><span class="nb">id</span> -u<span class="k">)</span> -eq 0 <span class="o">]</span>  <span class="o">&amp;&amp;</span> <span class="nb">echo </span>this is admin <span class="o">||</span> <span class="nb">echo </span>this is not admin
+this is admin
+<span class="o">[</span>root@server ~]# su - stu1
+<span class="o">[</span>stu1@server ~]<span class="nv">$ </span><span class="o">[</span> <span class="k">$(</span><span class="nb">id</span> -u<span class="k">)</span> -eq 0 <span class="o">]</span>  <span class="o">&amp;&amp;</span> <span class="nb">echo </span>this is admin <span class="o">||</span> <span class="nb">echo </span>this is not admin
+this is not admin
+</code></pre></div></div>
+
+<ul>
+  <li>类C风格的数值比较</li>
+</ul>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>注意：在<span class="o">((</span> <span class="o">))</span>中，<span class="o">=</span>表示赋值；<span class="o">==</span>表示判断
+<span class="o">[</span>root@server ~]# <span class="o">((</span><span class="nv">1</span><span class="o">==</span>2<span class="o">))</span>;<span class="nb">echo</span> <span class="nv">$?</span>
+<span class="o">[</span>root@server ~]# <span class="o">((</span>1&lt;2<span class="o">))</span>;<span class="nb">echo</span> <span class="nv">$?</span>
+<span class="o">[</span>root@server ~]# <span class="o">((</span>2&gt;<span class="o">=</span>1<span class="o">))</span>;<span class="nb">echo</span> <span class="nv">$?</span>
+<span class="o">[</span>root@server ~]# <span class="o">((</span>2!<span class="o">=</span>1<span class="o">))</span>;<span class="nb">echo</span> <span class="nv">$?</span>
+<span class="o">[</span>root@server ~]# <span class="o">((</span><span class="se">`i</span>d -u<span class="se">`=</span><span class="o">=</span>0<span class="o">))</span>;<span class="nb">echo</span> <span class="nv">$?</span>
+ 
+<span class="o">[</span>root@server ~]# <span class="o">((</span><span class="nv">a</span><span class="o">=</span>123<span class="o">))</span>;<span class="nb">echo</span> <span class="nv">$a</span>
+<span class="o">[</span>root@server ~]# <span class="nb">unset </span>a
+<span class="o">[</span>root@server ~]# <span class="o">((</span><span class="nv">a</span><span class="o">==</span>123<span class="o">))</span>;<span class="nb">echo</span> <span class="nv">$?</span>
+</code></pre></div></div>
+
+<ul>
+  <li>字符串比较</li>
+</ul>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>注意：双引号引起来，看作一个整体；<span class="o">=</span> 和 <span class="o">==</span> 在 <span class="o">[</span> 字符串 <span class="o">]</span> 比较中都表示判断
+<span class="o">[</span>root@server ~]# <span class="nv">a</span><span class="o">=</span><span class="s1">'hello world'</span>;<span class="nv">b</span><span class="o">=</span>world
+<span class="o">[</span>root@server ~]# <span class="o">[</span> <span class="nv">$a</span> <span class="o">=</span> <span class="nv">$b</span> <span class="o">]</span>;<span class="nb">echo</span> <span class="nv">$?</span>
+<span class="o">[</span>root@server ~]# <span class="o">[</span> <span class="s2">"</span><span class="nv">$a</span><span class="s2">"</span> <span class="o">=</span> <span class="s2">"</span><span class="nv">$b</span><span class="s2">"</span> <span class="o">]</span>;<span class="nb">echo</span> <span class="nv">$?</span>
+<span class="o">[</span>root@server ~]# <span class="o">[</span> <span class="s2">"</span><span class="nv">$a</span><span class="s2">"</span> <span class="o">!=</span> <span class="s2">"</span><span class="nv">$b</span><span class="s2">"</span> <span class="o">]</span>;<span class="nb">echo</span> <span class="nv">$?</span>
+<span class="o">[</span>root@server ~]# <span class="o">[</span> <span class="s2">"</span><span class="nv">$a</span><span class="s2">"</span> <span class="o">!==</span> <span class="s2">"</span><span class="nv">$b</span><span class="s2">"</span> <span class="o">]</span>;<span class="nb">echo</span> <span class="nv">$?</span>        错误
+<span class="o">[</span>root@server ~]# <span class="o">[</span> <span class="s2">"</span><span class="nv">$a</span><span class="s2">"</span> <span class="o">==</span> <span class="s2">"</span><span class="nv">$b</span><span class="s2">"</span> <span class="o">]</span>;<span class="nb">echo</span> <span class="nv">$?</span>
+<span class="o">[</span>root@server ~]# <span class="nb">test</span> <span class="s2">"</span><span class="nv">$a</span><span class="s2">"</span> <span class="o">!=</span> <span class="s2">"</span><span class="nv">$b</span><span class="s2">"</span>;<span class="nb">echo</span> <span class="nv">$?</span>
+
+
+<span class="nb">test  </span>表达式
+<span class="o">[</span> 表达式 <span class="o">]</span>
+<span class="o">[[</span> 表达式 <span class="o">]]</span>
+
+思考：[ <span class="o">]</span> 和 <span class="o">[[</span> <span class="o">]]</span> 有什么区别？
+
+<span class="o">[</span>root@server ~]# <span class="nv">a</span><span class="o">=</span>
+<span class="o">[</span>root@server ~]# <span class="nb">test</span> -z <span class="nv">$a</span>;<span class="nb">echo</span> <span class="nv">$?</span>
+<span class="o">[</span>root@server ~]# <span class="nv">a</span><span class="o">=</span>hello
+<span class="o">[</span>root@server ~]# <span class="nb">test</span> -z <span class="nv">$a</span>;<span class="nb">echo</span> <span class="nv">$?</span>
+<span class="o">[</span>root@server ~]# <span class="nb">test</span> -n <span class="nv">$a</span>;<span class="nb">echo</span> <span class="nv">$?</span>
+<span class="o">[</span>root@server ~]# <span class="nb">test</span> -n <span class="s2">"</span><span class="nv">$a</span><span class="s2">"</span>;<span class="nb">echo</span> <span class="nv">$?</span>
+
+<span class="c1"># [ '' = $a ];echo $?</span>
+-bash: <span class="o">[</span>: : unary operator expected
+2
+<span class="c1"># [[ '' = $a ]];echo $?</span>
+0
+
+
+<span class="o">[</span>root@server ~]# <span class="o">[</span> 1 -eq 0 -a 1 -ne 0 <span class="o">]</span>;<span class="nb">echo</span> <span class="nv">$?</span>
+<span class="o">[</span>root@server ~]# <span class="o">[</span> 1 -eq 0 <span class="o">&amp;&amp;</span> 1 -ne 0 <span class="o">]</span>;<span class="nb">echo</span> <span class="nv">$?</span>
+<span class="o">[</span>root@server ~]# <span class="o">[[</span> 1 -eq 0 <span class="o">&amp;&amp;</span> 1 -ne 0 <span class="o">]]</span>;<span class="nb">echo</span> <span class="nv">$?</span>
+</code></pre></div></div>
+
+<h4 id="-逻辑运算符总结">② 逻辑运算符总结</h4>
+
+<ol>
+  <li>
+    <table>
+      <tbody>
+        <tr>
+          <td>符号;和&amp;&amp;和</td>
+          <td> </td>
+          <td>都可以用来分割命令或者表达式</td>
+        </tr>
+      </tbody>
+    </table>
+  </li>
+  <li>分号（;）完全不考虑前面的语句是否正确执行，都会执行;号后面的内容</li>
+  <li><code class="highlighter-rouge">&amp;&amp;</code>符号，需要考虑&amp;&amp;前面的语句的正确性，前面语句正确执行才会执行&amp;&amp;后的内容；反之亦然</li>
+  <li>
+    <table>
+      <tbody>
+        <tr>
+          <td><code class="highlighter-rouge">||</code>符号，需要考虑</td>
+          <td> </td>
+          <td>前面的语句的非正确性，前面语句执行错误才会执行</td>
+          <td> </td>
+          <td>后内容；反之亦然</td>
+        </tr>
+      </tbody>
+    </table>
+  </li>
+  <li>
+    <table>
+      <tbody>
+        <tr>
+          <td>如果&amp;&amp;和</td>
+          <td> </td>
+          <td>一起出现，从左往右依次看，按照以上原则</td>
+        </tr>
+      </tbody>
+    </table>
+  </li>
+</ol>
+
+<h1 id="二流程控制语句">二、流程控制语句</h1>
+
+<p><strong>关键词：选择（人生漫漫长路，我该何去何从:vertical_traffic_light:）</strong></p>
+
+<h2 id="1-基本语法结构">1. 基本语法结构</h2>
+
+<h3 id="-if结构">㈠ if结构</h3>
+
+<p><strong>箴言1：只要正确，就要一直向前冲:v:</strong></p>
+
+<p><strong>F</strong>:表示false，为假</p>
+
+<p><strong>T</strong>:表示true，为真</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if</span> <span class="o">[</span> condition <span class="o">]</span>;<span class="k">then
+        </span><span class="nb">command
+        command
+</span><span class="k">fi
+
+if </span><span class="nb">test </span>条件;then
+    命令
+<span class="k">fi
+
+if</span> <span class="o">[[</span> 条件 <span class="o">]]</span>;<span class="k">then
+    </span>命令
+<span class="k">fi</span>
+
+<span class="o">[</span> 条件 <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="nb">command</span>
+</code></pre></div></div>
+
+<p><img src="./流程判断1.png" alt="流程判断1" /></p>
+
+<h3 id="-ifelse结构">㈡ if…else结构</h3>
+
+<p><strong>箴言2：分叉路口，二选一</strong></p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if</span> <span class="o">[</span> condition <span class="o">]</span>;<span class="k">then
+        </span>command1
+    <span class="k">else
+        </span>command2
+<span class="k">fi</span>
+
+<span class="o">[</span> 条件 <span class="o">]</span> <span class="o">&amp;&amp;</span> command1 <span class="o">||</span> command2
+</code></pre></div></div>
+
+<p><img src="/流程判断2.png" alt="流程判断2" /></p>
+
+<p><strong>小试牛刀：</strong></p>
+
+<p>让用户自己输入字符串，如果用户输入的是hello，请打印world，否则打印“请输入hello”</p>
+
+<ol>
+  <li><code class="highlighter-rouge">read定义变量</code></li>
+  <li>if….else…</li>
+</ol>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#!/bin/env bash</span>
+
+<span class="nb">read</span> -p <span class="s1">'请输入一个字符串:'</span> str
+<span class="k">if</span> <span class="o">[</span> <span class="s2">"</span><span class="nv">$str</span><span class="s2">"</span> <span class="o">=</span> <span class="s1">'hello'</span> <span class="o">]</span>;<span class="k">then
+    </span><span class="nb">echo</span> <span class="s1">'world'</span>
+ <span class="k">else
+    </span><span class="nb">echo</span> <span class="s1">'请输入hello!'</span>
+<span class="k">fi
+
+  </span>1 <span class="c1">#!/bin/env bash</span>
+  2
+  3 <span class="nb">read</span> -p <span class="s2">"请输入一个字符串:"</span> str
+  4 <span class="k">if</span> <span class="o">[</span> <span class="s2">"</span><span class="nv">$str</span><span class="s2">"</span> <span class="o">=</span> <span class="s2">"hello"</span> <span class="o">]</span>
+  5 <span class="k">then
+  </span>6     <span class="nb">echo </span>world
+  7 <span class="k">else
+  </span>8     <span class="nb">echo</span> <span class="s2">"请输入hello!"</span>
+  9 <span class="k">fi
+  
+  </span><span class="nb">echo</span> <span class="s2">"该脚本需要传递参数"</span>
+  1 <span class="k">if</span> <span class="o">[</span> <span class="nv">$1</span> <span class="o">=</span> hello <span class="o">]</span>;<span class="k">then
+  </span>2         <span class="nb">echo</span> <span class="s2">"hello"</span>
+  3 <span class="k">else
+  </span>4         <span class="nb">echo</span> <span class="s2">"请输入hello"</span>
+  5 <span class="k">fi</span>
+
+<span class="c1">#!/bin/env bash</span>
+
+<span class="nv">A</span><span class="o">=</span>hello
+<span class="nv">B</span><span class="o">=</span>world
+<span class="nv">C</span><span class="o">=</span>hello
+
+<span class="k">if</span> <span class="o">[</span> <span class="s2">"</span><span class="nv">$1</span><span class="s2">"</span> <span class="o">=</span> <span class="s2">"</span><span class="nv">$A</span><span class="s2">"</span> <span class="o">]</span>;<span class="k">then
+        </span><span class="nb">echo</span> <span class="s2">"</span><span class="nv">$B</span><span class="s2">"</span>
+    <span class="k">else
+        </span><span class="nb">echo</span> <span class="s2">"</span><span class="nv">$C</span><span class="s2">"</span>
+<span class="k">fi
+
+
+</span><span class="nb">read</span> -p <span class="s1">'请输入一个字符串:'</span> str;
+ <span class="o">[</span> <span class="s2">"</span><span class="nv">$str</span><span class="s2">"</span> <span class="o">=</span> <span class="s1">'hello'</span> <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s1">'world'</span> <span class="o">||</span>  <span class="nb">echo</span> <span class="s1">'请输入hello!'</span>
+</code></pre></div></div>
+
+<h3 id="-ifelifelse结构">㈢ if…elif…else结构</h3>
+
+<p><strong>箴言3：选择很多，能走的只有一条</strong></p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if</span> <span class="o">[</span> condition1 <span class="o">]</span>;<span class="k">then
+        </span>command1      结束
+    <span class="k">elif</span> <span class="o">[</span> condition2 <span class="o">]</span>;<span class="k">then
+        </span>command2       结束
+    <span class="k">else
+        </span>command3
+<span class="k">fi
+</span>注释：
+如果条件1满足，执行命令1后结束；如果条件1不满足，再看条件2，如果条件2满足执行命令2后结束；如果条件1和条件2都不满足执行命令3结束.
+</code></pre></div></div>
+
+<p><img src="/流程判断3.png" alt="流程判断3" /></p>
+
+<h3 id="-层层嵌套结构">㈣ 层层嵌套结构</h3>
+
+<p><strong>箴言4：多次判断，带你走出人生迷雾。</strong></p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if</span> <span class="o">[</span> condition1 <span class="o">]</span>;<span class="k">then
+        </span>command1        
+        <span class="k">if</span> <span class="o">[</span> condition2 <span class="o">]</span>;<span class="k">then
+            </span>command2
+        <span class="k">fi
+ else
+        if</span> <span class="o">[</span> condition3 <span class="o">]</span>;<span class="k">then
+            </span>command3
+        <span class="k">elif</span> <span class="o">[</span> condition4 <span class="o">]</span>;<span class="k">then
+            </span>command4
+        <span class="k">else
+            </span>command5
+        <span class="k">fi
+fi
+</span>注释：
+如果条件1满足，执行命令1；如果条件2也满足执行命令2，如果不满足就只执行命令1结束；
+如果条件1不满足，不看条件2；直接看条件3，如果条件3满足执行命令3；如果不满足则看条件4，如果条件4满足执行命令4；否则执行命令5
+</code></pre></div></div>
+
+<p><img src="/流程判断4.png" alt="流程判断4" /></p>
+
+<h2 id="2-应用案例">2. 应用案例</h2>
+
+<h3 id="-判断两台主机是否ping通">㈠ 判断两台主机是否ping通</h3>
+
+<p><strong>需求：</strong>判断当前主机是否和远程主机是否ping通</p>
+
+<h4 id="-思路">① 思路</h4>
+
+<ol>
+  <li>使用哪个命令实现  <code class="highlighter-rouge">ping -c次数</code></li>
+  <li>根据命令的执行结果状态来判断是否通<code class="highlighter-rouge">$?</code></li>
+  <li>根据逻辑和语法结构来编写脚本(条件判断或者流程控制)</li>
+</ol>
+
+<h4 id="-落地实现">② 落地实现</h4>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#!/bin/env bash</span>
+<span class="c1"># 该脚本用于判断当前主机是否和远程指定主机互通</span>
+
+<span class="c1"># 交互式定义变量，让用户自己决定ping哪个主机</span>
+<span class="nb">read</span> -p <span class="s2">"请输入你要ping的主机的IP:"</span> ip
+
+<span class="c1"># 使用ping程序判断主机是否互通</span>
+ping -c1 <span class="nv">$ip</span> &amp;&gt;/dev/null
+
+<span class="k">if</span> <span class="o">[</span> <span class="nv">$?</span> -eq 0 <span class="o">]</span>;<span class="k">then
+    </span><span class="nb">echo</span> <span class="s2">"当前主机和远程主机</span><span class="nv">$ip</span><span class="s2">是互通的"</span>
+ <span class="k">else
+     </span><span class="nb">echo</span> <span class="s2">"当前主机和远程主机</span><span class="nv">$ip</span><span class="s2">不通的"</span>
+<span class="k">fi
+
+</span>逻辑运算符
+<span class="nb">test</span> <span class="nv">$?</span> -eq 0 <span class="o">&amp;&amp;</span>  <span class="nb">echo</span> <span class="s2">"当前主机和远程主机</span><span class="nv">$ip</span><span class="s2">是互通的"</span> <span class="o">||</span> <span class="nb">echo</span> <span class="s2">"当前主机和远程主机</span><span class="nv">$ip</span><span class="s2">不通的"</span>
+
+</code></pre></div></div>
+
+<h3 id="-判断一个进程是否存在">㈡ 判断一个进程是否存在</h3>
+
+<p><strong>需求：</strong>判断web服务器中httpd进程是否存在</p>
+
+<h4 id="-思路-1">① 思路</h4>
+
+<ol>
+  <li>查看进程的相关命令   ps   pgrep</li>
+  <li>根据命令的返回状态值来判断进程是否存在</li>
+  <li>根据逻辑用脚本语言实现</li>
+</ol>
+
+<h4 id="-落地实现-1">② 落地实现</h4>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#!/bin/env bash</span>
+<span class="c1"># 判断一个程序(httpd)的进程是否存在</span>
+pgrep httpd &amp;&gt;/dev/null
+<span class="k">if</span> <span class="o">[</span> <span class="nv">$?</span> -ne 0 <span class="o">]</span>;<span class="k">then
+    </span><span class="nb">echo</span> <span class="s2">"当前httpd进程不存在"</span>
+<span class="k">else
+    </span><span class="nb">echo</span> <span class="s2">"当前httpd进程存在"</span>
+<span class="k">fi
+
+</span>或者
+<span class="nb">test</span> <span class="nv">$?</span> -eq 0 <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s2">"当前httpd进程存在"</span> <span class="o">||</span> <span class="nb">echo</span> <span class="s2">"当前httpd进程不存在"</span>
+</code></pre></div></div>
+
+<h4 id="-补充命令">③ 补充命令</h4>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pgrep命令：以名称为依据从运行进程队列中查找进程，并显示查找到的进程id
+选项
+-o：仅显示找到的最小（起始）进程号;
+-n：仅显示找到的最大（结束）进程号；
+-l：显示进程名称；
+-P：指定父进程号；pgrep -p 4764  查看父进程下的子进程id
+-g：指定进程组；
+-t：指定开启进程的终端；
+-u：指定进程的有效用户ID。
+</code></pre></div></div>
+
+<h3 id="-判断一个服务是否正常">㈢ 判断一个服务是否正常</h3>
+
+<p><strong>需求：</strong>判断门户网站是否能够正常访问</p>
+
+<h4 id="-思路-2">① 思路</h4>
+
+<ol>
+  <li>可以判断进程是否存在，用/etc/init.d/httpd status判断状态等方法</li>
+  <li>最好的方法是直接去访问一下，通过访问成功和失败的返回值来判断
+    <ul>
+      <li>Linux环境，wget  curl  elinks -dump</li>
+    </ul>
+  </li>
+</ol>
+
+<h4 id="-落地实现-2">② 落地实现</h4>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#!/bin/env bash</span>
+<span class="c1"># 判断门户网站是否能够正常提供服务</span>
+
+<span class="c1">#定义变量</span>
+<span class="nv">web_server</span><span class="o">=</span>www.itcast.cn
+<span class="c1">#访问网站</span>
+<span class="nb">wget</span> -P /shell/ <span class="nv">$web_server</span> &amp;&gt;/dev/null
+<span class="o">[</span> <span class="nv">$?</span> -eq 0 <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s2">"当前网站服务是ok"</span> <span class="o">&amp;&amp;</span> <span class="nb">rm</span> -f /shell/index.<span class="k">*</span> <span class="o">||</span> <span class="nb">echo</span> <span class="s2">"当前网站服务不ok，请立刻处理"</span>
+
+</code></pre></div></div>
+
+<p>##3. 课堂练习</p>
+
+<h3 id="-判断用户是否存在">㈠ 判断用户是否存在</h3>
+
+<p><strong>需求1：</strong>输入一个用户，用脚本判断该用户是否存在</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="c1">#!/bin/env bash</span>
+  2 <span class="nb">read</span> -p <span class="s2">"请输入一个用户名："</span> user_name
+  3 <span class="nb">id</span> <span class="nv">$user_name</span> &amp;&gt;/dev/null
+  4 <span class="k">if</span> <span class="o">[</span> <span class="nv">$?</span> -eq 0 <span class="o">]</span>;<span class="k">then
+  </span>6     <span class="nb">echo</span> <span class="s2">"该用户存在！"</span>
+  7 <span class="k">else
+  </span>8     <span class="nb">echo</span> <span class="s2">"用户不存在！"</span>
+  9 <span class="k">fi</span>
+  
+  
+<span class="c1">#!/bin/bash</span>
+<span class="c1"># 判断 用户（id） 是否存在</span>
+<span class="nb">read</span> -p <span class="s2">"输入壹个用户："</span> <span class="nb">id
+id</span> <span class="nv">$id</span> &amp;&gt; /dev/null
+<span class="k">if</span> <span class="o">[</span> <span class="nv">$?</span> -eq 0 <span class="o">]</span>;<span class="k">then
+        </span><span class="nb">echo</span> <span class="s2">"该用户存在"</span>
+<span class="k">else
+        </span><span class="nb">echo</span> <span class="s2">"该用户不存在"</span>
+<span class="k">fi</span>
+
+<span class="c1">#!/bin/env bash</span>
+<span class="nb">read</span> -p <span class="s2">"请输入你要查询的用户名:"</span> username
+<span class="nb">grep</span> -w <span class="nv">$username</span> /etc/passwd &amp;&gt;/dev/null
+<span class="k">if</span> <span class="o">[</span> <span class="nv">$?</span> -eq 0 <span class="o">]</span>
+<span class="k">then
+    </span><span class="nb">echo</span> <span class="s2">"该用户已存在"</span>
+<span class="k">else
+    </span><span class="nb">echo</span> <span class="s2">"该用户不存在"</span>
+<span class="k">fi</span>
+
+<span class="c1">#!/bin/bash</span>
+<span class="nb">read</span> -p <span class="s2">"请输入你要检查的用户名："</span> name
+<span class="nb">id</span> <span class="nv">$name</span> &amp;&gt;/dev/null
+<span class="k">if</span> <span class="o">[</span> <span class="nv">$?</span> -eq 0 <span class="o">]</span>
+<span class="k">then
+</span><span class="nb">echo </span>用户<span class="s2">"</span><span class="nv">$name</span><span class="s2">"</span>已经存在
+<span class="k">else
+</span><span class="nb">echo </span>用户<span class="s2">"</span><span class="nv">$name</span><span class="s2">"</span>不存在
+<span class="k">fi</span>
+
+<span class="c1">#!/bin/env bash</span>
+<span class="c1">#判断用户是否存在</span>
+<span class="nb">read</span> -p <span class="s2">"请写出用户名"</span> <span class="nb">id
+id</span> <span class="nv">$id</span>
+<span class="k">if</span> <span class="o">[</span> <span class="nv">$?</span> -eq 0 <span class="o">]</span>;<span class="k">then
+        </span><span class="nb">echo</span> <span class="s2">"用户存在"</span>
+<span class="k">else
+        </span><span class="nb">echo</span> <span class="s2">"用户不存在"</span>
+<span class="k">fi</span>
+
+<span class="c1">#!/bin/env bash</span>
+<span class="nb">read</span> -p <span class="s1">'请输入用户名:'</span> username
+<span class="nb">id</span> <span class="nv">$username</span> &amp;&gt;/dev/null
+<span class="o">[</span> <span class="nv">$?</span> -eq 0 <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s1">'用户存在'</span> <span class="o">||</span> <span class="nb">echo</span> <span class="s1">'不存在'</span>
+
+
+
+</code></pre></div></div>
+
+<h3 id="-判断软件包是否安装">㈡ 判断软件包是否安装</h3>
+
+<p><strong>需求2：</strong>用脚本判断一个软件包是否安装，如果没安装则安装它（假设本地yum已配合）</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+</code></pre></div></div>
+
+<h3 id="-判断当前主机的内核版本">㈢ 判断当前主机的内核版本</h3>
+
+<p><strong>需求3：</strong>判断当前内核主版本是否为2，且次版本是否大于等于6；如果都满足则输出当前内核版本</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>思路：
+1. 先查看内核的版本号    <span class="nb">uname</span> -r
+2. 先将内核的版本号保存到一个变量里，然后再根据需求截取出该变量的一部分：主版本和次版本
+3. 根据需求进步判断
+
+
+<span class="c1">#!/bin/bash</span>
+<span class="nv">kernel</span><span class="o">=</span><span class="se">`u</span>name -r<span class="se">`</span>
+<span class="nv">var1</span><span class="o">=</span><span class="se">`e</span>cho <span class="nv">$kernel</span>|cut -d. -f1<span class="se">`</span>
+<span class="nv">var2</span><span class="o">=</span><span class="se">`e</span>cho <span class="nv">$kernel</span>|cut -d. -f2<span class="se">`</span>
+<span class="nb">test</span> <span class="nv">$var1</span> -eq 2 -a <span class="nv">$var2</span> -ge 6 <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="nv">$kernel</span> <span class="o">||</span> <span class="nb">echo</span> <span class="s2">"当前内核版本不符合要求"</span>
+或者
+<span class="o">[</span> <span class="nv">$var1</span> -eq 2 -a <span class="nv">$var2</span> -ge 6 <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="nv">$kernel</span> <span class="o">||</span> <span class="nb">echo</span> <span class="s2">"当前内核版本不符合要求"</span>
+或者
+<span class="o">[[</span> <span class="nv">$var1</span> -eq 2 <span class="o">&amp;&amp;</span> <span class="nv">$var2</span> -ge 6 <span class="o">]]</span> <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="nv">$kernel</span> <span class="o">||</span> <span class="nb">echo</span> <span class="s2">"当前内核版本不符合要求"</span>
+
+或者
+<span class="c1">#!/bin/bash</span>
+<span class="nv">kernel</span><span class="o">=</span><span class="se">`u</span>name -r<span class="se">`</span>
+<span class="nb">test</span> <span class="k">${</span><span class="nv">kernel</span>:0:1<span class="k">}</span> -eq 2 -a <span class="k">${</span><span class="nv">kernel</span>:2:1<span class="k">}</span> -ge 6 <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="nv">$kernel</span> <span class="o">||</span> <span class="nb">echo</span> <span class="s1">'不符合要求'</span>
+
+其他命令参考：
+<span class="nb">uname</span> -r|grep ^2.[6-9] <span class="o">||</span> <span class="nb">echo</span> <span class="s1">'不符合要求'</span>
+</code></pre></div></div>
+
+
+  </section>
+
+</article>
+
+<section>
+
+            <div class="content-play">
+              <p><a href="javascript:void(0)" onclick="dashangToggle()" class="dashang" title="打赏，支持一下">打赏一个呗</a></p>
+              <div class="hide_box-play"></div>
+              <div class="shang_box-play">
+                <a class="shang_close-play" href="javascript:void(0)" onclick="dashangToggle()" title="关闭"><img src="/images/payimg/close.jpg" alt="取消" /></a>
+                <div class="shang_tit-play">
+                  <p>感谢您的支持，我会继续努力的!</p>
+                </div>
+                <div class="shang_payimg">
+                    <img src="/images/payimg/alipayimg.jpg" alt="扫码支持" title="扫一扫" />
+                </div>
+              <div class="shang_payimg">    
+                    <img src="/images/payimg/weipayimg.jpg" alt="扫码支持" title="扫一扫" />
+                </div>
+                <div class="pay_explain">扫码打赏，你说多少就多少</div>
+                <div class="shang_payselect">
+                  <div class="pay_item checked" data-id="alipay">
+                    <span class="pay_logo"><img src="/images/payimg/alipay.jpg" alt="支付宝" /></span>
+                  </div>
+                  <div class="pay_item" data-id="weipay">
+                    <span class="pay_logo"><img src="/images/payimg/wechat.jpg" alt="微信" /></span>
+                  </div>
+                </div>
+                <div class="shang_info-play">
+                  <p>打开<span id="shang_pay_txt">支付宝</span>扫一扫，即可进行扫码打赏哦</p>
+                </div>
+              </div>
+            </div>
+            <script type="text/javascript">
+            function dashangToggle(){
+              $(".hide_box-play").fadeToggle();
+              $(".shang_box-play").fadeToggle();
+            }
+            </script>
+
+            <div style="text-align:center;margin:50px 0; font:normal 14px/24px 'MicroSoft YaHei';"></div>
+
+            <style type="text/css">
+              .content-play{width:80%;margin-top: 20px;margin-bottom: 10px;height:40px;}
+              .hide_box-play{z-index:999;filter:alpha(opacity=50);background:#666;opacity: 0.5;-moz-opacity: 0.5;left:0;top:0;height:99%;width:100%;position:fixed;display:none;}
+              .shang_box-play{width:540px;height:540px;padding:10px;background-color:#fff;border-radius:10px;position:fixed;z-index:1000;left:50%;top:50%;margin-left:-280px;margin-top:-280px;border:1px dotted #dedede;display:none;}
+              .shang_box-play img{border:none;border-width:0;}
+              .dashang{display:block;width:100px;margin:5px auto;height:25px;line-height:25px;padding:10px;background-color:#E74851;color:#fff;text-align:center;text-decoration:none;border-radius:10px;font-weight:bold;font-size:16px;transition: all 0.3s;}
+              .dashang:hover{opacity:0.8;padding:15px;font-size:18px;}
+              .shang_close-play{float:right;display:inline-block;
+                margin-right: 10px;margin-top: 20px;
+              }
+              .shang_logo{display:block;text-align:center;margin:20px auto;}
+              .shang_tit-play{width: 100%;height: 75px;text-align: center;line-height: 66px;color: #a3a3a3;font-size: 16px;background: url('/images/payimg/cy-reward-title-bg.jpg');font-family: 'Microsoft YaHei';margin-top: 7px;margin-right:2px;}
+              .shang_tit-play p{color:#a3a3a3;text-align:center;font-size:16px;}
+              .shang_payimg{width:140px;padding:10px;padding-left: 80px; /*border:6px solid #EA5F00;**/margin:0 auto;border-radius:3px;height:140px;display:inline-block;}
+              .shang_payimg img{display:inline-block;margin-right:10px;float:left;text-align:center;width:140px;height:140px; }
+              .pay_explain{text-align:center;margin:10px auto;font-size:12px;color:#545454;}
+              .shang_payselect{text-align:center;margin:0 auto;margin-top:40px;cursor:pointer;height:60px;width:500px;margin-left:110px;}
+              .shang_payselect .pay_item{display:inline-block;margin-right:140px;float:left;}
+              .shang_info-play{clear:both;}
+              .shang_info-play p,.shang_info-play a{color:#C3C3C3;text-align:center;font-size:12px;text-decoration:none;line-height:2em;}
+            </style>
+
+       <ul class="pager">
+        
+        <li class="previous">
+            <a href="/2018/04/02_SHELL/" data-toggle="tooltip" data-placement="top" title="02_SHELL编程之变量定义">上一篇：  <span>02_SHELL编程之变量定义</span>
+            </a>
+        </li>
+        
+        
+        <li class="next">
+            <a href="/2018/04/04_SHELL/" data-toggle="tooltip" data-placement="top" title="04_SHELL编程之循环语句">下一篇：  <span>04_SHELL编程之循环语句</span>
+            </a>
+        </li>
+        
+    </ul>
+</section>
+
+<section class="post-comments">
+
+  
+
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zMDUwNi83MDYw">
+      <script type="text/javascript">
+         (function(d, s) {
+             var j, e = d.getElementsByTagName(s)[0];
+
+             if (typeof LivereTower === 'function') { return; }
+             j = d.createElement(s);
+             j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+             j.async = true;
+             e.parentNode.insertBefore(j, e);
+         })(document, 'script');
+      </script>
+      <noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+      </div>
+
+  
+
+</section>
+
+
+            <section class="footer">
+    <footer>
+        <div class = "footer_div">  
+        <nav class="cover-navigation navigation--social">
+          <ul class="navigation">
+
+          
+          <!-- Github -->
+          <li class="navigation__item_social">
+            <a href="https://github.com/lijingbiao" title="@lijingbiao 的 Github" target="_blank">
+              <div class="footer-social-icon" style="background:url(/images/github.png);"></div>
+            </a>
+          </li>
+          
+
+          
+
+          
+
+          
+          <!-- Zhihu -->
+          <li class="navigation__item_social">
+            <a href="https://www.jianshu.com/u/e66c74545d7e" title="@e66c74545d7e" target="_blank">
+              <div class="footer-social-icon" style="background:url(/images/jianshu.png);"></div>
+            </a>
+          </li>
+
+          
+
+          
+
+          
+          
+
+
+          
+          <!-- Email -->
+          <li class="navigation__item_social">
+            <a href="mailto:694292399@qq.com" title="Contact me">
+              <div class="footer-social-icon" style="background:url(/images/email.png);"></div>
+            </a>
+          </li>
+          
+          
+          <!-- RSS -->
+          <li class="navigation__item_social">
+            <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+              <div class="footer-social-icon" style="background:url(/images/rss.png);"></div>
+              <span class="label">RSS</span>
+            </a>
+          </li>
+
+          </ul>
+        </nav>
+
+        </div>
+
+        <div class = "footer_div">  
+           <p class="copyright text-muted">
+            Copyright &copy; LiJingBiao 2021  |
+            <iframe
+                style="margin-left: 2px; margin-bottom:-5px;"
+                frameborder="0" scrolling="0" width="91px" height="20px"
+                src="https://ghbtns.com/github-btn.html?user=lijingbiao&repo=lijingbiao.github.io&type=star&count=true" >
+            </iframe>
+            </p>
+        	<div align="right">
+    			<link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+          <!-- 访问统计 -->
+          <span id="busuanzi_container_site_pv">
+            本站总访问量
+            <span id="busuanzi_value_site_pv"></span>次
+          </span>
+
+        </div>
+        <div>
+    </footer>
+</section>
+
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+<script type="text/javascript" src="/js/main.js"></script>
+
+<script type="text/javascript" src="/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+    
+  </body>
+
+</html>
