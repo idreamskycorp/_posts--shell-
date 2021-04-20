@@ -1,0 +1,1745 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>iOS 多线程：GCD详尽总结</title>
+  <meta name="description" content="iOS 多线程：『GCD』详尽总结">
+  <meta name="author" content="leopardpan">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="iOS 多线程：GCD详尽总结">
+  <meta name="twitter:description" content="iOS 多线程：『GCD』详尽总结">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="iOS 多线程：GCD详尽总结">
+  <meta property="og:description" content="iOS 多线程：『GCD』详尽总结">
+  
+  <link rel="icon" type="image/png" href="/images/favicon.png" />
+  <link href="/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://localhost:4000/2021/04/iOS_GCD/">
+  <link rel="alternate" type="application/rss+xml" title="LiJingBiao" href="http://localhost:4000/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+
+<!-- 站点统计 -->
+  <script 
+  async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js">
+  </script>  
+
+<!-- 百度统计 -->
+  
+  <script>
+      var _hmt = _hmt || [];
+      (function() {
+        var hm = document.createElement("script");
+        hm.src = "//hm.baidu.com/hm.js?8ba1c6be0953b6f9c2ba38e57f615421";
+        var s = document.getElementsByTagName("script")[0]; 
+        s.parentNode.insertBefore(hm, s);
+      })();
+  </script>
+  
+
+<!-- google 统计 -->
+  
+  <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+      ga('create', 'UA-84134159-3', 'auto');
+      ga('send', 'pageview');
+  </script>
+  
+
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-9005224472374751",
+    enable_page_level_ads: true
+  });
+</script>
+
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">        
+      <div class="nav_container">
+         <nav class="nav-menu-item" style = "float:right">
+            <i class="nav-menu-item">
+              <a href="/#blog" title="" class="blog-button">  博客主页
+              </a>
+            </i>
+            
+                <i class="nav-menu-item">
+
+                  <a href="/archive" title="archive" class="btn-mobile-menu__icon">
+                      所有文章
+                  </a>
+                </i>
+            
+                <i class="nav-menu-item">
+
+                  <a href="/tags" title="tags" class="btn-mobile-menu__icon">
+                      标签
+                  </a>
+                </i>
+            
+                <i class="nav-menu-item">
+
+                  <a href="/about" title="about" class="btn-mobile-menu__icon">
+                      关于我
+                  </a>
+                </i>
+            
+          </nav>
+      </div>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+        <!-- 头像效果-start -->
+        <div class="ih-item circle effect right_to_left">            
+            <a href="/#blog" title="前往 LiJingBiao 的主页" class="blog-button">
+                <div class="img"><img src="/images/avatar.jpg" alt="img"></div>
+                <div class="info">
+                    <div class="info-back">
+                        <h2> 
+                            
+                                天道酬勤
+                            
+                        </h2>
+                        <p>
+                           
+                                iOS / Ruby /Shell
+                            
+                        </p>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <!-- 头像效果-end -->
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for LiJingBiao" class="blog-button">LiJingBiao</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">个人站</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">欢迎来到我的个人站~</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        
+
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="" class="blog-button">博客主页</a></li>
+                
+                  <li class="navigation__item"><a href="/archive" title="archive">所有文章</a></li>
+                
+                  <li class="navigation__item"><a href="/tags" title="tags">标签</a></li>
+                
+                  <li class="navigation__item"><a href="/about" title="about">关于我</a></li>
+                
+              </ul>
+            </nav>
+          </div>          
+        </div>
+
+
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-clear"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <head>
+  <link rel="stylesheet" href="/css/post.css">
+</head>
+
+<article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <h1 class="post-title">iOS 多线程：GCD详尽总结</h1>
+    <div class="post-meta">
+      <img src="/images/calendar.png" width="20px"/> 
+      <time datetime="2021-04-20 00:00:00 +0800" itemprop="datePublished" class="post-meta__date date">2021-04-20</time>  
+
+      <span id="busuanzi_container_page_pv"> | 阅读：<span id="busuanzi_value_page_pv"></span>次</span>
+    </p>
+    </div>
+  </header>
+
+  
+    <h2 class="post-title">目录</h2>
+    <ul>
+  <li><a href="#一gcd-简介">一、GCD 简介</a>
+    <ul>
+      <li><a href="#什么是-gcd-我们先来看看百度百科的解释简单了解下相关概念">什么是 <strong>GCD</strong> ？我们先来看看百度百科的解释简单了解下相关概念。</a></li>
+      <li><a href="#那为什么我们要使用-gcd-呢">那为什么我们要使用 GCD 呢?</a></li>
+    </ul>
+  </li>
+  <li><a href="#二gcd-任务和队列">二、GCD 任务和队列</a></li>
+  <li><a href="#三gcd-的使用步骤">三、GCD 的使用步骤</a>
+    <ul>
+      <li><a href="#1-队列的创建方法--获取方法">1. 队列的创建方法 / 获取方法</a></li>
+      <li><a href="#2-任务的创建方法">2. 任务的创建方法</a></li>
+      <li><a href="#3-任务和队列不同组合方式的区别">3. 任务和队列不同组合方式的区别</a></li>
+      <li><a href="#4-队列嵌套情况下不同组合方式区别">4. 队列嵌套情况下，不同组合方式区别</a></li>
+      <li><a href="#5-关于不同队列和不同任务的形象理解">5. 关于不同队列和不同任务的形象理解</a></li>
+    </ul>
+  </li>
+  <li><a href="#四gcd-的基本使用">四、GCD 的基本使用</a>
+    <ul>
+      <li><a href="#1-同步执行--并发队列">1. 同步执行 + 并发队列</a></li>
+      <li><a href="#2-异步执行--并发队列">2. 异步执行 + 并发队列</a></li>
+      <li><a href="#3-同步执行--串行队列">3. 同步执行 + 串行队列</a></li>
+      <li><a href="#4-异步执行--串行队列">4. 异步执行 + 串行队列</a></li>
+      <li><a href="#5-同步执行--主队列">5. 同步执行 + 主队列</a>
+        <ul>
+          <li><a href="#-在主线程中调用-同步执行--主队列">㈠ 在主线程中调用 『同步执行 + 主队列』</a></li>
+          <li><a href="#-在其他线程中调用同步执行--主队列">㈡ 在其他线程中调用『同步执行 + 主队列』</a></li>
+        </ul>
+      </li>
+      <li><a href="#6-异步执行--主队列">6. 异步执行 + 主队列</a></li>
+    </ul>
+  </li>
+  <li><a href="#五gcd-线程间的通信">五、GCD 线程间的通信</a></li>
+  <li><a href="#六gcd-的其他方法">六、GCD 的其他方法</a>
+    <ul>
+      <li><a href="#1-gcd-栅栏方法dispatch_barrier_async">1. GCD 栅栏方法：dispatch_barrier_async</a></li>
+      <li><a href="#2-gcd-延时执行方法dispatch_after">2. GCD 延时执行方法：dispatch_after</a></li>
+      <li><a href="#3-gcd-一次性代码只执行一次dispatch_once">3. GCD 一次性代码（只执行一次）：dispatch_once</a></li>
+      <li><a href="#4-gcd-快速迭代方法dispatch_apply">4. GCD 快速迭代方法：dispatch_apply</a></li>
+      <li><a href="#5-gcd-队列组dispatch_group">5. GCD 队列组：dispatch_group</a>
+        <ul>
+          <li><a href="#1-dispatch_group_notify">1) dispatch_group_notify</a></li>
+          <li><a href="#2-dispatch_group_wait">2) dispatch_group_wait</a></li>
+          <li><a href="#3-dispatch_group_enterdispatch_group_leave">3) dispatch_group_enter、dispatch_group_leave</a></li>
+        </ul>
+      </li>
+      <li><a href="#gcd-信号量dispatch_semaphore">GCD 信号量：dispatch_semaphore</a>
+        <ul>
+          <li><a href="#1-dispatch-semaphore-线程同步">1) Dispatch Semaphore 线程同步</a></li>
+          <li><a href="#2-dispatch-semaphore-线程安全和线程同步为线程加锁">2) Dispatch Semaphore 线程安全和线程同步（为线程加锁）</a>
+            <ul>
+              <li><a href="#非线程安全不使用-semaphore先来看看不考虑线程安全的代码">非线程安全（不使用 semaphore）先来看看不考虑线程安全的代码：</a></li>
+              <li><a href="#线程安全使用-semaphore-加锁考虑线程安全的代码">线程安全（使用 semaphore 加锁）考虑线程安全的代码：</a></li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+  
+
+  <section class="post">
+    <p>iOS 多线程：『GCD』详尽总结</p>
+
+<p>本文用来介绍 iOS 多线程中 GCD 的相关知识以及使用方法。这大概是史上最详细、清晰的关于 <strong>GCD 的详细讲解 + 总结</strong> 的文章了。通过本文，您将了解到：</p>
+
+<p><strong>1. GCD 简介</strong></p>
+
+<p><strong>2. GCD 任务和队列</strong></p>
+
+<p><strong>3. GCD 的使用步骤</strong></p>
+
+<p><strong>4. GCD 的基本使用</strong>（六种组合不同区别，队列嵌套情况区别，相互关系形象理解）</p>
+
+<p><strong>5. GCD 线程间的通信</strong></p>
+
+<p><strong>6. GCD 的其他方法</strong>（栅栏方法：dispatch_barrier_async、延时执行方法：dispatch_after、一次性代码（只执行一次）：dispatch_once、快速迭代方法：dispatch_apply、队列组：dispatch_group、信号量：dispatch_semaphore）</p>
+
+<p>文中 Demo 我已放在了 Github 上，Demo 链接：<a href="https://links.jianshu.com/go?to=https%3A%2F%2Fgithub.com%2Fbujige%2FYSC-GCD-demo">传送门</a></p>
+
+<hr />
+
+<h1 id="一gcd-简介">一、GCD 简介</h1>
+
+<h2 id="什么是-gcd-我们先来看看百度百科的解释简单了解下相关概念">什么是 <strong>GCD</strong> ？我们先来看看百度百科的解释简单了解下相关概念。</h2>
+
+<blockquote>
+  <p>引自 <a href="https://links.jianshu.com/go?to=http%3A%2F%2Fbaike.baidu.com%2Fitem%2FGCD">百度百科</a>
+<strong>Grand Central Dispatch（GCD）</strong> 是 Apple 开发的一个多核编程的较新的解决方法。它主要用于优化应用程序以支持多核处理器以及其他对称多处理系统。它是一个在线程池模式的基础上执行的并发任务。在 Mac OS X 10.6 雪豹中首次推出，也可在 iOS 4 及以上版本使用。</p>
+</blockquote>
+
+<h2 id="那为什么我们要使用-gcd-呢">那为什么我们要使用 GCD 呢?</h2>
+
+<p>因为使用 GCD 有很多好处啊，具体如下：</p>
+
+<ul>
+  <li>GCD 可用于多核的并行运算；</li>
+  <li>GCD 会自动利用更多的 CPU 内核（比如双核、四核）；</li>
+  <li>GCD 会自动管理线程的生命周期（创建线程、调度任务、销毁线程）；</li>
+  <li>程序员只需要告诉 GCD 想要执行什么任务，不需要编写任何线程管理代码。</li>
+</ul>
+
+<p>GCD 拥有以上这么多的好处，而且在多线程中处于举足轻重的地位。那么我们就很有必要系统地学习一下 GCD 的使用方法。</p>
+
+<hr />
+
+<h1 id="二gcd-任务和队列">二、GCD 任务和队列</h1>
+
+<p>学习 GCD 之前，先来了解 GCD 中两个核心概念：<strong>『任务』</strong> 和 <strong>『队列』</strong>。</p>
+
+<p><strong>任务</strong>：就是执行操作的意思，换句话说就是你在线程中执行的那段代码。在 GCD 中是放在 block 中的。执行任务有两种方式：<strong>『同步执行』</strong> 和 <strong>『异步执行』</strong>。两者的主要区别是：<strong>是否等待队列的任务执行结束，以及是否具备开启新线程的能力。</strong></p>
+
+<ul>
+  <li><strong>同步执行（sync）</strong>：
+    <ul>
+      <li>同步添加任务到指定的队列中，在添加的任务执行结束之前，会一直等待，直到队列里面的任务完成之后再继续执行。</li>
+      <li>只能在当前线程中执行任务，不具备开启新线程的能力。</li>
+    </ul>
+  </li>
+  <li><strong>异步执行（async）</strong>：
+    <ul>
+      <li>异步添加任务到指定的队列中，它不会做任何等待，可以继续执行任务。</li>
+      <li>可以在新的线程中执行任务，具备开启新线程的能力。</li>
+    </ul>
+  </li>
+</ul>
+
+<p>举个简单例子：你要打电话给小明和小白。</p>
+
+<p><strong>『同步执行』</strong> 就是：你打电话给小明的时候，不能同时打给小白。只有等到给小明打完了，才能打给小白（等待任务执行结束）。而且只能用当前的电话（不具备开启新线程的能力）。</p>
+
+<p><strong>『异步执行』</strong> 就是：你打电话给小明的时候，不用等着和小明通话结束（不用等待任务执行结束），还能同时给小白打电话。而且除了当前电话，你还可以使用其他一个或多个电话（具备开启新线程的能力）。</p>
+
+<p>注意：<strong>异步执行（async）</strong>虽然具有开启新线程的能力，但是并不一定开启新线程。这跟任务所指定的队列类型有关（下面会讲）。</p>
+
+<p><strong>队列（Dispatch Queue）</strong>：这里的队列指执行任务的等待队列，即用来存放任务的队列。队列是一种特殊的线性表，采用 FIFO（先进先出）的原则，即新任务总是被插入到队列的末尾，而读取任务的时候总是从队列的头部开始读取。每读取一个任务，则从队列中释放一个任务。队列的结构可参考下图：</p>
+
+<p><img src="/images/posts/iOS/1877784-01267bd211719167.webp" alt="" /></p>
+
+<p>在 GCD 中有两种队列：<strong>『串行队列』</strong> 和 <strong>『并发队列』</strong>。两者都符合 FIFO（先进先出）的原则。两者的主要区别是：<strong>执行顺序不同，以及开启线程数不同。</strong></p>
+
+<ul>
+  <li><strong>串行队列（Serial Dispatch Queue）</strong>：
+    <ul>
+      <li>每次只有一个任务被执行。让任务一个接着一个地执行。（只开启一个线程，一个任务执行完毕后，再执行下一个任务）</li>
+    </ul>
+  </li>
+  <li><strong>并发队列（Concurrent Dispatch Queue）</strong>：
+    <ul>
+      <li>可以让多个任务并发（同时）执行。（可以开启多个线程，并且同时执行任务）</li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote>
+  <p>注意：<strong>并发队列</strong> 的并发功能只有在异步（dispatch_async）方法下才有效。</p>
+</blockquote>
+
+<p>两者具体区别如下两图所示：</p>
+
+<p><img src="/images/posts/iOS/1877784-4faca27116209f35.webp" alt="" />
+<img src="/images/posts/iOS/1877784-97f3931d1b187b11.webp" alt="" /></p>
+
+<h1 id="三gcd-的使用步骤">三、GCD 的使用步骤</h1>
+
+<p>GCD 的使用步骤其实很简单，只有两步：</p>
+
+<ol>
+  <li>创建一个队列（串行队列或并发队列）；</li>
+  <li>将任务追加到任务的等待队列中，然后系统就会根据任务类型执行任务（同步执行或异步执行）。</li>
+</ol>
+
+<p>下边来看看队列的创建方法 / 获取方法，以及任务的创建方法。</p>
+
+<h2 id="1-队列的创建方法--获取方法">1. 队列的创建方法 / 获取方法</h2>
+
+<ul>
+  <li>可以使用<code class="highlighter-rouge">dispatch_queue_create</code>方法来创建队列。该方法需要传入两个参数：
+    <ul>
+      <li>第一个参数表示队列的唯一标识符，用于 DEBUG，可为空。队列的名称推荐使用应用程序 ID 这种逆序全程域名。</li>
+      <li>第二个参数用来识别是串行队列还是并发队列。<code class="highlighter-rouge">DISPATCH_QUEUE_SERIAL</code>表示串行队列，<code class="highlighter-rouge">DISPATCH_QUEUE_CONCURRENT</code>表示并发队列。</li>
+    </ul>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>// 串行队列的创建方法
+dispatch_queue_t queue = dispatch_queue_create("net.bujige.testQueue", DISPATCH_QUEUE_SERIAL);
+// 并发队列的创建方法
+dispatch_queue_t queue = dispatch_queue_create("net.bujige.testQueue", DISPATCH_QUEUE_CONCURRENT);
+</code></pre></div>    </div>
+  </li>
+  <li>对于串行队列，GCD 默认提供了：<strong>『主队列（Main Dispatch Queue）』</strong>。
+    <ul>
+      <li>所有放在主队列中的任务，都会放到主线程中执行。</li>
+      <li>可使用 <code class="highlighter-rouge">dispatch_get_main_queue()</code>方法获得主队列。</li>
+    </ul>
+
+    <blockquote>
+      <p>注意：<strong>主队列其实并不特殊。</strong> 主队列的实质上就是一个普通的串行队列，只是因为默认情况下，当前代码是放在主队列中的，然后主队列中的代码，有都会放到主线程中去执行，所以才造成了主队列特殊的现象。</p>
+    </blockquote>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>// 主队列的获取方法
+dispatch_queue_t queue = dispatch_get_main_queue();
+</code></pre></div>    </div>
+  </li>
+  <li>对于并发队列，GCD 默认提供了 <strong>『全局并发队列（Global Dispatch Queue）』</strong>。
+    <ul>
+      <li>可以使用 dispatch_get_global_queue方法来获取全局并发队列。需要传入两个参数。第一个参数表示队列优先级，一般用 DISPATCH_QUEUE_PRIORITY_DEFAULT。第二个参数暂时没用，用 0即可。</li>
+    </ul>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>// 全局并发队列的获取方法
+dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<h2 id="2-任务的创建方法">2. 任务的创建方法</h2>
+
+<p>GCD 提供了同步执行任务的创建方法 <code class="highlighter-rouge">dispatch_sync</code> 和异步执行任务创建方法 <code class="highlighter-rouge">dispatch_async</code>。</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>// 同步执行任务创建方法 
+dispatch_sync(queue, ^{ 
+  // 这里放同步执行任务代码 
+  }); 
+// 异步执行任务创建方法 
+dispatch_async(queue, ^{ 
+  // 这里放异步执行任务代码 
+  });
+</code></pre></div></div>
+<p>虽然使用 GCD 只需两步，但是既然我们有两种队列（串行队列 / 并发队列），两种任务执行方式（同步执行 / 异步执行），那么我们就有了四种不同的组合方式。这四种不同的组合方式是：</p>
+
+<ol>
+  <li>同步执行 + 并发队列</li>
+  <li>异步执行 + 并发队列</li>
+  <li>同步执行 + 串行队列</li>
+  <li>异步执行 + 串行队列</li>
+</ol>
+
+<p>实际上，刚才还说了两种默认队列：全局并发队列、主队列。全局并发队列可以作为普通并发队列来使用。但是当前代码默认放在主队列中，所以主队列很有必要专门来研究一下，所以我们就又多了两种组合方式。这样就有六种不同的组合方式了。</p>
+
+<ol>
+  <li>同步执行 + 主队列</li>
+  <li>异步执行 + 主队列</li>
+</ol>
+
+<p><strong>那么这几种不同组合方式各有什么区别呢？</strong></p>
+
+<p>这里我们先上结论，后面再来详细讲解。你可以直接查看 <strong>3 任务和队列不同组合方式的区别</strong> 中的表格结果，然后跳过 <strong>4. GCD的基本使用</strong> 继续往后看。</p>
+
+<h2 id="3-任务和队列不同组合方式的区别">3. 任务和队列不同组合方式的区别</h2>
+
+<p>我们先来考虑最基本的使用，也就是当前线程为 <strong>『主线程』</strong> 的环境下，<strong>『不同队列』+『不同任务』</strong> 简单组合使用的不同区别。暂时不考虑 <strong>『队列中嵌套队列』</strong> 的这种复杂情况。</p>
+
+<p><strong>『主线程』</strong>中，<strong>『不同队列』</strong>+<strong>『不同任务』</strong>简单组合的区别：</p>
+
+<table><tr><th>区别</th><th>并发队列</th><th>串行队列</th><th>主队列</th></tr><tr><td>同步（sync）</td><td>没有开启新线程，串行执行任务</td><td>没有开启新线程，串行执行任务</td><td>死锁卡住不执行</td></tr><tr><td>异步（async）</td><td>有开启新线程，并发执行任务</td><td>有开启新线程（1条），串行执行任务</td><td>没有开启新线程，串行执行任务</td></tr></table>
+
+<blockquote>
+  <p>注意：从上边可看出： <strong>『主线程』</strong> 中调用 <strong>『主队列』+『同步执行』</strong> 会导致死锁问题。这是因为 <strong>主队列中追加的同步任务</strong> 和 <strong>主线程本身的任务</strong> 两者之间相互等待，阻塞了 <strong>『主队列』</strong>，最终造成了主队列所在的线程（主线程）死锁问题。而如果我们在 <strong>『其他线程』</strong> 调用 <strong>『主队列』+『同步执行』</strong>，则不会阻塞 <strong>『主队列』</strong>，自然也不会造成死锁问题。最终的结果是：<strong>不会开启新线程，串行执行任务</strong>。</p>
+</blockquote>
+
+<h2 id="4-队列嵌套情况下不同组合方式区别">4. 队列嵌套情况下，不同组合方式区别</h2>
+
+<p>除了上边提到的『主线程』中调用『主队列』+『同步执行』会导致死锁问题。实际在使用『串行队列』的时候，也可能出现阻塞『串行队列』所在线程的情况发生，从而造成死锁问题。这种情况多见于同一个串行队列的嵌套使用。</p>
+
+<p>比如下面代码这样：在『异步执行』+『串行队列』的任务中，又嵌套了『当前的串行队列』，然后进行『同步执行』。</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  dispatch_queue_t queue = dispatch_queue_create("test.queue", DISPATCH_QUEUE_SERIAL); 
+  dispatch_async(queue, ^{ // 异步执行 + 串行队列 
+    dispatch_sync(queue, ^{ // 同步执行 + 当前串行队列 
+      // 追加任务 1 
+      [NSThread sleepForTimeInterval:2]; // 模拟耗时操作 
+      NSLog(@"1---%@",[NSThread currentThread]); // 打印当前线程 
+      }); 
+  });
+</code></pre></div></div>
+
+<blockquote>
+  <p>执行上面的代码会导致 <strong>串行队列中追加的任务</strong> 和 <strong>串行队列中原有的任务</strong> 两者之间相互等待，阻塞了『串行队列』，最终造成了串行队列所在的线程（子线程）死锁问题。
+主队列造成死锁也是基于这个原因，所以，这也进一步说明了主队列其实并不特殊。</p>
+</blockquote>
+
+<p>关于 『队列中嵌套队列』这种复杂情况，这里也简单做一个总结。不过这里只考虑同一个队列的嵌套情况，关于多个队列的相互嵌套情况还请自行研究，或者等我最新的文章发布。</p>
+
+<p><strong>『不同队列』+『不同任务』</strong> 组合，以及 <strong>『队列中嵌套队列』</strong> 使用的区别：</p>
+
+<table><tr><th>区别</th><th>『异步执行+并发队列』嵌套『同一个并发队列』</th><th>『同步执行+并发队列』嵌套『同一个并发队列』</th><th>『异步执行+串行队列』嵌套『同一个串行队列』</th><th>『同步执行+串行队列』嵌套『同一个串行队列』</th></tr><tr><td>同步（sync）</td><td>没有开启新的线程，串行执行任务</td><td>没有开启新线程，串行执行任务</td><td>死锁卡住不执行</td><td>死锁卡住不执行</td></tr><tr><td>异步（async）</td><td>有开启新线程，并发执行任务</td><td>有开启新线程，并发执行任务</td><td>有开启新线程（1 条），串行执行任务</td><td>有开启新线程（1 条），串行执行任务</td></tr></table>
+
+<p>好了，关于『不同队列』+『不同任务』 组合不同区别总结就到这里。</p>
+
+<h2 id="5-关于不同队列和不同任务的形象理解">5. 关于不同队列和不同任务的形象理解</h2>
+
+<p>因为前一段时间看到了有朋友留言说对 <code class="highlighter-rouge">异步执行</code> 和 <code class="highlighter-rouge">并发队列</code> 中创建线程能力有所不理解，我觉得这个问题的确很容易造成困惑，所以很值得拿来专门分析一下。</p>
+
+<blockquote>
+  <p>他的问题：
+在 异步 + 并发 中的解释：
+异步执行具备开启新线程的能力。且并发队列可开启多个线程，同时执行多个任务）
+以及 同步 + 并发 中的解释：
+（虽然并发队列可以开启多个线程，并且同时执行多个任务。但是因为本身不能创建新线程，只有当前线程这一个线程（同步任务不具备开启新线程的能力）
+这个地方看起来有点疑惑，你两个地方分别提到：异步执行开启新线程，并发队列也可以开启新线程，想请教下，你的意思是只有任务才拥有创建新线程的能力，而队列只有开启线程的能力，并不能创建线程 ？这二者是这样的关联吗？</p>
+
+</blockquote>
+
+<p>关于这个问题，我想做一个很形象的类比，来帮助大家对 <strong>队列</strong>、<strong>任务</strong> 以及 <strong>线程</strong> 之间关系的理解。</p>
+
+<p>假设现在有 5 个人要穿过一道门禁，这道门禁总共有 10 个入口，管理员可以决定同一时间打开几个入口，可以决定同一时间让一个人单独通过还是多个人一起通过。不过默认情况下，管理员只开启一个入口，且一个通道一次只能通过一个人。</p>
+
+<ul>
+  <li>这个故事里，人好比是 <strong>任务</strong>，管理员好比是 <strong>系统</strong>，入口则代表 <strong>线程</strong>。
+    <ul>
+      <li>5 个人表示有 5 个任务，10 个入口代表 10 条线程。</li>
+      <li><strong>串行队列</strong>好比是 5 个人排成一支长队。</li>
+      <li><strong>并发队列</strong>好比是 5 个人排成多支队伍，比如 2 队，或者 3 队。</li>
+      <li><strong>同步任务</strong>好比是管理员只开启了一个入口（当前线程）。</li>
+      <li><strong>异步任务</strong>好比是管理员同时开启了多个入口（当前线程 + 新开的线程）。</li>
+    </ul>
+  </li>
+  <li><strong>『异步执行 + 并发队列』</strong>可以理解为：现在管理员开启了多个入口（比如 3 个入口），5 个人排成了多支队伍（比如 3 支队伍），这样这 5 个人就可以 3 个人同时一起穿过门禁了。</li>
+  <li><strong>『同步执行 + 并发队列』</strong>可以理解为：现在管理员只开启了 1 个入口，5 个人排成了多支队伍。虽然这 5 个人排成了多支队伍，但是只开了 1 个入口啊，这 5 个人虽然都想快点过去，但是 1 个入口一次只能过 1 个人，所以大家就只好一个接一个走过去了，表现的结果就是：顺次通过入口。</li>
+  <li>换成 GCD 里的语言就是说：
+    <ul>
+      <li>『异步执行 + 并发队列』就是：系统开启了多个线程（主线程+其他子线程），任务可以多个同时运行。</li>
+      <li>『同步执行 + 并发队列』就是：系统只默认开启了一个主线程，没有开启子线程，虽然任务处于并发队列中，但也只能一个接一个执行了。</li>
+    </ul>
+  </li>
+</ul>
+
+<p>下边我们来研究一下上边提到的六种简单组合方式的使用方法。</p>
+
+<h1 id="四gcd-的基本使用">四、GCD 的基本使用</h1>
+
+<p><strong>先来讲讲并发队列的两种执行方式。</strong></p>
+
+<h2 id="1-同步执行--并发队列">1. 同步执行 + 并发队列</h2>
+
+<ul>
+  <li>在当前线程中执行任务，不会开启新线程，执行完一个任务，再执行下一个任务。</li>
+</ul>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/**
+ * 同步执行 + 并发队列
+ * 特点：在当前线程中执行任务，不会开启新线程，执行完一个任务，再执行下一个任务。
+ */
+- (void)syncConcurrent {
+    NSLog(@"currentThread---%@",[NSThread currentThread]);  // 打印当前线程
+    NSLog(@"syncConcurrent---begin");
+    
+    dispatch_queue_t queue = dispatch_queue_create("net.bujige.testQueue", DISPATCH_QUEUE_CONCURRENT);
+    
+    dispatch_sync(queue, ^{
+        // 追加任务 1
+        [NSThread sleepForTimeInterval:2];              // 模拟耗时操作
+        NSLog(@"1---%@",[NSThread currentThread]);      // 打印当前线程
+    });
+    
+    dispatch_sync(queue, ^{
+        // 追加任务 2
+        [NSThread sleepForTimeInterval:2];              // 模拟耗时操作
+        NSLog(@"2---%@",[NSThread currentThread]);      // 打印当前线程
+    });
+    
+    dispatch_sync(queue, ^{
+        // 追加任务 3
+        [NSThread sleepForTimeInterval:2];              // 模拟耗时操作
+        NSLog(@"3---%@",[NSThread currentThread]);      // 打印当前线程
+    });
+    
+    NSLog(@"syncConcurrent---end");
+}
+</code></pre></div></div>
+
+<p>输出结果：</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> 2019-08-08 14:32:53.542816+0800 YSC-GCD-demo[16332:4171500] currentThread---{number = 1, name = main}
+   
+ 2019-08-08 14:32:53.542964+0800 YSC-GCD-demo[16332:4171500] syncConcurrent---begin
+   
+ 2019-08-08 14:32:55.544329+0800 YSC-GCD-demo[16332:4171500] 1---{number = 1, name = main}
+   
+ 2019-08-08 14:32:57.545779+0800 YSC-GCD-demo[16332:4171500] 2---{number = 1, name = main}
+   
+ 2019-08-08 14:32:59.547154+0800 YSC-GCD-demo[16332:4171500] 3---{number = 1, name = main}
+   
+ 2019-08-08 14:32:59.547365+0800 YSC-GCD-demo[16332:4171500] syncConcurrent---end
+</code></pre></div></div>
+<p>从 <code class="highlighter-rouge">同步执行 + 并发队列</code> 中可看到：</p>
+
+<ul>
+  <li>所有任务都是在当前线程（主线程）中执行的，没有开启新的线程（<code class="highlighter-rouge">同步执行</code>不具备开启新线程的能力）。</li>
+  <li>所有任务都在打印的 <code class="highlighter-rouge">syncConcurrent---begin</code>和 <code class="highlighter-rouge">syncConcurrent---end</code>之间执行的（<code class="highlighter-rouge">同步任务</code>需要等待队列的任务执行结束）。</li>
+  <li>任务按顺序执行的。按顺序执行的原因：虽然 <code class="highlighter-rouge">并发队列</code>可以开启多个线程，并且同时执行多个任务。但是因为本身不能创建新线程，只有当前线程这一个线程（<code class="highlighter-rouge">同步任务</code>不具备开启新线程的能力），所以也就不存在并发。而且当前线程只有等待当前队列中正在执行的任务执行完毕之后，才能继续接着执行下面的操作（<code class="highlighter-rouge">同步任务</code>需要等待队列的任务执行结束）。所以任务只能一个接一个按顺序执行，不能同时被执行。</li>
+</ul>
+
+<h2 id="2-异步执行--并发队列">2. 异步执行 + 并发队列</h2>
+
+<ul>
+  <li>可以开启多个线程，任务交替（同时）执行。</li>
+</ul>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/**
+ * 异步执行 + 并发队列
+ * 特点：可以开启多个线程，任务交替（同时）执行。
+ */
+- (void)asyncConcurrent {
+    NSLog(@"currentThread---%@",[NSThread currentThread]);  // 打印当前线程
+    NSLog(@"asyncConcurrent---begin");
+    
+    dispatch_queue_t queue = dispatch_queue_create("net.bujige.testQueue", DISPATCH_QUEUE_CONCURRENT);
+    
+    dispatch_async(queue, ^{
+        // 追加任务 1
+        [NSThread sleepForTimeInterval:2];              // 模拟耗时操作
+        NSLog(@"1---%@",[NSThread currentThread]);      // 打印当前线程
+    });
+    
+    dispatch_async(queue, ^{
+        // 追加任务 2
+        [NSThread sleepForTimeInterval:2];              // 模拟耗时操作
+        NSLog(@"2---%@",[NSThread currentThread]);      // 打印当前线程
+    });
+    
+    dispatch_async(queue, ^{
+        // 追加任务 3
+        [NSThread sleepForTimeInterval:2];              // 模拟耗时操作
+        NSLog(@"3---%@",[NSThread currentThread]);      // 打印当前线程
+    });
+    
+    NSLog(@"asyncConcurrent---end");
+}
+</code></pre></div></div>
+<p>输出结果：</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> 2019-08-08 14:36:37.747966+0800 YSC-GCD-demo[17232:4187114] currentThread---{number = 1, name = main}
+   
+ 2019-08-08 14:36:37.748150+0800 YSC-GCD-demo[17232:4187114] asyncConcurrent---begin
+   
+ 2019-08-08 14:36:37.748279+0800 YSC-GCD-demo[17232:4187114] asyncConcurrent---end
+   
+ 2019-08-08 14:36:39.752523+0800 YSC-GCD-demo[17232:4187204] 2---{number = 3, name = (null)}
+   
+ 2019-08-08 14:36:39.752527+0800 YSC-GCD-demo[17232:4187202] 3---{number = 5, name = (null)}
+   
+ 2019-08-08 14:36:39.752527+0800 YSC-GCD-demo[17232:4187203] 1---{number = 4, name = (null)}
+</code></pre></div></div>
+
+<p>在 <code class="highlighter-rouge">异步执行</code> + <code class="highlighter-rouge">并发队列</code> 中可以看出：</p>
+
+<ul>
+  <li>除了当前线程（主线程），系统又开启了 3 个线程，并且任务是交替/同时执行的。（异步执行具备开启新线程的能力。且 并发队列可开启多个线程，同时执行多个任务）。</li>
+  <li>所有任务是在打印的 syncConcurrent—begin和 syncConcurrent—end之后才执行的。说明当前线程没有等待，而是直接开启了新线程，在新线程中执行任务（异步执行不做等待，可以继续执行任务）。</li>
+</ul>
+
+<p><strong>接下来再来讲讲串行队列的两种执行方式。</strong></p>
+
+<hr />
+
+<h2 id="3-同步执行--串行队列">3. 同步执行 + 串行队列</h2>
+
+<ul>
+  <li>不会开启新线程，在当前线程执行任务。任务是串行的，执行完一个任务，再执行下一个任务。</li>
+</ul>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/**
+ * 同步执行 + 串行队列
+ * 特点：不会开启新线程，在当前线程执行任务。任务是串行的，执行完一个任务，再执行下一个任务。
+ */
+- (void)syncSerial {
+    NSLog(@"currentThread---%@",[NSThread currentThread]);  // 打印当前线程
+    NSLog(@"syncSerial---begin");
+    
+    dispatch_queue_t queue = dispatch_queue_create("net.bujige.testQueue", DISPATCH_QUEUE_SERIAL);
+    
+    dispatch_sync(queue, ^{
+        // 追加任务 1
+        [NSThread sleepForTimeInterval:2];              // 模拟耗时操作
+        NSLog(@"1---%@",[NSThread currentThread]);      // 打印当前线程
+    });
+    dispatch_sync(queue, ^{
+        // 追加任务 2
+        [NSThread sleepForTimeInterval:2];              // 模拟耗时操作
+        NSLog(@"2---%@",[NSThread currentThread]);      // 打印当前线程
+    });
+    dispatch_sync(queue, ^{
+        // 追加任务 3
+        [NSThread sleepForTimeInterval:2];              // 模拟耗时操作
+        NSLog(@"3---%@",[NSThread currentThread]);      // 打印当前线程
+    });
+    
+    NSLog(@"syncSerial---end");
+}
+</code></pre></div></div>
+<p>输出结果为：</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> 2019-08-08 14:39:31.366815+0800 YSC-GCD-demo[17285:4197645] currentThread---{number = 1, name = main}
+   
+ 2019-08-08 14:39:31.366952+0800 YSC-GCD-demo[17285:4197645] syncSerial---begin
+   
+ 2019-08-08 14:39:33.368256+0800 YSC-GCD-demo[17285:4197645] 1---{number = 1, name = main}
+   
+ 2019-08-08 14:39:35.369661+0800 YSC-GCD-demo[17285:4197645] 2---{number = 1, name = main}
+   
+ 2019-08-08 14:39:37.370991+0800 YSC-GCD-demo[17285:4197645] 3---{number = 1, name = main}
+   
+ 2019-08-08 14:39:37.371192+0800 YSC-GCD-demo[17285:4197645] syncSerial---end
+</code></pre></div></div>
+
+<p>在 同步执行 + 串行队列 可以看到：</p>
+
+<ul>
+  <li>所有任务都是在当前线程（主线程）中执行的，并没有开启新的线程（同步执行不具备开启新线程的能力）。</li>
+  <li>所有任务都在打印的 syncConcurrent—begin和 syncConcurrent—end之间执行（同步任务需要等待队列的任务执行结束）。</li>
+  <li>任务是按顺序执行的（串行队列每次只有一个任务被执行，任务一个接一个按顺序执行）。</li>
+</ul>
+
+<h2 id="4-异步执行--串行队列">4. 异步执行 + 串行队列</h2>
+
+<ul>
+  <li>会开启新线程，但是因为任务是串行的，执行完一个任务，再执行下一个任务</li>
+</ul>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/**
+ * 同步执行 + 串行队列
+ * 特点：不会开启新线程，在当前线程执行任务。任务是串行的，执行完一个任务，再执行下一个任务。
+ */
+- (void)syncSerial {
+    NSLog(@"currentThread---%@",[NSThread currentThread]);  // 打印当前线程
+    NSLog(@"syncSerial---begin");
+    
+    dispatch_queue_t queue = dispatch_queue_create("net.bujige.testQueue", DISPATCH_QUEUE_SERIAL);
+    
+    dispatch_sync(queue, ^{
+        // 追加任务 1
+        [NSThread sleepForTimeInterval:2];              // 模拟耗时操作
+        NSLog(@"1---%@",[NSThread currentThread]);      // 打印当前线程
+    });
+    dispatch_sync(queue, ^{
+        // 追加任务 2
+        [NSThread sleepForTimeInterval:2];              // 模拟耗时操作
+        NSLog(@"2---%@",[NSThread currentThread]);      // 打印当前线程
+    });
+    dispatch_sync(queue, ^{
+        // 追加任务 3
+        [NSThread sleepForTimeInterval:2];              // 模拟耗时操作
+        NSLog(@"3---%@",[NSThread currentThread]);      // 打印当前线程
+    });
+    
+    NSLog(@"syncSerial---end");
+}
+</code></pre></div></div>
+<p>输出结果为：</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> 2019-08-08 14:40:53.944502+0800 YSC-GCD-demo[17313:4203018] currentThread---{number = 1, name = main}
+   
+ 2019-08-08 14:40:53.944615+0800 YSC-GCD-demo[17313:4203018] asyncSerial---begin
+   
+ 2019-08-08 14:40:53.944710+0800 YSC-GCD-demo[17313:4203018] asyncSerial---end
+   
+ 2019-08-08 14:40:55.947709+0800 YSC-GCD-demo[17313:4203079] 1---{number = 3, name = (null)}
+   
+ 2019-08-08 14:40:57.952453+0800 YSC-GCD-demo[17313:4203079] 2---{number = 3, name = (null)}
+   
+ 2019-08-08 14:40:59.952943+0800 YSC-GCD-demo[17313:4203079] 3---{number = 3, name = (null)}
+</code></pre></div></div>
+<p>在 异步执行 + 串行队列 可以看到：</p>
+
+<ul>
+  <li>开启了一条新线程（异步执行具备开启新线程的能力，串行队列只开启一个线程）。</li>
+  <li>所有任务是在打印的 syncConcurrent—begin和 syncConcurrent—end之后才开始执行的（异步执行不会做任何等待，可以继续执行任务）。</li>
+  <li>任务是按顺序执行的（串行队列每次只有一个任务被执行，任务一个接一个按顺序执行）。</li>
+</ul>
+
+<p>下边讲讲刚才我们提到过的：<strong>主队列</strong>。</p>
+
+<ul>
+  <li>主队列：GCD 默认提供的 <strong>串行队列</strong>。
+    <ul>
+      <li>默认情况下，平常所写代码是直接放在主队列中的。</li>
+      <li>所有放在主队列中的任务，都会放到主线程中执行。</li>
+      <li>可使用 dispatch_get_main_queue()获得主队列。</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>我们再来看看主队列的两种组合方式。</strong></p>
+
+<h2 id="5-同步执行--主队列">5. 同步执行 + 主队列</h2>
+
+<p>同步执行 + 主队列 在不同线程中调用结果也是不一样，在主线程中调用会发生死锁问题，而在其他线程中调用则不会。</p>
+
+<h3 id="-在主线程中调用-同步执行--主队列">㈠ 在主线程中调用 『同步执行 + 主队列』</h3>
+
+<ul>
+  <li>互相等待卡住不可行</li>
+</ul>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/**
+ * 同步执行 + 主队列
+ * 特点(主线程调用)：互等卡主不执行。
+ * 特点(其他线程调用)：不会开启新线程，执行完一个任务，再执行下一个任务。
+ */
+- (void)syncMain {
+    
+    NSLog(@"currentThread---%@",[NSThread currentThread]);  // 打印当前线程
+    NSLog(@"syncMain---begin");
+    
+    dispatch_queue_t queue = dispatch_get_main_queue();
+    
+    dispatch_sync(queue, ^{
+        // 追加任务 1
+        [NSThread sleepForTimeInterval:2];              // 模拟耗时操作
+        NSLog(@"1---%@",[NSThread currentThread]);      // 打印当前线程
+    });
+    
+    dispatch_sync(queue, ^{
+        // 追加任务 2
+        [NSThread sleepForTimeInterval:2];              // 模拟耗时操作
+        NSLog(@"2---%@",[NSThread currentThread]);      // 打印当前线程
+    });
+    
+    dispatch_sync(queue, ^{
+        // 追加任务 3
+        [NSThread sleepForTimeInterval:2];              // 模拟耗时操作
+        NSLog(@"3---%@",[NSThread currentThread]);      // 打印当前线程
+    });
+    
+    NSLog(@"syncMain---end");
+}
+</code></pre></div></div>
+<p>输出结果</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> 2019-08-08 14:43:58.062376+0800 YSC-GCD-demo[17371:4213562] currentThread---{number = 1, name = main}
+   
+ 2019-08-08 14:43:58.062518+0800 YSC-GCD-demo[17371:4213562] syncMain---begin
+   
+ (lldb)
+</code></pre></div></div>
+<p>在主线程中使用 同步执行 + 主队列 可以惊奇的发现：</p>
+
+<ul>
+  <li>追加到主线程的任务 1、任务 2、任务 3 都不再执行了，而且 syncMain—end也没有打印，在 XCode 9 及以上版本上还会直接报崩溃。这是为什么呢？</li>
+</ul>
+
+<p>这是因为我们在主线程中执行 syncMain 方法，相当于把 syncMain 任务放到了主线程的队列中。而 同步执行 会等待当前队列中的任务执行完毕，才会接着执行。那么当我们把 任务 1 追加到主队列中，任务 1 就在等待主线程处理完 syncMain 任务。而syncMain 任务需要等待 任务 1 执行完毕，才能接着执行。</p>
+
+<p>那么，现在的情况就是 syncMain 任务和 任务 1 都在等对方执行完毕。这样大家互相等待，所以就卡住了，所以我们的任务执行不了，而且 syncMain—end 也没有打印。</p>
+
+<p><strong>要是如果不在主线程中调用，而在其他线程中调用会如何呢？</strong></p>
+
+<h3 id="-在其他线程中调用同步执行--主队列">㈡ 在其他线程中调用『同步执行 + 主队列』</h3>
+
+<ul>
+  <li>不会开启新线程，执行完一个任务，再执行下一个任务</li>
+</ul>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>// 使用 NSThread 的 detachNewThreadSelector 方法会创建线程，并自动启动线程执行 selector 任务
+[NSThread detachNewThreadSelector:@selector(syncMain) toTarget:self withObject:nil];
+</code></pre></div></div>
+<p>输出结果：</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> 2019-08-08 14:51:38.137978+0800 YSC-GCD-demo[17482:4237818] currentThread---{number = 3, name = (null)}
+   
+ 2019-08-08 14:51:38.138159+0800 YSC-GCD-demo[17482:4237818] syncMain---begin
+   
+ 2019-08-08 14:51:40.149065+0800 YSC-GCD-demo[17482:4237594] 1---{number = 1, name = main}
+   
+ 2019-08-08 14:51:42.151104+0800 YSC-GCD-demo[17482:4237594] 2---{number = 1, name = main}
+   
+ 2019-08-08 14:51:44.152583+0800 YSC-GCD-demo[17482:4237594] 3---{number = 1, name = main}
+   
+ 2019-08-08 14:51:44.152767+0800 YSC-GCD-demo[17482:4237818] syncMain---end
+</code></pre></div></div>
+<p>在其他线程中使用 同步执行 + 主队列 可看到：</p>
+
+<ul>
+  <li>所有任务都是在主线程（非当前线程）中执行的，没有开启新的线程（所有放在主队列中的任务，都会放到主线程中执行）。</li>
+  <li>所有任务都在打印的 syncConcurrent—begin和 syncConcurrent—end之间执行（同步任务需要等待队列的任务执行结束）。</li>
+  <li>任务是按顺序执行的（主队列是 串行队列，每次只有一个任务被执行，任务一个接一个按顺序执行）。</li>
+</ul>
+
+<p>为什么现在就不会卡住了呢？</p>
+
+<p>因为syncMain 任务 放到了其他线程里，而 任务 1、任务 2、任务3 都在追加到主队列中，这三个任务都会在主线程中执行。syncMain 任务 在其他线程中执行到追加 任务 1 到主队列中，因为主队列现在没有正在执行的任务，所以，会直接执行主队列的 任务1，等 任务1 执行完毕，再接着执行 任务 2、任务 3。所以这里不会卡住线程，也就不会造成死锁问题。</p>
+
+<h2 id="6-异步执行--主队列">6. 异步执行 + 主队列</h2>
+
+<ul>
+  <li>只在主线程中执行任务，执行完一个任务，再执行下一个任务。</li>
+</ul>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/**
+ * 异步执行 + 主队列
+ * 特点：只在主线程中执行任务，执行完一个任务，再执行下一个任务
+ */
+- (void)asyncMain {
+    NSLog(@"currentThread---%@",[NSThread currentThread]);  // 打印当前线程
+    NSLog(@"asyncMain---begin");
+    
+    dispatch_queue_t queue = dispatch_get_main_queue();
+    
+    dispatch_async(queue, ^{
+        // 追加任务 1
+        [NSThread sleepForTimeInterval:2];              // 模拟耗时操作
+        NSLog(@"1---%@",[NSThread currentThread]);      // 打印当前线程
+    });
+    
+    dispatch_async(queue, ^{
+        // 追加任务 2
+        [NSThread sleepForTimeInterval:2];              // 模拟耗时操作
+        NSLog(@"2---%@",[NSThread currentThread]);      // 打印当前线程
+    });
+    
+    dispatch_async(queue, ^{
+        // 追加任务 3
+        [NSThread sleepForTimeInterval:2];              // 模拟耗时操作
+        NSLog(@"3---%@",[NSThread currentThread]);      // 打印当前线程
+    });
+    
+    NSLog(@"asyncMain---end");
+}
+</code></pre></div></div>
+<p>输出结果：</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> 2019-08-08 14:53:27.023091+0800 YSC-GCD-demo[17521:4243690] currentThread---{number = 1, name = main}
+   
+ 2019-08-08 14:53:27.023247+0800 YSC-GCD-demo[17521:4243690] asyncMain---begin
+   
+ 2019-08-08 14:53:27.023399+0800 YSC-GCD-demo[17521:4243690] asyncMain---end
+   
+ 2019-08-08 14:53:29.035565+0800 YSC-GCD-demo[17521:4243690] 1---{number = 1, name = main}
+   
+ 2019-08-08 14:53:31.036565+0800 YSC-GCD-demo[17521:4243690] 2---{number = 1, name = main}
+   
+ 2019-08-08 14:53:33.037092+0800 YSC-GCD-demo[17521:4243690] 3---{number = 1, name = main}
+</code></pre></div></div>
+<p>在 异步执行 + 主队列 可以看到：</p>
+
+<ul>
+  <li>所有任务都是在当前线程（主线程）中执行的，并没有开启新的线程（虽然 异步执行具备开启线程的能力，但因为是主队列，所以所有任务都在主线程中）。</li>
+  <li>所有任务是在打印的 syncConcurrent—begin和 syncConcurrent—end之后才开始执行的（异步执行不会做任何等待，可以继续执行任务）。</li>
+  <li>任务是按顺序执行的（因为主队列是 串行队列，每次只有一个任务被执行，任务一个接一个按顺序执行）。</li>
+</ul>
+
+<p>弄懂了难理解、绕来绕去的<strong>『不同队列』+『不同任务』</strong>使用区别之后，我们来学习一个简单的东西：<strong>5. GCD 线程间的通信</strong>。</p>
+
+<hr />
+
+<h1 id="五gcd-线程间的通信">五、GCD 线程间的通信</h1>
+
+<p>在 iOS 开发过程中，我们一般在主线程里边进行 UI 刷新，例如：点击、滚动、拖拽等事件。我们通常把一些耗时的操作放在其他线程，比如说图片下载、文件上传等耗时操作。而当我们有时候在其他线程完成了耗时操作时，需要回到主线程，那么就用到了线程之间的通讯。</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/**
+ * 线程间通信
+ */
+- (void)communication {
+    // 获取全局并发队列
+    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+    // 获取主队列
+    dispatch_queue_t mainQueue = dispatch_get_main_queue();
+    
+    dispatch_async(queue, ^{
+        // 异步追加任务 1
+        [NSThread sleepForTimeInterval:2];              // 模拟耗时操作
+        NSLog(@"1---%@",[NSThread currentThread]);      // 打印当前线程
+        
+        // 回到主线程
+        dispatch_async(mainQueue, ^{
+            // 追加在主线程中执行的任务
+            [NSThread sleepForTimeInterval:2];              // 模拟耗时操作
+            NSLog(@"2---%@",[NSThread currentThread]);      // 打印当前线程
+        });
+    });
+}
+</code></pre></div></div>
+<p>输出结果：</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> 2019-08-08 14:56:22.973318+0800 YSC-GCD-demo[17573:4253201] 1---{number = 3, name = (null)}
+   
+ 2019-08-08 14:56:24.973902+0800 YSC-GCD-demo[17573:4253108] 2---{number = 1, name = main}
+
+  - 可以看到在其他线程中先执行任务，执行完了之后回到主线程执行主线程的相应操作。
+</code></pre></div></div>
+
+<h1 id="六gcd-的其他方法">六、GCD 的其他方法</h1>
+
+<h2 id="1-gcd-栅栏方法dispatch_barrier_async">1. GCD 栅栏方法：dispatch_barrier_async</h2>
+
+<ul>
+  <li>我们有时需要异步执行两组操作，而且第一组操作执行完之后，才能开始执行第二组操作。这样我们就需要一个相当于 栅栏一样的一个方法将两组异步执行的操作组给分割起来，当然这里的操作组里可以包含一个或多个任务。这就需要用到dispatch_barrier_async方法在两个操作组间形成栅栏。</li>
+</ul>
+
+<p>dispatch_barrier_async方法会等待前边追加到并发队列中的任务全部执行完毕之后，再将指定的任务追加到该异步队列中。然后在 dispatch_barrier_async方法追加的任务执行完毕之后，异步队列才恢复为一般动作，接着追加任务到该异步队列并开始执行。具体如下图所示：</p>
+
+<p><img src="/images/posts/iOS/1877784-4d6d77fafd3ad007.webp" alt="" /></p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/**
+ * 栅栏方法 dispatch_barrier_async
+ */
+- (void)barrier {
+    dispatch_queue_t queue = dispatch_queue_create("net.bujige.testQueue", DISPATCH_QUEUE_CONCURRENT);
+    
+    dispatch_async(queue, ^{
+        // 追加任务 1
+        [NSThread sleepForTimeInterval:2];              // 模拟耗时操作
+        NSLog(@"1---%@",[NSThread currentThread]);      // 打印当前线程
+    });
+    dispatch_async(queue, ^{
+        // 追加任务 2
+        [NSThread sleepForTimeInterval:2];              // 模拟耗时操作
+        NSLog(@"2---%@",[NSThread currentThread]);      // 打印当前线程
+    });
+    
+    dispatch_barrier_async(queue, ^{
+        // 追加任务 barrier
+        [NSThread sleepForTimeInterval:2];              // 模拟耗时操作
+        NSLog(@"barrier---%@",[NSThread currentThread]);// 打印当前线程
+    });
+    
+    dispatch_async(queue, ^{
+        // 追加任务 3
+        [NSThread sleepForTimeInterval:2];              // 模拟耗时操作
+        NSLog(@"3---%@",[NSThread currentThread]);      // 打印当前线程
+    });
+    dispatch_async(queue, ^{
+        // 追加任务 4
+        [NSThread sleepForTimeInterval:2];              // 模拟耗时操作
+        NSLog(@"4---%@",[NSThread currentThread]);      // 打印当前线程
+    });
+}
+</code></pre></div></div>
+<p>输出结果：</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> 2019-08-08 14:59:02.540868+0800 YSC-GCD-demo[17648:4262933] 1---{number = 3, name = (null)}
+   
+ 2019-08-08 14:59:02.540868+0800 YSC-GCD-demo[17648:4262932] 2---{number = 4, name = (null)}
+   
+ 2019-08-08 14:59:04.542346+0800 YSC-GCD-demo[17648:4262933] barrier---{number = 3, name = (null)}
+   
+ 2019-08-08 14:59:06.542772+0800 YSC-GCD-demo[17648:4262932] 4---{number = 4, name = (null)}
+   
+ 2019-08-08 14:59:06.542773+0800 YSC-GCD-demo[17648:4262933] 3---{number = 3, name = (null)}
+</code></pre></div></div>
+<p>在 dispatch_barrier_async 执行结果中可以看出：</p>
+
+<ul>
+  <li>在执行完栅栏前面的操作之后，才执行栅栏操作，最后再执行栅栏后边的操作。</li>
+</ul>
+
+<h2 id="2-gcd-延时执行方法dispatch_after">2. GCD 延时执行方法：dispatch_after</h2>
+<hr />
+
+<p>我们经常会遇到这样的需求：在指定时间（例如 3 秒）之后执行某个任务。可以用 GCD 的dispatch_after 方法来实现。</p>
+
+<p>需要注意的是：dispatch_after 方法并不是在指定时间之后才开始执行处理，而是在指定时间之后将任务追加到主队列中。严格来说，这个时间并不是绝对准确的，但想要大致延迟执行任务，dispatch_after 方法是很有效的。</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/**
+ * 延时执行方法 dispatch_after
+ */
+- (void)after {
+    NSLog(@"currentThread---%@",[NSThread currentThread]);  // 打印当前线程
+    NSLog(@"asyncMain---begin");
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        // 2.0 秒后异步追加任务代码到主队列，并开始执行
+        NSLog(@"after---%@",[NSThread currentThread]);  // 打印当前线程
+    });
+}
+</code></pre></div></div>
+<p>输出结果：</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> 2019-08-08 15:01:33.569710+0800 YSC-GCD-demo[17702:4272430] currentThread---{number = 1, name = main}
+   
+ 2019-08-08 15:01:33.569838+0800 YSC-GCD-demo[17702:4272430] asyncMain---begin
+   
+ 2019-08-08 15:01:35.570146+0800 YSC-GCD-demo[17702:4272430] after---{number = 1, name = main}
+</code></pre></div></div>
+<p>可以看出：在打印 <code class="highlighter-rouge">asyncMain---begin</code> 之后大约 2.0 秒的时间，打印了 <code class="highlighter-rouge">after---{number = 1, name = main}</code></p>
+
+<h2 id="3-gcd-一次性代码只执行一次dispatch_once">3. GCD 一次性代码（只执行一次）：dispatch_once</h2>
+
+<ul>
+  <li>我们在创建单例、或者有整个程序运行过程中只执行一次的代码时，我们就用到了 GCD 的 dispatch_once方法。使用 dispatch_once方法能保证某段代码在程序运行过程中只被执行 1 次，并且即使在多线程的环境下，dispatch_once也可以保证线程安全。</li>
+</ul>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/**
+ * 一次性代码（只执行一次）dispatch_once
+ */
+- (void)once {
+    static dispatch_once_t onceToken;
+    dispatch_once(&amp;onceToken, ^{
+        // 只执行 1 次的代码（这里面默认是线程安全的）
+    });
+}
+</code></pre></div></div>
+
+<h2 id="4-gcd-快速迭代方法dispatch_apply">4. GCD 快速迭代方法：dispatch_apply</h2>
+
+<ul>
+  <li>通常我们会用 for 循环遍历，但是 GCD 给我们提供了快速迭代的方法 dispatch_apply。dispatch_apply按照指定的次数将指定的任务追加到指定的队列中，并等待全部队列执行结束。</li>
+</ul>
+
+<p>如果是在串行队列中使用 dispatch_apply，那么就和 for 循环一样，按顺序同步执行。但是这样就体现不出快速迭代的意义了。</p>
+
+<p>我们可以利用并发队列进行异步执行。比如说遍历 0~5 这 6 个数字，for 循环的做法是每次取出一个元素，逐个遍历。dispatch_apply 可以 在多个线程中同时（异步）遍历多个数字。</p>
+
+<p>还有一点，无论是在串行队列，还是并发队列中，dispatch_apply 都会等待全部任务执行完毕，这点就像是同步操作，也像是队列组中的 dispatch_group_wait方法。</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/**
+ * 快速迭代方法 dispatch_apply
+ */
+- (void)apply {
+    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+    
+    NSLog(@"apply---begin");
+    dispatch_apply(6, queue, ^(size_t index) {
+        NSLog(@"%zd---%@",index, [NSThread currentThread]);
+    });
+    NSLog(@"apply---end");
+}
+</code></pre></div></div>
+<p>输出结果：</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> 2019-08-08 15:05:04.715266+0800 YSC-GCD-demo[17771:4285619] apply---begin
+   
+ 2019-08-08 15:05:04.715492+0800 YSC-GCD-demo[17771:4285619] 0---{number = 1, name = main}
+   
+ 2019-08-08 15:05:04.715516+0800 YSC-GCD-demo[17771:4285722] 1---{number = 3, name = (null)}
+   
+ 2019-08-08 15:05:04.715526+0800 YSC-GCD-demo[17771:4285720] 3---{number = 5, name = (null)}
+   
+ 2019-08-08 15:05:04.715564+0800 YSC-GCD-demo[17771:4285721] 2---{number = 7, name = (null)}
+   
+ 2019-08-08 15:05:04.715555+0800 YSC-GCD-demo[17771:4285719] 4---{number = 6, name = (null)}
+   
+ 2019-08-08 15:05:04.715578+0800 YSC-GCD-demo[17771:4285728] 5---{number = 4, name = (null)}
+   
+ 2019-08-08 15:05:04.715677+0800 YSC-GCD-demo[17771:4285619] apply---end
+</code></pre></div></div>
+<p>因为是在并发队列中异步执行任务，所以各个任务的执行时间长短不定，最后结束顺序也不定。但是 apply—end 一定在最后执行。这是因为 dispatch_apply 方法会等待全部任务执行完毕。</p>
+
+<h2 id="5-gcd-队列组dispatch_group">5. GCD 队列组：dispatch_group</h2>
+
+<p>有时候我们会有这样的需求：分别异步执行2个耗时任务，然后当2个耗时任务都执行完毕后再回到主线程执行任务。这时候我们可以用到 GCD 的队列组。</p>
+
+<ul>
+  <li>调用队列组的 dispatch_group_async先把任务放到队列中，然后将队列放入队列组中。或者使用队列组的 dispatch_group_enter、dispatch_group_leave组合来实现 dispatch_group_async。</li>
+  <li>调用队列组的 dispatch_group_notify回到指定线程执行任务。或者使用 dispatch_group_wait回到当前线程继续向下执行（会阻塞当前线程）。</li>
+</ul>
+
+<h3 id="1-dispatch_group_notify">1) dispatch_group_notify</h3>
+
+<ul>
+  <li>监听 group 中任务的完成状态，当所有的任务都执行完成后，追加任务到 group 中，并执行任务。</li>
+</ul>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/**
+ * 队列组 dispatch_group_notify
+ */
+- (void)groupNotify {
+    NSLog(@"currentThread---%@",[NSThread currentThread]);  // 打印当前线程
+    NSLog(@"group---begin");
+    
+    dispatch_group_t group =  dispatch_group_create();
+    
+    dispatch_group_async(group, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        // 追加任务 1
+        [NSThread sleepForTimeInterval:2];              // 模拟耗时操作
+        NSLog(@"1---%@",[NSThread currentThread]);      // 打印当前线程
+    });
+    
+    dispatch_group_async(group, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        // 追加任务 2
+        [NSThread sleepForTimeInterval:2];              // 模拟耗时操作
+        NSLog(@"2---%@",[NSThread currentThread]);      // 打印当前线程
+    });
+    
+    dispatch_group_notify(group, dispatch_get_main_queue(), ^{
+        // 等前面的异步任务 1、任务 2 都执行完毕后，回到主线程执行下边任务
+        [NSThread sleepForTimeInterval:2];              // 模拟耗时操作
+        NSLog(@"3---%@",[NSThread currentThread]);      // 打印当前线程
+
+        NSLog(@"group---end");
+    });
+}
+</code></pre></div></div>
+<p>输出结果：</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> 2019-08-08 15:07:21.601734+0800 YSC-GCD-demo[17813:4293874] currentThread---{number = 1, name = main}
+   
+ 2019-08-08 15:07:21.601871+0800 YSC-GCD-demo[17813:4293874] group---begin
+   
+ 2019-08-08 15:07:23.604854+0800 YSC-GCD-demo[17813:4294048] 2---{number = 4, name = (null)}
+   
+ 2019-08-08 15:07:23.604852+0800 YSC-GCD-demo[17813:4294053] 1---{number = 3, name = (null)}
+   
+ 2019-08-08 15:07:25.606067+0800 YSC-GCD-demo[17813:4293874] 3---{number = 1, name = main}
+   
+ 2019-08-08 15:07:25.606255+0800 YSC-GCD-demo[17813:4293874] group---end
+</code></pre></div></div>
+<p>从 dispatch_group_notify 相关代码运行输出结果可以看出：</p>
+
+<p>当所有任务都执行完成之后，才执行 dispatch_group_notify 相关 block 中的任务。</p>
+
+<h3 id="2-dispatch_group_wait">2) dispatch_group_wait</h3>
+
+<ul>
+  <li>暂停当前线程（阻塞当前线程），等待指定的 group 中的任务执行完成后，才会往下继续执行。</li>
+</ul>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/**
+ * 队列组 dispatch_group_wait
+ */
+- (void)groupWait {
+    NSLog(@"currentThread---%@",[NSThread currentThread]);  // 打印当前线程
+    NSLog(@"group---begin");
+    
+    dispatch_group_t group =  dispatch_group_create();
+    
+    dispatch_group_async(group, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        // 追加任务 1
+        [NSThread sleepForTimeInterval:2];              // 模拟耗时操作
+        NSLog(@"1---%@",[NSThread currentThread]);      // 打印当前线程
+    });
+    
+    dispatch_group_async(group, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        // 追加任务 2
+        [NSThread sleepForTimeInterval:2];              // 模拟耗时操作
+        NSLog(@"2---%@",[NSThread currentThread]);      // 打印当前线程
+    });
+    
+    // 等待上面的任务全部完成后，会往下继续执行（会阻塞当前线程）
+    dispatch_group_wait(group, DISPATCH_TIME_FOREVER);
+    
+    NSLog(@"group---end");
+    
+}
+</code></pre></div></div>
+<p>输出结果：</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> 2019-08-08 15:09:12.441729+0800 YSC-GCD-demo[17844:4299926] currentThread---{number = 1, name = main}
+   
+ 2019-08-08 15:09:12.441870+0800 YSC-GCD-demo[17844:4299926] group---begin
+   
+ 2019-08-08 15:09:14.445790+0800 YSC-GCD-demo[17844:4300046] 2---{number = 4, name = (null)}
+   
+ 2019-08-08 15:09:14.445760+0800 YSC-GCD-demo[17844:4300043] 1---{number = 3, name = (null)}
+   
+ 2019-08-08 15:09:14.446039+0800 YSC-GCD-demo[17844:4299926] group---end
+</code></pre></div></div>
+<p>从 dispatch_group_wait 相关代码运行输出结果可以看出：</p>
+
+<p>当所有任务执行完成之后，才执行 dispatch_group_wait 之后的操作。但是，使用dispatch_group_wait 会阻塞当前线程。</p>
+
+<h3 id="3-dispatch_group_enterdispatch_group_leave">3) dispatch_group_enter、dispatch_group_leave</h3>
+
+<ul>
+  <li>dispatch_group_enter标志着一个任务追加到 group，执行一次，相当于 group 中未执行完毕任务数 +1</li>
+  <li>dispatch_group_leave标志着一个任务离开了 group，执行一次，相当于 group 中未执行完毕任务数 -1。</li>
+  <li>当 group 中未执行完毕任务数为0的时候，才会使 dispatch_group_wait解除阻塞，以及执行追加到 dispatch_group_notify中的任务。</li>
+</ul>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/**
+ * 队列组 dispatch_group_enter、dispatch_group_leave
+ */
+- (void)groupEnterAndLeave {
+    NSLog(@"currentThread---%@",[NSThread currentThread]);  // 打印当前线程
+    NSLog(@"group---begin");
+    
+    dispatch_group_t group = dispatch_group_create();
+    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+    dispatch_group_enter(group);
+    dispatch_async(queue, ^{
+        // 追加任务 1
+        [NSThread sleepForTimeInterval:2];              // 模拟耗时操作
+        NSLog(@"1---%@",[NSThread currentThread]);      // 打印当前线程
+
+        dispatch_group_leave(group);
+    });
+    
+    dispatch_group_enter(group);
+    dispatch_async(queue, ^{
+        // 追加任务 2
+        [NSThread sleepForTimeInterval:2];              // 模拟耗时操作
+        NSLog(@"2---%@",[NSThread currentThread]);      // 打印当前线程
+        
+        dispatch_group_leave(group);
+    });
+    
+    dispatch_group_notify(group, dispatch_get_main_queue(), ^{
+        // 等前面的异步操作都执行完毕后，回到主线程.
+        [NSThread sleepForTimeInterval:2];              // 模拟耗时操作
+        NSLog(@"3---%@",[NSThread currentThread]);      // 打印当前线程
+    
+        NSLog(@"group---end");
+    });
+}
+</code></pre></div></div>
+<p>输出结果：</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> 2019-08-08 15:13:17.983283+0800 YSC-GCD-demo[17924:4314716] currentThread---{number = 1, name = main}
+   
+ 2019-08-08 15:13:17.983429+0800 YSC-GCD-demo[17924:4314716] group---begin
+   
+ 2019-08-08 15:13:19.988898+0800 YSC-GCD-demo[17924:4314816] 2---{number = 3, name = (null)}
+   
+ 2019-08-08 15:13:19.988888+0800 YSC-GCD-demo[17924:4314808] 1---{number = 4, name = (null)}
+   
+ 2019-08-08 15:13:21.990450+0800 YSC-GCD-demo[17924:4314716] 3---{number = 1, name = main}
+   
+ 2019-08-08 15:13:21.990711+0800 YSC-GCD-demo[17924:4314716] group---end
+</code></pre></div></div>
+<p>从 dispatch_group_enter、dispatch_group_leave 相关代码运行结果中可以看出：当所有任务执行完成之后，才执行 dispatch_group_notify 中的任务。这里的dispatch_group_enter、dispatch_group_leave 组合，其实等同于dispatch_group_async。</p>
+
+<h2 id="gcd-信号量dispatch_semaphore">GCD 信号量：dispatch_semaphore</h2>
+
+<p>GCD 中的信号量是指 <strong>Dispatch Semaphore</strong>，是持有计数的信号。类似于过高速路收费站的栏杆。可以通过时，打开栏杆，不可以通过时，关闭栏杆。在 <strong>Dispatch Semaphore</strong> 中，使用计数来完成这个功能，计数小于 0 时等待，不可通过。计数为 0 或大于 0 时，计数减 1 且不等待，可通过。</p>
+
+<p><strong>Dispatch Semaphore</strong> 提供了三个方法：</p>
+
+<ul>
+  <li>dispatch_semaphore_create：创建一个 Semaphore 并初始化信号的总量</li>
+  <li>dispatch_semaphore_signal：发送一个信号，让信号总量加 1</li>
+  <li>dispatch_semaphore_wait：可以使总信号量减 1，信号总量小于 0 时就会一直等待（阻塞所在线程），否则就可以正常执行。</li>
+</ul>
+
+<p>注意：信号量的使用前提是：想清楚你需要处理哪个线程等待（阻塞），又要哪个线程继续执行，然后使用信号量。</p>
+
+<p>Dispatch Semaphore 在实际开发中主要用于：</p>
+
+<ul>
+  <li>保持线程同步，将异步执行任务转换为同步执行任务</li>
+  <li>保证线程安全，为线程加锁</li>
+</ul>
+
+<h3 id="1-dispatch-semaphore-线程同步">1) Dispatch Semaphore 线程同步</h3>
+
+<p>我们在开发中，会遇到这样的需求��异步执行耗时任务，并使用异步执行的结果进行一些额外的操作。换句话说，相当于，将将异步执行任务转换为同步执行任务。比如说：AFNetworking 中 AFURLSessionManager.m 里面的 tasksForKeyPath: 方法。通过引入信号量的方式，等待异步执行任务结果，获取到 tasks，然后再返回该 tasks。</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- (NSArray *)tasksForKeyPath:(NSString *)keyPath {
+    __block NSArray *tasks = nil;
+    dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+    [self.session getTasksWithCompletionHandler:^(NSArray *dataTasks, NSArray *uploadTasks, NSArray *downloadTasks) {
+        if ([keyPath isEqualToString:NSStringFromSelector(@selector(dataTasks))]) {
+            tasks = dataTasks;
+        } else if ([keyPath isEqualToString:NSStringFromSelector(@selector(uploadTasks))]) {
+            tasks = uploadTasks;
+        } else if ([keyPath isEqualToString:NSStringFromSelector(@selector(downloadTasks))]) {
+            tasks = downloadTasks;
+        } else if ([keyPath isEqualToString:NSStringFromSelector(@selector(tasks))]) {
+            tasks = [@[dataTasks, uploadTasks, downloadTasks] valueForKeyPath:@"@unionOfArrays.self"];
+        }
+
+        dispatch_semaphore_signal(semaphore);
+    }];
+
+    dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+
+    return tasks;
+}
+</code></pre></div></div>
+<p>下面，我们来利用 Dispatch Semaphore 实现线程同步，将异步执行任务转换为同步执行任务。</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/**
+ * semaphore 线程同步
+ */
+- (void)semaphoreSync {
+    
+    NSLog(@"currentThread---%@",[NSThread currentThread]);  // 打印当前线程
+    NSLog(@"semaphore---begin");
+    
+    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+    dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+    
+    __block int number = 0;
+    dispatch_async(queue, ^{
+        // 追加任务 1
+        [NSThread sleepForTimeInterval:2];              // 模拟耗时操作
+        NSLog(@"1---%@",[NSThread currentThread]);      // 打印当前线程
+        
+        number = 100;
+        
+        dispatch_semaphore_signal(semaphore);
+    });
+    
+    dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+    NSLog(@"semaphore---end,number = %zd",number);
+}
+</code></pre></div></div>
+<p>输出结果：</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> 2019-08-08 15:16:56.781543+0800 YSC-GCD-demo[17988:4325744] currentThread---{number = 1, name = main}
+   
+ 2019-08-08 15:16:56.781698+0800 YSC-GCD-demo[17988:4325744] semaphore---begin
+   
+ 2019-08-08 15:16:58.785232+0800 YSC-GCD-demo[17988:4325867] 1---{number = 3, name = (null)}
+   
+ 2019-08-08 15:16:58.785432+0800 YSC-GCD-demo[17988:4325744] semaphore---end,number = 100
+</code></pre></div></div>
+<p>从 Dispatch Semaphore 实现线程同步的代码可以看到：</p>
+
+<ul>
+  <li>semaphore—end是在执行完 number = 100;之后才打印的。而且输出结果 number 为 100。这是因为 异步执行不会做任何等待，可以继续执行任务。</li>
+</ul>
+
+<p>执行顺如下：
+    1. semaphore 初始创建时计数为 0。
+    2. 异步执行将 任务 1追加到队列之后，不做等待，接着执行 dispatch_semaphore_wait方法，semaphore 减 1，此时 semaphore == -1，当前线程进入等待状态。
+    3. 然后，异步任务 1 开始执行。任务 1 执行到 dispatch_semaphore_signal之后，总信号量加 1，此时 semaphore == 0，正在被阻塞的线程（主线程）恢复继续执行。
+    4. 最后打印 semaphore—end,number = 100。</p>
+
+<p>这样就实现了线程同步，将异步执行任务转换为同步执行任务。</p>
+
+<h3 id="2-dispatch-semaphore-线程安全和线程同步为线程加锁">2) Dispatch Semaphore 线程安全和线程同步（为线程加锁）</h3>
+
+<p><strong>线程安全</strong>：如果你的代码所在的进程中有多个线程在同时运行，而这些线程可能会同时运行这段代码。如果每次运行结果和单线程运行的结果是一样的，而且其他的变量的值也和预期的是一样的，就是线程安全的。</p>
+
+<p>若每个线程中对全局变量、静态变量只有读操作，而无写操作，一般来说，这个全局变量是线程安全的；若有多个线程同时执行写操作（更改变量），一般都需要考虑线程同步，否则的话就可能影响线程安全。</p>
+
+<p><strong>线程同步</strong>：可理解为线程 A 和 线程 B 一块配合，A 执行到一定程度时要依靠线程 B 的某个结果，于是停下来，示意 B 运行；B 依言执行，再将结果给 A；A 再继续操作。</p>
+
+<p>举个简单例子就是：两个人在一起聊天。两个人不能同时说话，避免听不清(操作冲突)。等一个人说完(一个线程结束操作)，另一个再说(另一个线程再开始操作)。</p>
+
+<p>下面，我们模拟火车票售卖的方式，实现 NSThread 线程安全和解决线程同步问题。</p>
+
+<p>场景：总共有 50 张火车票，有两个售卖火车票的窗口，一个是北京火车票售卖窗口，另一个是上海火车票售卖窗口。两个窗口同时售卖火车票，卖完为止。</p>
+
+<h4 id="非线程安全不使用-semaphore先来看看不考虑线程安全的代码">非线程安全（不使用 semaphore）先来看看不考虑线程安全的代码：</h4>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/**
+ * 非线程安全：不使用 semaphore
+ * 初始化火车票数量、卖票窗口（非线程安全）、并开始卖票
+ */
+- (void)initTicketStatusNotSave {
+    NSLog(@"currentThread---%@",[NSThread currentThread]);  // 打印当前线程
+    NSLog(@"semaphore---begin");
+    
+    self.ticketSurplusCount = 50;
+    
+    // queue1 代表北京火车票售卖窗口
+    dispatch_queue_t queue1 = dispatch_queue_create("net.bujige.testQueue1", DISPATCH_QUEUE_SERIAL);
+    // queue2 代表上海火车票售卖窗口
+    dispatch_queue_t queue2 = dispatch_queue_create("net.bujige.testQueue2", DISPATCH_QUEUE_SERIAL);
+    
+    __weak typeof(self) weakSelf = self;
+    dispatch_async(queue1, ^{
+        [weakSelf saleTicketNotSafe];
+    });
+    
+    dispatch_async(queue2, ^{
+        [weakSelf saleTicketNotSafe];
+    });
+}
+
+/**
+ * 售卖火车票（非线程安全）
+ */
+- (void)saleTicketNotSafe {
+    while (1) {
+        
+        if (self.ticketSurplusCount &gt; 0) {  // 如果还有票，继续售卖
+            self.ticketSurplusCount--;
+            NSLog(@"%@", [NSString stringWithFormat:@"剩余票数：%d 窗口：%@", self.ticketSurplusCount, [NSThread currentThread]]);
+            [NSThread sleepForTimeInterval:0.2];
+        } else { // 如果已卖完，关闭售票窗口
+            NSLog(@"所有火车票均已售完");
+            break;
+        }
+        
+    }
+}
+</code></pre></div></div>
+<p>输出结果（部分）：</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> 2019-08-08 15:21:39.772655+0800 YSC-GCD-demo[18071:4340555] currentThread---{number = 1, name = main}
+   
+ 2019-08-08 15:21:39.772790+0800 YSC-GCD-demo[18071:4340555] semaphore---begin
+   
+ 2019-08-08 15:21:39.773101+0800 YSC-GCD-demo[18071:4340604] 剩余票数：48 窗口：{number = 4, name = (null)}
+   
+ 2019-08-08 15:21:39.773115+0800 YSC-GCD-demo[18071:4340605] 剩余票数：49 窗口：{number = 3, name = (null)}
+   
+ 2019-08-08 15:21:39.975041+0800 YSC-GCD-demo[18071:4340605] 剩余票数：47 窗口：{number = 3, name = (null)}
+   
+ 2019-08-08 15:21:39.975037+0800 YSC-GCD-demo[18071:4340604] 剩余票数：47 窗口：{number = 4, name = (null)}
+   
+ 2019-08-08 15:21:40.176567+0800 YSC-GCD-demo[18071:4340604] 剩余票数：46 窗口：{number = 4, name = (null)}
+   
+ ...
+</code></pre></div></div>
+<p>可以看到在不考虑线程安全，不使用 semaphore 的情况下，得到票数是错乱的，这样显然不符合我们的需求，所以我们需要考虑线程安全问题。</p>
+
+<h4 id="线程安全使用-semaphore-加锁考虑线程安全的代码">线程安全（使用 semaphore 加锁）考虑线程安全的代码：</h4>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/**
+ * 线程安全：使用 semaphore 加锁
+ * 初始化火车票数量、卖票窗口（线程安全）、并开始卖票
+ */
+- (void)initTicketStatusSave {
+    NSLog(@"currentThread---%@",[NSThread currentThread]);  // 打印当前线程
+    NSLog(@"semaphore---begin");
+    
+    semaphoreLock = dispatch_semaphore_create(1);
+    
+    self.ticketSurplusCount = 50;
+    
+    // queue1 代表北京火车票售卖窗口
+    dispatch_queue_t queue1 = dispatch_queue_create("net.bujige.testQueue1", DISPATCH_QUEUE_SERIAL);
+    // queue2 代表上海火车票售卖窗口
+    dispatch_queue_t queue2 = dispatch_queue_create("net.bujige.testQueue2", DISPATCH_QUEUE_SERIAL);
+    
+    __weak typeof(self) weakSelf = self;
+    dispatch_async(queue1, ^{
+        [weakSelf saleTicketSafe];
+    });
+    
+    dispatch_async(queue2, ^{
+        [weakSelf saleTicketSafe];
+    });
+}
+
+/**
+ * 售卖火车票（线程安全）
+ */
+- (void)saleTicketSafe {
+    while (1) {
+        // 相当于加锁
+        dispatch_semaphore_wait(semaphoreLock, DISPATCH_TIME_FOREVER);
+        
+        if (self.ticketSurplusCount &gt; 0) {  // 如果还有票，继续售卖
+            self.ticketSurplusCount--;
+            NSLog(@"%@", [NSString stringWithFormat:@"剩余票数：%d 窗口：%@", self.ticketSurplusCount, [NSThread currentThread]]);
+            [NSThread sleepForTimeInterval:0.2];
+        } else { // 如果已卖完，关闭售票窗口
+            NSLog(@"所有火车票均已售完");
+            
+            // 相当于解锁
+            dispatch_semaphore_signal(semaphoreLock);
+            break;
+        }
+        
+        // 相当于解锁
+        dispatch_semaphore_signal(semaphoreLock);
+    }
+}
+</code></pre></div></div>
+<p>输出结果为：</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> 2019-08-08 15:23:58.819891+0800 YSC-GCD-demo[18116:4348091] currentThread---{number = 1, name = main}
+   
+ 2019-08-08 15:23:58.820041+0800 YSC-GCD-demo[18116:4348091] semaphore---begin
+   
+ 2019-08-08 15:23:58.820305+0800 YSC-GCD-demo[18116:4348159] 剩余票数：49 窗口：{number = 3, name = (null)}
+   
+ 2019-08-08 15:23:59.022165+0800 YSC-GCD-demo[18116:4348157] 剩余票数：48 窗口：{number = 4, name = (null)}
+   
+ 2019-08-08 15:23:59.225299+0800 YSC-GCD-demo[18116:4348159] 剩余票数：47 窗口：{number = 3, name = (null)}
+   
+ ...
+   
+ 2019-08-08 15:24:08.355977+0800 YSC-GCD-demo[18116:4348157] 剩余票数：2 窗口：{number = 4, name = (null)}
+   
+ 2019-08-08 15:24:08.559201+0800 YSC-GCD-demo[18116:4348159] 剩余票数：1 窗口：{number = 3, name = (null)}
+   
+ 2019-08-08 15:24:08.759630+0800 YSC-GCD-demo[18116:4348157] 剩余票数：0 窗口：{number = 4, name = (null)}
+   
+ 2019-08-08 15:24:08.965100+0800 YSC-GCD-demo[18116:4348159] 所有火车票均已售完
+   
+ 2019-08-08 15:24:08.965440+0800 YSC-GCD-demo[18116:4348157] 所有火车票均已售完
+</code></pre></div></div>
+<p>可以看出，在考虑了线程安全的情况下，使用 dispatch_semaphore</p>
+
+<p>机制之后，得到的票数是正确的，没有出现混乱的情况。我们也就解决了多个线程同步的问题。</p>
+
+
+  </section>
+
+</article>
+
+<section>
+
+            <div class="content-play">
+              <p><a href="javascript:void(0)" onclick="dashangToggle()" class="dashang" title="打赏，支持一下">打赏一个呗</a></p>
+              <div class="hide_box-play"></div>
+              <div class="shang_box-play">
+                <a class="shang_close-play" href="javascript:void(0)" onclick="dashangToggle()" title="关闭"><img src="/images/payimg/close.jpg" alt="取消" /></a>
+                <div class="shang_tit-play">
+                  <p>感谢您的支持，我会继续努力的!</p>
+                </div>
+                <div class="shang_payimg">
+                    <img src="/images/payimg/alipayimg.jpg" alt="扫码支持" title="扫一扫" />
+                </div>
+              <div class="shang_payimg">    
+                    <img src="/images/payimg/weipayimg.jpg" alt="扫码支持" title="扫一扫" />
+                </div>
+                <div class="pay_explain">扫码打赏，你说多少就多少</div>
+                <div class="shang_payselect">
+                  <div class="pay_item checked" data-id="alipay">
+                    <span class="pay_logo"><img src="/images/payimg/alipay.jpg" alt="支付宝" /></span>
+                  </div>
+                  <div class="pay_item" data-id="weipay">
+                    <span class="pay_logo"><img src="/images/payimg/wechat.jpg" alt="微信" /></span>
+                  </div>
+                </div>
+                <div class="shang_info-play">
+                  <p>打开<span id="shang_pay_txt">支付宝</span>扫一扫，即可进行扫码打赏哦</p>
+                </div>
+              </div>
+            </div>
+            <script type="text/javascript">
+            function dashangToggle(){
+              $(".hide_box-play").fadeToggle();
+              $(".shang_box-play").fadeToggle();
+            }
+            </script>
+
+            <div style="text-align:center;margin:50px 0; font:normal 14px/24px 'MicroSoft YaHei';"></div>
+
+            <style type="text/css">
+              .content-play{width:80%;margin-top: 20px;margin-bottom: 10px;height:40px;}
+              .hide_box-play{z-index:999;filter:alpha(opacity=50);background:#666;opacity: 0.5;-moz-opacity: 0.5;left:0;top:0;height:99%;width:100%;position:fixed;display:none;}
+              .shang_box-play{width:540px;height:540px;padding:10px;background-color:#fff;border-radius:10px;position:fixed;z-index:1000;left:50%;top:50%;margin-left:-280px;margin-top:-280px;border:1px dotted #dedede;display:none;}
+              .shang_box-play img{border:none;border-width:0;}
+              .dashang{display:block;width:100px;margin:5px auto;height:25px;line-height:25px;padding:10px;background-color:#E74851;color:#fff;text-align:center;text-decoration:none;border-radius:10px;font-weight:bold;font-size:16px;transition: all 0.3s;}
+              .dashang:hover{opacity:0.8;padding:15px;font-size:18px;}
+              .shang_close-play{float:right;display:inline-block;
+                margin-right: 10px;margin-top: 20px;
+              }
+              .shang_logo{display:block;text-align:center;margin:20px auto;}
+              .shang_tit-play{width: 100%;height: 75px;text-align: center;line-height: 66px;color: #a3a3a3;font-size: 16px;background: url('/images/payimg/cy-reward-title-bg.jpg');font-family: 'Microsoft YaHei';margin-top: 7px;margin-right:2px;}
+              .shang_tit-play p{color:#a3a3a3;text-align:center;font-size:16px;}
+              .shang_payimg{width:140px;padding:10px;padding-left: 80px; /*border:6px solid #EA5F00;**/margin:0 auto;border-radius:3px;height:140px;display:inline-block;}
+              .shang_payimg img{display:inline-block;margin-right:10px;float:left;text-align:center;width:140px;height:140px; }
+              .pay_explain{text-align:center;margin:10px auto;font-size:12px;color:#545454;}
+              .shang_payselect{text-align:center;margin:0 auto;margin-top:40px;cursor:pointer;height:60px;width:500px;margin-left:110px;}
+              .shang_payselect .pay_item{display:inline-block;margin-right:140px;float:left;}
+              .shang_info-play{clear:both;}
+              .shang_info-play p,.shang_info-play a{color:#C3C3C3;text-align:center;font-size:12px;text-decoration:none;line-height:2em;}
+            </style>
+
+       <ul class="pager">
+        
+        <li class="previous">
+            <a href="/2021/04/%E7%AB%AF%E5%8F%A3%E5%8D%A0%E7%94%A8/" data-toggle="tooltip" data-placement="top" title="MAC 端口被占用 address already in use">上一篇：  <span>MAC 端口被占用 address already in use</span>
+            </a>
+        </li>
+        
+        
+    </ul>
+</section>
+
+<section class="post-comments">
+
+  
+
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zMDUwNi83MDYw">
+      <script type="text/javascript">
+         (function(d, s) {
+             var j, e = d.getElementsByTagName(s)[0];
+
+             if (typeof LivereTower === 'function') { return; }
+             j = d.createElement(s);
+             j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+             j.async = true;
+             e.parentNode.insertBefore(j, e);
+         })(document, 'script');
+      </script>
+      <noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+      </div>
+
+  
+
+</section>
+
+
+            <section class="footer">
+    <footer>
+        <div class = "footer_div">  
+        <nav class="cover-navigation navigation--social">
+          <ul class="navigation">
+
+          
+          <!-- Github -->
+          <li class="navigation__item_social">
+            <a href="https://github.com/lijingbiao" title="@lijingbiao 的 Github" target="_blank">
+              <div class="footer-social-icon" style="background:url(/images/github.png);"></div>
+            </a>
+          </li>
+          
+
+          
+
+          
+
+          
+          <!-- Zhihu -->
+          <li class="navigation__item_social">
+            <a href="https://www.jianshu.com/u/e66c74545d7e" title="@e66c74545d7e" target="_blank">
+              <div class="footer-social-icon" style="background:url(/images/jianshu.png);"></div>
+            </a>
+          </li>
+
+          
+
+          
+
+          
+          
+
+
+          
+          <!-- Email -->
+          <li class="navigation__item_social">
+            <a href="mailto:694292399@qq.com" title="Contact me">
+              <div class="footer-social-icon" style="background:url(/images/email.png);"></div>
+            </a>
+          </li>
+          
+          
+          <!-- RSS -->
+          <li class="navigation__item_social">
+            <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+              <div class="footer-social-icon" style="background:url(/images/rss.png);"></div>
+              <span class="label">RSS</span>
+            </a>
+          </li>
+
+          </ul>
+        </nav>
+
+        </div>
+
+        <div class = "footer_div">  
+           <p class="copyright text-muted">
+            Copyright &copy; LiJingBiao 2021  |
+            <iframe
+                style="margin-left: 2px; margin-bottom:-5px;"
+                frameborder="0" scrolling="0" width="91px" height="20px"
+                src="https://ghbtns.com/github-btn.html?user=lijingbiao&repo=lijingbiao.github.io&type=star&count=true" >
+            </iframe>
+            </p>
+        	<div align="right">
+    			<link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+          <!-- 访问统计 -->
+          <span id="busuanzi_container_site_pv">
+            本站总访问量
+            <span id="busuanzi_value_site_pv"></span>次
+          </span>
+
+        </div>
+        <div>
+    </footer>
+</section>
+
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+<script type="text/javascript" src="/js/main.js"></script>
+
+<script type="text/javascript" src="/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+    
+  </body>
+
+</html>

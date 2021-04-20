@@ -6,17 +6,17 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <title>09_SHELL编程之xarg使用</title>
-  <meta name="description" content="xargs 是给命令传递参数的一个过滤器，可以将管道或标准输入的数据转换成参数，默认的命令是 echo，这意味着通过管道传递给 xargs 的输入将会包含换行，不过通过 xargs 的处理，换行将被空格取代。">
+  <title>shell编程：find命令</title>
+  <meta name="description" content="">
   <meta name="author" content="leopardpan">
 
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="09_SHELL编程之xarg使用">
-  <meta name="twitter:description" content="xargs 是给命令传递参数的一个过滤器，可以将管道或标准输入的数据转换成参数，默认的命令是 echo，这意味着通过管道传递给 xargs 的输入将会包含换行，不过通过 xargs 的处理，换行将被空格取代。">
+  <meta name="twitter:title" content="shell编程：find命令">
+  <meta name="twitter:description" content="">
   
   <meta property="og:type" content="article">
-  <meta property="og:title" content="09_SHELL编程之xarg使用">
-  <meta property="og:description" content="xargs 是给命令传递参数的一个过滤器，可以将管道或标准输入的数据转换成参数，默认的命令是 echo，这意味着通过管道传递给 xargs 的输入将会包含换行，不过通过 xargs 的处理，换行将被空格取代。">
+  <meta property="og:title" content="shell编程：find命令">
+  <meta property="og:description" content="">
   
   <link rel="icon" type="image/png" href="/images/favicon.png" />
   <link href="/images/favicon.png" rel="shortcut icon" type="image/png">
@@ -24,7 +24,7 @@
   <link rel="stylesheet" href="/css/main.css">
   <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 
-  <link rel="canonical" href="http://localhost:4000/2018/05/09_SHELL/">
+  <link rel="canonical" href="http://localhost:4000/2019/12/10_SHELL/">
   <link rel="alternate" type="application/rss+xml" title="LiJingBiao" href="http://localhost:4000/feed.xml">
   
   <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
@@ -179,10 +179,10 @@
 
 <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
   <header class="post-header">
-    <h1 class="post-title">09_SHELL编程之xarg使用</h1>
+    <h1 class="post-title">shell编程：find命令</h1>
     <div class="post-meta">
       <img src="/images/calendar.png" width="20px"/> 
-      <time datetime="2018-05-03 00:00:00 +0800" itemprop="datePublished" class="post-meta__date date">2018-05-03</time>  
+      <time datetime="2019-12-09 00:00:00 +0800" itemprop="datePublished" class="post-meta__date date">2019-12-09</time>  
 
       <span id="busuanzi_container_page_pv"> | 阅读：<span id="busuanzi_value_page_pv"></span>次</span>
     </p>
@@ -192,133 +192,196 @@
   
     <h2 class="post-title">目录</h2>
     <ul>
-  <li><a href="#1-如何使用xargs命令">1. 如何使用xargs命令</a></li>
-  <li><a href="#2-如何限制参数的数量">2. <em>如何限制参数的数量</em></a></li>
-  <li><a href="#3-如何运行多个命令">3. 如何运行多个命令</a></li>
-  <li><a href="#4-如何指定一个分隔符">4. 如何指定一个分隔符</a></li>
-  <li><a href="#5-如何从文件中读取条目">5. 如何从文件中读取条目</a></li>
-  <li><a href="#6-xargs与find一起使用">6. xargs与find一起使用</a></li>
-  <li><a href="#总结">总结</a></li>
+  <li><a href="#常用例子">常用例子</a>
+    <ul>
+      <li><a href="#根据文件名查找">根据文件名查找</a></li>
+      <li><a href="#根据正则表达式查找">根据正则表达式查找</a></li>
+      <li><a href="#根据路径查找">根据路径查找</a></li>
+      <li><a href="#根据文件类型查找">根据文件类型查找</a></li>
+      <li><a href="#限制搜索深度">限制搜索深度</a></li>
+      <li><a href="#根据文件大小">根据文件大小</a></li>
+      <li><a href="#根据访问修改变化时间">根据访问/修改/变化时间</a></li>
+      <li><a href="#根据权限">根据权限</a></li>
+      <li><a href="#根据文件拥有者">根据文件拥有者</a></li>
+      <li><a href="#找到文件后执行命令">找到文件后执行命令</a></li>
+      <li><a href="#找出空文件">找出空文件</a></li>
+    </ul>
+  </li>
 </ul>
 
   
 
   <section class="post">
-    <p><em>xargs 是给命令传递参数的一个过滤器，可以将管道或标准输入的数据转换成参数，默认的命令是 echo，这意味着通过管道传递给 xargs 的输入将会包含换行，不过通过 xargs 的处理，换行将被空格取代。</em></p>
+    <hr />
 
-<h1 id="1-如何使用xargs命令">1. 如何使用xargs命令</h1>
-<p>语法：</p>
+<p>在linux的日常管理中，find的使用频率很高，熟练掌握对提高工作效率很有帮助。</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>xargs [OPTIONS] [COMMAND [initial-arguments]]
+<p>find的语法比较简单，常用参数的就那么几个，比如-name、-type、-ctime等。初学的同学直接看第二部分的例子，如需进一步了解参数说明，可以参考find的帮助文档。</p>
+
+<p>find语法如下：</p>
+
+<p>find(选项)(参数)</p>
+
+<h2 id="常用例子">常用例子</h2>
+
+<h3 id="根据文件名查找">根据文件名查找</h3>
+
+<p>列出当前目录以及子目录下的所有文件</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>find .
+</code></pre></div></div>
+<p>找到当前目录下名字为11.png的文件</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>find . -name "11.png"
+</code></pre></div></div>
+<p>找到当前目录下所有的jpg文件</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>find . -name "*.jpg"
+</code></pre></div></div>
+<p>找到当前目录下的jpg文件和png文件</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>find . -name "*.jpg" -o -name "*.png"
+</code></pre></div></div>
+<p>找出当前目录下不是以png结尾的文件</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>find . ! -name "*.png"
 </code></pre></div></div>
 
-<p>举一个例子：我们用管道符传输到xargs，并为每个参数运行touch命令，-t表示在执行之前先打印，创建三个文件：</p>
+<h3 id="根据正则表达式查找">根据正则表达式查找</h3>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[root@localhost ~]# echo "file1 file2 file3"|xargs -t touch
-touch file1 file2 file3
+<p>备注：正则表示式比原先想的要复杂，支持好几种类型。可以参考<a href="http://www.gnu.org/software/findutils/manual/html_mono/find.html#emacs-regular-expression-syntax">这里</a></p>
+
+<p>找到当前目录下，文件名都是数字的png文件。</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>find . -regex "\./*[0-9]+\.png"
 </code></pre></div></div>
 
-<h1 id="2-如何限制参数的数量">2. <em>如何限制参数的数量</em></h1>
-<p>默认情况下，传递给命令的参数数量由系统限制决定。-n选项指定要传递给命令的参数个数。xargs根据需要多次运行指定的命令，直到所有参数都用完为止。</p>
+<h3 id="根据路径查找">根据路径查找</h3>
 
-<p>下面例子指定每次传递一个参数：</p>
+<p>找出当前目录下，路径中包含wysiwyg的文件/路径。</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[root@localhost ~]# echo "file1 file2 file3"|xargs -n1 -t touch
-touch file1 
-touch file2 
-touch file3
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>find . -path "*wysiwyg*"
 </code></pre></div></div>
 
-<h1 id="3-如何运行多个命令">3. 如何运行多个命令</h1>
-<p>要使用xargs运行多个命令，请使用-i或者-I选项。在-i或者-I后面自定义一个传递参数符号，所有匹配的项都会替换为传递给xargs的参数。</p>
+<h3 id="根据文件类型查找">根据文件类型查找</h3>
 
-<p>下面例子时xargs运行两条命令，先touch创建文件，然后ls列出来：</p>
+<p>通过-type进行文件类型的过滤。</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[root@localhost ~]# echo "file1 file2 file3"|xargs -t -I % sh -c 'touch %;ls -l %'
-sh -c touch file1 file2 file3;ls -l file1 file2 file3 
--rw-r--r--. 1 root root 0 Jan 30 00:18 file1
--rw-r--r--. 1 root root 0 Jan 30 00:18 file2
--rw-r--r--. 1 root root 0 Jan 30 00:18 file3
+<ul>
+  <li>f 普通文件</li>
+  <li>l 符号连接</li>
+  <li>d 目录</li>
+  <li>c 字符设备</li>
+  <li>b 块设备</li>
+  <li>s 套接字</li>
+  <li>p Fifo</li>
+</ul>
+
+<p>举例，查找当前目录下，路径中包含wysiwyg的文件</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>find . -type f -path "*wysiwyg*"
 </code></pre></div></div>
 
-<h1 id="4-如何指定一个分隔符">4. 如何指定一个分隔符</h1>
-<p>使用-d或者–delimiter选项设置自定义分隔符，可以是单个字符，也可以是以\ 开头的转义字符。</p>
+<h3 id="限制搜索深度">限制搜索深度</h3>
 
-<p>下面例子使用#做分隔符，echo命令使用了-n选项，意思是不输出新行：</p>
+<p>找出当前目录下所有的png，不包括子目录。</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[root@localhost ~]# echo -n file1#file2#file3#file4|xargs -d \# -t touch
-touch file1 file2 file3 file4
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>find . -maxdepth 1 -name "*.png"
+</code></pre></div></div>
+<p>相对应的，也是mindepth选项。</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>find . -mindepth 2 -maxdepth 2 -name "*.png"
 </code></pre></div></div>
 
-<h1 id="5-如何从文件中读取条目">5. 如何从文件中读取条目</h1>
-<p>xargs命令还可以从文件读取条目，而不是从标准输入读取条目。使用-a选项，后跟文件名。
-创建一个ip.txt的文件，一会使用xargs命令ping里面的每一个地址：</p>
+<h3 id="根据文件大小">根据文件大小</h3>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[root@localhost ~]# cat ip.txt 
-114.114.114.114
-www.linuxprobe.com
-202.102.128.68
+<p>通过-size来过滤文件尺寸。支持的文件大小单元如下</p>
+
+<ul>
+  <li>b —— 块（512字节）</li>
+  <li>c —— 字节</li>
+  <li>w —— 字（2字节）</li>
+  <li>k —— 千字节</li>
+  <li>M —— 兆字节</li>
+  <li>G —— 吉字节</li>
+</ul>
+
+<p>举例来说，找出当前目录下文件大小超过100M的文件</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>find . -type f -size +100M
 </code></pre></div></div>
 
-<p>使用-L 1选项，该选项表示xargs一次读取一行。如果省略此选项，xargs将把所有ip传递给一个ping命令。</p>
+<h3 id="根据访问修改变化时间">根据访问/修改/变化时间</h3>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[root@localhost ~]# xargs -a ip.txt -t -L 1 ping -c 1
-ping -c 1 114.114.114.114 
-PING 114.114.114.114 (114.114.114.114) 56(84) bytes of data.
-64 bytes from 114.114.114.114: icmp_seq=1 ttl=93 time=11.0 ms
+<p>支持下面的时间类型。</p>
 
---- 114.114.114.114 ping statistics ---
-1 packets transmitted, 1 received, 0% packet loss, time 0ms
-rtt min/avg/max/mdev = 11.026/11.026/11.026/0.000 ms
-ping -c 1 www.linuxprobe.com 
-PING www.linuxprobe.com.w.kunlunno.com (221.15.65.202) 56(84) bytes of data.
-64 bytes from hn.kd.jz.adsl (221.15.65.202): icmp_seq=1 ttl=48 time=20.9 ms
+<ul>
+  <li>访问时间（-atime/天，-amin/分钟）：用户最近一次访问时间。</li>
+  <li>修改时间（-mtime/天，-mmin/分钟）：文件最后一次修改时间。</li>
+  <li>变化时间（-ctime/天，-cmin/分钟）：文件数据元（例如权限等）最后一次修改时间。</li>
+</ul>
 
---- www.linuxprobe.com.w.kunlunno.com ping statistics ---
-1 packets transmitted, 1 received, 0% packet loss, time 0ms
-rtt min/avg/max/mdev = 20.934/20.934/20.934/0.000 ms
-ping -c 1 202.102.128.68 
-PING 202.102.128.68 (202.102.128.68) 56(84) bytes of data.
-64 bytes from 202.102.128.68: icmp_seq=1 ttl=83 time=8.71 ms
+<p>举例，找出1天内被修改过的文件</p>
 
---- 202.102.128.68 ping statistics ---
-1 packets transmitted, 1 received, 0% packet loss, time 0ms
-rtt min/avg/max/mdev = 8.710/8.710/8.710/0.000 ms
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>find . -type f -mtime -1
+</code></pre></div></div>
+<p>找出最近1周内被访问过的文件</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>find . -type f -atime -7
+</code></pre></div></div>
+<p>将日志目录里超过一个礼拜的日志文件，移动到/tmp/old_logs里。</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>find . -type f -mtime +7 -name "*.log" -exec mv {} /tmp/old_logs \;
+</code></pre></div></div>
+<p>注意：{} 用于与-exec选项结合使用来匹配所有文件，然后会被替换为相应的文件名。</p>
+
+<p>另外，\;用来表示命令结束，如果没有加，则会有如下提示</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>find: -exec: no terminating ";" or "+"
 </code></pre></div></div>
 
-<h1 id="6-xargs与find一起使用">6. xargs与find一起使用</h1>
-<p>xargs通常与find命令结合使用。您可以使用find搜索特定文件，然后使用xargs对这些文件执行操作。</p>
+<h3 id="根据权限">根据权限</h3>
 
-<p>若要避免包含换行符或其他特殊字符的文件名出现问题，请始终使用find的-print0选项，这样可以使find打印完整的文件名，配合xargs命令使用-0或者–null选项可以正确的解释。</p>
+<p>通过-perm来实现。举例，找出当前目录下权限为777的文件</p>
 
-<p>下面例子中，查找log文件夹下面的类型为file的所有文件，打包压缩起来：</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>find . -type f -perm 777
+</code></pre></div></div>
+<p>找出当前目录下权限不是644的php文件</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[root@localhost ~]# find log/ -type f -print0|xargs --null tar -zcvf logs.tar.gz
-log/anaconda/anaconda.log
-log/anaconda/syslog
-log/anaconda/program.log
-log/anaconda/packaging.log
-log/anaconda/storage.log
-log/anaconda/ifcfg.log
-log/anaconda/ks-script-TOLvJc.log
-log/anaconda/ks-script-VRY9yQ.log
-log/anaconda/ks-script-pjDijm.log
-log/anaconda/journal.log
-log/audit/audit.log
-log/boot.log
-log/boot.log-20200126
-log/btmp
-log/btmp-20200126
-…
-[root@localhost ~]# ll
-total 604
--rw-------. 1 root root   1285 Dec 21 17:19 anaconda-ks.cfg
-drwxr-xr-x. 8 root root   4096 Jan 29 23:02 log
--rw-r--r--. 1 root root 607566 Jan 30 00:58 logs.tar.gz
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>find . -type f -name "*.php" ! -perm 644
 </code></pre></div></div>
 
-<h1 id="总结">总结</h1>
-<p>之所以能用到这个命令，关键是由于很多命令不支持管道符来传递参数，xargs可以解决这个问题，而且使用起来很方便，跟能强大。</p>
+<h3 id="根据文件拥有者">根据文件拥有者</h3>
+
+<p>找出文件拥有者为root的文件</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>find . -type f -user root
+</code></pre></div></div>
+<p>找出文件所在群组为root的文件</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>find . -type f -group root
+</code></pre></div></div>
+
+<h3 id="找到文件后执行命令">找到文件后执行命令</h3>
+
+<p>通过-ok、和-exec来实现。区别在于，-ok在执行命令前，会进行二次确认，-exec不会。</p>
+
+<p>看下实际例子。删除当前目录下所有的js文件。用-ok的效果如下，删除前有二次确认</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>➜ find find . -type f -name "*.js" -ok rm {} \; "rm ./1.js"?
+</code></pre></div></div>
+<p>试下-exec。直接就删除了</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>find . -type f -name "*.js" -exec rm {} \;
+</code></pre></div></div>
+
+<h3 id="找出空文件">找出空文件</h3>
+
+<p>例子如下</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>touch {1..9}.txt echo "hello" &gt; 1.txt find . -empty
+</code></pre></div></div>
+
 
   </section>
 
@@ -388,13 +451,13 @@ drwxr-xr-x. 8 root root   4096 Jan 29 23:02 log
        <ul class="pager">
         
         <li class="previous">
-            <a href="/2018/05/08_SHELL/" data-toggle="tooltip" data-placement="top" title="08_SHELL编程之文本处理工具awk">上一篇：  <span>08_SHELL编程之文本处理工具awk</span>
+            <a href="/2018/05/09_SHELL/" data-toggle="tooltip" data-placement="top" title="09_SHELL编程之xarg使用">上一篇：  <span>09_SHELL编程之xarg使用</span>
             </a>
         </li>
         
         
         <li class="next">
-            <a href="/2019/12/10_SHELL/" data-toggle="tooltip" data-placement="top" title="shell编程：find命令">下一篇：  <span>shell编程：find命令</span>
+            <a href="/2020/07/blog_info/" data-toggle="tooltip" data-placement="top" title="博客模板功能介绍">下一篇：  <span>博客模板功能介绍</span>
             </a>
         </li>
         

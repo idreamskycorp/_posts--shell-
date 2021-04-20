@@ -5,9 +5,1313 @@
     <description>欢迎来到我的个人站~</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Tue, 20 Apr 2021 11:04:50 +0800</pubDate>
-    <lastBuildDate>Tue, 20 Apr 2021 11:04:50 +0800</lastBuildDate>
+    <pubDate>Tue, 20 Apr 2021 16:18:17 +0800</pubDate>
+    <lastBuildDate>Tue, 20 Apr 2021 16:18:17 +0800</lastBuildDate>
     <generator>Jekyll v3.8.5</generator>
+    
+      <item>
+        <title>iOS 多线程：GCD详尽总结</title>
+        <description>&lt;p&gt;iOS 多线程：『GCD』详尽总结&lt;/p&gt;
+
+&lt;p&gt;本文用来介绍 iOS 多线程中 GCD 的相关知识以及使用方法。这大概是史上最详细、清晰的关于 &lt;strong&gt;GCD 的详细讲解 + 总结&lt;/strong&gt; 的文章了。通过本文，您将了解到：&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;1. GCD 简介&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;2. GCD 任务和队列&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;3. GCD 的使用步骤&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;4. GCD 的基本使用&lt;/strong&gt;（六种组合不同区别，队列嵌套情况区别，相互关系形象理解）&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;5. GCD 线程间的通信&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;6. GCD 的其他方法&lt;/strong&gt;（栅栏方法：dispatch_barrier_async、延时执行方法：dispatch_after、一次性代码（只执行一次）：dispatch_once、快速迭代方法：dispatch_apply、队列组：dispatch_group、信号量：dispatch_semaphore）&lt;/p&gt;
+
+&lt;p&gt;文中 Demo 我已放在了 Github 上，Demo 链接：&lt;a href=&quot;https://links.jianshu.com/go?to=https%3A%2F%2Fgithub.com%2Fbujige%2FYSC-GCD-demo&quot;&gt;传送门&lt;/a&gt;&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h1 id=&quot;一gcd-简介&quot;&gt;一、GCD 简介&lt;/h1&gt;
+
+&lt;h2 id=&quot;什么是-gcd-我们先来看看百度百科的解释简单了解下相关概念&quot;&gt;什么是 &lt;strong&gt;GCD&lt;/strong&gt; ？我们先来看看百度百科的解释简单了解下相关概念。&lt;/h2&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;引自 &lt;a href=&quot;https://links.jianshu.com/go?to=http%3A%2F%2Fbaike.baidu.com%2Fitem%2FGCD&quot;&gt;百度百科&lt;/a&gt;
+&lt;strong&gt;Grand Central Dispatch（GCD）&lt;/strong&gt; 是 Apple 开发的一个多核编程的较新的解决方法。它主要用于优化应用程序以支持多核处理器以及其他对称多处理系统。它是一个在线程池模式的基础上执行的并发任务。在 Mac OS X 10.6 雪豹中首次推出，也可在 iOS 4 及以上版本使用。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h2 id=&quot;那为什么我们要使用-gcd-呢&quot;&gt;那为什么我们要使用 GCD 呢?&lt;/h2&gt;
+
+&lt;p&gt;因为使用 GCD 有很多好处啊，具体如下：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;GCD 可用于多核的并行运算；&lt;/li&gt;
+  &lt;li&gt;GCD 会自动利用更多的 CPU 内核（比如双核、四核）；&lt;/li&gt;
+  &lt;li&gt;GCD 会自动管理线程的生命周期（创建线程、调度任务、销毁线程）；&lt;/li&gt;
+  &lt;li&gt;程序员只需要告诉 GCD 想要执行什么任务，不需要编写任何线程管理代码。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;GCD 拥有以上这么多的好处，而且在多线程中处于举足轻重的地位。那么我们就很有必要系统地学习一下 GCD 的使用方法。&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h1 id=&quot;二gcd-任务和队列&quot;&gt;二、GCD 任务和队列&lt;/h1&gt;
+
+&lt;p&gt;学习 GCD 之前，先来了解 GCD 中两个核心概念：&lt;strong&gt;『任务』&lt;/strong&gt; 和 &lt;strong&gt;『队列』&lt;/strong&gt;。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;任务&lt;/strong&gt;：就是执行操作的意思，换句话说就是你在线程中执行的那段代码。在 GCD 中是放在 block 中的。执行任务有两种方式：&lt;strong&gt;『同步执行』&lt;/strong&gt; 和 &lt;strong&gt;『异步执行』&lt;/strong&gt;。两者的主要区别是：&lt;strong&gt;是否等待队列的任务执行结束，以及是否具备开启新线程的能力。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;同步执行（sync）&lt;/strong&gt;：
+    &lt;ul&gt;
+      &lt;li&gt;同步添加任务到指定的队列中，在添加的任务执行结束之前，会一直等待，直到队列里面的任务完成之后再继续执行。&lt;/li&gt;
+      &lt;li&gt;只能在当前线程中执行任务，不具备开启新线程的能力。&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;异步执行（async）&lt;/strong&gt;：
+    &lt;ul&gt;
+      &lt;li&gt;异步添加任务到指定的队列中，它不会做任何等待，可以继续执行任务。&lt;/li&gt;
+      &lt;li&gt;可以在新的线程中执行任务，具备开启新线程的能力。&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;举个简单例子：你要打电话给小明和小白。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;『同步执行』&lt;/strong&gt; 就是：你打电话给小明的时候，不能同时打给小白。只有等到给小明打完了，才能打给小白（等待任务执行结束）。而且只能用当前的电话（不具备开启新线程的能力）。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;『异步执行』&lt;/strong&gt; 就是：你打电话给小明的时候，不用等着和小明通话结束（不用等待任务执行结束），还能同时给小白打电话。而且除了当前电话，你还可以使用其他一个或多个电话（具备开启新线程的能力）。&lt;/p&gt;
+
+&lt;p&gt;注意：&lt;strong&gt;异步执行（async）&lt;/strong&gt;虽然具有开启新线程的能力，但是并不一定开启新线程。这跟任务所指定的队列类型有关（下面会讲）。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;队列（Dispatch Queue）&lt;/strong&gt;：这里的队列指执行任务的等待队列，即用来存放任务的队列。队列是一种特殊的线性表，采用 FIFO（先进先出）的原则，即新任务总是被插入到队列的末尾，而读取任务的时候总是从队列的头部开始读取。每读取一个任务，则从队列中释放一个任务。队列的结构可参考下图：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/posts/iOS/1877784-01267bd211719167.webp&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;在 GCD 中有两种队列：&lt;strong&gt;『串行队列』&lt;/strong&gt; 和 &lt;strong&gt;『并发队列』&lt;/strong&gt;。两者都符合 FIFO（先进先出）的原则。两者的主要区别是：&lt;strong&gt;执行顺序不同，以及开启线程数不同。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;串行队列（Serial Dispatch Queue）&lt;/strong&gt;：
+    &lt;ul&gt;
+      &lt;li&gt;每次只有一个任务被执行。让任务一个接着一个地执行。（只开启一个线程，一个任务执行完毕后，再执行下一个任务）&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;并发队列（Concurrent Dispatch Queue）&lt;/strong&gt;：
+    &lt;ul&gt;
+      &lt;li&gt;可以让多个任务并发（同时）执行。（可以开启多个线程，并且同时执行任务）&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;注意：&lt;strong&gt;并发队列&lt;/strong&gt; 的并发功能只有在异步（dispatch_async）方法下才有效。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;两者具体区别如下两图所示：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/posts/iOS/1877784-4faca27116209f35.webp&quot; alt=&quot;&quot; /&gt;
+&lt;img src=&quot;/images/posts/iOS/1877784-97f3931d1b187b11.webp&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h1 id=&quot;三gcd-的使用步骤&quot;&gt;三、GCD 的使用步骤&lt;/h1&gt;
+
+&lt;p&gt;GCD 的使用步骤其实很简单，只有两步：&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;创建一个队列（串行队列或并发队列）；&lt;/li&gt;
+  &lt;li&gt;将任务追加到任务的等待队列中，然后系统就会根据任务类型执行任务（同步执行或异步执行）。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;下边来看看队列的创建方法 / 获取方法，以及任务的创建方法。&lt;/p&gt;
+
+&lt;h2 id=&quot;1-队列的创建方法--获取方法&quot;&gt;1. 队列的创建方法 / 获取方法&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;可以使用&lt;code class=&quot;highlighter-rouge&quot;&gt;dispatch_queue_create&lt;/code&gt;方法来创建队列。该方法需要传入两个参数：
+    &lt;ul&gt;
+      &lt;li&gt;第一个参数表示队列的唯一标识符，用于 DEBUG，可为空。队列的名称推荐使用应用程序 ID 这种逆序全程域名。&lt;/li&gt;
+      &lt;li&gt;第二个参数用来识别是串行队列还是并发队列。&lt;code class=&quot;highlighter-rouge&quot;&gt;DISPATCH_QUEUE_SERIAL&lt;/code&gt;表示串行队列，&lt;code class=&quot;highlighter-rouge&quot;&gt;DISPATCH_QUEUE_CONCURRENT&lt;/code&gt;表示并发队列。&lt;/li&gt;
+    &lt;/ul&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;// 串行队列的创建方法
+dispatch_queue_t queue = dispatch_queue_create(&quot;net.bujige.testQueue&quot;, DISPATCH_QUEUE_SERIAL);
+// 并发队列的创建方法
+dispatch_queue_t queue = dispatch_queue_create(&quot;net.bujige.testQueue&quot;, DISPATCH_QUEUE_CONCURRENT);
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;对于串行队列，GCD 默认提供了：&lt;strong&gt;『主队列（Main Dispatch Queue）』&lt;/strong&gt;。
+    &lt;ul&gt;
+      &lt;li&gt;所有放在主队列中的任务，都会放到主线程中执行。&lt;/li&gt;
+      &lt;li&gt;可使用 &lt;code class=&quot;highlighter-rouge&quot;&gt;dispatch_get_main_queue()&lt;/code&gt;方法获得主队列。&lt;/li&gt;
+    &lt;/ul&gt;
+
+    &lt;blockquote&gt;
+      &lt;p&gt;注意：&lt;strong&gt;主队列其实并不特殊。&lt;/strong&gt; 主队列的实质上就是一个普通的串行队列，只是因为默认情况下，当前代码是放在主队列中的，然后主队列中的代码，有都会放到主线程中去执行，所以才造成了主队列特殊的现象。&lt;/p&gt;
+    &lt;/blockquote&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;// 主队列的获取方法
+dispatch_queue_t queue = dispatch_get_main_queue();
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;对于并发队列，GCD 默认提供了 &lt;strong&gt;『全局并发队列（Global Dispatch Queue）』&lt;/strong&gt;。
+    &lt;ul&gt;
+      &lt;li&gt;可以使用 dispatch_get_global_queue方法来获取全局并发队列。需要传入两个参数。第一个参数表示队列优先级，一般用 DISPATCH_QUEUE_PRIORITY_DEFAULT。第二个参数暂时没用，用 0即可。&lt;/li&gt;
+    &lt;/ul&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;// 全局并发队列的获取方法
+dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;2-任务的创建方法&quot;&gt;2. 任务的创建方法&lt;/h2&gt;
+
+&lt;p&gt;GCD 提供了同步执行任务的创建方法 &lt;code class=&quot;highlighter-rouge&quot;&gt;dispatch_sync&lt;/code&gt; 和异步执行任务创建方法 &lt;code class=&quot;highlighter-rouge&quot;&gt;dispatch_async&lt;/code&gt;。&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;// 同步执行任务创建方法 
+dispatch_sync(queue, ^{ 
+  // 这里放同步执行任务代码 
+  }); 
+// 异步执行任务创建方法 
+dispatch_async(queue, ^{ 
+  // 这里放异步执行任务代码 
+  });
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;虽然使用 GCD 只需两步，但是既然我们有两种队列（串行队列 / 并发队列），两种任务执行方式（同步执行 / 异步执行），那么我们就有了四种不同的组合方式。这四种不同的组合方式是：&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;同步执行 + 并发队列&lt;/li&gt;
+  &lt;li&gt;异步执行 + 并发队列&lt;/li&gt;
+  &lt;li&gt;同步执行 + 串行队列&lt;/li&gt;
+  &lt;li&gt;异步执行 + 串行队列&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;实际上，刚才还说了两种默认队列：全局并发队列、主队列。全局并发队列可以作为普通并发队列来使用。但是当前代码默认放在主队列中，所以主队列很有必要专门来研究一下，所以我们就又多了两种组合方式。这样就有六种不同的组合方式了。&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;同步执行 + 主队列&lt;/li&gt;
+  &lt;li&gt;异步执行 + 主队列&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;strong&gt;那么这几种不同组合方式各有什么区别呢？&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;这里我们先上结论，后面再来详细讲解。你可以直接查看 &lt;strong&gt;3 任务和队列不同组合方式的区别&lt;/strong&gt; 中的表格结果，然后跳过 &lt;strong&gt;4. GCD的基本使用&lt;/strong&gt; 继续往后看。&lt;/p&gt;
+
+&lt;h2 id=&quot;3-任务和队列不同组合方式的区别&quot;&gt;3. 任务和队列不同组合方式的区别&lt;/h2&gt;
+
+&lt;p&gt;我们先来考虑最基本的使用，也就是当前线程为 &lt;strong&gt;『主线程』&lt;/strong&gt; 的环境下，&lt;strong&gt;『不同队列』+『不同任务』&lt;/strong&gt; 简单组合使用的不同区别。暂时不考虑 &lt;strong&gt;『队列中嵌套队列』&lt;/strong&gt; 的这种复杂情况。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;『主线程』&lt;/strong&gt;中，&lt;strong&gt;『不同队列』&lt;/strong&gt;+&lt;strong&gt;『不同任务』&lt;/strong&gt;简单组合的区别：&lt;/p&gt;
+
+&lt;table&gt;&lt;tr&gt;&lt;th&gt;区别&lt;/th&gt;&lt;th&gt;并发队列&lt;/th&gt;&lt;th&gt;串行队列&lt;/th&gt;&lt;th&gt;主队列&lt;/th&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;同步（sync）&lt;/td&gt;&lt;td&gt;没有开启新线程，串行执行任务&lt;/td&gt;&lt;td&gt;没有开启新线程，串行执行任务&lt;/td&gt;&lt;td&gt;死锁卡住不执行&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;异步（async）&lt;/td&gt;&lt;td&gt;有开启新线程，并发执行任务&lt;/td&gt;&lt;td&gt;有开启新线程（1条），串行执行任务&lt;/td&gt;&lt;td&gt;没有开启新线程，串行执行任务&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;注意：从上边可看出： &lt;strong&gt;『主线程』&lt;/strong&gt; 中调用 &lt;strong&gt;『主队列』+『同步执行』&lt;/strong&gt; 会导致死锁问题。这是因为 &lt;strong&gt;主队列中追加的同步任务&lt;/strong&gt; 和 &lt;strong&gt;主线程本身的任务&lt;/strong&gt; 两者之间相互等待，阻塞了 &lt;strong&gt;『主队列』&lt;/strong&gt;，最终造成了主队列所在的线程（主线程）死锁问题。而如果我们在 &lt;strong&gt;『其他线程』&lt;/strong&gt; 调用 &lt;strong&gt;『主队列』+『同步执行』&lt;/strong&gt;，则不会阻塞 &lt;strong&gt;『主队列』&lt;/strong&gt;，自然也不会造成死锁问题。最终的结果是：&lt;strong&gt;不会开启新线程，串行执行任务&lt;/strong&gt;。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h2 id=&quot;4-队列嵌套情况下不同组合方式区别&quot;&gt;4. 队列嵌套情况下，不同组合方式区别&lt;/h2&gt;
+
+&lt;p&gt;除了上边提到的『主线程』中调用『主队列』+『同步执行』会导致死锁问题。实际在使用『串行队列』的时候，也可能出现阻塞『串行队列』所在线程的情况发生，从而造成死锁问题。这种情况多见于同一个串行队列的嵌套使用。&lt;/p&gt;
+
+&lt;p&gt;比如下面代码这样：在『异步执行』+『串行队列』的任务中，又嵌套了『当前的串行队列』，然后进行『同步执行』。&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  dispatch_queue_t queue = dispatch_queue_create(&quot;test.queue&quot;, DISPATCH_QUEUE_SERIAL); 
+  dispatch_async(queue, ^{ // 异步执行 + 串行队列 
+    dispatch_sync(queue, ^{ // 同步执行 + 当前串行队列 
+      // 追加任务 1 
+      [NSThread sleepForTimeInterval:2]; // 模拟耗时操作 
+      NSLog(@&quot;1---%@&quot;,[NSThread currentThread]); // 打印当前线程 
+      }); 
+  });
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;执行上面的代码会导致 &lt;strong&gt;串行队列中追加的任务&lt;/strong&gt; 和 &lt;strong&gt;串行队列中原有的任务&lt;/strong&gt; 两者之间相互等待，阻塞了『串行队列』，最终造成了串行队列所在的线程（子线程）死锁问题。
+主队列造成死锁也是基于这个原因，所以，这也进一步说明了主队列其实并不特殊。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;关于 『队列中嵌套队列』这种复杂情况，这里也简单做一个总结。不过这里只考虑同一个队列的嵌套情况，关于多个队列的相互嵌套情况还请自行研究，或者等我最新的文章发布。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;『不同队列』+『不同任务』&lt;/strong&gt; 组合，以及 &lt;strong&gt;『队列中嵌套队列』&lt;/strong&gt; 使用的区别：&lt;/p&gt;
+
+&lt;table&gt;&lt;tr&gt;&lt;th&gt;区别&lt;/th&gt;&lt;th&gt;『异步执行+并发队列』嵌套『同一个并发队列』&lt;/th&gt;&lt;th&gt;『同步执行+并发队列』嵌套『同一个并发队列』&lt;/th&gt;&lt;th&gt;『异步执行+串行队列』嵌套『同一个串行队列』&lt;/th&gt;&lt;th&gt;『同步执行+串行队列』嵌套『同一个串行队列』&lt;/th&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;同步（sync）&lt;/td&gt;&lt;td&gt;没有开启新的线程，串行执行任务&lt;/td&gt;&lt;td&gt;没有开启新线程，串行执行任务&lt;/td&gt;&lt;td&gt;死锁卡住不执行&lt;/td&gt;&lt;td&gt;死锁卡住不执行&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;异步（async）&lt;/td&gt;&lt;td&gt;有开启新线程，并发执行任务&lt;/td&gt;&lt;td&gt;有开启新线程，并发执行任务&lt;/td&gt;&lt;td&gt;有开启新线程（1 条），串行执行任务&lt;/td&gt;&lt;td&gt;有开启新线程（1 条），串行执行任务&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+&lt;p&gt;好了，关于『不同队列』+『不同任务』 组合不同区别总结就到这里。&lt;/p&gt;
+
+&lt;h2 id=&quot;5-关于不同队列和不同任务的形象理解&quot;&gt;5. 关于不同队列和不同任务的形象理解&lt;/h2&gt;
+
+&lt;p&gt;因为前一段时间看到了有朋友留言说对 &lt;code class=&quot;highlighter-rouge&quot;&gt;异步执行&lt;/code&gt; 和 &lt;code class=&quot;highlighter-rouge&quot;&gt;并发队列&lt;/code&gt; 中创建线程能力有所不理解，我觉得这个问题的确很容易造成困惑，所以很值得拿来专门分析一下。&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;他的问题：
+在 异步 + 并发 中的解释：
+异步执行具备开启新线程的能力。且并发队列可开启多个线程，同时执行多个任务）
+以及 同步 + 并发 中的解释：
+（虽然并发队列可以开启多个线程，并且同时执行多个任务。但是因为本身不能创建新线程，只有当前线程这一个线程（同步任务不具备开启新线程的能力）
+这个地方看起来有点疑惑，你两个地方分别提到：异步执行开启新线程，并发队列也可以开启新线程，想请教下，你的意思是只有任务才拥有创建新线程的能力，而队列只有开启线程的能力，并不能创建线程 ？这二者是这样的关联吗？&lt;/p&gt;
+
+&lt;/blockquote&gt;
+
+&lt;p&gt;关于这个问题，我想做一个很形象的类比，来帮助大家对 &lt;strong&gt;队列&lt;/strong&gt;、&lt;strong&gt;任务&lt;/strong&gt; 以及 &lt;strong&gt;线程&lt;/strong&gt; 之间关系的理解。&lt;/p&gt;
+
+&lt;p&gt;假设现在有 5 个人要穿过一道门禁，这道门禁总共有 10 个入口，管理员可以决定同一时间打开几个入口，可以决定同一时间让一个人单独通过还是多个人一起通过。不过默认情况下，管理员只开启一个入口，且一个通道一次只能通过一个人。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;这个故事里，人好比是 &lt;strong&gt;任务&lt;/strong&gt;，管理员好比是 &lt;strong&gt;系统&lt;/strong&gt;，入口则代表 &lt;strong&gt;线程&lt;/strong&gt;。
+    &lt;ul&gt;
+      &lt;li&gt;5 个人表示有 5 个任务，10 个入口代表 10 条线程。&lt;/li&gt;
+      &lt;li&gt;&lt;strong&gt;串行队列&lt;/strong&gt;好比是 5 个人排成一支长队。&lt;/li&gt;
+      &lt;li&gt;&lt;strong&gt;并发队列&lt;/strong&gt;好比是 5 个人排成多支队伍，比如 2 队，或者 3 队。&lt;/li&gt;
+      &lt;li&gt;&lt;strong&gt;同步任务&lt;/strong&gt;好比是管理员只开启了一个入口（当前线程）。&lt;/li&gt;
+      &lt;li&gt;&lt;strong&gt;异步任务&lt;/strong&gt;好比是管理员同时开启了多个入口（当前线程 + 新开的线程）。&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;『异步执行 + 并发队列』&lt;/strong&gt;可以理解为：现在管理员开启了多个入口（比如 3 个入口），5 个人排成了多支队伍（比如 3 支队伍），这样这 5 个人就可以 3 个人同时一起穿过门禁了。&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;『同步执行 + 并发队列』&lt;/strong&gt;可以理解为：现在管理员只开启了 1 个入口，5 个人排成了多支队伍。虽然这 5 个人排成了多支队伍，但是只开了 1 个入口啊，这 5 个人虽然都想快点过去，但是 1 个入口一次只能过 1 个人，所以大家就只好一个接一个走过去了，表现的结果就是：顺次通过入口。&lt;/li&gt;
+  &lt;li&gt;换成 GCD 里的语言就是说：
+    &lt;ul&gt;
+      &lt;li&gt;『异步执行 + 并发队列』就是：系统开启了多个线程（主线程+其他子线程），任务可以多个同时运行。&lt;/li&gt;
+      &lt;li&gt;『同步执行 + 并发队列』就是：系统只默认开启了一个主线程，没有开启子线程，虽然任务处于并发队列中，但也只能一个接一个执行了。&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;下边我们来研究一下上边提到的六种简单组合方式的使用方法。&lt;/p&gt;
+
+&lt;h1 id=&quot;四gcd-的基本使用&quot;&gt;四、GCD 的基本使用&lt;/h1&gt;
+
+&lt;p&gt;&lt;strong&gt;先来讲讲并发队列的两种执行方式。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;1-同步执行--并发队列&quot;&gt;1. 同步执行 + 并发队列&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;在当前线程中执行任务，不会开启新线程，执行完一个任务，再执行下一个任务。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/**
+ * 同步执行 + 并发队列
+ * 特点：在当前线程中执行任务，不会开启新线程，执行完一个任务，再执行下一个任务。
+ */
+- (void)syncConcurrent {
+    NSLog(@&quot;currentThread---%@&quot;,[NSThread currentThread]);  // 打印当前线程
+    NSLog(@&quot;syncConcurrent---begin&quot;);
+    
+    dispatch_queue_t queue = dispatch_queue_create(&quot;net.bujige.testQueue&quot;, DISPATCH_QUEUE_CONCURRENT);
+    
+    dispatch_sync(queue, ^{
+        // 追加任务 1
+        [NSThread sleepForTimeInterval:2];              // 模拟耗时操作
+        NSLog(@&quot;1---%@&quot;,[NSThread currentThread]);      // 打印当前线程
+    });
+    
+    dispatch_sync(queue, ^{
+        // 追加任务 2
+        [NSThread sleepForTimeInterval:2];              // 模拟耗时操作
+        NSLog(@&quot;2---%@&quot;,[NSThread currentThread]);      // 打印当前线程
+    });
+    
+    dispatch_sync(queue, ^{
+        // 追加任务 3
+        [NSThread sleepForTimeInterval:2];              // 模拟耗时操作
+        NSLog(@&quot;3---%@&quot;,[NSThread currentThread]);      // 打印当前线程
+    });
+    
+    NSLog(@&quot;syncConcurrent---end&quot;);
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;输出结果：&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; 2019-08-08 14:32:53.542816+0800 YSC-GCD-demo[16332:4171500] currentThread---{number = 1, name = main}
+   
+ 2019-08-08 14:32:53.542964+0800 YSC-GCD-demo[16332:4171500] syncConcurrent---begin
+   
+ 2019-08-08 14:32:55.544329+0800 YSC-GCD-demo[16332:4171500] 1---{number = 1, name = main}
+   
+ 2019-08-08 14:32:57.545779+0800 YSC-GCD-demo[16332:4171500] 2---{number = 1, name = main}
+   
+ 2019-08-08 14:32:59.547154+0800 YSC-GCD-demo[16332:4171500] 3---{number = 1, name = main}
+   
+ 2019-08-08 14:32:59.547365+0800 YSC-GCD-demo[16332:4171500] syncConcurrent---end
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;从 &lt;code class=&quot;highlighter-rouge&quot;&gt;同步执行 + 并发队列&lt;/code&gt; 中可看到：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;所有任务都是在当前线程（主线程）中执行的，没有开启新的线程（&lt;code class=&quot;highlighter-rouge&quot;&gt;同步执行&lt;/code&gt;不具备开启新线程的能力）。&lt;/li&gt;
+  &lt;li&gt;所有任务都在打印的 &lt;code class=&quot;highlighter-rouge&quot;&gt;syncConcurrent---begin&lt;/code&gt;和 &lt;code class=&quot;highlighter-rouge&quot;&gt;syncConcurrent---end&lt;/code&gt;之间执行的（&lt;code class=&quot;highlighter-rouge&quot;&gt;同步任务&lt;/code&gt;需要等待队列的任务执行结束）。&lt;/li&gt;
+  &lt;li&gt;任务按顺序执行的。按顺序执行的原因：虽然 &lt;code class=&quot;highlighter-rouge&quot;&gt;并发队列&lt;/code&gt;可以开启多个线程，并且同时执行多个任务。但是因为本身不能创建新线程，只有当前线程这一个线程（&lt;code class=&quot;highlighter-rouge&quot;&gt;同步任务&lt;/code&gt;不具备开启新线程的能力），所以也就不存在并发。而且当前线程只有等待当前队列中正在执行的任务执行完毕之后，才能继续接着执行下面的操作（&lt;code class=&quot;highlighter-rouge&quot;&gt;同步任务&lt;/code&gt;需要等待队列的任务执行结束）。所以任务只能一个接一个按顺序执行，不能同时被执行。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;2-异步执行--并发队列&quot;&gt;2. 异步执行 + 并发队列&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;可以开启多个线程，任务交替（同时）执行。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/**
+ * 异步执行 + 并发队列
+ * 特点：可以开启多个线程，任务交替（同时）执行。
+ */
+- (void)asyncConcurrent {
+    NSLog(@&quot;currentThread---%@&quot;,[NSThread currentThread]);  // 打印当前线程
+    NSLog(@&quot;asyncConcurrent---begin&quot;);
+    
+    dispatch_queue_t queue = dispatch_queue_create(&quot;net.bujige.testQueue&quot;, DISPATCH_QUEUE_CONCURRENT);
+    
+    dispatch_async(queue, ^{
+        // 追加任务 1
+        [NSThread sleepForTimeInterval:2];              // 模拟耗时操作
+        NSLog(@&quot;1---%@&quot;,[NSThread currentThread]);      // 打印当前线程
+    });
+    
+    dispatch_async(queue, ^{
+        // 追加任务 2
+        [NSThread sleepForTimeInterval:2];              // 模拟耗时操作
+        NSLog(@&quot;2---%@&quot;,[NSThread currentThread]);      // 打印当前线程
+    });
+    
+    dispatch_async(queue, ^{
+        // 追加任务 3
+        [NSThread sleepForTimeInterval:2];              // 模拟耗时操作
+        NSLog(@&quot;3---%@&quot;,[NSThread currentThread]);      // 打印当前线程
+    });
+    
+    NSLog(@&quot;asyncConcurrent---end&quot;);
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;输出结果：&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; 2019-08-08 14:36:37.747966+0800 YSC-GCD-demo[17232:4187114] currentThread---{number = 1, name = main}
+   
+ 2019-08-08 14:36:37.748150+0800 YSC-GCD-demo[17232:4187114] asyncConcurrent---begin
+   
+ 2019-08-08 14:36:37.748279+0800 YSC-GCD-demo[17232:4187114] asyncConcurrent---end
+   
+ 2019-08-08 14:36:39.752523+0800 YSC-GCD-demo[17232:4187204] 2---{number = 3, name = (null)}
+   
+ 2019-08-08 14:36:39.752527+0800 YSC-GCD-demo[17232:4187202] 3---{number = 5, name = (null)}
+   
+ 2019-08-08 14:36:39.752527+0800 YSC-GCD-demo[17232:4187203] 1---{number = 4, name = (null)}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;在 &lt;code class=&quot;highlighter-rouge&quot;&gt;异步执行&lt;/code&gt; + &lt;code class=&quot;highlighter-rouge&quot;&gt;并发队列&lt;/code&gt; 中可以看出：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;除了当前线程（主线程），系统又开启了 3 个线程，并且任务是交替/同时执行的。（异步执行具备开启新线程的能力。且 并发队列可开启多个线程，同时执行多个任务）。&lt;/li&gt;
+  &lt;li&gt;所有任务是在打印的 syncConcurrent—begin和 syncConcurrent—end之后才执行的。说明当前线程没有等待，而是直接开启了新线程，在新线程中执行任务（异步执行不做等待，可以继续执行任务）。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;接下来再来讲讲串行队列的两种执行方式。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;3-同步执行--串行队列&quot;&gt;3. 同步执行 + 串行队列&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;不会开启新线程，在当前线程执行任务。任务是串行的，执行完一个任务，再执行下一个任务。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/**
+ * 同步执行 + 串行队列
+ * 特点：不会开启新线程，在当前线程执行任务。任务是串行的，执行完一个任务，再执行下一个任务。
+ */
+- (void)syncSerial {
+    NSLog(@&quot;currentThread---%@&quot;,[NSThread currentThread]);  // 打印当前线程
+    NSLog(@&quot;syncSerial---begin&quot;);
+    
+    dispatch_queue_t queue = dispatch_queue_create(&quot;net.bujige.testQueue&quot;, DISPATCH_QUEUE_SERIAL);
+    
+    dispatch_sync(queue, ^{
+        // 追加任务 1
+        [NSThread sleepForTimeInterval:2];              // 模拟耗时操作
+        NSLog(@&quot;1---%@&quot;,[NSThread currentThread]);      // 打印当前线程
+    });
+    dispatch_sync(queue, ^{
+        // 追加任务 2
+        [NSThread sleepForTimeInterval:2];              // 模拟耗时操作
+        NSLog(@&quot;2---%@&quot;,[NSThread currentThread]);      // 打印当前线程
+    });
+    dispatch_sync(queue, ^{
+        // 追加任务 3
+        [NSThread sleepForTimeInterval:2];              // 模拟耗时操作
+        NSLog(@&quot;3---%@&quot;,[NSThread currentThread]);      // 打印当前线程
+    });
+    
+    NSLog(@&quot;syncSerial---end&quot;);
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;输出结果为：&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; 2019-08-08 14:39:31.366815+0800 YSC-GCD-demo[17285:4197645] currentThread---{number = 1, name = main}
+   
+ 2019-08-08 14:39:31.366952+0800 YSC-GCD-demo[17285:4197645] syncSerial---begin
+   
+ 2019-08-08 14:39:33.368256+0800 YSC-GCD-demo[17285:4197645] 1---{number = 1, name = main}
+   
+ 2019-08-08 14:39:35.369661+0800 YSC-GCD-demo[17285:4197645] 2---{number = 1, name = main}
+   
+ 2019-08-08 14:39:37.370991+0800 YSC-GCD-demo[17285:4197645] 3---{number = 1, name = main}
+   
+ 2019-08-08 14:39:37.371192+0800 YSC-GCD-demo[17285:4197645] syncSerial---end
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;在 同步执行 + 串行队列 可以看到：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;所有任务都是在当前线程（主线程）中执行的，并没有开启新的线程（同步执行不具备开启新线程的能力）。&lt;/li&gt;
+  &lt;li&gt;所有任务都在打印的 syncConcurrent—begin和 syncConcurrent—end之间执行（同步任务需要等待队列的任务执行结束）。&lt;/li&gt;
+  &lt;li&gt;任务是按顺序执行的（串行队列每次只有一个任务被执行，任务一个接一个按顺序执行）。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;4-异步执行--串行队列&quot;&gt;4. 异步执行 + 串行队列&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;会开启新线程，但是因为任务是串行的，执行完一个任务，再执行下一个任务&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/**
+ * 同步执行 + 串行队列
+ * 特点：不会开启新线程，在当前线程执行任务。任务是串行的，执行完一个任务，再执行下一个任务。
+ */
+- (void)syncSerial {
+    NSLog(@&quot;currentThread---%@&quot;,[NSThread currentThread]);  // 打印当前线程
+    NSLog(@&quot;syncSerial---begin&quot;);
+    
+    dispatch_queue_t queue = dispatch_queue_create(&quot;net.bujige.testQueue&quot;, DISPATCH_QUEUE_SERIAL);
+    
+    dispatch_sync(queue, ^{
+        // 追加任务 1
+        [NSThread sleepForTimeInterval:2];              // 模拟耗时操作
+        NSLog(@&quot;1---%@&quot;,[NSThread currentThread]);      // 打印当前线程
+    });
+    dispatch_sync(queue, ^{
+        // 追加任务 2
+        [NSThread sleepForTimeInterval:2];              // 模拟耗时操作
+        NSLog(@&quot;2---%@&quot;,[NSThread currentThread]);      // 打印当前线程
+    });
+    dispatch_sync(queue, ^{
+        // 追加任务 3
+        [NSThread sleepForTimeInterval:2];              // 模拟耗时操作
+        NSLog(@&quot;3---%@&quot;,[NSThread currentThread]);      // 打印当前线程
+    });
+    
+    NSLog(@&quot;syncSerial---end&quot;);
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;输出结果为：&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; 2019-08-08 14:40:53.944502+0800 YSC-GCD-demo[17313:4203018] currentThread---{number = 1, name = main}
+   
+ 2019-08-08 14:40:53.944615+0800 YSC-GCD-demo[17313:4203018] asyncSerial---begin
+   
+ 2019-08-08 14:40:53.944710+0800 YSC-GCD-demo[17313:4203018] asyncSerial---end
+   
+ 2019-08-08 14:40:55.947709+0800 YSC-GCD-demo[17313:4203079] 1---{number = 3, name = (null)}
+   
+ 2019-08-08 14:40:57.952453+0800 YSC-GCD-demo[17313:4203079] 2---{number = 3, name = (null)}
+   
+ 2019-08-08 14:40:59.952943+0800 YSC-GCD-demo[17313:4203079] 3---{number = 3, name = (null)}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;在 异步执行 + 串行队列 可以看到：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;开启了一条新线程（异步执行具备开启新线程的能力，串行队列只开启一个线程）。&lt;/li&gt;
+  &lt;li&gt;所有任务是在打印的 syncConcurrent—begin和 syncConcurrent—end之后才开始执行的（异步执行不会做任何等待，可以继续执行任务）。&lt;/li&gt;
+  &lt;li&gt;任务是按顺序执行的（串行队列每次只有一个任务被执行，任务一个接一个按顺序执行）。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;下边讲讲刚才我们提到过的：&lt;strong&gt;主队列&lt;/strong&gt;。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;主队列：GCD 默认提供的 &lt;strong&gt;串行队列&lt;/strong&gt;。
+    &lt;ul&gt;
+      &lt;li&gt;默认情况下，平常所写代码是直接放在主队列中的。&lt;/li&gt;
+      &lt;li&gt;所有放在主队列中的任务，都会放到主线程中执行。&lt;/li&gt;
+      &lt;li&gt;可使用 dispatch_get_main_queue()获得主队列。&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;我们再来看看主队列的两种组合方式。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;5-同步执行--主队列&quot;&gt;5. 同步执行 + 主队列&lt;/h2&gt;
+
+&lt;p&gt;同步执行 + 主队列 在不同线程中调用结果也是不一样，在主线程中调用会发生死锁问题，而在其他线程中调用则不会。&lt;/p&gt;
+
+&lt;h3 id=&quot;-在主线程中调用-同步执行--主队列&quot;&gt;㈠ 在主线程中调用 『同步执行 + 主队列』&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;互相等待卡住不可行&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/**
+ * 同步执行 + 主队列
+ * 特点(主线程调用)：互等卡主不执行。
+ * 特点(其他线程调用)：不会开启新线程，执行完一个任务，再执行下一个任务。
+ */
+- (void)syncMain {
+    
+    NSLog(@&quot;currentThread---%@&quot;,[NSThread currentThread]);  // 打印当前线程
+    NSLog(@&quot;syncMain---begin&quot;);
+    
+    dispatch_queue_t queue = dispatch_get_main_queue();
+    
+    dispatch_sync(queue, ^{
+        // 追加任务 1
+        [NSThread sleepForTimeInterval:2];              // 模拟耗时操作
+        NSLog(@&quot;1---%@&quot;,[NSThread currentThread]);      // 打印当前线程
+    });
+    
+    dispatch_sync(queue, ^{
+        // 追加任务 2
+        [NSThread sleepForTimeInterval:2];              // 模拟耗时操作
+        NSLog(@&quot;2---%@&quot;,[NSThread currentThread]);      // 打印当前线程
+    });
+    
+    dispatch_sync(queue, ^{
+        // 追加任务 3
+        [NSThread sleepForTimeInterval:2];              // 模拟耗时操作
+        NSLog(@&quot;3---%@&quot;,[NSThread currentThread]);      // 打印当前线程
+    });
+    
+    NSLog(@&quot;syncMain---end&quot;);
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;输出结果&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; 2019-08-08 14:43:58.062376+0800 YSC-GCD-demo[17371:4213562] currentThread---{number = 1, name = main}
+   
+ 2019-08-08 14:43:58.062518+0800 YSC-GCD-demo[17371:4213562] syncMain---begin
+   
+ (lldb)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;在主线程中使用 同步执行 + 主队列 可以惊奇的发现：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;追加到主线程的任务 1、任务 2、任务 3 都不再执行了，而且 syncMain—end也没有打印，在 XCode 9 及以上版本上还会直接报崩溃。这是为什么呢？&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;这是因为我们在主线程中执行 syncMain 方法，相当于把 syncMain 任务放到了主线程的队列中。而 同步执行 会等待当前队列中的任务执行完毕，才会接着执行。那么当我们把 任务 1 追加到主队列中，任务 1 就在等待主线程处理完 syncMain 任务。而syncMain 任务需要等待 任务 1 执行完毕，才能接着执行。&lt;/p&gt;
+
+&lt;p&gt;那么，现在的情况就是 syncMain 任务和 任务 1 都在等对方执行完毕。这样大家互相等待，所以就卡住了，所以我们的任务执行不了，而且 syncMain—end 也没有打印。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;要是如果不在主线程中调用，而在其他线程中调用会如何呢？&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;-在其他线程中调用同步执行--主队列&quot;&gt;㈡ 在其他线程中调用『同步执行 + 主队列』&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;不会开启新线程，执行完一个任务，再执行下一个任务&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;// 使用 NSThread 的 detachNewThreadSelector 方法会创建线程，并自动启动线程执行 selector 任务
+[NSThread detachNewThreadSelector:@selector(syncMain) toTarget:self withObject:nil];
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;输出结果：&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; 2019-08-08 14:51:38.137978+0800 YSC-GCD-demo[17482:4237818] currentThread---{number = 3, name = (null)}
+   
+ 2019-08-08 14:51:38.138159+0800 YSC-GCD-demo[17482:4237818] syncMain---begin
+   
+ 2019-08-08 14:51:40.149065+0800 YSC-GCD-demo[17482:4237594] 1---{number = 1, name = main}
+   
+ 2019-08-08 14:51:42.151104+0800 YSC-GCD-demo[17482:4237594] 2---{number = 1, name = main}
+   
+ 2019-08-08 14:51:44.152583+0800 YSC-GCD-demo[17482:4237594] 3---{number = 1, name = main}
+   
+ 2019-08-08 14:51:44.152767+0800 YSC-GCD-demo[17482:4237818] syncMain---end
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;在其他线程中使用 同步执行 + 主队列 可看到：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;所有任务都是在主线程（非当前线程）中执行的，没有开启新的线程（所有放在主队列中的任务，都会放到主线程中执行）。&lt;/li&gt;
+  &lt;li&gt;所有任务都在打印的 syncConcurrent—begin和 syncConcurrent—end之间执行（同步任务需要等待队列的任务执行结束）。&lt;/li&gt;
+  &lt;li&gt;任务是按顺序执行的（主队列是 串行队列，每次只有一个任务被执行，任务一个接一个按顺序执行）。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;为什么现在就不会卡住了呢？&lt;/p&gt;
+
+&lt;p&gt;因为syncMain 任务 放到了其他线程里，而 任务 1、任务 2、任务3 都在追加到主队列中，这三个任务都会在主线程中执行。syncMain 任务 在其他线程中执行到追加 任务 1 到主队列中，因为主队列现在没有正在执行的任务，所以，会直接执行主队列的 任务1，等 任务1 执行完毕，再接着执行 任务 2、任务 3。所以这里不会卡住线程，也就不会造成死锁问题。&lt;/p&gt;
+
+&lt;h2 id=&quot;6-异步执行--主队列&quot;&gt;6. 异步执行 + 主队列&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;只在主线程中执行任务，执行完一个任务，再执行下一个任务。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/**
+ * 异步执行 + 主队列
+ * 特点：只在主线程中执行任务，执行完一个任务，再执行下一个任务
+ */
+- (void)asyncMain {
+    NSLog(@&quot;currentThread---%@&quot;,[NSThread currentThread]);  // 打印当前线程
+    NSLog(@&quot;asyncMain---begin&quot;);
+    
+    dispatch_queue_t queue = dispatch_get_main_queue();
+    
+    dispatch_async(queue, ^{
+        // 追加任务 1
+        [NSThread sleepForTimeInterval:2];              // 模拟耗时操作
+        NSLog(@&quot;1---%@&quot;,[NSThread currentThread]);      // 打印当前线程
+    });
+    
+    dispatch_async(queue, ^{
+        // 追加任务 2
+        [NSThread sleepForTimeInterval:2];              // 模拟耗时操作
+        NSLog(@&quot;2---%@&quot;,[NSThread currentThread]);      // 打印当前线程
+    });
+    
+    dispatch_async(queue, ^{
+        // 追加任务 3
+        [NSThread sleepForTimeInterval:2];              // 模拟耗时操作
+        NSLog(@&quot;3---%@&quot;,[NSThread currentThread]);      // 打印当前线程
+    });
+    
+    NSLog(@&quot;asyncMain---end&quot;);
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;输出结果：&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; 2019-08-08 14:53:27.023091+0800 YSC-GCD-demo[17521:4243690] currentThread---{number = 1, name = main}
+   
+ 2019-08-08 14:53:27.023247+0800 YSC-GCD-demo[17521:4243690] asyncMain---begin
+   
+ 2019-08-08 14:53:27.023399+0800 YSC-GCD-demo[17521:4243690] asyncMain---end
+   
+ 2019-08-08 14:53:29.035565+0800 YSC-GCD-demo[17521:4243690] 1---{number = 1, name = main}
+   
+ 2019-08-08 14:53:31.036565+0800 YSC-GCD-demo[17521:4243690] 2---{number = 1, name = main}
+   
+ 2019-08-08 14:53:33.037092+0800 YSC-GCD-demo[17521:4243690] 3---{number = 1, name = main}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;在 异步执行 + 主队列 可以看到：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;所有任务都是在当前线程（主线程）中执行的，并没有开启新的线程（虽然 异步执行具备开启线程的能力，但因为是主队列，所以所有任务都在主线程中）。&lt;/li&gt;
+  &lt;li&gt;所有任务是在打印的 syncConcurrent—begin和 syncConcurrent—end之后才开始执行的（异步执行不会做任何等待，可以继续执行任务）。&lt;/li&gt;
+  &lt;li&gt;任务是按顺序执行的（因为主队列是 串行队列，每次只有一个任务被执行，任务一个接一个按顺序执行）。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;弄懂了难理解、绕来绕去的&lt;strong&gt;『不同队列』+『不同任务』&lt;/strong&gt;使用区别之后，我们来学习一个简单的东西：&lt;strong&gt;5. GCD 线程间的通信&lt;/strong&gt;。&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h1 id=&quot;五gcd-线程间的通信&quot;&gt;五、GCD 线程间的通信&lt;/h1&gt;
+
+&lt;p&gt;在 iOS 开发过程中，我们一般在主线程里边进行 UI 刷新，例如：点击、滚动、拖拽等事件。我们通常把一些耗时的操作放在其他线程，比如说图片下载、文件上传等耗时操作。而当我们有时候在其他线程完成了耗时操作时，需要回到主线程，那么就用到了线程之间的通讯。&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/**
+ * 线程间通信
+ */
+- (void)communication {
+    // 获取全局并发队列
+    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+    // 获取主队列
+    dispatch_queue_t mainQueue = dispatch_get_main_queue();
+    
+    dispatch_async(queue, ^{
+        // 异步追加任务 1
+        [NSThread sleepForTimeInterval:2];              // 模拟耗时操作
+        NSLog(@&quot;1---%@&quot;,[NSThread currentThread]);      // 打印当前线程
+        
+        // 回到主线程
+        dispatch_async(mainQueue, ^{
+            // 追加在主线程中执行的任务
+            [NSThread sleepForTimeInterval:2];              // 模拟耗时操作
+            NSLog(@&quot;2---%@&quot;,[NSThread currentThread]);      // 打印当前线程
+        });
+    });
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;输出结果：&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; 2019-08-08 14:56:22.973318+0800 YSC-GCD-demo[17573:4253201] 1---{number = 3, name = (null)}
+   
+ 2019-08-08 14:56:24.973902+0800 YSC-GCD-demo[17573:4253108] 2---{number = 1, name = main}
+
+  - 可以看到在其他线程中先执行任务，执行完了之后回到主线程执行主线程的相应操作。
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h1 id=&quot;六gcd-的其他方法&quot;&gt;六、GCD 的其他方法&lt;/h1&gt;
+
+&lt;h2 id=&quot;1-gcd-栅栏方法dispatch_barrier_async&quot;&gt;1. GCD 栅栏方法：dispatch_barrier_async&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;我们有时需要异步执行两组操作，而且第一组操作执行完之后，才能开始执行第二组操作。这样我们就需要一个相当于 栅栏一样的一个方法将两组异步执行的操作组给分割起来，当然这里的操作组里可以包含一个或多个任务。这就需要用到dispatch_barrier_async方法在两个操作组间形成栅栏。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;dispatch_barrier_async方法会等待前边追加到并发队列中的任务全部执行完毕之后，再将指定的任务追加到该异步队列中。然后在 dispatch_barrier_async方法追加的任务执行完毕之后，异步队列才恢复为一般动作，接着追加任务到该异步队列并开始执行。具体如下图所示：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/posts/iOS/1877784-4d6d77fafd3ad007.webp&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/**
+ * 栅栏方法 dispatch_barrier_async
+ */
+- (void)barrier {
+    dispatch_queue_t queue = dispatch_queue_create(&quot;net.bujige.testQueue&quot;, DISPATCH_QUEUE_CONCURRENT);
+    
+    dispatch_async(queue, ^{
+        // 追加任务 1
+        [NSThread sleepForTimeInterval:2];              // 模拟耗时操作
+        NSLog(@&quot;1---%@&quot;,[NSThread currentThread]);      // 打印当前线程
+    });
+    dispatch_async(queue, ^{
+        // 追加任务 2
+        [NSThread sleepForTimeInterval:2];              // 模拟耗时操作
+        NSLog(@&quot;2---%@&quot;,[NSThread currentThread]);      // 打印当前线程
+    });
+    
+    dispatch_barrier_async(queue, ^{
+        // 追加任务 barrier
+        [NSThread sleepForTimeInterval:2];              // 模拟耗时操作
+        NSLog(@&quot;barrier---%@&quot;,[NSThread currentThread]);// 打印当前线程
+    });
+    
+    dispatch_async(queue, ^{
+        // 追加任务 3
+        [NSThread sleepForTimeInterval:2];              // 模拟耗时操作
+        NSLog(@&quot;3---%@&quot;,[NSThread currentThread]);      // 打印当前线程
+    });
+    dispatch_async(queue, ^{
+        // 追加任务 4
+        [NSThread sleepForTimeInterval:2];              // 模拟耗时操作
+        NSLog(@&quot;4---%@&quot;,[NSThread currentThread]);      // 打印当前线程
+    });
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;输出结果：&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; 2019-08-08 14:59:02.540868+0800 YSC-GCD-demo[17648:4262933] 1---{number = 3, name = (null)}
+   
+ 2019-08-08 14:59:02.540868+0800 YSC-GCD-demo[17648:4262932] 2---{number = 4, name = (null)}
+   
+ 2019-08-08 14:59:04.542346+0800 YSC-GCD-demo[17648:4262933] barrier---{number = 3, name = (null)}
+   
+ 2019-08-08 14:59:06.542772+0800 YSC-GCD-demo[17648:4262932] 4---{number = 4, name = (null)}
+   
+ 2019-08-08 14:59:06.542773+0800 YSC-GCD-demo[17648:4262933] 3---{number = 3, name = (null)}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;在 dispatch_barrier_async 执行结果中可以看出：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;在执行完栅栏前面的操作之后，才执行栅栏操作，最后再执行栅栏后边的操作。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;2-gcd-延时执行方法dispatch_after&quot;&gt;2. GCD 延时执行方法：dispatch_after&lt;/h2&gt;
+&lt;hr /&gt;
+
+&lt;p&gt;我们经常会遇到这样的需求：在指定时间（例如 3 秒）之后执行某个任务。可以用 GCD 的dispatch_after 方法来实现。&lt;/p&gt;
+
+&lt;p&gt;需要注意的是：dispatch_after 方法并不是在指定时间之后才开始执行处理，而是在指定时间之后将任务追加到主队列中。严格来说，这个时间并不是绝对准确的，但想要大致延迟执行任务，dispatch_after 方法是很有效的。&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/**
+ * 延时执行方法 dispatch_after
+ */
+- (void)after {
+    NSLog(@&quot;currentThread---%@&quot;,[NSThread currentThread]);  // 打印当前线程
+    NSLog(@&quot;asyncMain---begin&quot;);
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        // 2.0 秒后异步追加任务代码到主队列，并开始执行
+        NSLog(@&quot;after---%@&quot;,[NSThread currentThread]);  // 打印当前线程
+    });
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;输出结果：&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; 2019-08-08 15:01:33.569710+0800 YSC-GCD-demo[17702:4272430] currentThread---{number = 1, name = main}
+   
+ 2019-08-08 15:01:33.569838+0800 YSC-GCD-demo[17702:4272430] asyncMain---begin
+   
+ 2019-08-08 15:01:35.570146+0800 YSC-GCD-demo[17702:4272430] after---{number = 1, name = main}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;可以看出：在打印 &lt;code class=&quot;highlighter-rouge&quot;&gt;asyncMain---begin&lt;/code&gt; 之后大约 2.0 秒的时间，打印了 &lt;code class=&quot;highlighter-rouge&quot;&gt;after---{number = 1, name = main}&lt;/code&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;3-gcd-一次性代码只执行一次dispatch_once&quot;&gt;3. GCD 一次性代码（只执行一次）：dispatch_once&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;我们在创建单例、或者有整个程序运行过程中只执行一次的代码时，我们就用到了 GCD 的 dispatch_once方法。使用 dispatch_once方法能保证某段代码在程序运行过程中只被执行 1 次，并且即使在多线程的环境下，dispatch_once也可以保证线程安全。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/**
+ * 一次性代码（只执行一次）dispatch_once
+ */
+- (void)once {
+    static dispatch_once_t onceToken;
+    dispatch_once(&amp;amp;onceToken, ^{
+        // 只执行 1 次的代码（这里面默认是线程安全的）
+    });
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;4-gcd-快速迭代方法dispatch_apply&quot;&gt;4. GCD 快速迭代方法：dispatch_apply&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;通常我们会用 for 循环遍历，但是 GCD 给我们提供了快速迭代的方法 dispatch_apply。dispatch_apply按照指定的次数将指定的任务追加到指定的队列中，并等待全部队列执行结束。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;如果是在串行队列中使用 dispatch_apply，那么就和 for 循环一样，按顺序同步执行。但是这样就体现不出快速迭代的意义了。&lt;/p&gt;
+
+&lt;p&gt;我们可以利用并发队列进行异步执行。比如说遍历 0~5 这 6 个数字，for 循环的做法是每次取出一个元素，逐个遍历。dispatch_apply 可以 在多个线程中同时（异步）遍历多个数字。&lt;/p&gt;
+
+&lt;p&gt;还有一点，无论是在串行队列，还是并发队列中，dispatch_apply 都会等待全部任务执行完毕，这点就像是同步操作，也像是队列组中的 dispatch_group_wait方法。&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/**
+ * 快速迭代方法 dispatch_apply
+ */
+- (void)apply {
+    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+    
+    NSLog(@&quot;apply---begin&quot;);
+    dispatch_apply(6, queue, ^(size_t index) {
+        NSLog(@&quot;%zd---%@&quot;,index, [NSThread currentThread]);
+    });
+    NSLog(@&quot;apply---end&quot;);
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;输出结果：&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; 2019-08-08 15:05:04.715266+0800 YSC-GCD-demo[17771:4285619] apply---begin
+   
+ 2019-08-08 15:05:04.715492+0800 YSC-GCD-demo[17771:4285619] 0---{number = 1, name = main}
+   
+ 2019-08-08 15:05:04.715516+0800 YSC-GCD-demo[17771:4285722] 1---{number = 3, name = (null)}
+   
+ 2019-08-08 15:05:04.715526+0800 YSC-GCD-demo[17771:4285720] 3---{number = 5, name = (null)}
+   
+ 2019-08-08 15:05:04.715564+0800 YSC-GCD-demo[17771:4285721] 2---{number = 7, name = (null)}
+   
+ 2019-08-08 15:05:04.715555+0800 YSC-GCD-demo[17771:4285719] 4---{number = 6, name = (null)}
+   
+ 2019-08-08 15:05:04.715578+0800 YSC-GCD-demo[17771:4285728] 5---{number = 4, name = (null)}
+   
+ 2019-08-08 15:05:04.715677+0800 YSC-GCD-demo[17771:4285619] apply---end
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;因为是在并发队列中异步执行任务，所以各个任务的执行时间长短不定，最后结束顺序也不定。但是 apply—end 一定在最后执行。这是因为 dispatch_apply 方法会等待全部任务执行完毕。&lt;/p&gt;
+
+&lt;h2 id=&quot;5-gcd-队列组dispatch_group&quot;&gt;5. GCD 队列组：dispatch_group&lt;/h2&gt;
+
+&lt;p&gt;有时候我们会有这样的需求：分别异步执行2个耗时任务，然后当2个耗时任务都执行完毕后再回到主线程执行任务。这时候我们可以用到 GCD 的队列组。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;调用队列组的 dispatch_group_async先把任务放到队列中，然后将队列放入队列组中。或者使用队列组的 dispatch_group_enter、dispatch_group_leave组合来实现 dispatch_group_async。&lt;/li&gt;
+  &lt;li&gt;调用队列组的 dispatch_group_notify回到指定线程执行任务。或者使用 dispatch_group_wait回到当前线程继续向下执行（会阻塞当前线程）。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;1-dispatch_group_notify&quot;&gt;1) dispatch_group_notify&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;监听 group 中任务的完成状态，当所有的任务都执行完成后，追加任务到 group 中，并执行任务。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/**
+ * 队列组 dispatch_group_notify
+ */
+- (void)groupNotify {
+    NSLog(@&quot;currentThread---%@&quot;,[NSThread currentThread]);  // 打印当前线程
+    NSLog(@&quot;group---begin&quot;);
+    
+    dispatch_group_t group =  dispatch_group_create();
+    
+    dispatch_group_async(group, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        // 追加任务 1
+        [NSThread sleepForTimeInterval:2];              // 模拟耗时操作
+        NSLog(@&quot;1---%@&quot;,[NSThread currentThread]);      // 打印当前线程
+    });
+    
+    dispatch_group_async(group, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        // 追加任务 2
+        [NSThread sleepForTimeInterval:2];              // 模拟耗时操作
+        NSLog(@&quot;2---%@&quot;,[NSThread currentThread]);      // 打印当前线程
+    });
+    
+    dispatch_group_notify(group, dispatch_get_main_queue(), ^{
+        // 等前面的异步任务 1、任务 2 都执行完毕后，回到主线程执行下边任务
+        [NSThread sleepForTimeInterval:2];              // 模拟耗时操作
+        NSLog(@&quot;3---%@&quot;,[NSThread currentThread]);      // 打印当前线程
+
+        NSLog(@&quot;group---end&quot;);
+    });
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;输出结果：&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; 2019-08-08 15:07:21.601734+0800 YSC-GCD-demo[17813:4293874] currentThread---{number = 1, name = main}
+   
+ 2019-08-08 15:07:21.601871+0800 YSC-GCD-demo[17813:4293874] group---begin
+   
+ 2019-08-08 15:07:23.604854+0800 YSC-GCD-demo[17813:4294048] 2---{number = 4, name = (null)}
+   
+ 2019-08-08 15:07:23.604852+0800 YSC-GCD-demo[17813:4294053] 1---{number = 3, name = (null)}
+   
+ 2019-08-08 15:07:25.606067+0800 YSC-GCD-demo[17813:4293874] 3---{number = 1, name = main}
+   
+ 2019-08-08 15:07:25.606255+0800 YSC-GCD-demo[17813:4293874] group---end
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;从 dispatch_group_notify 相关代码运行输出结果可以看出：&lt;/p&gt;
+
+&lt;p&gt;当所有任务都执行完成之后，才执行 dispatch_group_notify 相关 block 中的任务。&lt;/p&gt;
+
+&lt;h3 id=&quot;2-dispatch_group_wait&quot;&gt;2) dispatch_group_wait&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;暂停当前线程（阻塞当前线程），等待指定的 group 中的任务执行完成后，才会往下继续执行。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/**
+ * 队列组 dispatch_group_wait
+ */
+- (void)groupWait {
+    NSLog(@&quot;currentThread---%@&quot;,[NSThread currentThread]);  // 打印当前线程
+    NSLog(@&quot;group---begin&quot;);
+    
+    dispatch_group_t group =  dispatch_group_create();
+    
+    dispatch_group_async(group, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        // 追加任务 1
+        [NSThread sleepForTimeInterval:2];              // 模拟耗时操作
+        NSLog(@&quot;1---%@&quot;,[NSThread currentThread]);      // 打印当前线程
+    });
+    
+    dispatch_group_async(group, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        // 追加任务 2
+        [NSThread sleepForTimeInterval:2];              // 模拟耗时操作
+        NSLog(@&quot;2---%@&quot;,[NSThread currentThread]);      // 打印当前线程
+    });
+    
+    // 等待上面的任务全部完成后，会往下继续执行（会阻塞当前线程）
+    dispatch_group_wait(group, DISPATCH_TIME_FOREVER);
+    
+    NSLog(@&quot;group---end&quot;);
+    
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;输出结果：&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; 2019-08-08 15:09:12.441729+0800 YSC-GCD-demo[17844:4299926] currentThread---{number = 1, name = main}
+   
+ 2019-08-08 15:09:12.441870+0800 YSC-GCD-demo[17844:4299926] group---begin
+   
+ 2019-08-08 15:09:14.445790+0800 YSC-GCD-demo[17844:4300046] 2---{number = 4, name = (null)}
+   
+ 2019-08-08 15:09:14.445760+0800 YSC-GCD-demo[17844:4300043] 1---{number = 3, name = (null)}
+   
+ 2019-08-08 15:09:14.446039+0800 YSC-GCD-demo[17844:4299926] group---end
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;从 dispatch_group_wait 相关代码运行输出结果可以看出：&lt;/p&gt;
+
+&lt;p&gt;当所有任务执行完成之后，才执行 dispatch_group_wait 之后的操作。但是，使用dispatch_group_wait 会阻塞当前线程。&lt;/p&gt;
+
+&lt;h3 id=&quot;3-dispatch_group_enterdispatch_group_leave&quot;&gt;3) dispatch_group_enter、dispatch_group_leave&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;dispatch_group_enter标志着一个任务追加到 group，执行一次，相当于 group 中未执行完毕任务数 +1&lt;/li&gt;
+  &lt;li&gt;dispatch_group_leave标志着一个任务离开了 group，执行一次，相当于 group 中未执行完毕任务数 -1。&lt;/li&gt;
+  &lt;li&gt;当 group 中未执行完毕任务数为0的时候，才会使 dispatch_group_wait解除阻塞，以及执行追加到 dispatch_group_notify中的任务。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/**
+ * 队列组 dispatch_group_enter、dispatch_group_leave
+ */
+- (void)groupEnterAndLeave {
+    NSLog(@&quot;currentThread---%@&quot;,[NSThread currentThread]);  // 打印当前线程
+    NSLog(@&quot;group---begin&quot;);
+    
+    dispatch_group_t group = dispatch_group_create();
+    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+    dispatch_group_enter(group);
+    dispatch_async(queue, ^{
+        // 追加任务 1
+        [NSThread sleepForTimeInterval:2];              // 模拟耗时操作
+        NSLog(@&quot;1---%@&quot;,[NSThread currentThread]);      // 打印当前线程
+
+        dispatch_group_leave(group);
+    });
+    
+    dispatch_group_enter(group);
+    dispatch_async(queue, ^{
+        // 追加任务 2
+        [NSThread sleepForTimeInterval:2];              // 模拟耗时操作
+        NSLog(@&quot;2---%@&quot;,[NSThread currentThread]);      // 打印当前线程
+        
+        dispatch_group_leave(group);
+    });
+    
+    dispatch_group_notify(group, dispatch_get_main_queue(), ^{
+        // 等前面的异步操作都执行完毕后，回到主线程.
+        [NSThread sleepForTimeInterval:2];              // 模拟耗时操作
+        NSLog(@&quot;3---%@&quot;,[NSThread currentThread]);      // 打印当前线程
+    
+        NSLog(@&quot;group---end&quot;);
+    });
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;输出结果：&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; 2019-08-08 15:13:17.983283+0800 YSC-GCD-demo[17924:4314716] currentThread---{number = 1, name = main}
+   
+ 2019-08-08 15:13:17.983429+0800 YSC-GCD-demo[17924:4314716] group---begin
+   
+ 2019-08-08 15:13:19.988898+0800 YSC-GCD-demo[17924:4314816] 2---{number = 3, name = (null)}
+   
+ 2019-08-08 15:13:19.988888+0800 YSC-GCD-demo[17924:4314808] 1---{number = 4, name = (null)}
+   
+ 2019-08-08 15:13:21.990450+0800 YSC-GCD-demo[17924:4314716] 3---{number = 1, name = main}
+   
+ 2019-08-08 15:13:21.990711+0800 YSC-GCD-demo[17924:4314716] group---end
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;从 dispatch_group_enter、dispatch_group_leave 相关代码运行结果中可以看出：当所有任务执行完成之后，才执行 dispatch_group_notify 中的任务。这里的dispatch_group_enter、dispatch_group_leave 组合，其实等同于dispatch_group_async。&lt;/p&gt;
+
+&lt;h2 id=&quot;gcd-信号量dispatch_semaphore&quot;&gt;GCD 信号量：dispatch_semaphore&lt;/h2&gt;
+
+&lt;p&gt;GCD 中的信号量是指 &lt;strong&gt;Dispatch Semaphore&lt;/strong&gt;，是持有计数的信号。类似于过高速路收费站的栏杆。可以通过时，打开栏杆，不可以通过时，关闭栏杆。在 &lt;strong&gt;Dispatch Semaphore&lt;/strong&gt; 中，使用计数来完成这个功能，计数小于 0 时等待，不可通过。计数为 0 或大于 0 时，计数减 1 且不等待，可通过。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Dispatch Semaphore&lt;/strong&gt; 提供了三个方法：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;dispatch_semaphore_create：创建一个 Semaphore 并初始化信号的总量&lt;/li&gt;
+  &lt;li&gt;dispatch_semaphore_signal：发送一个信号，让信号总量加 1&lt;/li&gt;
+  &lt;li&gt;dispatch_semaphore_wait：可以使总信号量减 1，信号总量小于 0 时就会一直等待（阻塞所在线程），否则就可以正常执行。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;注意：信号量的使用前提是：想清楚你需要处理哪个线程等待（阻塞），又要哪个线程继续执行，然后使用信号量。&lt;/p&gt;
+
+&lt;p&gt;Dispatch Semaphore 在实际开发中主要用于：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;保持线程同步，将异步执行任务转换为同步执行任务&lt;/li&gt;
+  &lt;li&gt;保证线程安全，为线程加锁&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;1-dispatch-semaphore-线程同步&quot;&gt;1) Dispatch Semaphore 线程同步&lt;/h3&gt;
+
+&lt;p&gt;我们在开发中，会遇到这样的需求��异步执行耗时任务，并使用异步执行的结果进行一些额外的操作。换句话说，相当于，将将异步执行任务转换为同步执行任务。比如说：AFNetworking 中 AFURLSessionManager.m 里面的 tasksForKeyPath: 方法。通过引入信号量的方式，等待异步执行任务结果，获取到 tasks，然后再返回该 tasks。&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;- (NSArray *)tasksForKeyPath:(NSString *)keyPath {
+    __block NSArray *tasks = nil;
+    dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+    [self.session getTasksWithCompletionHandler:^(NSArray *dataTasks, NSArray *uploadTasks, NSArray *downloadTasks) {
+        if ([keyPath isEqualToString:NSStringFromSelector(@selector(dataTasks))]) {
+            tasks = dataTasks;
+        } else if ([keyPath isEqualToString:NSStringFromSelector(@selector(uploadTasks))]) {
+            tasks = uploadTasks;
+        } else if ([keyPath isEqualToString:NSStringFromSelector(@selector(downloadTasks))]) {
+            tasks = downloadTasks;
+        } else if ([keyPath isEqualToString:NSStringFromSelector(@selector(tasks))]) {
+            tasks = [@[dataTasks, uploadTasks, downloadTasks] valueForKeyPath:@&quot;@unionOfArrays.self&quot;];
+        }
+
+        dispatch_semaphore_signal(semaphore);
+    }];
+
+    dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+
+    return tasks;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;下面，我们来利用 Dispatch Semaphore 实现线程同步，将异步执行任务转换为同步执行任务。&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/**
+ * semaphore 线程同步
+ */
+- (void)semaphoreSync {
+    
+    NSLog(@&quot;currentThread---%@&quot;,[NSThread currentThread]);  // 打印当前线程
+    NSLog(@&quot;semaphore---begin&quot;);
+    
+    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+    dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+    
+    __block int number = 0;
+    dispatch_async(queue, ^{
+        // 追加任务 1
+        [NSThread sleepForTimeInterval:2];              // 模拟耗时操作
+        NSLog(@&quot;1---%@&quot;,[NSThread currentThread]);      // 打印当前线程
+        
+        number = 100;
+        
+        dispatch_semaphore_signal(semaphore);
+    });
+    
+    dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+    NSLog(@&quot;semaphore---end,number = %zd&quot;,number);
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;输出结果：&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; 2019-08-08 15:16:56.781543+0800 YSC-GCD-demo[17988:4325744] currentThread---{number = 1, name = main}
+   
+ 2019-08-08 15:16:56.781698+0800 YSC-GCD-demo[17988:4325744] semaphore---begin
+   
+ 2019-08-08 15:16:58.785232+0800 YSC-GCD-demo[17988:4325867] 1---{number = 3, name = (null)}
+   
+ 2019-08-08 15:16:58.785432+0800 YSC-GCD-demo[17988:4325744] semaphore---end,number = 100
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;从 Dispatch Semaphore 实现线程同步的代码可以看到：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;semaphore—end是在执行完 number = 100;之后才打印的。而且输出结果 number 为 100。这是因为 异步执行不会做任何等待，可以继续执行任务。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;执行顺如下：
+    1. semaphore 初始创建时计数为 0。
+    2. 异步执行将 任务 1追加到队列之后，不做等待，接着执行 dispatch_semaphore_wait方法，semaphore 减 1，此时 semaphore == -1，当前线程进入等待状态。
+    3. 然后，异步任务 1 开始执行。任务 1 执行到 dispatch_semaphore_signal之后，总信号量加 1，此时 semaphore == 0，正在被阻塞的线程（主线程）恢复继续执行。
+    4. 最后打印 semaphore—end,number = 100。&lt;/p&gt;
+
+&lt;p&gt;这样就实现了线程同步，将异步执行任务转换为同步执行任务。&lt;/p&gt;
+
+&lt;h3 id=&quot;2-dispatch-semaphore-线程安全和线程同步为线程加锁&quot;&gt;2) Dispatch Semaphore 线程安全和线程同步（为线程加锁）&lt;/h3&gt;
+
+&lt;p&gt;&lt;strong&gt;线程安全&lt;/strong&gt;：如果你的代码所在的进程中有多个线程在同时运行，而这些线程可能会同时运行这段代码。如果每次运行结果和单线程运行的结果是一样的，而且其他的变量的值也和预期的是一样的，就是线程安全的。&lt;/p&gt;
+
+&lt;p&gt;若每个线程中对全局变量、静态变量只有读操作，而无写操作，一般来说，这个全局变量是线程安全的；若有多个线程同时执行写操作（更改变量），一般都需要考虑线程同步，否则的话就可能影响线程安全。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;线程同步&lt;/strong&gt;：可理解为线程 A 和 线程 B 一块配合，A 执行到一定程度时要依靠线程 B 的某个结果，于是停下来，示意 B 运行；B 依言执行，再将结果给 A；A 再继续操作。&lt;/p&gt;
+
+&lt;p&gt;举个简单例子就是：两个人在一起聊天。两个人不能同时说话，避免听不清(操作冲突)。等一个人说完(一个线程结束操作)，另一个再说(另一个线程再开始操作)。&lt;/p&gt;
+
+&lt;p&gt;下面，我们模拟火车票售卖的方式，实现 NSThread 线程安全和解决线程同步问题。&lt;/p&gt;
+
+&lt;p&gt;场景：总共有 50 张火车票，有两个售卖火车票的窗口，一个是北京火车票售卖窗口，另一个是上海火车票售卖窗口。两个窗口同时售卖火车票，卖完为止。&lt;/p&gt;
+
+&lt;h4 id=&quot;非线程安全不使用-semaphore先来看看不考虑线程安全的代码&quot;&gt;非线程安全（不使用 semaphore）先来看看不考虑线程安全的代码：&lt;/h4&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/**
+ * 非线程安全：不使用 semaphore
+ * 初始化火车票数量、卖票窗口（非线程安全）、并开始卖票
+ */
+- (void)initTicketStatusNotSave {
+    NSLog(@&quot;currentThread---%@&quot;,[NSThread currentThread]);  // 打印当前线程
+    NSLog(@&quot;semaphore---begin&quot;);
+    
+    self.ticketSurplusCount = 50;
+    
+    // queue1 代表北京火车票售卖窗口
+    dispatch_queue_t queue1 = dispatch_queue_create(&quot;net.bujige.testQueue1&quot;, DISPATCH_QUEUE_SERIAL);
+    // queue2 代表上海火车票售卖窗口
+    dispatch_queue_t queue2 = dispatch_queue_create(&quot;net.bujige.testQueue2&quot;, DISPATCH_QUEUE_SERIAL);
+    
+    __weak typeof(self) weakSelf = self;
+    dispatch_async(queue1, ^{
+        [weakSelf saleTicketNotSafe];
+    });
+    
+    dispatch_async(queue2, ^{
+        [weakSelf saleTicketNotSafe];
+    });
+}
+
+/**
+ * 售卖火车票（非线程安全）
+ */
+- (void)saleTicketNotSafe {
+    while (1) {
+        
+        if (self.ticketSurplusCount &amp;gt; 0) {  // 如果还有票，继续售卖
+            self.ticketSurplusCount--;
+            NSLog(@&quot;%@&quot;, [NSString stringWithFormat:@&quot;剩余票数：%d 窗口：%@&quot;, self.ticketSurplusCount, [NSThread currentThread]]);
+            [NSThread sleepForTimeInterval:0.2];
+        } else { // 如果已卖完，关闭售票窗口
+            NSLog(@&quot;所有火车票均已售完&quot;);
+            break;
+        }
+        
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;输出结果（部分）：&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; 2019-08-08 15:21:39.772655+0800 YSC-GCD-demo[18071:4340555] currentThread---{number = 1, name = main}
+   
+ 2019-08-08 15:21:39.772790+0800 YSC-GCD-demo[18071:4340555] semaphore---begin
+   
+ 2019-08-08 15:21:39.773101+0800 YSC-GCD-demo[18071:4340604] 剩余票数：48 窗口：{number = 4, name = (null)}
+   
+ 2019-08-08 15:21:39.773115+0800 YSC-GCD-demo[18071:4340605] 剩余票数：49 窗口：{number = 3, name = (null)}
+   
+ 2019-08-08 15:21:39.975041+0800 YSC-GCD-demo[18071:4340605] 剩余票数：47 窗口：{number = 3, name = (null)}
+   
+ 2019-08-08 15:21:39.975037+0800 YSC-GCD-demo[18071:4340604] 剩余票数：47 窗口：{number = 4, name = (null)}
+   
+ 2019-08-08 15:21:40.176567+0800 YSC-GCD-demo[18071:4340604] 剩余票数：46 窗口：{number = 4, name = (null)}
+   
+ ...
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;可以看到在不考虑线程安全，不使用 semaphore 的情况下，得到票数是错乱的，这样显然不符合我们的需求，所以我们需要考虑线程安全问题。&lt;/p&gt;
+
+&lt;h4 id=&quot;线程安全使用-semaphore-加锁考虑线程安全的代码&quot;&gt;线程安全（使用 semaphore 加锁）考虑线程安全的代码：&lt;/h4&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/**
+ * 线程安全：使用 semaphore 加锁
+ * 初始化火车票数量、卖票窗口（线程安全）、并开始卖票
+ */
+- (void)initTicketStatusSave {
+    NSLog(@&quot;currentThread---%@&quot;,[NSThread currentThread]);  // 打印当前线程
+    NSLog(@&quot;semaphore---begin&quot;);
+    
+    semaphoreLock = dispatch_semaphore_create(1);
+    
+    self.ticketSurplusCount = 50;
+    
+    // queue1 代表北京火车票售卖窗口
+    dispatch_queue_t queue1 = dispatch_queue_create(&quot;net.bujige.testQueue1&quot;, DISPATCH_QUEUE_SERIAL);
+    // queue2 代表上海火车票售卖窗口
+    dispatch_queue_t queue2 = dispatch_queue_create(&quot;net.bujige.testQueue2&quot;, DISPATCH_QUEUE_SERIAL);
+    
+    __weak typeof(self) weakSelf = self;
+    dispatch_async(queue1, ^{
+        [weakSelf saleTicketSafe];
+    });
+    
+    dispatch_async(queue2, ^{
+        [weakSelf saleTicketSafe];
+    });
+}
+
+/**
+ * 售卖火车票（线程安全）
+ */
+- (void)saleTicketSafe {
+    while (1) {
+        // 相当于加锁
+        dispatch_semaphore_wait(semaphoreLock, DISPATCH_TIME_FOREVER);
+        
+        if (self.ticketSurplusCount &amp;gt; 0) {  // 如果还有票，继续售卖
+            self.ticketSurplusCount--;
+            NSLog(@&quot;%@&quot;, [NSString stringWithFormat:@&quot;剩余票数：%d 窗口：%@&quot;, self.ticketSurplusCount, [NSThread currentThread]]);
+            [NSThread sleepForTimeInterval:0.2];
+        } else { // 如果已卖完，关闭售票窗口
+            NSLog(@&quot;所有火车票均已售完&quot;);
+            
+            // 相当于解锁
+            dispatch_semaphore_signal(semaphoreLock);
+            break;
+        }
+        
+        // 相当于解锁
+        dispatch_semaphore_signal(semaphoreLock);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;输出结果为：&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; 2019-08-08 15:23:58.819891+0800 YSC-GCD-demo[18116:4348091] currentThread---{number = 1, name = main}
+   
+ 2019-08-08 15:23:58.820041+0800 YSC-GCD-demo[18116:4348091] semaphore---begin
+   
+ 2019-08-08 15:23:58.820305+0800 YSC-GCD-demo[18116:4348159] 剩余票数：49 窗口：{number = 3, name = (null)}
+   
+ 2019-08-08 15:23:59.022165+0800 YSC-GCD-demo[18116:4348157] 剩余票数：48 窗口：{number = 4, name = (null)}
+   
+ 2019-08-08 15:23:59.225299+0800 YSC-GCD-demo[18116:4348159] 剩余票数：47 窗口：{number = 3, name = (null)}
+   
+ ...
+   
+ 2019-08-08 15:24:08.355977+0800 YSC-GCD-demo[18116:4348157] 剩余票数：2 窗口：{number = 4, name = (null)}
+   
+ 2019-08-08 15:24:08.559201+0800 YSC-GCD-demo[18116:4348159] 剩余票数：1 窗口：{number = 3, name = (null)}
+   
+ 2019-08-08 15:24:08.759630+0800 YSC-GCD-demo[18116:4348157] 剩余票数：0 窗口：{number = 4, name = (null)}
+   
+ 2019-08-08 15:24:08.965100+0800 YSC-GCD-demo[18116:4348159] 所有火车票均已售完
+   
+ 2019-08-08 15:24:08.965440+0800 YSC-GCD-demo[18116:4348157] 所有火车票均已售完
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;可以看出，在考虑了线程安全的情况下，使用 dispatch_semaphore&lt;/p&gt;
+
+&lt;p&gt;机制之后，得到的票数是正确的，没有出现混乱的情况。我们也就解决了多个线程同步的问题。&lt;/p&gt;
+
+</description>
+        <pubDate>Tue, 20 Apr 2021 00:00:00 +0800</pubDate>
+        <link>http://localhost:4000/2021/04/iOS_GCD/</link>
+        <guid isPermaLink="true">http://localhost:4000/2021/04/iOS_GCD/</guid>
+        
+        <category>iOS</category>
+        
+        
+      </item>
     
       <item>
         <title>MAC 端口被占用 address already in use</title>
@@ -536,931 +1840,181 @@ fi
       </item>
     
       <item>
-        <title>09_SHELL编程之xarg使用</title>
-        <description>&lt;p&gt;&lt;em&gt;xargs 是给命令传递参数的一个过滤器，可以将管道或标准输入的数据转换成参数，默认的命令是 echo，这意味着通过管道传递给 xargs 的输入将会包含换行，不过通过 xargs 的处理，换行将被空格取代。&lt;/em&gt;&lt;/p&gt;
+        <title>shell编程：find命令</title>
+        <description>&lt;hr /&gt;
 
-&lt;h1 id=&quot;1-如何使用xargs命令&quot;&gt;1. 如何使用xargs命令&lt;/h1&gt;
-&lt;p&gt;语法：&lt;/p&gt;
+&lt;p&gt;在linux的日常管理中，find的使用频率很高，熟练掌握对提高工作效率很有帮助。&lt;/p&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;xargs [OPTIONS] [COMMAND [initial-arguments]]
+&lt;p&gt;find的语法比较简单，常用参数的就那么几个，比如-name、-type、-ctime等。初学的同学直接看第二部分的例子，如需进一步了解参数说明，可以参考find的帮助文档。&lt;/p&gt;
+
+&lt;p&gt;find语法如下：&lt;/p&gt;
+
+&lt;p&gt;find(选项)(参数)&lt;/p&gt;
+
+&lt;h2 id=&quot;常用例子&quot;&gt;常用例子&lt;/h2&gt;
+
+&lt;h3 id=&quot;根据文件名查找&quot;&gt;根据文件名查找&lt;/h3&gt;
+
+&lt;p&gt;列出当前目录以及子目录下的所有文件&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;find .
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;找到当前目录下名字为11.png的文件&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;find . -name &quot;11.png&quot;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;找到当前目录下所有的jpg文件&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;find . -name &quot;*.jpg&quot;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;找到当前目录下的jpg文件和png文件&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;find . -name &quot;*.jpg&quot; -o -name &quot;*.png&quot;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;找出当前目录下不是以png结尾的文件&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;find . ! -name &quot;*.png&quot;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;举一个例子：我们用管道符传输到xargs，并为每个参数运行touch命令，-t表示在执行之前先打印，创建三个文件：&lt;/p&gt;
+&lt;h3 id=&quot;根据正则表达式查找&quot;&gt;根据正则表达式查找&lt;/h3&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;[root@localhost ~]# echo &quot;file1 file2 file3&quot;|xargs -t touch
-touch file1 file2 file3
+&lt;p&gt;备注：正则表示式比原先想的要复杂，支持好几种类型。可以参考&lt;a href=&quot;http://www.gnu.org/software/findutils/manual/html_mono/find.html#emacs-regular-expression-syntax&quot;&gt;这里&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;找到当前目录下，文件名都是数字的png文件。&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;find . -regex &quot;\./*[0-9]+\.png&quot;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;h1 id=&quot;2-如何限制参数的数量&quot;&gt;2. &lt;em&gt;如何限制参数的数量&lt;/em&gt;&lt;/h1&gt;
-&lt;p&gt;默认情况下，传递给命令的参数数量由系统限制决定。-n选项指定要传递给命令的参数个数。xargs根据需要多次运行指定的命令，直到所有参数都用完为止。&lt;/p&gt;
+&lt;h3 id=&quot;根据路径查找&quot;&gt;根据路径查找&lt;/h3&gt;
 
-&lt;p&gt;下面例子指定每次传递一个参数：&lt;/p&gt;
+&lt;p&gt;找出当前目录下，路径中包含wysiwyg的文件/路径。&lt;/p&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;[root@localhost ~]# echo &quot;file1 file2 file3&quot;|xargs -n1 -t touch
-touch file1 
-touch file2 
-touch file3
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;find . -path &quot;*wysiwyg*&quot;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;h1 id=&quot;3-如何运行多个命令&quot;&gt;3. 如何运行多个命令&lt;/h1&gt;
-&lt;p&gt;要使用xargs运行多个命令，请使用-i或者-I选项。在-i或者-I后面自定义一个传递参数符号，所有匹配的项都会替换为传递给xargs的参数。&lt;/p&gt;
+&lt;h3 id=&quot;根据文件类型查找&quot;&gt;根据文件类型查找&lt;/h3&gt;
 
-&lt;p&gt;下面例子时xargs运行两条命令，先touch创建文件，然后ls列出来：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;[root@localhost ~]# echo &quot;file1 file2 file3&quot;|xargs -t -I % sh -c 'touch %;ls -l %'
-sh -c touch file1 file2 file3;ls -l file1 file2 file3 
--rw-r--r--. 1 root root 0 Jan 30 00:18 file1
--rw-r--r--. 1 root root 0 Jan 30 00:18 file2
--rw-r--r--. 1 root root 0 Jan 30 00:18 file3
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h1 id=&quot;4-如何指定一个分隔符&quot;&gt;4. 如何指定一个分隔符&lt;/h1&gt;
-&lt;p&gt;使用-d或者–delimiter选项设置自定义分隔符，可以是单个字符，也可以是以\ 开头的转义字符。&lt;/p&gt;
-
-&lt;p&gt;下面例子使用#做分隔符，echo命令使用了-n选项，意思是不输出新行：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;[root@localhost ~]# echo -n file1#file2#file3#file4|xargs -d \# -t touch
-touch file1 file2 file3 file4
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h1 id=&quot;5-如何从文件中读取条目&quot;&gt;5. 如何从文件中读取条目&lt;/h1&gt;
-&lt;p&gt;xargs命令还可以从文件读取条目，而不是从标准输入读取条目。使用-a选项，后跟文件名。
-创建一个ip.txt的文件，一会使用xargs命令ping里面的每一个地址：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;[root@localhost ~]# cat ip.txt 
-114.114.114.114
-www.linuxprobe.com
-202.102.128.68
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;使用-L 1选项，该选项表示xargs一次读取一行。如果省略此选项，xargs将把所有ip传递给一个ping命令。&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;[root@localhost ~]# xargs -a ip.txt -t -L 1 ping -c 1
-ping -c 1 114.114.114.114 
-PING 114.114.114.114 (114.114.114.114) 56(84) bytes of data.
-64 bytes from 114.114.114.114: icmp_seq=1 ttl=93 time=11.0 ms
-
---- 114.114.114.114 ping statistics ---
-1 packets transmitted, 1 received, 0% packet loss, time 0ms
-rtt min/avg/max/mdev = 11.026/11.026/11.026/0.000 ms
-ping -c 1 www.linuxprobe.com 
-PING www.linuxprobe.com.w.kunlunno.com (221.15.65.202) 56(84) bytes of data.
-64 bytes from hn.kd.jz.adsl (221.15.65.202): icmp_seq=1 ttl=48 time=20.9 ms
-
---- www.linuxprobe.com.w.kunlunno.com ping statistics ---
-1 packets transmitted, 1 received, 0% packet loss, time 0ms
-rtt min/avg/max/mdev = 20.934/20.934/20.934/0.000 ms
-ping -c 1 202.102.128.68 
-PING 202.102.128.68 (202.102.128.68) 56(84) bytes of data.
-64 bytes from 202.102.128.68: icmp_seq=1 ttl=83 time=8.71 ms
-
---- 202.102.128.68 ping statistics ---
-1 packets transmitted, 1 received, 0% packet loss, time 0ms
-rtt min/avg/max/mdev = 8.710/8.710/8.710/0.000 ms
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h1 id=&quot;6-xargs与find一起使用&quot;&gt;6. xargs与find一起使用&lt;/h1&gt;
-&lt;p&gt;xargs通常与find命令结合使用。您可以使用find搜索特定文件，然后使用xargs对这些文件执行操作。&lt;/p&gt;
-
-&lt;p&gt;若要避免包含换行符或其他特殊字符的文件名出现问题，请始终使用find的-print0选项，这样可以使find打印完整的文件名，配合xargs命令使用-0或者–null选项可以正确的解释。&lt;/p&gt;
-
-&lt;p&gt;下面例子中，查找log文件夹下面的类型为file的所有文件，打包压缩起来：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;[root@localhost ~]# find log/ -type f -print0|xargs --null tar -zcvf logs.tar.gz
-log/anaconda/anaconda.log
-log/anaconda/syslog
-log/anaconda/program.log
-log/anaconda/packaging.log
-log/anaconda/storage.log
-log/anaconda/ifcfg.log
-log/anaconda/ks-script-TOLvJc.log
-log/anaconda/ks-script-VRY9yQ.log
-log/anaconda/ks-script-pjDijm.log
-log/anaconda/journal.log
-log/audit/audit.log
-log/boot.log
-log/boot.log-20200126
-log/btmp
-log/btmp-20200126
-…
-[root@localhost ~]# ll
-total 604
--rw-------. 1 root root   1285 Dec 21 17:19 anaconda-ks.cfg
-drwxr-xr-x. 8 root root   4096 Jan 29 23:02 log
--rw-r--r--. 1 root root 607566 Jan 30 00:58 logs.tar.gz
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h1 id=&quot;总结&quot;&gt;总结&lt;/h1&gt;
-&lt;p&gt;之所以能用到这个命令，关键是由于很多命令不支持管道符来传递参数，xargs可以解决这个问题，而且使用起来很方便，跟能强大。&lt;/p&gt;
-</description>
-        <pubDate>Thu, 03 May 2018 00:00:00 +0800</pubDate>
-        <link>http://localhost:4000/2018/05/09_SHELL/</link>
-        <guid isPermaLink="true">http://localhost:4000/2018/05/09_SHELL/</guid>
-        
-        <category>Shell</category>
-        
-        
-      </item>
-    
-      <item>
-        <title>08_SHELL编程之文本处理工具awk</title>
-        <description>&lt;h1 id=&quot;课程目标&quot;&gt;课程目标&lt;/h1&gt;
+&lt;p&gt;通过-type进行文件类型的过滤。&lt;/p&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;熟悉awk的&lt;strong&gt;命令行模式&lt;/strong&gt;基本语法结构&lt;/li&gt;
-  &lt;li&gt;熟悉awk的相关内部变量&lt;/li&gt;
-  &lt;li&gt;熟悉awk常用的打印函数print&lt;/li&gt;
-  &lt;li&gt;能够在awk中匹配正则表达式打印相关的行&lt;/li&gt;
+  &lt;li&gt;f 普通文件&lt;/li&gt;
+  &lt;li&gt;l 符号连接&lt;/li&gt;
+  &lt;li&gt;d 目录&lt;/li&gt;
+  &lt;li&gt;c 字符设备&lt;/li&gt;
+  &lt;li&gt;b 块设备&lt;/li&gt;
+  &lt;li&gt;s 套接字&lt;/li&gt;
+  &lt;li&gt;p Fifo&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h1 id=&quot;一awk介绍&quot;&gt;一、awk介绍&lt;/h1&gt;
+&lt;p&gt;举例，查找当前目录下，路径中包含wysiwyg的文件&lt;/p&gt;
 
-&lt;h2 id=&quot;1-awk概述&quot;&gt;1. awk概述&lt;/h2&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;find . -type f -path &quot;*wysiwyg*&quot;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;限制搜索深度&quot;&gt;限制搜索深度&lt;/h3&gt;
+
+&lt;p&gt;找出当前目录下所有的png，不包括子目录。&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;find . -maxdepth 1 -name &quot;*.png&quot;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;相对应的，也是mindepth选项。&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;find . -mindepth 2 -maxdepth 2 -name &quot;*.png&quot;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;根据文件大小&quot;&gt;根据文件大小&lt;/h3&gt;
+
+&lt;p&gt;通过-size来过滤文件尺寸。支持的文件大小单元如下&lt;/p&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;awk是一种编程语言，主要用于在linux/unix下对文本和数据进行处理，是linux/unix下的一个工具。数据可以来自标准输入、一个或多个文件，或其它命令的输出。&lt;/li&gt;
-  &lt;li&gt;awk的处理文本和数据的方式：&lt;strong&gt;逐行扫描文件&lt;/strong&gt;，默认从第一行到最后一行，寻找匹配的特定模式的行，并在这些行上进行你想要的操作。&lt;/li&gt;
-  &lt;li&gt;awk分别代表其作者姓氏的第一个字母。因为它的作者是三个人，分别是Alfred Aho、Brian Kernighan、Peter Weinberger。&lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;gawk是awk的GNU版本，它提供了Bell实验室和GNU的一些扩展。&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;下面介绍的awk是以GNU的gawk为例的，在linux系统中已把awk链接到gawk，所以下面全部以awk进行介绍。&lt;/li&gt;
+  &lt;li&gt;b —— 块（512字节）&lt;/li&gt;
+  &lt;li&gt;c —— 字节&lt;/li&gt;
+  &lt;li&gt;w —— 字（2字节）&lt;/li&gt;
+  &lt;li&gt;k —— 千字节&lt;/li&gt;
+  &lt;li&gt;M —— 兆字节&lt;/li&gt;
+  &lt;li&gt;G —— 吉字节&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h2 id=&quot;2-awk能干啥&quot;&gt;2. awk能干啥?&lt;/h2&gt;
+&lt;p&gt;举例来说，找出当前目录下文件大小超过100M的文件&lt;/p&gt;
 
-&lt;ol&gt;
-  &lt;li&gt;awk用来处理文件和数据的，是类unix下的一个工具，也是一种编程语言&lt;/li&gt;
-  &lt;li&gt;可以用来统计数据，比如网站的访问量，访问的IP量等等&lt;/li&gt;
-  &lt;li&gt;支持条件判断，支持for和while循环&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h1 id=&quot;二awk使用方式&quot;&gt;二、awk使用方式&lt;/h1&gt;
-
-&lt;h2 id=&quot;1-命令行模式使用&quot;&gt;1. 命令行模式使用&lt;/h2&gt;
-
-&lt;h3 id=&quot;-语法结构&quot;&gt;㈠ 语法结构&lt;/h3&gt;
-
-&lt;div class=&quot;language-powershell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;awk &lt;/span&gt;选项 &lt;span class=&quot;s1&quot;&gt;'命令部分'&lt;/span&gt; 文件名
-
-
-特别说明：
-引用shell变量需用双引号引起
-
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;find . -type f -size +100M
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;h3 id=&quot;-常用选项介绍&quot;&gt;㈡ 常用选项介绍&lt;/h3&gt;
+&lt;h3 id=&quot;根据访问修改变化时间&quot;&gt;根据访问/修改/变化时间&lt;/h3&gt;
+
+&lt;p&gt;支持下面的时间类型。&lt;/p&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;-F  定义字段分割符号，默认的分隔符是空格&lt;/li&gt;
-  &lt;li&gt;-v  定义变量并赋值&lt;/li&gt;
+  &lt;li&gt;访问时间（-atime/天，-amin/分钟）：用户最近一次访问时间。&lt;/li&gt;
+  &lt;li&gt;修改时间（-mtime/天，-mmin/分钟）：文件最后一次修改时间。&lt;/li&gt;
+  &lt;li&gt;变化时间（-ctime/天，-cmin/分钟）：文件数据元（例如权限等）最后一次修改时间。&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h3 id=&quot;--命名部分说明&quot;&gt;㈢  &lt;strong&gt;‘&lt;/strong&gt;命名部分说明&lt;strong&gt;‘&lt;/strong&gt;&lt;/h3&gt;
+&lt;p&gt;举例，找出1天内被修改过的文件&lt;/p&gt;
 
-&lt;ul&gt;
-  &lt;li&gt;正则表达式，地址定位&lt;/li&gt;
-&lt;/ul&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;find . -type f -mtime -1
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;找出最近1周内被访问过的文件&lt;/p&gt;
 
-&lt;div class=&quot;language-powershell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;s1&quot;&gt;'/root/{awk语句}'&lt;/span&gt;                sed中： &lt;span class=&quot;s1&quot;&gt;'/root/p'&lt;/span&gt;
-&lt;span class=&quot;s1&quot;&gt;'NR==1,NR==5{awk语句}'&lt;/span&gt;            sed中： &lt;span class=&quot;s1&quot;&gt;'1,5p'&lt;/span&gt;
-&lt;span class=&quot;s1&quot;&gt;'/^root/,/^ftp/{awk语句}'&lt;/span&gt;      sed中：&lt;span class=&quot;s1&quot;&gt;'/^root/,/^ftp/p'&lt;/span&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;find . -type f -atime -7
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;将日志目录里超过一个礼拜的日志文件，移动到/tmp/old_logs里。&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;find . -type f -mtime +7 -name &quot;*.log&quot; -exec mv {} /tmp/old_logs \;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;注意：{} 用于与-exec选项结合使用来匹配所有文件，然后会被替换为相应的文件名。&lt;/p&gt;
+
+&lt;p&gt;另外，\;用来表示命令结束，如果没有加，则会有如下提示&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;find: -exec: no terminating &quot;;&quot; or &quot;+&quot;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;ul&gt;
-  &lt;li&gt;{awk语句1&lt;strong&gt;;&lt;/strong&gt;awk语句2&lt;strong&gt;;&lt;/strong&gt;…}&lt;/li&gt;
-&lt;/ul&gt;
+&lt;h3 id=&quot;根据权限&quot;&gt;根据权限&lt;/h3&gt;
 
-&lt;div class=&quot;language-powershell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;s1&quot;&gt;'{print $0;print $1}'&lt;/span&gt;        sed中：&lt;span class=&quot;s1&quot;&gt;'p'&lt;/span&gt;
-&lt;span class=&quot;s1&quot;&gt;'NR==5{print $0}'&lt;/span&gt;                sed中：&lt;span class=&quot;s1&quot;&gt;'5p'&lt;/span&gt;
-注：awk命令语句间用分号间隔
+&lt;p&gt;通过-perm来实现。举例，找出当前目录下权限为777的文件&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;find . -type f -perm 777
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;找出当前目录下权限不是644的php文件&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;find . -type f -name &quot;*.php&quot; ! -perm 644
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;ul&gt;
-  &lt;li&gt;BEGIN…END….&lt;/li&gt;
-&lt;/ul&gt;
+&lt;h3 id=&quot;根据文件拥有者&quot;&gt;根据文件拥有者&lt;/h3&gt;
 
-&lt;div class=&quot;language-powershell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;s1&quot;&gt;'BEGIN{awk语句};{处理中};END{awk语句}'&lt;/span&gt;
-&lt;span class=&quot;s1&quot;&gt;'BEGIN{awk语句};{处理中}'&lt;/span&gt;
-&lt;span class=&quot;s1&quot;&gt;'{处理中};END{awk语句}'&lt;/span&gt;
+&lt;p&gt;找出文件拥有者为root的文件&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;find . -type f -user root
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;找出文件所在群组为root的文件&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;find . -type f -group root
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;h2 id=&quot;2-脚本模式使用&quot;&gt;2. 脚本模式使用&lt;/h2&gt;
+&lt;h3 id=&quot;找到文件后执行命令&quot;&gt;找到文件后执行命令&lt;/h3&gt;
 
-&lt;h3 id=&quot;-脚本编写&quot;&gt;㈠ 脚本编写&lt;/h3&gt;
+&lt;p&gt;通过-ok、和-exec来实现。区别在于，-ok在执行命令前，会进行二次确认，-exec不会。&lt;/p&gt;
 
-&lt;div class=&quot;language-powershell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;#!/bin/awk -f         定义魔法字符&lt;/span&gt;
-以下是awk引号里的命令清单，不要用引号保护命令，多个命令用分号间隔
-&lt;span class=&quot;k&quot;&gt;BEGIN&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;FS&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;:&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;nv&quot;&gt;NR&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;==&lt;/span&gt;1,NR&lt;span class=&quot;o&quot;&gt;==&lt;/span&gt;3&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;print &lt;span class=&quot;nv&quot;&gt;$1&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;\t&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$NF&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-...
+&lt;p&gt;看下实际例子。删除当前目录下所有的js文件。用-ok的效果如下，删除前有二次确认&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;➜ find find . -type f -name &quot;*.js&quot; -ok rm {} \; &quot;rm ./1.js&quot;?
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;试下-exec。直接就删除了&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;find . -type f -name &quot;*.js&quot; -exec rm {} \;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;h3 id=&quot;-脚本执行&quot;&gt;㈡ 脚本执行&lt;/h3&gt;
+&lt;h3 id=&quot;找出空文件&quot;&gt;找出空文件&lt;/h3&gt;
 
-&lt;div class=&quot;language-powershell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;方法1：
-&lt;span class=&quot;nb&quot;&gt;awk &lt;/span&gt;选项 -f awk的脚本文件  要处理的文本文件
-&lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; -f awk.sh filename
+&lt;p&gt;例子如下&lt;/p&gt;
 
-&lt;span class=&quot;nb&quot;&gt;sed&lt;/span&gt; -f sed.sh -i filename
-
-方法2：
-./awk的脚本文件&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;或者绝对路径&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;    要处理的文本文件
-./awk.sh filename
-
-./sed.sh filename
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;touch {1..9}.txt echo &quot;hello&quot; &amp;gt; 1.txt find . -empty
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h1 id=&quot;三-awk内部相关变量&quot;&gt;三、 awk内部相关变量&lt;/h1&gt;
-
-&lt;table&gt;
-  &lt;thead&gt;
-    &lt;tr&gt;
-      &lt;th&gt;变量&lt;/th&gt;
-      &lt;th&gt;变量说明&lt;/th&gt;
-      &lt;th&gt;备注&lt;/th&gt;
-    &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;$0&lt;/td&gt;
-      &lt;td&gt;当前处理行的所有记录&lt;/td&gt;
-      &lt;td&gt; &lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;$1,$2,$3…$n&lt;/td&gt;
-      &lt;td&gt;文件中每行以间隔符号分割的不同字段&lt;/td&gt;
-      &lt;td&gt;awk -F: ‘{print $1,$3}’&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;NF&lt;/td&gt;
-      &lt;td&gt;当前记录的字段数（列数）&lt;/td&gt;
-      &lt;td&gt;awk -F: ‘{print NF}’&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;$NF&lt;/td&gt;
-      &lt;td&gt;最后一列&lt;/td&gt;
-      &lt;td&gt;$(NF-1)表示倒数第二列&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;FNR/NR&lt;/td&gt;
-      &lt;td&gt;行号&lt;/td&gt;
-      &lt;td&gt; &lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;FS&lt;/td&gt;
-      &lt;td&gt;定义间隔符&lt;/td&gt;
-      &lt;td&gt;‘BEGIN{FS=”:”};{print $1,$3}’&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;OFS&lt;/td&gt;
-      &lt;td&gt;定义输出字段分隔符，默认空格&lt;/td&gt;
-      &lt;td&gt;‘BEGIN{OFS=”\t”};print $1,$3}’&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;RS&lt;/td&gt;
-      &lt;td&gt;输入记录分割符，默认换行&lt;/td&gt;
-      &lt;td&gt;‘BEGIN{RS=”\t”};{print $0}’&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;ORS&lt;/td&gt;
-      &lt;td&gt;输出记录分割符，默认换行&lt;/td&gt;
-      &lt;td&gt;‘BEGIN{ORS=”\n\n”};{print $1,$3}’&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;FILENAME&lt;/td&gt;
-      &lt;td&gt;当前输入的文件名&lt;/td&gt;
-      &lt;td&gt; &lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;h2 id=&quot;1常用内置变量举例&quot;&gt;1、常用内置变量举例&lt;/h2&gt;
-
-&lt;div class=&quot;language-powershell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# awk -F: '{print $1,$(NF-1)}' 1.txt&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;# awk -F: '{print $1,$(NF-1),$NF,NF}' 1.txt&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;# awk '/root/{print $0}' 1.txt&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;# awk '/root/' 1.txt&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;# awk -F: '/root/{print $1,$NF}' 1.txt &lt;/span&gt;
-root /bin/bash
-&lt;span class=&quot;c1&quot;&gt;# awk -F: '/root/{print $0}' 1.txt      &lt;/span&gt;
-root:x:0:0:root:/root:/bin/bash
-&lt;span class=&quot;c1&quot;&gt;# awk 'NR==1,NR==5' 1.txt &lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;# awk 'NR==1,NR==5{print $0}' 1.txt&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;# awk 'NR==1,NR==5;/^root/{print $0}' 1.txt &lt;/span&gt;
-root:x:0:0:root:/root:/bin/bash
-root:x:0:0:root:/root:/bin/bash
-bin:x:1:1:bin:/bin:/sbin/nologin
-daemon:x:2:2:daemon:/sbin:/sbin/nologin
-adm:x:3:4:adm:/var/adm:/sbin/nologin
-&lt;span class=&quot;nb&quot;&gt;lp&lt;/span&gt;:x:4:7:lp:/var/spool/lpd:/sbin/nologin
-
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h2 id=&quot;2内置变量分隔符举例&quot;&gt;2、内置变量分隔符举例&lt;/h2&gt;
-
-&lt;div class=&quot;language-powershell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;FS和OFS:
-&lt;span class=&quot;c1&quot;&gt;# awk 'BEGIN{FS=&quot;:&quot;};/^root/,/^lp/{print $1,$NF}' 1.txt&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;# awk -F: 'BEGIN{OFS=&quot;\t\t&quot;};/^root/,/^lp/{print $1,$NF}' 1.txt        &lt;/span&gt;
-root            /bin/bash
-bin             /sbin/nologin
-daemon          /sbin/nologin
-adm             /sbin/nologin
-&lt;span class=&quot;nb&quot;&gt;lp&lt;/span&gt;              /sbin/nologin
-&lt;span class=&quot;c1&quot;&gt;# awk -F: 'BEGIN{OFS=&quot;@@@&quot;};/^root/,/^lp/{print $1,$NF}' 1.txt     &lt;/span&gt;
-root@@@/bin/bash
-bin@@@/sbin/nologin
-daemon@@@/sbin/nologin
-adm@@@/sbin/nologin
-&lt;span class=&quot;nb&quot;&gt;lp&lt;/span&gt;@@@/sbin/nologin
-&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;root@server shell07]# 
-
-RS和ORS：
-修改源文件前2行增加制表符和内容：
-vim 1.txt
-root:x:0:0:root:/root:/bin/bash hello   world
-bin:x:1:1:bin:/bin:/sbin/nologin        test1   test2
-
-&lt;span class=&quot;c1&quot;&gt;# awk 'BEGIN{RS=&quot;\t&quot;};{print $0}' 1.txt&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;# awk 'BEGIN{ORS=&quot;\t&quot;};{print $0}' 1.txt&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h1 id=&quot;四-awk工作原理&quot;&gt;四、 awk工作原理&lt;/h1&gt;
-
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;awk -F: '{print $1,$3}' /etc/passwd&lt;/code&gt;&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;
-    &lt;p&gt;awk使用一行作为输入，并将这一行赋给内部变量$0，每一行也可称为一个记录，以换行符(RS)结束&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;每行被间隔符&lt;strong&gt;:&lt;/strong&gt;(默认为空格或制表符)分解成字段(或域)，每个字段存储在已编号的变量中，从$1开始&lt;/p&gt;
-
-    &lt;p&gt;问：awk如何知道用空格来分隔字段的呢？&lt;/p&gt;
-
-    &lt;p&gt;答：因为有一个内部变量FS来确定字段分隔符。初始时，FS赋为空格&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;awk使用print函数打印字段，打印出来的字段会以空格分隔，因为$1,$3之间有一个逗号。逗号比较特殊，它映射为另一个内部变量，称为输出字段分隔符OFS，OFS默认为空格&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;awk处理完一行后，将从文件中获取另一行，并将其存储在$0中，覆盖原来的内容，然后将新的字符串分隔成字段并进行处理。该过程将持续到所有行处理完毕&lt;/p&gt;
-  &lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h1 id=&quot;五awk使用进阶&quot;&gt;五、awk使用进阶&lt;/h1&gt;
-
-&lt;h2 id=&quot;1-格式化输出print和printf&quot;&gt;1. 格式化输出&lt;code class=&quot;highlighter-rouge&quot;&gt;print&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;printf&lt;/code&gt;&lt;/h2&gt;
-
-&lt;div class=&quot;language-powershell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;print函数        类似echo &lt;span class=&quot;s2&quot;&gt;&quot;hello world&quot;&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;# date |awk '{print &quot;Month: &quot;$2 &quot;\nYear: &quot;$NF}'&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;# awk -F: '{print &quot;username is: &quot; $1 &quot;\t uid is: &quot;$3}' /etc/passwd&lt;/span&gt;
-
-
-printf函数        类似echo -n
-&lt;span class=&quot;c1&quot;&gt;# awk -F: '{printf &quot;%-15s %-10s %-15s\n&quot;, $1,$2,$3}'  /etc/passwd&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;# awk -F: '{printf &quot;|%15s| %10s| %15s|\n&quot;, $1,$2,$3}' /etc/passwd&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;# awk -F: '{printf &quot;|%-15s| %-10s| %-15s|\n&quot;, $1,$2,$3}' /etc/passwd&lt;/span&gt;
-
-&lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'BEGIN{FS=&quot;:&quot;};{printf &quot;%-15s %-15s %-15s\n&quot;,$1,$6,$NF}'&lt;/span&gt; a.txt
-
-%s 字符类型  strings            %-20s
-%d 数值类型    
-占15字符
-- 表示左对齐，默认是右对齐
-printf默认不会在行尾自动换行，加\n
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h2 id=&quot;2-awk变量定义&quot;&gt;2. awk变量定义&lt;/h2&gt;
-
-&lt;div class=&quot;language-powershell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# awk -v NUM=3 -F: '{ print $NUM }' /etc/passwd&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;# awk -v NUM=3 -F: '{ print NUM }' /etc/passwd&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;# awk -v num=1 'BEGIN{print num}' &lt;/span&gt;
-1
-&lt;span class=&quot;c1&quot;&gt;# awk -v num=1 'BEGIN{print $num}' &lt;/span&gt;
-注意：
-awk中调用定义的变量不需要加&lt;span class=&quot;err&quot;&gt;$&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h2 id=&quot;3-awk中beginend使用&quot;&gt;3. awk中BEGIN…END使用&lt;/h2&gt;
-
-&lt;p&gt;​    ①BEGIN：表示在程序开始前执行&lt;/p&gt;
-
-&lt;p&gt;​    ②END ：表示所有文件处理完后执行&lt;/p&gt;
-
-&lt;p&gt;​    ③用法：&lt;code class=&quot;highlighter-rouge&quot;&gt;'BEGIN{开始处理之前};{处理中};END{处理结束后}'&lt;/code&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;-举例说明1&quot;&gt;㈠ 举例说明1&lt;/h3&gt;
-
-&lt;p&gt;&lt;strong&gt;打印最后一列和倒数第二列（登录shell和家目录）&lt;/strong&gt;&lt;/p&gt;
-
-&lt;div class=&quot;language-powershell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; -F: &lt;span class=&quot;s1&quot;&gt;'BEGIN{ print &quot;Login_shell\t\tLogin_home\n*******************&quot;};{print $NF&quot;\t\t&quot;$(NF-1)};END{print &quot;************************&quot;}'&lt;/span&gt; 1.txt
-
-&lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'BEGIN{ FS=&quot;:&quot;;print &quot;Login_shell\tLogin_home\n*******************&quot;};{print $NF&quot;\t&quot;$(NF-1)};END{print &quot;************************&quot;}'&lt;/span&gt; 1.txt
-
-Login_shell        Login_home
-&lt;span class=&quot;k&quot;&gt;************************&lt;/span&gt;
-/bin/bash        /root
-/sbin/nologin        /bin
-/sbin/nologin        /sbin
-/sbin/nologin        /var/adm
-/sbin/nologin        /var/spool/lpd
-/bin/bash        /home/redhat
-/bin/bash        /home/user01
-/sbin/nologin        /var/named
-/bin/bash        /home/u01
-/bin/bash        /home/YUNWEI
-&lt;span class=&quot;k&quot;&gt;************************************&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;-举例说明2&quot;&gt;㈡ 举例说明2&lt;/h3&gt;
-
-&lt;p&gt;&lt;strong&gt;打印/etc/passwd里的用户名、家目录及登录shell&lt;/strong&gt;&lt;/p&gt;
-
-&lt;div class=&quot;language-powershell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;u_name      h_dir       shell
-&lt;span class=&quot;k&quot;&gt;***************************&lt;/span&gt;
-
-&lt;span class=&quot;k&quot;&gt;***************************&lt;/span&gt;
-
-&lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; -F: &lt;span class=&quot;s1&quot;&gt;'BEGIN{OFS=&quot;\t\t&quot;;print&quot;u_name\t\th_dir\t\tshell\n***************************&quot;};{printf &quot;%-20s %-20s %-20s\n&quot;,$1,$(NF-1),$NF};END{print &quot;****************************&quot;}'&lt;/span&gt;
-
-
-&lt;span class=&quot;c1&quot;&gt;# awk -F: 'BEGIN{print &quot;u_name\t\th_dir\t\tshell&quot; RS &quot;*****************&quot;}  {printf &quot;%-15s %-20s %-20s\n&quot;,$1,$(NF-1),$NF}END{print &quot;***************************&quot;}'  /etc/passwd&lt;/span&gt;
-
-格式化输出：
-&lt;span class=&quot;nb&quot;&gt;echo        &lt;/span&gt;print
-&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; -n    &lt;span class=&quot;nb&quot;&gt;printf&lt;/span&gt;
-
-&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;printf&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;%-15s %-20s %-20s\n&quot;&lt;/span&gt;,&lt;span class=&quot;nv&quot;&gt;$1&lt;/span&gt;,&lt;span class=&quot;k&quot;&gt;$(&lt;/span&gt;NF-1&lt;span class=&quot;k&quot;&gt;)&lt;/span&gt;,&lt;span class=&quot;nv&quot;&gt;$NF&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h2 id=&quot;4-awk和正则的综合运用&quot;&gt;4. awk和正则的综合运用&lt;/h2&gt;
-
-&lt;table&gt;
-  &lt;thead&gt;
-    &lt;tr&gt;
-      &lt;th&gt;运算符&lt;/th&gt;
-      &lt;th&gt;说明&lt;/th&gt;
-    &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;==&lt;/td&gt;
-      &lt;td&gt;等于&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;!=&lt;/td&gt;
-      &lt;td&gt;不等于&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;&amp;gt;&lt;/td&gt;
-      &lt;td&gt;大于&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;&amp;lt;&lt;/td&gt;
-      &lt;td&gt;小于&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;&amp;gt;=&lt;/td&gt;
-      &lt;td&gt;大于等于&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;&amp;lt;=&lt;/td&gt;
-      &lt;td&gt;小于等于&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;~&lt;/td&gt;
-      &lt;td&gt;匹配&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;!~&lt;/td&gt;
-      &lt;td&gt;不匹配&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;!&lt;/td&gt;
-      &lt;td&gt;逻辑非&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;&amp;amp;&amp;amp;&lt;/td&gt;
-      &lt;td&gt;逻辑与&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;||&lt;/td&gt;
-      &lt;td&gt;逻辑或&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;h3 id=&quot;-举例说明&quot;&gt;㈠ 举例说明&lt;/h3&gt;
-
-&lt;div class=&quot;language-powershell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;从第一行开始匹配到以lp开头行
-&lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; -F: &lt;span class=&quot;s1&quot;&gt;'NR==1,/^lp/{print $0 }'&lt;/span&gt; passwd  
-从第一行到第5行          
-&lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; -F: &lt;span class=&quot;s1&quot;&gt;'NR==1,NR==5{print $0 }'&lt;/span&gt; passwd
-从以lp开头的行匹配到第10行       
-&lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; -F: &lt;span class=&quot;s1&quot;&gt;'/^lp/,NR==10{print $0 }'&lt;/span&gt; passwd 
-从以root开头的行匹配到以lp开头的行       
-&lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; -F: &lt;span class=&quot;s1&quot;&gt;'/^root/,/^lp/{print $0}'&lt;/span&gt; passwd
-打印以root开头或者以lp开头的行            
-&lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; -F: &lt;span class=&quot;s1&quot;&gt;'/^root/ || /^lp/{print $0}'&lt;/span&gt; passwd
-&lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; -F: &lt;span class=&quot;s1&quot;&gt;'/^root/;/^lp/{print $0}'&lt;/span&gt; passwd
-显示5-10行   
-&lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; -F&lt;span class=&quot;s1&quot;&gt;':'&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'NR&amp;gt;=5 &amp;amp;&amp;amp; NR&amp;lt;=10 {print $0}'&lt;/span&gt; /etc/passwd     
-&lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; -F: &lt;span class=&quot;s1&quot;&gt;'NR&amp;lt;10 &amp;amp;&amp;amp; NR&amp;gt;5 {print $0}'&lt;/span&gt; passwd 
-
-打印30-39行以bash结尾的内容：
-&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;root@MissHou shell06]# &lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'NR&amp;gt;=30 &amp;amp;&amp;amp; NR&amp;lt;=39 &amp;amp;&amp;amp; $0 ~ /bash$/{print $0}'&lt;/span&gt; passwd 
-stu1:x:500:500::/home/stu1:/bin/bash
-yunwei:x:501:501::/home/yunwei:/bin/bash
-user01:x:502:502::/home/user01:/bin/bash
-user02:x:503:503::/home/user02:/bin/bash
-user03:x:504:504::/home/user03:/bin/bash
-
-&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;root@MissHou shell06]# &lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'NR&amp;gt;=3 &amp;amp;&amp;amp; NR&amp;lt;=8 &amp;amp;&amp;amp; /bash$/'&lt;/span&gt; 1.txt  
-stu7:x:1007:1007::/rhome/stu7:/bin/bash
-stu8:x:1008:1008::/rhome/stu8:/bin/bash
-stu9:x:1009:1009::/rhome/stu9:/bin/bash
-
-打印文件中1-5并且以root开头的行
-&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;root@MissHou shell06]# &lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'NR&amp;gt;=1 &amp;amp;&amp;amp; NR&amp;lt;=5 &amp;amp;&amp;amp; $0 ~ /^root/{print $0}'&lt;/span&gt; 1.txt
-root:x:0:0:root:/root:/bin/bash
-&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;root@MissHou shell06]# &lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'NR&amp;gt;=1 &amp;amp;&amp;amp; NR&amp;lt;=5 &amp;amp;&amp;amp; $0 !~ /^root/{print $0}'&lt;/span&gt; 1.txt
-bin:x:1:1:bin:/bin:/sbin/nologin
-daemon:x:2:2:daemon:/sbin:/sbin/nologin
-adm:x:3:4:adm:/var/adm:/sbin/nologin
-&lt;span class=&quot;nb&quot;&gt;lp&lt;/span&gt;:x:4:7:lp:/var/spool/lpd:/sbin/nologin
-
-
-理解;号和||的含义：
-&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;root@MissHou shell06]# &lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'NR&amp;gt;=3 &amp;amp;&amp;amp; NR&amp;lt;=8 || /bash$/'&lt;/span&gt; 1.txt
-&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;root@MissHou shell06]# &lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'NR&amp;gt;=3 &amp;amp;&amp;amp; NR&amp;lt;=8;/bash$/'&lt;/span&gt; 1.txt
-
-
-打印IP地址
-&lt;span class=&quot;c1&quot;&gt;# ifconfig eth0|awk 'NR&amp;gt;1 {print $2}'|awk -F':' 'NR&amp;lt;2 {print $2}'    &lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;# ifconfig eth0|grep Bcast|awk -F':' '{print $2}'|awk '{print $1}'&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;# ifconfig eth0|grep Bcast|awk '{print $2}'|awk -F: '{print $2}'&lt;/span&gt;
-
-
-&lt;span class=&quot;c1&quot;&gt;# ifconfig eth0|awk NR==2|awk -F '[ :]+' '{print $4RS$6RS$8}'&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;# ifconfig eth0|awk -F&quot;[ :]+&quot; '/inet addr:/{print $4}'&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h2 id=&quot;4-课堂练习&quot;&gt;4. 课堂练习&lt;/h2&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;显示可以登录操作系统的用户所有信息     从第7列匹配以bash结尾，输出整行（当前行所有的列）&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;div class=&quot;language-powershell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;root@MissHou ~] &lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'/bash$/{print $0}'&lt;/span&gt;    /etc/passwd
-&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;root@MissHou ~] &lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'/bash$/{print $0}'&lt;/span&gt; /etc/passwd
-&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;root@MissHou ~] &lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'/bash$/'&lt;/span&gt; /etc/passwd
-&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;root@MissHou ~] &lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; -F: &lt;span class=&quot;s1&quot;&gt;'$7 ~ /bash/'&lt;/span&gt; /etc/passwd
-&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;root@MissHou ~] &lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; -F: &lt;span class=&quot;s1&quot;&gt;'$NF ~ /bash/'&lt;/span&gt; /etc/passwd
-&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;root@MissHou ~] &lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; -F: &lt;span class=&quot;s1&quot;&gt;'$0 ~ /bash/'&lt;/span&gt; /etc/passwd
-&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;root@MissHou ~] &lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; -F: &lt;span class=&quot;s1&quot;&gt;'$0 ~ /\/bin\/bash/'&lt;/span&gt; /etc/passwd
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;显示可以登录系统的用户名&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;div class=&quot;language-powershell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# awk -F: '$0 ~ /\/bin\/bash/{print $1}' /etc/passwd&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;打印出系统中普通用户的UID和用户名&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;div class=&quot;language-powershell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;500    stu1
-501    yunwei
-502    user01
-503    user02
-504    user03
-
-
-&lt;span class=&quot;c1&quot;&gt;# awk -F: 'BEGIN{print &quot;UID\tUSERNAME&quot;} {if($3&amp;gt;=500 &amp;amp;&amp;amp; $3 !=65534 ) {print $3&quot;\t&quot;$1} }' /etc/passwdUID    USERNAME&lt;/span&gt;
-
-
-&lt;span class=&quot;c1&quot;&gt;# awk -F: '{if($3 &amp;gt;= 500 &amp;amp;&amp;amp; $3 != 65534) print $1,$3}' a.txt &lt;/span&gt;
-redhat 508
-user01 509
-u01 510
-YUNWEI 511
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h2 id=&quot;5-awk的脚本编程&quot;&gt;5. awk的脚本编程&lt;/h2&gt;
-
-&lt;h3 id=&quot;-流程控制语句&quot;&gt;㈠ 流程控制语句&lt;/h3&gt;
-
-&lt;h4 id=&quot;-if结构&quot;&gt;① if结构&lt;/h4&gt;
-
-&lt;div class=&quot;language-powershell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;if语句：
-
-&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; xxx &lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;;&lt;span class=&quot;k&quot;&gt;then
-&lt;/span&gt;xxx
-&lt;span class=&quot;k&quot;&gt;fi
-
-&lt;/span&gt;格式：
-&lt;span class=&quot;nb&quot;&gt;awk &lt;/span&gt;选项 &lt;span class=&quot;s1&quot;&gt;'正则，地址定位{awk语句}'&lt;/span&gt;  文件名
-
-&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;表达式&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;｛语句1;语句2;...｝&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-&lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; -F: &lt;span class=&quot;s1&quot;&gt;'{if($3&amp;gt;=500 &amp;amp;&amp;amp; $3&amp;lt;=60000) {print $1,$3} }'&lt;/span&gt; passwd
-
-&lt;span class=&quot;c1&quot;&gt;# awk -F: '{if($3==0) {print $1&quot;是管理员&quot;} }' passwd &lt;/span&gt;
-root是管理员
-
-&lt;span class=&quot;c1&quot;&gt;# awk 'BEGIN{if('$(id -u)'==0) {print &quot;admin&quot;} }'&lt;/span&gt;
-admin
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h4 id=&quot;-ifelse结构&quot;&gt;② if…else结构&lt;/h4&gt;
-
-&lt;div class=&quot;language-powershell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;...else语句:
-&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; xxx &lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;;&lt;span class=&quot;k&quot;&gt;then
-    &lt;/span&gt;xxxxx
-    
-&lt;span class=&quot;k&quot;&gt;else
-    &lt;/span&gt;xxx
-&lt;span class=&quot;k&quot;&gt;fi
-
-&lt;/span&gt;格式：
-&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;表达式&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;｛语句;语句;...｝else｛语句;语句;...&lt;span class=&quot;o&quot;&gt;}}&lt;/span&gt;
-
-&lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; -F: &lt;span class=&quot;s1&quot;&gt;'{ if($3&amp;gt;=500 &amp;amp;&amp;amp; $3 != 65534) {print $1&quot;是普通用户&quot;} else {print $1,&quot;不是普通用户&quot;}}'&lt;/span&gt; passwd 
-
-&lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'BEGIN{if( '&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;$(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;id&lt;/span&gt; -u&lt;span class=&quot;k&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'&amp;gt;=500 &amp;amp;&amp;amp; '&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;$(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;id&lt;/span&gt; -u&lt;span class=&quot;k&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;' !=65534 ) {print &quot;是普通用户&quot;} else {print &quot;不是普通用户&quot;}}'&lt;/span&gt;
-
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h4 id=&quot;-ifelifelse结构&quot;&gt;③ if…elif…else结构&lt;/h4&gt;
-
-&lt;div class=&quot;language-powershell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;xxxx];then
-    xxxx
-&lt;span class=&quot;k&quot;&gt;elif&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;xxx];then
-    xxx
-....
-&lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;
-...
-&lt;span class=&quot;k&quot;&gt;fi
-
-
-if&lt;/span&gt;...else &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;...else语句：
-
-格式：
-&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;表达式1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;｛语句;语句；...｝else &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;表达式2&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;｛语句;语句；...｝else &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;表达式3&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;｛语句;语句；...｝else｛语句;语句；...｝&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-&lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; -F: &lt;span class=&quot;s1&quot;&gt;'{ if($3==0) {print $1,&quot;:是管理员&quot;} else if($3&amp;gt;=1 &amp;amp;&amp;amp; $3&amp;lt;=499 || $3==65534 ) {print $1,&quot;:是系统用户&quot;} else {print $1,&quot;:是普通用户&quot;}}'&lt;/span&gt;
-
-
-&lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; -F: &lt;span class=&quot;s1&quot;&gt;'{ if($3==0) {i++} else if($3&amp;gt;=1 &amp;amp;&amp;amp; $3&amp;lt;=499 || $3==65534 ) {j++} else {k++}};END{print &quot;管理员个数为:&quot;i &quot;\n系统用户个数为:&quot;j&quot;\n普通用户的个数为:&quot;k }'&lt;/span&gt;
-
-
-&lt;span class=&quot;c1&quot;&gt;# awk -F: '{if($3==0) {print $1,&quot;is admin&quot;} else if($3&amp;gt;=1 &amp;amp;&amp;amp; $3&amp;lt;=499 || $3==65534) {print $1,&quot;is sys users&quot;} else {print $1,&quot;is general user&quot;} }' a.txt &lt;/span&gt;
-
-root is admin
-bin is sys &lt;span class=&quot;nb&quot;&gt;users
-&lt;/span&gt;daemon is sys &lt;span class=&quot;nb&quot;&gt;users
-&lt;/span&gt;adm is sys &lt;span class=&quot;nb&quot;&gt;users
-lp &lt;/span&gt;is sys &lt;span class=&quot;nb&quot;&gt;users
-&lt;/span&gt;redhat is general user
-user01 is general user
-named is sys &lt;span class=&quot;nb&quot;&gt;users
-&lt;/span&gt;u01 is general user
-YUNWEI is general user
-
-&lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; -F: &lt;span class=&quot;s1&quot;&gt;'{  if($3==0) {print $1&quot;:管理员&quot;} else if($3&amp;gt;=1 &amp;amp;&amp;amp; $3&amp;lt;500 || $3==65534 ) {print $1&quot;:是系统用户&quot;} else {print $1&quot;:是普通用户&quot;}}'&lt;/span&gt;   /etc/passwd
-
-
-&lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; -F: &lt;span class=&quot;s1&quot;&gt;'{if($3==0) {i++} else if($3&amp;gt;=1 &amp;amp;&amp;amp; $3&amp;lt;500 || $3==65534){j++} else {k++}};END{print &quot;管理员个数为:&quot; i RS &quot;系统用户个数为:&quot;j RS &quot;普通用户的个数为:&quot;k }'&lt;/span&gt; /etc/passwd
-管理员个数为:1
-系统用户个数为:28
-普通用户的个数为:27
-
-
-&lt;span class=&quot;c1&quot;&gt;# awk -F: '{ if($3==0) {print $1&quot;:是管理员&quot;} else if($3&amp;gt;=500 &amp;amp;&amp;amp; $3!=65534) {print $1&quot;:是普通用户&quot;} else {print $1&quot;:是系统用户&quot;}}' passwd &lt;/span&gt;
-
-&lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; -F: &lt;span class=&quot;s1&quot;&gt;'{if($3==0){i++} else if($3&amp;gt;=500){k++} else{j++}} END{print i; print k; print j}'&lt;/span&gt; /etc/passwd
-
-&lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; -F: &lt;span class=&quot;s1&quot;&gt;'{if($3==0){i++} else if($3&amp;gt;999){k++} else{j++}} END{print &quot;管理员个数: &quot;i; print &quot;普通用个数: &quot;k; print &quot;系统用户: &quot;j}'&lt;/span&gt; /etc/passwd 
-
-如果是普通用户打印默认shell，如果是系统用户打印用户名
-&lt;span class=&quot;c1&quot;&gt;# awk -F: '{if($3&amp;gt;=1 &amp;amp;&amp;amp; $3&amp;lt;500 || $3 == 65534) {print $1} else if($3&amp;gt;=500 &amp;amp;&amp;amp; $3&amp;lt;=60000 ) {print $NF} }' /etc/passwd&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;-循环语句&quot;&gt;㈡ 循环语句&lt;/h3&gt;
-
-&lt;h4 id=&quot;-for循环&quot;&gt;① for循环&lt;/h4&gt;
-
-&lt;div class=&quot;language-powershell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;打印1~5
-&lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;((&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;1;i&amp;lt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;5;i++&lt;span class=&quot;o&quot;&gt;))&lt;/span&gt;;&lt;span class=&quot;k&quot;&gt;do &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$i&lt;/span&gt;;&lt;span class=&quot;k&quot;&gt;done&lt;/span&gt;
-
-&lt;span class=&quot;c1&quot;&gt;# awk 'BEGIN { for(i=1;i&amp;lt;=5;i++) {print i} }'&lt;/span&gt;
-打印1~10中的奇数
-&lt;span class=&quot;c1&quot;&gt;# for ((i=1;i&amp;lt;=10;i+=2));do echo $i;done|awk '{sum+=$0};END{print sum}'&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;# awk 'BEGIN{ for(i=1;i&amp;lt;=10;i+=2) {print i} }'&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;# awk 'BEGIN{ for(i=1;i&amp;lt;=10;i+=2) print i }'&lt;/span&gt;
-
-计算1-5的和
-&lt;span class=&quot;c1&quot;&gt;# awk 'BEGIN{sum=0;for(i=1;i&amp;lt;=5;i++) sum+=i;print sum}'&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;# awk 'BEGIN{for(i=1;i&amp;lt;=5;i++) (sum+=i);{print sum}}'&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;# awk 'BEGIN{for(i=1;i&amp;lt;=5;i++) (sum+=i);print sum}'&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h4 id=&quot;-while循环&quot;&gt;② while循环&lt;/h4&gt;
-
-&lt;div class=&quot;language-powershell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;打印1-5
-&lt;span class=&quot;c1&quot;&gt;# i=1;while (($i&amp;lt;=5));do echo $i;let i++;done&lt;/span&gt;
-
-&lt;span class=&quot;c1&quot;&gt;# awk 'BEGIN { i=1;while(i&amp;lt;=5) {print i;i++} }'&lt;/span&gt;
-打印1~10中的奇数
-&lt;span class=&quot;c1&quot;&gt;# awk 'BEGIN{i=1;while(i&amp;lt;=10) {print i;i+=2} }'&lt;/span&gt;
-计算1-5的和
-&lt;span class=&quot;c1&quot;&gt;# awk 'BEGIN{i=1;sum=0;while(i&amp;lt;=5) {sum+=i;i++}; print sum }'&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;# awk 'BEGIN {i=1;while(i&amp;lt;=5) {(sum+=i) i++};print sum }'&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h4 id=&quot;-嵌套循环&quot;&gt;③ 嵌套循环&lt;/h4&gt;
-
-&lt;div class=&quot;language-powershell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;嵌套循环：
-&lt;span class=&quot;c1&quot;&gt;#!/bin/bash&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;((&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;1;y&amp;lt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;5;y++&lt;span class=&quot;o&quot;&gt;))&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;do
-    for&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;((&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;1;x&amp;lt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$y&lt;/span&gt;;x++&lt;span class=&quot;o&quot;&gt;))&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;do
-        &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; -n &lt;span class=&quot;nv&quot;&gt;$x&lt;/span&gt;    
-    &lt;span class=&quot;k&quot;&gt;done
-&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo
-&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;done
-
-&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'BEGIN{ for(y=1;y&amp;lt;=5;y++) {for(x=1;x&amp;lt;=y;x++) {printf x} ;print } }'&lt;/span&gt;
-
-
-&lt;span class=&quot;c1&quot;&gt;# awk 'BEGIN { for(y=1;y&amp;lt;=5;y++) { for(x=1;x&amp;lt;=y;x++) {printf x};print} }'&lt;/span&gt;
-1
-12
-123
-1234
-12345
-
-&lt;span class=&quot;c1&quot;&gt;# awk 'BEGIN{ y=1;while(y&amp;lt;=5) { for(x=1;x&amp;lt;=y;x++) {printf x};y++;print}}'&lt;/span&gt;
-1
-12
-123
-1234
-12345
-
-尝试用三种方法打印99口诀表：
-&lt;span class=&quot;c1&quot;&gt;#awk 'BEGIN{for(y=1;y&amp;lt;=9;y++) { for(x=1;x&amp;lt;=y;x++) {printf x&quot;*&quot;y&quot;=&quot;x*y&quot;\t&quot;};print} }'&lt;/span&gt;
-
-&lt;span class=&quot;c1&quot;&gt;#awk 'BEGIN{for(y=1;y&amp;lt;=9;y++) { for(x=1;x&amp;lt;=y;x++) printf x&quot;*&quot;y&quot;=&quot;x*y&quot;\t&quot;;print} }'&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;#awk 'BEGIN{i=1;while(i&amp;lt;=9){for(j=1;j&amp;lt;=i;j++) {printf j&quot;*&quot;i&quot;=&quot;j*i&quot;\t&quot;};print;i++ }}'&lt;/span&gt;
-
-&lt;span class=&quot;c1&quot;&gt;#awk 'BEGIN{for(i=1;i&amp;lt;=9;i++){j=1;while(j&amp;lt;=i) {printf j&quot;*&quot;i&quot;=&quot;i*j&quot;\t&quot;;j++};print}}'&lt;/span&gt;
-
-循环的控制：
-&lt;span class=&quot;k&quot;&gt;break        &lt;/span&gt;条件满足的时候中断循环
-&lt;span class=&quot;k&quot;&gt;continue    &lt;/span&gt;条件满足的时候跳过循环
-&lt;span class=&quot;c1&quot;&gt;# awk 'BEGIN{for(i=1;i&amp;lt;=5;i++) {if(i==3) break;print i} }'&lt;/span&gt;
-1
-2
-&lt;span class=&quot;c1&quot;&gt;# awk 'BEGIN{for(i=1;i&amp;lt;=5;i++){if(i==3) continue;print i}}'&lt;/span&gt;
-1
-2
-4
-5
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h2 id=&quot;6-awk算数运算&quot;&gt;6. awk算数运算&lt;/h2&gt;
-
-&lt;div class=&quot;language-powershell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;+ - &lt;span class=&quot;k&quot;&gt;*&lt;/span&gt; / %&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;模&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; ^&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;幂2^3&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-可以在模式中执行计算，awk都将按浮点数方式执行算术运算
-&lt;span class=&quot;c1&quot;&gt;# awk 'BEGIN{print 1+1}'&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;# awk 'BEGIN{print 1**1}'&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;# awk 'BEGIN{print 2**3}'&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;# awk 'BEGIN{print 2/3}'&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h1 id=&quot;六awk统计案例&quot;&gt;六、awk统计案例&lt;/h1&gt;
-
-&lt;h2 id=&quot;1统计系统中各种类型的shell&quot;&gt;1、统计系统中各种类型的shell&lt;/h2&gt;
-
-&lt;div class=&quot;language-powershell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# awk -F: '{ shells[$NF]++ };END{for (i in shells) {print i,shells[i]} }' /etc/passwd&lt;/span&gt;
-
-books[linux]++
-books[linux]&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;1
-shells[/bin/bash]++
-shells[/sbin/nologin]++
-
-/bin/bash 5
-/sbin/nologin 6
-
-shells[/bin/bash]++            a
-shells[/sbin/nologin]++        b
-shells[/sbin/shutdown]++    c
-
-books[linux]++
-books[php]++
-
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h2 id=&quot;2统计网站访问状态&quot;&gt;2、统计网站访问状态&lt;/h2&gt;
-
-&lt;div class=&quot;language-powershell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# ss -antp|grep 80|awk '{states[$1]++};END{for(i in states){print i,states[i]}}'&lt;/span&gt;
-TIME_WAIT 578
-ESTABLISHED 1
-LISTEN 1
-
-&lt;span class=&quot;c1&quot;&gt;# ss -an |grep :80 |awk '{states[$2]++};END{for(i in states){print i,states[i]}}'&lt;/span&gt;
-LISTEN 1
-ESTAB 5
-TIME-WAIT 25
-
-&lt;span class=&quot;c1&quot;&gt;# ss -an |grep :80 |awk '{states[$2]++};END{for(i in states){print i,states[i]}}' |sort -k2 -rn&lt;/span&gt;
-TIME-WAIT 18
-ESTAB 8
-LISTEN 1
-
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h2 id=&quot;3统计访问网站的每个ip的数量&quot;&gt;3、统计访问网站的每个IP的数量&lt;/h2&gt;
-
-&lt;div class=&quot;language-powershell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# netstat -ant |grep :80 |awk -F: '{ip_count[$8]++};END{for(i in ip_count){print i,ip_count[i]} }' |sort&lt;/span&gt;
-
-
-&lt;span class=&quot;c1&quot;&gt;# ss -an |grep :80 |awk -F&quot;:&quot; '!/LISTEN/{ip_count[$(NF-1)]++};END{for(i in ip_count){print i,ip_count[i]}}' |sort -k2 -rn |head&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h2 id=&quot;4统计网站日志中pv量&quot;&gt;4、统计网站日志中PV量&lt;/h2&gt;
-
-&lt;div class=&quot;language-powershell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;统计Apache/Nginx日志中某一天的PV量 　&amp;lt;统计日志&amp;gt;
-&lt;span class=&quot;c1&quot;&gt;# grep '27/Jul/2017' mysqladmin.cc-access_log |wc -l&lt;/span&gt;
-14519
-
-统计Apache/Nginx日志中某一天不同IP的访问量　&amp;lt;统计日志&amp;gt;
-&lt;span class=&quot;c1&quot;&gt;# grep '27/Jul/2017' mysqladmin.cc-access_log |awk '{ips[$1]++};END{for(i in ips){print i,ips[i]} }' |sort -k2 -rn |head&lt;/span&gt;
-
-&lt;span class=&quot;c1&quot;&gt;# grep '07/Aug/2017' access.log |awk '{ips[$1]++};END{for(i in ips){print i,ips[i]} }' |awk '$2&amp;gt;100' |sort -k2 -rn&lt;/span&gt;
-
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;&lt;strong&gt;名词解释：&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;网站浏览量（PV）
-名词：PV=PageView (网站浏览量)
-说明：指页面的浏览次数，用以衡量网站用户访问的网页数量。多次打开同一页面则浏览量累计。用户每打开一个页面便记录1次PV。&lt;/p&gt;
-
-&lt;p&gt;名词：VV = Visit View（访问次数）
-说明：从访客来到您网站到最终关闭网站的所有页面离开，计为1次访问。若访客连续30分钟没有新开和刷新页面，或者访客关闭了浏览器，则被计算为本次访问结束。&lt;/p&gt;
-
-&lt;p&gt;独立访客（UV）
-名词：UV= Unique Visitor（独立访客数）
-说明：1天内相同的访客多次访问您的网站只计算1个UV。&lt;/p&gt;
-
-&lt;p&gt;独立IP（IP）
-名词：IP=独立IP数
-说明：指1天内使用不同IP地址的用户访问网站的数量。同一IP无论访问了几个页面，独立IP数均为1&lt;/p&gt;
-
-&lt;h1 id=&quot;七课后作业&quot;&gt;七、课后作业&lt;/h1&gt;
-
-&lt;p&gt;&lt;strong&gt;作业1：&lt;/strong&gt;
-1、写一个自动检测磁盘使用率的脚本，当磁盘使用空间达到90%以上时，需要发送邮件给相关人员
-2、写一个脚本监控系统内存和交换分区使用情况&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;作业2：&lt;/strong&gt;
-输入一个IP地址，使用脚本判断其合法性：
-必须符合ip地址规范，第1、4位不能以0开头，不能大于255不能小于0&lt;/p&gt;
-
-&lt;h1 id=&quot;八企业实战案例&quot;&gt;八、企业实战案例&lt;/h1&gt;
-
-&lt;h2 id=&quot;1-任务背景&quot;&gt;1. 任务/背景&lt;/h2&gt;
-
-&lt;p&gt;web服务器集群中总共有9台机器，上面部署的是Apache服务。由于业务不断增长，每天每台机器上都会产生大量的访问日志，现需要将每台web服务器上的apache访问日志&lt;strong&gt;保留最近3天&lt;/strong&gt;的，3天以前的日志&lt;strong&gt;转储&lt;/strong&gt;到一台专门的日志服务器上，已做后续分析。如何实现每台服务器上只保留3天以内的日志？&lt;/p&gt;
-
-&lt;h2 id=&quot;2-具体要求&quot;&gt;2. 具体要求&lt;/h2&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;每台web服务器的日志对应日志服务器相应的目录里。如：web1——&amp;gt;web1.log（在日志服务器上）&lt;/li&gt;
-  &lt;li&gt;每台web服务器上保留最近3天的访问日志，3天以前的日志每天凌晨5:03分转储到日志服务器&lt;/li&gt;
-  &lt;li&gt;如果脚本转储失败，运维人员需要通过跳板机的菜单选择手动清理日志&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h2 id=&quot;3-涉及知识点&quot;&gt;3. 涉及知识点&lt;/h2&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;shell的基本语法结构&lt;/li&gt;
-  &lt;li&gt;文件同步rsync&lt;/li&gt;
-  &lt;li&gt;文件查找命令find&lt;/li&gt;
-  &lt;li&gt;计划任务crontab&lt;/li&gt;
-  &lt;li&gt;apache日志切割&lt;/li&gt;
-  &lt;li&gt;其他&lt;/li&gt;
-&lt;/ol&gt;
 
 </description>
-        <pubDate>Tue, 01 May 2018 00:00:00 +0800</pubDate>
-        <link>http://localhost:4000/2018/05/08_SHELL/</link>
-        <guid isPermaLink="true">http://localhost:4000/2018/05/08_SHELL/</guid>
+        <pubDate>Mon, 09 Dec 2019 00:00:00 +0800</pubDate>
+        <link>http://localhost:4000/2019/12/10_SHELL/</link>
+        <guid isPermaLink="true">http://localhost:4000/2019/12/10_SHELL/</guid>
         
         <category>Shell</category>
         

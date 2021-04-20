@@ -6,17 +6,17 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <title>09_SHELL编程之xarg使用</title>
-  <meta name="description" content="xargs 是给命令传递参数的一个过滤器，可以将管道或标准输入的数据转换成参数，默认的命令是 echo，这意味着通过管道传递给 xargs 的输入将会包含换行，不过通过 xargs 的处理，换行将被空格取代。">
+  <title>Shell编程ls命令</title>
+  <meta name="description" content="1、简介">
   <meta name="author" content="leopardpan">
 
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="09_SHELL编程之xarg使用">
-  <meta name="twitter:description" content="xargs 是给命令传递参数的一个过滤器，可以将管道或标准输入的数据转换成参数，默认的命令是 echo，这意味着通过管道传递给 xargs 的输入将会包含换行，不过通过 xargs 的处理，换行将被空格取代。">
+  <meta name="twitter:title" content="Shell编程ls命令">
+  <meta name="twitter:description" content="1、简介">
   
   <meta property="og:type" content="article">
-  <meta property="og:title" content="09_SHELL编程之xarg使用">
-  <meta property="og:description" content="xargs 是给命令传递参数的一个过滤器，可以将管道或标准输入的数据转换成参数，默认的命令是 echo，这意味着通过管道传递给 xargs 的输入将会包含换行，不过通过 xargs 的处理，换行将被空格取代。">
+  <meta property="og:title" content="Shell编程ls命令">
+  <meta property="og:description" content="1、简介">
   
   <link rel="icon" type="image/png" href="/images/favicon.png" />
   <link href="/images/favicon.png" rel="shortcut icon" type="image/png">
@@ -24,7 +24,7 @@
   <link rel="stylesheet" href="/css/main.css">
   <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 
-  <link rel="canonical" href="http://localhost:4000/2018/05/09_SHELL/">
+  <link rel="canonical" href="http://localhost:4000/2016/09/11_SHELL/">
   <link rel="alternate" type="application/rss+xml" title="LiJingBiao" href="http://localhost:4000/feed.xml">
   
   <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
@@ -179,10 +179,10 @@
 
 <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
   <header class="post-header">
-    <h1 class="post-title">09_SHELL编程之xarg使用</h1>
+    <h1 class="post-title">Shell编程ls命令</h1>
     <div class="post-meta">
       <img src="/images/calendar.png" width="20px"/> 
-      <time datetime="2018-05-03 00:00:00 +0800" itemprop="datePublished" class="post-meta__date date">2018-05-03</time>  
+      <time datetime="2016-09-03 00:00:00 +0800" itemprop="datePublished" class="post-meta__date date">2016-09-03</time>  
 
       <span id="busuanzi_container_page_pv"> | 阅读：<span id="busuanzi_value_page_pv"></span>次</span>
     </p>
@@ -192,133 +192,189 @@
   
     <h2 class="post-title">目录</h2>
     <ul>
-  <li><a href="#1-如何使用xargs命令">1. 如何使用xargs命令</a></li>
-  <li><a href="#2-如何限制参数的数量">2. <em>如何限制参数的数量</em></a></li>
-  <li><a href="#3-如何运行多个命令">3. 如何运行多个命令</a></li>
-  <li><a href="#4-如何指定一个分隔符">4. 如何指定一个分隔符</a></li>
-  <li><a href="#5-如何从文件中读取条目">5. 如何从文件中读取条目</a></li>
-  <li><a href="#6-xargs与find一起使用">6. xargs与find一起使用</a></li>
-  <li><a href="#总结">总结</a></li>
+  <li><a href="#1简介">1、简介</a></li>
+  <li><a href="#2主要功能">2、主要功能</a></li>
+  <li><a href="#3用法命令格式">3、用法/命令格式</a></li>
+  <li><a href="#5辅助功能">5、辅助功能</a>
+    <ul>
+      <li><a href="#51-文件显示">5.1 文件显示</a>
+        <ul>
+          <li><a href="#511-显示所有文件">5.1.1 显示所有文件</a></li>
+          <li><a href="#512-只显示-普通文件">5.1.2 只显示 普通文件</a></li>
+        </ul>
+      </li>
+      <li><a href="#52-目录显示">5.2 目录显示</a></li>
+      <li><a href="#521-打印路径">5.2.1 打印路径</a>
+        <ul>
+          <li><a href="#522-只显示目录">5.2.2 只显示目录</a></li>
+        </ul>
+      </li>
+      <li><a href="#53-排序">5.3 排序</a></li>
+      <li><a href="#531-时间排序">5.3.1 时间排序</a>
+        <ul>
+          <li><a href="#532-文件大小排序">5.3.2 文件大小排序</a></li>
+        </ul>
+      </li>
+      <li><a href="#54-输出显示">5.4 输出显示</a>
+        <ul>
+          <li><a href="#544-按列输出">5.4.4 按列输出</a></li>
+          <li><a href="#545-按行输出">5.4.5 按行输出</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
 </ul>
 
   
 
   <section class="post">
-    <p><em>xargs 是给命令传递参数的一个过滤器，可以将管道或标准输入的数据转换成参数，默认的命令是 echo，这意味着通过管道传递给 xargs 的输入将会包含换行，不过通过 xargs 的处理，换行将被空格取代。</em></p>
+    <h1 id="1简介">1、简介</h1>
 
-<h1 id="1-如何使用xargs命令">1. 如何使用xargs命令</h1>
-<p>语法：</p>
+<p>    ls 命令是 linux 下最常用的命令，是 list 的缩写</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>xargs [OPTIONS] [COMMAND [initial-arguments]]
+<p>    </p>
+
+<h1 id="2主要功能">2、主要功能</h1>
+
+<p>    查看 目录清单</p>
+
+<p>         ls 打印当目录的清单</p>
+
+<p>        ls 指定其他目录，显示指定目录里的文件及文件夹清单</p>
+
+<p>    查看 文件属性</p>
+
+<p>         查看文件权限(包括目录、文件夹、文件权限)查看目录信息等</p>
+
+<p>    </p>
+
+<h1 id="3用法命令格式">3、用法/命令格式</h1>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ls [选项] [目录名/文件名]
+</code></pre></div></div>
+<p>ls 命令可以说是linux下最常用的命令之一。</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>-a 列出目录下的所有文件，包括以 . 开头的隐含文件。
+-b 把文件名中不可输出的字符用反斜杠加字符编号(就象在C语言里一样)的形式列出。
+-c 输出文件的 i 节点的修改时间，并以此排序。
+-d 将目录象文件一样显示，而不是显示其下的文件。
+-e 输出时间的全部信息，而不是输出简略信息。
+-f -U 对输出的文件不排序。
+-g 无用。
+-i 输出文件的 i 节点的索引信息。
+-k 以 k 字节的形式表示文件的大小。
+-l 列出文件的详细信息。
+-m 横向输出文件名，并以“，”作分格符。
+-n 用数字的 UID,GID 代替名称。
+-o 显示文件的除组信息外的详细信息。
+-p -F 在每个文件名后附上一个字符以说明该文件的类型，“*”表示可执行的普通
+文件；“/”表示目录；“@”表示符号链接；“|”表示FIFOs；“=”表示套
+接字(sockets)。
+-q 用?代替不可输出的字符。
+-r 对目录反向排序。
+-s 在每个文件名后输出该文件的大小。
+-t 以时间排序。
+-u 以文件上次被访问的时间排序。
+-x 按列输出，横向排序。
+-A 显示除 “.”和“..”外的所有文件。
+-B 不输出以 “~”结尾的备份文件。
+-C 按列输出，纵向排序。
+-G 输出文件的组的信息。
+-L 列出链接文件名而不是链接到的文件。
+-N 不限制文件长度。
+-Q 把输出的文件名用双引号括起来。
+-R 列出所有子目录下的文件。
+-S 以文件大小排序。
+-X 以文件的扩展名(最后一个 . 后的字符)排序。
+-1 一行只输出一个文件。
+
+--color=no 不显示彩色文件名
+--help 在标准输出上显示帮助信息。
+--version 在标准输出上输出版本信息并退出。
+</code></pre></div></div>
+<p>只列出子目录</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1. ls -F | grep /$ 或者 alias sub = "ls -F | grep /$"(linux)
+2. ls -l | grep "^d" 或者 ls -lL | grep "^d" (Solaris)
+</code></pre></div></div>
+<p>计算当前目录下的文件数和目录数
+下面命令可以分别计算当前目录下的文件和目录个数：</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># ls -l * |grep "^-"|wc -l ---- to count files
+# ls -l * |grep "^d"|wc -l ----- to count dir
+</code></pre></div></div>
+<p>显示彩色目录列表
+打开/etc/bashrc, 加入如下一行:</p>
+
+<p>alias ls=”ls –color”
+下次启动bash时就可以像在Slackware里那样显示彩色的目录列表了, 其中颜色的含义如下:</p>
+<ol>
+  <li>蓝色–&gt;目录</li>
+  <li>绿色–&gt;可执行文件</li>
+  <li>红色–&gt;压缩文件</li>
+  <li>浅蓝色–&gt;链接文件</li>
+  <li>灰色–&gt;其他文件
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ls -tl --time-style=full-iso sshd
+ls -ctl --time-style=long-iso
+</code></pre></div>    </div>
+    <p>4、常用参数解析
+========</p>
+  </li>
+</ol>
+
+<table><tr><th>语法</th><th>参数</th><th>说明</th></tr><tr><td>ls [ -a 或者 --all ] [ 目录名/文件名]</td><td>-a； --all</td><td>列出目录下的所有文件，包括以 . 开头的隐含文件</td></tr><tr><td>ls [ -l ] [ 目录名/文件名]</td><td>-l</td><td>除了文件名之外，还将文件的权限、所有者、文件大小等信息详细列出来</td></tr></table>
+<p>    </p>
+
+<h1 id="5辅助功能">5、辅助功能</h1>
+
+<h2 id="51-文件显示">5.1 文件显示</h2>
+
+<h3 id="511-显示所有文件">5.1.1 显示所有文件</h3>
+
+<p>    显示文件夹内所有文件</p>
+
+<table><tr><th>语法</th><th>参数</th><th>说明</th></tr><tr><td>ls [ -R ] [ 目录名]</td><td>-R</td><td>递归显示子目录</td></tr></table>
+<p>    </p>
+
+<h3 id="512-只显示-普通文件">5.1.2 只显示 普通文件</h3>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># ls -al [目录名] | grep "^-"
 </code></pre></div></div>
 
-<p>举一个例子：我们用管道符传输到xargs，并为每个参数运行touch命令，-t表示在执行之前先打印，创建三个文件：</p>
+<h2 id="52-目录显示">5.2 目录显示</h2>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[root@localhost ~]# echo "file1 file2 file3"|xargs -t touch
-touch file1 file2 file3
+<h2 id="521-打印路径">5.2.1 打印路径</h2>
+
+<table><tr><th>语法</th><th>参数</th><th>说明</th></tr><tr><td>ls [ -d ] [ 目录名]</td><td>-d</td><td>将目录像文件一样显示，而不是显示其下的文件</td></tr></table>
+<p>    </p>
+
+<h3 id="522-只显示目录">5.2.2 只显示目录</h3>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># ls -F | grep "/$" # ls -al | grep "^d"
 </code></pre></div></div>
+<p>    </p>
 
-<h1 id="2-如何限制参数的数量">2. <em>如何限制参数的数量</em></h1>
-<p>默认情况下，传递给命令的参数数量由系统限制决定。-n选项指定要传递给命令的参数个数。xargs根据需要多次运行指定的命令，直到所有参数都用完为止。</p>
+<h2 id="53-排序">5.3 排序</h2>
 
-<p>下面例子指定每次传递一个参数：</p>
+<h2 id="531-时间排序">5.3.1 时间排序</h2>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[root@localhost ~]# echo "file1 file2 file3"|xargs -n1 -t touch
-touch file1 
-touch file2 
-touch file3
-</code></pre></div></div>
+<table><tr><th>语法</th><th>参数</th><th>说明</th></tr><tr><td>ls [ -t ] [ 目录名]</td><td>-t</td><td>以文件修改时间排序</td></tr></table>
+<p>    </p>
 
-<h1 id="3-如何运行多个命令">3. 如何运行多个命令</h1>
-<p>要使用xargs运行多个命令，请使用-i或者-I选项。在-i或者-I后面自定义一个传递参数符号，所有匹配的项都会替换为传递给xargs的参数。</p>
+<h3 id="532-文件大小排序">5.3.2 文件大小排序</h3>
 
-<p>下面例子时xargs运行两条命令，先touch创建文件，然后ls列出来：</p>
+<table><tr><th>语法</th><th>参数</th><th>说明</th></tr><tr><td>ls [ -S ] [ 目录名]</td><td>-S</td><td>以文件大小排序</td></tr></table>
+<p>    </p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[root@localhost ~]# echo "file1 file2 file3"|xargs -t -I % sh -c 'touch %;ls -l %'
-sh -c touch file1 file2 file3;ls -l file1 file2 file3 
--rw-r--r--. 1 root root 0 Jan 30 00:18 file1
--rw-r--r--. 1 root root 0 Jan 30 00:18 file2
--rw-r--r--. 1 root root 0 Jan 30 00:18 file3
-</code></pre></div></div>
+<h2 id="54-输出显示">5.4 输出显示</h2>
 
-<h1 id="4-如何指定一个分隔符">4. 如何指定一个分隔符</h1>
-<p>使用-d或者–delimiter选项设置自定义分隔符，可以是单个字符，也可以是以\ 开头的转义字符。</p>
+<h3 id="544-按列输出">5.4.4 按列输出</h3>
 
-<p>下面例子使用#做分隔符，echo命令使用了-n选项，意思是不输出新行：</p>
+<table><tr><th>语法</th><th>参数</th><th>说明</th></tr><tr><td>ls [ -C ] [ 目录名]</td><td>-C</td><td>按列输出，纵向排序</td></tr></table>
+<p>    </p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[root@localhost ~]# echo -n file1#file2#file3#file4|xargs -d \# -t touch
-touch file1 file2 file3 file4
-</code></pre></div></div>
+<h3 id="545-按行输出">5.4.5 按行输出</h3>
 
-<h1 id="5-如何从文件中读取条目">5. 如何从文件中读取条目</h1>
-<p>xargs命令还可以从文件读取条目，而不是从标准输入读取条目。使用-a选项，后跟文件名。
-创建一个ip.txt的文件，一会使用xargs命令ping里面的每一个地址：</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[root@localhost ~]# cat ip.txt 
-114.114.114.114
-www.linuxprobe.com
-202.102.128.68
-</code></pre></div></div>
-
-<p>使用-L 1选项，该选项表示xargs一次读取一行。如果省略此选项，xargs将把所有ip传递给一个ping命令。</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[root@localhost ~]# xargs -a ip.txt -t -L 1 ping -c 1
-ping -c 1 114.114.114.114 
-PING 114.114.114.114 (114.114.114.114) 56(84) bytes of data.
-64 bytes from 114.114.114.114: icmp_seq=1 ttl=93 time=11.0 ms
-
---- 114.114.114.114 ping statistics ---
-1 packets transmitted, 1 received, 0% packet loss, time 0ms
-rtt min/avg/max/mdev = 11.026/11.026/11.026/0.000 ms
-ping -c 1 www.linuxprobe.com 
-PING www.linuxprobe.com.w.kunlunno.com (221.15.65.202) 56(84) bytes of data.
-64 bytes from hn.kd.jz.adsl (221.15.65.202): icmp_seq=1 ttl=48 time=20.9 ms
-
---- www.linuxprobe.com.w.kunlunno.com ping statistics ---
-1 packets transmitted, 1 received, 0% packet loss, time 0ms
-rtt min/avg/max/mdev = 20.934/20.934/20.934/0.000 ms
-ping -c 1 202.102.128.68 
-PING 202.102.128.68 (202.102.128.68) 56(84) bytes of data.
-64 bytes from 202.102.128.68: icmp_seq=1 ttl=83 time=8.71 ms
-
---- 202.102.128.68 ping statistics ---
-1 packets transmitted, 1 received, 0% packet loss, time 0ms
-rtt min/avg/max/mdev = 8.710/8.710/8.710/0.000 ms
-</code></pre></div></div>
-
-<h1 id="6-xargs与find一起使用">6. xargs与find一起使用</h1>
-<p>xargs通常与find命令结合使用。您可以使用find搜索特定文件，然后使用xargs对这些文件执行操作。</p>
-
-<p>若要避免包含换行符或其他特殊字符的文件名出现问题，请始终使用find的-print0选项，这样可以使find打印完整的文件名，配合xargs命令使用-0或者–null选项可以正确的解释。</p>
-
-<p>下面例子中，查找log文件夹下面的类型为file的所有文件，打包压缩起来：</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[root@localhost ~]# find log/ -type f -print0|xargs --null tar -zcvf logs.tar.gz
-log/anaconda/anaconda.log
-log/anaconda/syslog
-log/anaconda/program.log
-log/anaconda/packaging.log
-log/anaconda/storage.log
-log/anaconda/ifcfg.log
-log/anaconda/ks-script-TOLvJc.log
-log/anaconda/ks-script-VRY9yQ.log
-log/anaconda/ks-script-pjDijm.log
-log/anaconda/journal.log
-log/audit/audit.log
-log/boot.log
-log/boot.log-20200126
-log/btmp
-log/btmp-20200126
-…
-[root@localhost ~]# ll
-total 604
--rw-------. 1 root root   1285 Dec 21 17:19 anaconda-ks.cfg
-drwxr-xr-x. 8 root root   4096 Jan 29 23:02 log
--rw-r--r--. 1 root root 607566 Jan 30 00:58 logs.tar.gz
-</code></pre></div></div>
-
-<h1 id="总结">总结</h1>
-<p>之所以能用到这个命令，关键是由于很多命令不支持管道符来传递参数，xargs可以解决这个问题，而且使用起来很方便，跟能强大。</p>
+<table><tr><th>语法</th><th>参数</th><th>说明</th></tr><tr><td>ls [ -x ] [ 目录名]</td><td>-x</td><td>按行输出，横向排序</td></tr></table>
+<p>    </p>
 
   </section>
 
@@ -387,14 +443,9 @@ drwxr-xr-x. 8 root root   4096 Jan 29 23:02 log
 
        <ul class="pager">
         
-        <li class="previous">
-            <a href="/2018/05/08_SHELL/" data-toggle="tooltip" data-placement="top" title="08_SHELL编程之文本处理工具awk">上一篇：  <span>08_SHELL编程之文本处理工具awk</span>
-            </a>
-        </li>
-        
         
         <li class="next">
-            <a href="/2019/12/10_SHELL/" data-toggle="tooltip" data-placement="top" title="shell编程：find命令">下一篇：  <span>shell编程：find命令</span>
+            <a href="/2016/10/jekyll_tutorials1/" data-toggle="tooltip" data-placement="top" title="Jekyll搭建个人博客">下一篇：  <span>Jekyll搭建个人博客</span>
             </a>
         </li>
         
