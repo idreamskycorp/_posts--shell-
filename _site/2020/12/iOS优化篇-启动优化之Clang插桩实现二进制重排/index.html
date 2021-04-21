@@ -7,16 +7,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
   <title>iOS 优化篇 - 启动优化之Clang插桩实现二进制重排</title>
-  <meta name="description" content="转自掘金前言">
+  <meta name="description" content="前言">
   <meta name="author" content="leopardpan">
 
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="iOS 优化篇 - 启动优化之Clang插桩实现二进制重排">
-  <meta name="twitter:description" content="转自掘金前言">
+  <meta name="twitter:description" content="前言">
   
   <meta property="og:type" content="article">
   <meta property="og:title" content="iOS 优化篇 - 启动优化之Clang插桩实现二进制重排">
-  <meta property="og:description" content="转自掘金前言">
+  <meta property="og:description" content="前言">
   
   <link rel="icon" type="image/png" href="/images/favicon.png" />
   <link href="/images/favicon.png" rel="shortcut icon" type="image/png">
@@ -255,8 +255,7 @@
   
 
   <section class="post">
-    <p><a href="https://juejin.cn/post/6844904130406793224">转自掘金</a></p>
-<h2 id="前言">前言</h2>
+    <h2 id="前言">前言</h2>
 
 <blockquote>
   <ul>
@@ -1056,6 +1055,8 @@ void __sanitizer_cov_trace_pc_guard(uint32_t *guard) {
   <li>1️⃣ : 利用 <code class="highlighter-rouge">clang</code> 插桩获得启动时期需要加载的所有 <code class="highlighter-rouge">函数/方法</code> , <code class="highlighter-rouge">block</code> , <code class="highlighter-rouge">swift 方法</code>以及 <code class="highlighter-rouge">c++构造方法</code>的符号 .</li>
   <li>2️⃣ : 通过 order file 机制实现二进制重排 .</li>
 </ul>
+
+<p><a href="https://juejin.cn/post/6844904130406793224">转自掘金</a></p>
 
 <p>如有疑问或者不同看法 , 欢迎留言交流 .</p>
 
