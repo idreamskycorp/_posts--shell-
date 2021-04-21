@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>iOS 性能监控(2)——卡顿</title>
+  <meta name="description" content="iOS 性能监控(2)——卡顿">
+  <meta name="author" content="leopardpan">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="iOS 性能监控(2)——卡顿">
+  <meta name="twitter:description" content="iOS 性能监控(2)——卡顿">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="iOS 性能监控(2)——卡顿">
+  <meta property="og:description" content="iOS 性能监控(2)——卡顿">
+  
+  <link rel="icon" type="image/png" href="/images/favicon.png" />
+  <link href="/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://localhost:4000/2019/10/iOS%E6%80%A7%E8%83%BD%E7%9B%91%E6%8E%A7(2)-%E5%8D%A1%E9%A1%BF/">
+  <link rel="alternate" type="application/rss+xml" title="LiJingBiao" href="http://localhost:4000/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+
+<!-- 站点统计 -->
+  <script 
+  async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js">
+  </script>  
+
+<!-- 百度统计 -->
+  
+  <script>
+      var _hmt = _hmt || [];
+      (function() {
+        var hm = document.createElement("script");
+        hm.src = "//hm.baidu.com/hm.js?8ba1c6be0953b6f9c2ba38e57f615421";
+        var s = document.getElementsByTagName("script")[0]; 
+        s.parentNode.insertBefore(hm, s);
+      })();
+  </script>
+  
+
+<!-- google 统计 -->
+  
+  <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+      ga('create', 'UA-84134159-3', 'auto');
+      ga('send', 'pageview');
+  </script>
+  
+
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-9005224472374751",
+    enable_page_level_ads: true
+  });
+</script>
+
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">        
+      <div class="nav_container">
+         <nav class="nav-menu-item" style = "float:right">
+            <i class="nav-menu-item">
+              <a href="/#blog" title="" class="blog-button">  博客主页
+              </a>
+            </i>
+            
+                <i class="nav-menu-item">
+
+                  <a href="/archive" title="archive" class="btn-mobile-menu__icon">
+                      所有文章
+                  </a>
+                </i>
+            
+                <i class="nav-menu-item">
+
+                  <a href="/tags" title="tags" class="btn-mobile-menu__icon">
+                      标签
+                  </a>
+                </i>
+            
+                <i class="nav-menu-item">
+
+                  <a href="/about" title="about" class="btn-mobile-menu__icon">
+                      关于我
+                  </a>
+                </i>
+            
+          </nav>
+      </div>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+        <!-- 头像效果-start -->
+        <div class="ih-item circle effect right_to_left">            
+            <a href="/#blog" title="前往 LiJingBiao 的主页" class="blog-button">
+                <div class="img"><img src="/images/avatar.jpg" alt="img"></div>
+                <div class="info">
+                    <div class="info-back">
+                        <h2> 
+                            
+                                天道酬勤
+                            
+                        </h2>
+                        <p>
+                           
+                                iOS / Ruby /Shell
+                            
+                        </p>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <!-- 头像效果-end -->
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for LiJingBiao" class="blog-button">LiJingBiao</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">个人站</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">欢迎来到我的个人站~</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        
+
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="" class="blog-button">博客主页</a></li>
+                
+                  <li class="navigation__item"><a href="/archive" title="archive">所有文章</a></li>
+                
+                  <li class="navigation__item"><a href="/tags" title="tags">标签</a></li>
+                
+                  <li class="navigation__item"><a href="/about" title="about">关于我</a></li>
+                
+              </ul>
+            </nav>
+          </div>          
+        </div>
+
+
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-clear"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <head>
+  <link rel="stylesheet" href="/css/post.css">
+</head>
+
+<article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <h1 class="post-title">iOS 性能监控(2)——卡顿</h1>
+    <div class="post-meta">
+      <img src="/images/calendar.png" width="20px"/> 
+      <time datetime="2019-10-17 00:00:00 +0800" itemprop="datePublished" class="post-meta__date date">2019-10-17</time>  
+
+      <span id="busuanzi_container_page_pv"> | 阅读：<span id="busuanzi_value_page_pv"></span>次</span>
+    </p>
+    </div>
+  </header>
+
+  
+    <h2 class="post-title">目录</h2>
+    <ul>
+  <li><a href="#ios-性能监控2卡顿">iOS 性能监控(2)——卡顿</a></li>
+  <li><a href="#卡顿">卡顿</a>
+    <ul>
+      <li><a href="#相关系统原理">相关系统原理</a></li>
+      <li><a href="#fps-卡顿监控方案">FPS 卡顿监控方案</a></li>
+      <li><a href="#主线程卡顿监控方案">主线程卡顿监控方案</a>
+        <ul>
+          <li><a href="#runloop-定义">RunLoop 定义</a></li>
+          <li><a href="#runloop-机制">RunLoop 机制</a></li>
+          <li><a href="#runloop-运行时">RunLoop 运行时</a></li>
+          <li><a href="#代码实现">代码实现</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><a href="#参考">参考</a></li>
+</ul>
+
+  
+
+  <section class="post">
+    <h1 id="ios-性能监控2卡顿">iOS 性能监控(2)——卡顿</h1>
+
+<p><a href="https://links.jianshu.com/go?to=http%3A%2F%2Fchuquan.me%2F2019%2F06%2F17%2Fios-performance-monitor-caton%2F">原文链接</a></p>
+
+<p>前文探讨了 iOS 中进行线上监控 CPU、Memory、FPS 等指标的原理以及具体实现方法。本文则继续探讨如何在 iOS 中进行线上监控卡顿的原理及实现。</p>
+
+<h1 id="卡顿">卡顿</h1>
+
+<h2 id="相关系统原理">相关系统原理</h2>
+
+<p>那么为什么会出现卡顿呢？为了解释这个问题首先需要了解一下屏幕图像的显示原理。首先从 CRT 显示器原理说起，如下图所示。CRT 的电子枪从上到下逐行扫描，扫描完成后显示器就呈现一帧画面。然后电子枪回到初始位置进行下一次扫描。为了同步显示器的显示过程和系统的视频控制器，显示器会用硬件时钟产生一系列的定时信号。当电子枪换行进行扫描时，显示器会发出一个水平同步信号（horizonal synchronization），简称 <strong>HSync</strong> ；而当一帧画面绘制完成后，电子枪回复到原位，准备画下一帧前，显示器会发出一个垂直同步信号（vertical synchronization），简称 <strong>VSync</strong> 。显示器通常以固定频率进行刷新，这个刷新率就是 VSync 信号产生的频率。虽然现在的显示器基本都是液晶显示屏了，但其原理基本一致。</p>
+
+<p><img src="/images/posts/iOS/2056706-b927c2ebafe2dbea.webp" alt="" /></p>
+
+<p>下图所示为常见的 CPU、GPU、显示器工作方式。CPU 计算好显示内容（如：视图的创建、布局计算、图片解码、文本绘制）提交至 GPU，GPU 渲染完成后将渲染结果存入帧缓冲区，视频控制器会按照 VSync 信号逐帧读取帧缓冲区的数据，经过数据转换后最终由显示器进行显示。</p>
+
+<p><img src="/images/posts/iOS/2056706-40eb71478606fd6f.webp" alt="" /></p>
+
+<p>最简单的情况下，帧缓冲区只有一个。此时，帧缓冲区的读取和刷新都都会有比较大的效率问题。为了解决效率问题，GPU 通常会引入两个缓冲区，即 <strong>双缓冲机制</strong> 。事实上，iPhone 使用的就是双缓冲机制。在这种情况下，GPU 会预先渲染一帧放入一个缓冲区中，用于视频控制器的读取。当下一帧渲染完毕后，GPU 会直接把视频控制器的指针指向第二个缓冲器。</p>
+
+<p><img src="/images/posts/iOS/2056706-9b7973e783070635.webp" alt="" /></p>
+
+<p>双缓冲虽然能解决效率问题，但会引入一个新的问题。当视频控制器还未读取完成时，即屏幕内容刚显示一半时，GPU 将新的一帧内容提交到帧缓冲区并把两个缓冲区进行交换后，视频控制器就会把新的一帧数据的下半段显示到屏幕上，造成画面撕裂现象，如下图：</p>
+
+<p><img src="/images/posts/iOS/2056706-913ba882905ca13e.webp" alt="" /></p>
+
+<p>为了解决这个问题，GPU 通常有一个机制叫做垂直同步（简写也是 V-Sync），当开启垂直同步后，GPU 会等待显示器的 VSync 信号发出后，才进行新的一帧渲染和缓冲区更新。这样能解决画面撕裂现象，也增加了画面流畅度，但需要消费更多的计算资源，也会带来部分延迟。当 CPU 和 GPU 计算量比较大时，一旦它们的完成时间错过了下一次 C-Sync 的到来（通常是 1000/6=16.67ms），这样就会出现显示屏还是之前帧的内容，这就是界面卡顿的原因。</p>
+
+<p><img src="/images/posts/iOS/2056706-be02fb04f99b8266.webp" alt="" /></p>
+
+<h2 id="fps-卡顿监控方案">FPS 卡顿监控方案</h2>
+
+<p>FPS 卡顿监控方案的原理是 <strong>通过一段连续的 FPS 计算丢帧率来衡量当前页面绘制的质量</strong> 。</p>
+
+<p>具体实现方式可以通过 <a href="https://links.jianshu.com/go?to=http%3A%2F%2Fchuquan.me%2F2019%2F06%2F10%2Fios-performance-monitor-cpu-mem-fps%2F">iOS 性能监控(1)——CPU、Memory、FPS</a> 一文中的 FPS 监控方法进行 FPS 数据采集，然后处理数据。这里不做多余的介绍。</p>
+
+<h2 id="主线程卡顿监控方案">主线程卡顿监控方案</h2>
+
+<p>主线程卡顿监控方案的原理是 <strong>通过子线程监控主线程的 RunLoop，判断两个状态区域之间的耗时是否达到一定阈值</strong> 。因为主线程绝大部分计算或绘制任务都是以 RunLoop 为单位发生。单次 RunLoop 如果时长超过 16ms，就会导致 UI 体验的卡顿。</p>
+
+<p>美团的移动端性能监控方案 Hertz 采用的就是这种方式。</p>
+
+<p><img src="/images/posts/iOS/2056706-69df82c3fc8b4e30.webp" alt="" /></p>
+
+<p>首先我们需要了解一下 RunLoop 的原理。</p>
+
+<h3 id="runloop-定义">RunLoop 定义</h3>
+
+<p>RunLoop 是 iOS 事件响应与任务处理最核心的机制。当有持续的异步任务需求时，我们会创建一个独立的生命周期可控的线程。 <strong>RunLoop 就是控制线程生命周期并接收事件进行处理的机制</strong> 。</p>
+
+<h3 id="runloop-机制">RunLoop 机制</h3>
+
+<p><strong>主线程（有 RunLoop 的线程）几乎所有函数都从以下六个函数之一的函数调起：</strong></p>
+
+<ol>
+  <li><code class="highlighter-rouge">CFRUNLOOP_IS_CALLING_OUT_TO_AN_OBSERVER_CALLBACK_FUNCTION</code>
+    <ul>
+      <li>CFRunloop is calling out to an abserver callback function</li>
+      <li>用于向外部报告 RunLoop 当前状态的改变，框架中很多机制都由 RunLoopObserver 触发，如：CAAnimation</li>
+    </ul>
+  </li>
+  <li><code class="highlighter-rouge">CFRUNLOOP_IS_CALLING_OUT_TO_A_BLOCK</code>
+    <ul>
+      <li>CFRunloop is calling out to a block</li>
+      <li>消息通知、非延迟的 perform、dispatch 调用、block 回调、KVO</li>
+    </ul>
+  </li>
+  <li><code class="highlighter-rouge">CFRUNLOOP_IS_SERVICING_THE_MAIN_DISPATCH_QUEUE</code>
+    <ul>
+      <li>CFRunloop is servicing the main dispatch queue</li>
+      <li>执行主队列上的任务</li>
+    </ul>
+  </li>
+  <li><code class="highlighter-rouge">CFRUNLOOP_IS_CALLING_OUT_TO_A_TIMER_CALLBACK_FUNCTION</code>
+    <ul>
+      <li>CFRunloop is calling out to a timer callback function</li>
+      <li>基于定时器的延迟的 perfrom，dispatch 调用</li>
+    </ul>
+  </li>
+  <li><code class="highlighter-rouge">CFRUNLOOP_IS_CALLING_OUT_TO_A_SOURCE0_PERFORM_FUNCTION</code>
+    <ul>
+      <li>CFRunloop is calling out to a source 0 perform function</li>
+      <li>处理 App 内部事件、App自己负责管理（触发），如：<code class="highlighter-rouge">UIEvent</code>、<code class="highlighter-rouge">CFSocket</code>。普通函数调用，系统调用</li>
+    </ul>
+  </li>
+  <li><code class="highlighter-rouge">CFRUNLOOP_IS_CALLING_OUT_TO_A_SOURCE1_PERFORM_FUNCTION</code>
+    <ul>
+      <li>CFRunloop is calling out to a source 1 perform function</li>
+      <li>由 RunLoop 和内核管理，Mach port 驱动，如：<code class="highlighter-rouge">CFMachPort</code>、<code class="highlighter-rouge">CFMessagePort</code></li>
+    </ul>
+  </li>
+</ol>
+
+<h3 id="runloop-运行时">RunLoop 运行时</h3>
+
+<p>如下所示为 <code class="highlighter-rouge">CFRunLoop</code> 源码中的核心方法 <code class="highlighter-rouge">CFRunLoopRun</code> 简化后的主要逻辑。</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>int32_t __CFRunLoopRun() {
+    // 1. 通知 Observers：即将进入 RunLoop
+    __CFRunLoopDoObservers(KCFRunLoopEntry);
+    
+    do {
+        // 2. 通知Observers：即将要处理 timer
+        __CFRunLoopDoObservers(kCFRunLoopBeforeTimers);
+        // 3. 通知Observers：即将要处理 source
+        __CFRunLoopDoObservers(kCFRunLoopBeforeSources);
+        
+        // 处理非延迟的主线程调用
+        __CFRunLoopDoBlocks();
+        // 处理 UIEvent 事件
+        __CFRunLoopDoSource0();
+    
+        // GCD dispatch main queue
+        CheckIfExistMessagesInMainDispatchQueue();
+    
+        // 4. 通知 Observers：即将进入休眠等待
+        __CFRunLoopDoObservers(kCFRunLoopBeforeWaiting);
+        
+        // 等待内核mach_msg事件
+        mach_port_t wakeUpPort = SleepAndWaitForWakingUpPorts();
+        
+        // mach_msg_trap
+        // 休眠中 Zzz...
+        // Received mach_msg, wake up
+        
+        // 5. 通知 Observers：从休眠等待中醒来
+        __CFRunLoopDoObservers(kCFRunLoopAfterWaiting);
+        
+        if (wakeUpPort == timerPort) {
+            // 处理因timer的唤醒
+            __CFRunLoopDoTimers();
+        } else if (wakeUpPort == mainDispatchQueuePort) {
+            // 处理异步方法唤醒，如：dispatch_async
+            __CFRUNLOOP_IS_SERVICING_THE_MAIN_DISPATCH_QUEUE__ ()
+        } else {
+            // UI 刷新，动画显示
+            __CFRunLoopDoSource1();
+        }
+        
+        // 再次确保是否有同步的方法需要调用
+        __CFRunLoopDoBlocks()
+    } while(!stop &amp;&amp; !timeout);
+    
+    // 6. 通知 Observers：即将退出runloop
+    __CFRunLoopDoObservers(CFRunLoopExit);
+}
+</code></pre></div></div>
+
+<p>RunLoop 在运行时一直在向外部报告当前状态的更新，其状态定义如下：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>typedef CF_OPTIONS(CFOptionFlags, CFRunLoopActivity) {
+    kCFRunLoopEntry , // 进入 loop
+    kCFRunLoopBeforeTimers , // 触发 Timer 回调
+    kCFRunLoopBeforeSources , // 触发 Source0 回调
+    kCFRunLoopBeforeWaiting , // 等待 mach_port 消息
+    kCFRunLoopAfterWaiting , // 接收 mach_port 消息
+    kCFRunLoopExit , // 退出 loop
+    kCFRunLoopAllActivities // loop 所有状态改变
+}
+</code></pre></div></div>
+
+<p>从 RunLoop 运行逻辑中，不难发现 NSRunLoop 调用方法主要在于两个状态区间：</p>
+
+<ul>
+  <li><code class="highlighter-rouge">kCFRunLoopBeforeSources</code> 和 <code class="highlighter-rouge">kCFRunLoopBeforeWaiting</code> 之间</li>
+  <li><code class="highlighter-rouge">kCFRunLoopAfterWaiting</code> 之后</li>
+</ul>
+
+<p><strong>如果这两个时间内耗时太久而无法进入下一步，可以线程受阻。如果这个线程时主线程，表现出来就是出现了卡顿。</strong></p>
+
+<h3 id="代码实现">代码实现</h3>
+
+<p>我们可以通过 <code class="highlighter-rouge">CFRunLoopObserverRef</code> 实时获取 <code class="highlighter-rouge">NSRunLoop</code> 的状态。具体使用方法如下：</p>
+
+<p>首先创建一个 <code class="highlighter-rouge">CFRunLoopObserverContext</code> 观察者 <code class="highlighter-rouge">observer</code>。然后将观察者 <code class="highlighter-rouge">observer</code> 添加到主线程 RunLoop 的 <code class="highlighter-rouge">kCFRunLoopCommonModes</code> 模式下进行观察。</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- (void)registerObserver {
+    CFRunLoopObserverContext context = {0,(__bridge void*)self,NULL,NULL};
+    CFRunLoopObserverRef observer = CFRunLoopObserverCreate(kCFAllocatorDefault,
+                                                            kCFRunLoopAllActivities,
+                                                            YES,
+                                                            0,
+                                                            &amp;runLoopObserverCallBack,
+                                                            &amp;context);
+    CFRunLoopAddObserver(CFRunLoopGetMain(), observer, kCFRunLoopCommonModes);
+}
+
+static void runLoopObserverCallBack(CFRunLoopObserverRef observer, CFRunLoopActivity activity, void *info) {
+    MyClass *object = (__bridge MyClass*)info;
+    object-&gt;activity = activity;
+}
+</code></pre></div></div>
+
+<p>然后，创建一个持续的子线程专门用来监控主线程的 RunLoop 状态。为了让计算更精确，需要让子线程更及时的获知主线程 RunLoop 状态变化，<code class="highlighter-rouge">dispatch_semaphore_t</code> 是一个不错的选择。另外，卡顿需要覆盖多次连续短时间卡顿和单次长时间卡顿两种情景，所以判定条件也需要做适当优化。优化后的代码实现如下所示：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- (void)registerObserver {
+    CFRunLoopObserverContext context = {0,(__bridge void*)self,NULL,NULL};
+    CFRunLoopObserverRef observer = CFRunLoopObserverCreate(kCFAllocatorDefault,
+                                                            kCFRunLoopAllActivities,
+                                                            YES,
+                                                            0,
+                                                            &amp;runLoopObserverCallBack,
+                                                            &amp;context);
+    CFRunLoopAddObserver(CFRunLoopGetMain(), observer, kCFRunLoopCommonModes);
+    
+    // 创建信号
+    semaphore = dispatch_semaphore_create(0);
+    
+    // 在子线程监控时长
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        while (YES) {
+            // 假定连续5次超时50ms认为卡顿(当然也包含了单次超时250ms)
+            long st = dispatch_semaphore_wait(semaphore, dispatch_time(DISPATCH_TIME_NOW, 50*NSEC_PER_MSEC));
+            if (st != 0) {
+                if (activity == kCFRunLoopBeforeSources || activity==kCFRunLoopAfterWaiting) {
+                    if (++timeoutCount &lt; 5)
+                        continue;
+                    
+                    NSLog(@"好像有点儿卡哦");
+                }
+            }
+            timeoutCount = 0;
+        }
+    });
+}
+
+static void runLoopObserverCallBack(CFRunLoopObserverRef observer, CFRunLoopActivity activity, void *info) {
+    MyClass *object = (__bridge MyClass*)info;
+    
+    // 记录状态值
+    object-&gt;activity = activity;
+    
+    // 发送信号
+    dispatch_semaphore_t semaphore = moniotr-&gt;semaphore;
+    dispatch_semaphore_signal(semaphore);
+}
+</code></pre></div></div>
+
+<p>检测到卡顿时应该立刻获取卡顿的方法堆栈信息，并推送至服务端共开发者分析，从而解决卡顿问题。</p>
+
+<p>获取堆栈信息的一种方法是： <strong>直接调用系统函数</strong> 。这种方法的优点是 <strong>性能消耗小</strong> 。缺点是 <strong>它只能够获取简单的信息，无法配合 dSYM 来获取具体是哪行代码出了问题，而且能够获取的信息类型也有限</strong> 。</p>
+
+<p>直接调用系统函数的主要思路是：用 <code class="highlighter-rouge">signal</code> 进行错误信息获取。具体代码如下：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>static int s_fatal_signals[] = {
+    SIGABRT,
+    SIGBUS,
+    SIGFPE,
+    SIGILL,
+    SIGSEGV,
+    SIGTRAP,
+    SIGTERM,
+    SIGKILL,
+};
+
+static int s_fatal_signal_num = sizeof(s_fatal_signals) / sizeof(s_fatal_signals[0]);
+
+void UncaughtExceptionHandler(NSException *exception) {
+    NSArray *exceptionArray = [exception callStackSymbols]; // 得到当前调用栈信息
+    NSString *exceptionReason = [exception reason]; // 非常重要，就是崩溃的原因
+    NSString *exceptionName = [exception name]; // 异常类型
+}
+
+void SignalHandler(int code) {
+    NSLog(@"signal handler = %d",code);
+}
+
+void InitCrashReport() {
+    // 系统错误信号捕获
+    for (int i = 0; i &lt; s_fatal_signal_num; ++i) {
+        signal(s_fatal_signals[i], SignalHandler);
+    }
+    
+    //oc 未捕获异常的捕获
+    NSSetUncaughtExceptionHandler(&amp;UncaughtExceptionHandler);
+}
+
+int main(int argc, char * argv[]) {
+    @autoreleasepool {
+        InitCrashReport();
+        return UIApplicationMain(argc, argv, nil, NSStringFromClass([AppDelegate class]));
+    }
+}
+</code></pre></div></div>
+
+<p>获取堆栈信息的另一种方法是： <strong>直接使用 PLCrashReporter 第三方开源库</strong> 。这种方法的优点是 <strong>能够定位到问题代码的具体位置，而且性能消耗也不大</strong> 。具体代码如下：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>PLCrashReporterConfig *config = [[PLCrashReporterConfig alloc] initWithSignalHandlerType:PLCrashReporterSignalHandlerTypeBSD     
+                                                                   symbolicationStrategy:PLCrashReporterSymbolicationStrategyAll];
+PLCrashReporter *reporter = [[PLCrashReporter alloc] initWithConfiguration:config];
+
+// 获取数据
+NSData *lagData = [reporter generateLiveReport];
+
+// 转换成 PLCrashReport 对象
+PLCrashReport *lagReport = [[PLCrashReport alloc] initWithData:lagData error:NULL];
+
+// 进行字符串格式化处理
+NSString *lagReportString = [PLCrashReportTextFormatter stringValueForCrashReport:lagReport withTextFormat:PLCrashReportTextFormatiOS];
+
+// 将字符串上传服务器
+NSLog(@"lag happen, detail below: \n %@",lagReportString);
+</code></pre></div></div>
+
+<h1 id="参考">参考</h1>
+
+<ol>
+  <li><a href="https://links.jianshu.com/go?to=http%3A%2F%2Fchuquan.me%2F2018%2F08%2F26%2Fgraphics-rending-principle-gpu%2F">计算机那些事(8)——图形图像渲染原理</a></li>
+  <li><a href="https://links.jianshu.com/go?to=http%3A%2F%2Fchuquan.me%2F2018%2F10%2F06%2Funderstand-ios-runloop%2F">Run Loop 原理详解</a></li>
+  <li><a href="https://links.jianshu.com/go?to=https%3A%2F%2Fwereadteam.github.io%2F2016%2F05%2F03%2FWeRead-Performance%2F">微信读书 iOS 性能优化总结</a></li>
+  <li><a href="https://links.jianshu.com/go?to=http%3A%2F%2Fwww.tanhao.me%2Fcode%2F151113.html%2F">iOS 实时卡顿监控</a></li>
+  <li><a href="https://links.jianshu.com/go?to=https%3A%2F%2Fopensource.apple.com%2Fsource%2FCF%2FCF-1152.14%2FCFRunLoop.c.auto.html">CFRunLoop.c</a></li>
+  <li><a href="https://links.jianshu.com/go?to=https%3A%2F%2Fjuejin.im%2Fpost%2F5a94e9185188257a780dde61">RunLoop刨根问底</a></li>
+  <li><a href="https://links.jianshu.com/go?to=https%3A%2F%2Fwww.cnblogs.com%2Fzy1987%2Fp%2F4582466.html">RunLoop 原理和核心机制</a></li>
+  <li><a href="https://links.jianshu.com/go?to=http%3A%2F%2Fmrpeak.cn%2Fblog%2Fui-detect%2F">iOS应用UI线程卡顿监控</a></li>
+</ol>
+
+
+  </section>
+
+</article>
+
+<section>
+
+            <div class="content-play">
+              <p><a href="javascript:void(0)" onclick="dashangToggle()" class="dashang" title="打赏，支持一下">打赏一个呗</a></p>
+              <div class="hide_box-play"></div>
+              <div class="shang_box-play">
+                <a class="shang_close-play" href="javascript:void(0)" onclick="dashangToggle()" title="关闭"><img src="/images/payimg/close.jpg" alt="取消" /></a>
+                <div class="shang_tit-play">
+                  <p>感谢您的支持，我会继续努力的!</p>
+                </div>
+                <div class="shang_payimg">
+                    <img src="/images/payimg/alipayimg.jpg" alt="扫码支持" title="扫一扫" />
+                </div>
+              <div class="shang_payimg">    
+                    <img src="/images/payimg/weipayimg.jpg" alt="扫码支持" title="扫一扫" />
+                </div>
+                <div class="pay_explain">扫码打赏，你说多少就多少</div>
+                <div class="shang_payselect">
+                  <div class="pay_item checked" data-id="alipay">
+                    <span class="pay_logo"><img src="/images/payimg/alipay.jpg" alt="支付宝" /></span>
+                  </div>
+                  <div class="pay_item" data-id="weipay">
+                    <span class="pay_logo"><img src="/images/payimg/wechat.jpg" alt="微信" /></span>
+                  </div>
+                </div>
+                <div class="shang_info-play">
+                  <p>打开<span id="shang_pay_txt">支付宝</span>扫一扫，即可进行扫码打赏哦</p>
+                </div>
+              </div>
+            </div>
+            <script type="text/javascript">
+            function dashangToggle(){
+              $(".hide_box-play").fadeToggle();
+              $(".shang_box-play").fadeToggle();
+            }
+            </script>
+
+            <div style="text-align:center;margin:50px 0; font:normal 14px/24px 'MicroSoft YaHei';"></div>
+
+            <style type="text/css">
+              .content-play{width:80%;margin-top: 20px;margin-bottom: 10px;height:40px;}
+              .hide_box-play{z-index:999;filter:alpha(opacity=50);background:#666;opacity: 0.5;-moz-opacity: 0.5;left:0;top:0;height:99%;width:100%;position:fixed;display:none;}
+              .shang_box-play{width:540px;height:540px;padding:10px;background-color:#fff;border-radius:10px;position:fixed;z-index:1000;left:50%;top:50%;margin-left:-280px;margin-top:-280px;border:1px dotted #dedede;display:none;}
+              .shang_box-play img{border:none;border-width:0;}
+              .dashang{display:block;width:100px;margin:5px auto;height:25px;line-height:25px;padding:10px;background-color:#E74851;color:#fff;text-align:center;text-decoration:none;border-radius:10px;font-weight:bold;font-size:16px;transition: all 0.3s;}
+              .dashang:hover{opacity:0.8;padding:15px;font-size:18px;}
+              .shang_close-play{float:right;display:inline-block;
+                margin-right: 10px;margin-top: 20px;
+              }
+              .shang_logo{display:block;text-align:center;margin:20px auto;}
+              .shang_tit-play{width: 100%;height: 75px;text-align: center;line-height: 66px;color: #a3a3a3;font-size: 16px;background: url('/images/payimg/cy-reward-title-bg.jpg');font-family: 'Microsoft YaHei';margin-top: 7px;margin-right:2px;}
+              .shang_tit-play p{color:#a3a3a3;text-align:center;font-size:16px;}
+              .shang_payimg{width:140px;padding:10px;padding-left: 80px; /*border:6px solid #EA5F00;**/margin:0 auto;border-radius:3px;height:140px;display:inline-block;}
+              .shang_payimg img{display:inline-block;margin-right:10px;float:left;text-align:center;width:140px;height:140px; }
+              .pay_explain{text-align:center;margin:10px auto;font-size:12px;color:#545454;}
+              .shang_payselect{text-align:center;margin:0 auto;margin-top:40px;cursor:pointer;height:60px;width:500px;margin-left:110px;}
+              .shang_payselect .pay_item{display:inline-block;margin-right:140px;float:left;}
+              .shang_info-play{clear:both;}
+              .shang_info-play p,.shang_info-play a{color:#C3C3C3;text-align:center;font-size:12px;text-decoration:none;line-height:2em;}
+            </style>
+
+       <ul class="pager">
+        
+        <li class="previous">
+            <a href="/2018/05/09_SHELL/" data-toggle="tooltip" data-placement="top" title="09_SHELL编程之xarg使用">上一篇：  <span>09_SHELL编程之xarg使用</span>
+            </a>
+        </li>
+        
+        
+        <li class="next">
+            <a href="/2019/12/10_SHELL/" data-toggle="tooltip" data-placement="top" title="shell编程：find命令">下一篇：  <span>shell编程：find命令</span>
+            </a>
+        </li>
+        
+    </ul>
+</section>
+
+<section class="post-comments">
+
+  
+
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zMDUwNi83MDYw">
+      <script type="text/javascript">
+         (function(d, s) {
+             var j, e = d.getElementsByTagName(s)[0];
+
+             if (typeof LivereTower === 'function') { return; }
+             j = d.createElement(s);
+             j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+             j.async = true;
+             e.parentNode.insertBefore(j, e);
+         })(document, 'script');
+      </script>
+      <noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+      </div>
+
+  
+
+</section>
+
+
+            <section class="footer">
+    <footer>
+        <div class = "footer_div">  
+        <nav class="cover-navigation navigation--social">
+          <ul class="navigation">
+
+          
+          <!-- Github -->
+          <li class="navigation__item_social">
+            <a href="https://github.com/lijingbiao" title="@lijingbiao 的 Github" target="_blank">
+              <div class="footer-social-icon" style="background:url(/images/github.png);"></div>
+            </a>
+          </li>
+          
+
+          
+
+          
+
+          
+          <!-- Zhihu -->
+          <li class="navigation__item_social">
+            <a href="https://www.jianshu.com/u/e66c74545d7e" title="@e66c74545d7e" target="_blank">
+              <div class="footer-social-icon" style="background:url(/images/jianshu.png);"></div>
+            </a>
+          </li>
+
+          
+
+          
+
+          
+          
+
+
+          
+          <!-- Email -->
+          <li class="navigation__item_social">
+            <a href="mailto:694292399@qq.com" title="Contact me">
+              <div class="footer-social-icon" style="background:url(/images/email.png);"></div>
+            </a>
+          </li>
+          
+          
+          <!-- RSS -->
+          <li class="navigation__item_social">
+            <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+              <div class="footer-social-icon" style="background:url(/images/rss.png);"></div>
+              <span class="label">RSS</span>
+            </a>
+          </li>
+
+          </ul>
+        </nav>
+
+        </div>
+
+        <div class = "footer_div">  
+           <p class="copyright text-muted">
+            Copyright &copy; LiJingBiao 2021  |
+            <iframe
+                style="margin-left: 2px; margin-bottom:-5px;"
+                frameborder="0" scrolling="0" width="91px" height="20px"
+                src="https://ghbtns.com/github-btn.html?user=lijingbiao&repo=lijingbiao.github.io&type=star&count=true" >
+            </iframe>
+            </p>
+        	<div align="right">
+    			<link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+          <!-- 访问统计 -->
+          <span id="busuanzi_container_site_pv">
+            本站总访问量
+            <span id="busuanzi_value_site_pv"></span>次
+          </span>
+
+        </div>
+        <div>
+    </footer>
+</section>
+
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+<script type="text/javascript" src="/js/main.js"></script>
+
+<script type="text/javascript" src="/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+    
+  </body>
+
+</html>

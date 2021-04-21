@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>iOS获取设备的网络状态(已适配iOS13,iOS14无变化)</title>
+  <meta name="description" content="登录注册写文章">
+  <meta name="author" content="leopardpan">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="iOS获取设备的网络状态(已适配iOS13,iOS14无变化)">
+  <meta name="twitter:description" content="登录注册写文章">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="iOS获取设备的网络状态(已适配iOS13,iOS14无变化)">
+  <meta property="og:description" content="登录注册写文章">
+  
+  <link rel="icon" type="image/png" href="/images/favicon.png" />
+  <link href="/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://localhost:4000/2015/12/iOS_net_state/">
+  <link rel="alternate" type="application/rss+xml" title="LiJingBiao" href="http://localhost:4000/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+
+<!-- 站点统计 -->
+  <script 
+  async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js">
+  </script>  
+
+<!-- 百度统计 -->
+  
+  <script>
+      var _hmt = _hmt || [];
+      (function() {
+        var hm = document.createElement("script");
+        hm.src = "//hm.baidu.com/hm.js?8ba1c6be0953b6f9c2ba38e57f615421";
+        var s = document.getElementsByTagName("script")[0]; 
+        s.parentNode.insertBefore(hm, s);
+      })();
+  </script>
+  
+
+<!-- google 统计 -->
+  
+  <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+      ga('create', 'UA-84134159-3', 'auto');
+      ga('send', 'pageview');
+  </script>
+  
+
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-9005224472374751",
+    enable_page_level_ads: true
+  });
+</script>
+
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">        
+      <div class="nav_container">
+         <nav class="nav-menu-item" style = "float:right">
+            <i class="nav-menu-item">
+              <a href="/#blog" title="" class="blog-button">  博客主页
+              </a>
+            </i>
+            
+                <i class="nav-menu-item">
+
+                  <a href="/archive" title="archive" class="btn-mobile-menu__icon">
+                      所有文章
+                  </a>
+                </i>
+            
+                <i class="nav-menu-item">
+
+                  <a href="/tags" title="tags" class="btn-mobile-menu__icon">
+                      标签
+                  </a>
+                </i>
+            
+                <i class="nav-menu-item">
+
+                  <a href="/about" title="about" class="btn-mobile-menu__icon">
+                      关于我
+                  </a>
+                </i>
+            
+          </nav>
+      </div>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+        <!-- 头像效果-start -->
+        <div class="ih-item circle effect right_to_left">            
+            <a href="/#blog" title="前往 LiJingBiao 的主页" class="blog-button">
+                <div class="img"><img src="/images/avatar.jpg" alt="img"></div>
+                <div class="info">
+                    <div class="info-back">
+                        <h2> 
+                            
+                                天道酬勤
+                            
+                        </h2>
+                        <p>
+                           
+                                iOS / Ruby /Shell
+                            
+                        </p>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <!-- 头像效果-end -->
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for LiJingBiao" class="blog-button">LiJingBiao</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">个人站</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">欢迎来到我的个人站~</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        
+
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="" class="blog-button">博客主页</a></li>
+                
+                  <li class="navigation__item"><a href="/archive" title="archive">所有文章</a></li>
+                
+                  <li class="navigation__item"><a href="/tags" title="tags">标签</a></li>
+                
+                  <li class="navigation__item"><a href="/about" title="about">关于我</a></li>
+                
+              </ul>
+            </nav>
+          </div>          
+        </div>
+
+
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-clear"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <head>
+  <link rel="stylesheet" href="/css/post.css">
+</head>
+
+<article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <h1 class="post-title">iOS获取设备的网络状态(已适配iOS13,iOS14无变化)</h1>
+    <div class="post-meta">
+      <img src="/images/calendar.png" width="20px"/> 
+      <time datetime="2015-12-22 00:00:00 +0800" itemprop="datePublished" class="post-meta__date date">2015-12-22</time>  
+
+      <span id="busuanzi_container_page_pv"> | 阅读：<span id="busuanzi_value_page_pv"></span>次</span>
+    </p>
+    </div>
+  </header>
+
+  
+    <h2 class="post-title">目录</h2>
+    <ul>
+  <li><a href="#ios获取设备的网络状态已适配ios13ios14无变化">iOS获取设备的网络状态(已适配iOS13,iOS14无变化)</a></li>
+  <li><a href="#ios获取设备的网络状态已适配ios13ios14无变化-1">iOS获取设备的网络状态(已适配iOS13,iOS14无变化)</a></li>
+  <li><a href="#前言">前言</a></li>
+  <li><a href="#实现">实现</a>
+      - {:.} <a href="#1网络状态获取">1.网络状态获取</a>
+                  - {:.} <a href="#获取当前的网络类型">获取当前的网络类型</a>
+                  - {:.} <a href="#获取当前的wifi信息">获取当前的Wifi信息</a>
+                  - {:.} <a href="#获取当前的wifi信号强度">获取当前的Wifi信号强度</a>
+      - {:.} <a href="#2reachability的使用">2.Reachability的使用</a>
+      - {:.} <a href="#3ios-12下的补充">3.iOS 12下的补充</a>
+      - {:.} <a href="#4ios-13下的补充">4.iOS 13下的补充</a>
+      - {:.} <a href="#推荐阅读更多精彩内容">推荐阅读<a href="/">更多精彩内容</a></a></li>
+</ul>
+
+  
+
+  <section class="post">
+    <p><a href="/sign_in">登录</a><a href="/sign_up">注册</a><a href="/writer">写文章</a></p>
+
+<p><a href="/">首页</a><a href="/apps?utm_medium=desktop&amp;utm_source=navbar-apps">下载APP</a></p>
+
+<h1 id="ios获取设备的网络状态已适配ios13ios14无变化">iOS获取设备的网络状态(已适配iOS13,iOS14无变化)</h1>
+
+<p><a href="/u/3ea97312adbd">神SKY</a>关注赞赏支持</p>
+
+<h1 id="ios获取设备的网络状态已适配ios13ios14无变化-1">iOS获取设备的网络状态(已适配iOS13,iOS14无变化)</h1>
+
+<h1 id="前言">前言</h1>
+
+<p>小编最近在项目中遇到了一个问题，除刘海屏以外的iOS设备可以正常的搜索到硬件设备，但是刘海屏就不行。因此，小编花了一点时间研究了一下iOS设备获取当前设备的网络状态。</p>
+
+<h1 id="实现">实现</h1>
+
+<p>因为iOS的系统是封闭的，所以是没有直接的APi去获取当前的网络状态。但是道高一尺，魔高一尺。开发者总会有办法获取自己想要的东西。</p>
+
+<h3 id="1网络状态获取">1.网络状态获取</h3>
+
+<h6 id="获取当前的网络类型">获取当前的网络类型</h6>
+
+<p>获取当前的网络类型是通过获取状态栏，然后遍历状态栏的视图完成的。<br />
+先导入头文件，如下：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#import "AppDelegate.h"
+</code></pre></div></div>
+
+<p>实现方法如下：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>+ (NSString *)getNetworkType
+{
+    UIApplication *app = [UIApplication sharedApplication];
+    id statusBar = nil;
+// 判断是否是iOS 13
+    NSString *network = @"";
+    if (@available(iOS 13.0, *)) {
+        UIStatusBarManager *statusBarManager = [UIApplication sharedApplication].keyWindow.windowScene.statusBarManager;
+        
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wundeclared-selector"
+        if ([statusBarManager respondsToSelector:@selector(createLocalStatusBar)]) {
+            UIView *localStatusBar = [statusBarManager performSelector:@selector(createLocalStatusBar)];
+            if ([localStatusBar respondsToSelector:@selector(statusBar)]) {
+                statusBar = [localStatusBar performSelector:@selector(statusBar)];
+            }
+        }
+#pragma clang diagnostic pop
+        
+        if (statusBar) {
+// UIStatusBarDataCellularEntry
+            id currentData = [[statusBar valueForKeyPath:@"_statusBar"] valueForKeyPath:@"currentData"];
+            id _wifiEntry = [currentData valueForKeyPath:@"wifiEntry"];
+            id _cellularEntry = [currentData valueForKeyPath:@"cellularEntry"];
+            if (_wifiEntry &amp;&amp; [[_wifiEntry valueForKeyPath:@"isEnabled"] boolValue]) {
+// If wifiEntry is enabled, is WiFi.
+                network = @"WIFI";
+            } else if (_cellularEntry &amp;&amp; [[_cellularEntry valueForKeyPath:@"isEnabled"] boolValue]) {
+                NSNumber *type = [_cellularEntry valueForKeyPath:@"type"];
+                if (type) {
+                    switch (type.integerValue) {
+                        case 0:
+// 无sim卡
+                            network = @"NONE";
+                            break;
+                        case 1:
+                            network = @"1G";
+                            break;
+                        case 4:
+                            network = @"3G";
+                            break;
+                        case 5:
+                            network = @"4G";
+                            break;
+                        default:
+// 默认WWAN类型
+                            network = @"WWAN";
+                            break;
+                            }
+                        }
+                    }
+                }
+    }else {
+        statusBar = [app valueForKeyPath:@"statusBar"];
+        
+        if ([[[self alloc]init]isLiuHaiScreen]) {
+// 刘海屏
+                id statusBarView = [statusBar valueForKeyPath:@"statusBar"];
+                UIView *foregroundView = [statusBarView valueForKeyPath:@"foregroundView"];
+                NSArray *subviews = [[foregroundView subviews][2] subviews];
+                
+                if (subviews.count == 0) {
+// iOS 12
+                    id currentData = [statusBarView valueForKeyPath:@"currentData"];
+                    id wifiEntry = [currentData valueForKey:@"wifiEntry"];
+                    if ([[wifiEntry valueForKey:@"_enabled"] boolValue]) {
+                        network = @"WIFI";
+                    }else {
+// 卡1:
+                        id cellularEntry = [currentData valueForKey:@"cellularEntry"];
+// 卡2:
+                        id secondaryCellularEntry = [currentData valueForKey:@"secondaryCellularEntry"];
+
+                        if (([[cellularEntry valueForKey:@"_enabled"] boolValue]|[[secondaryCellularEntry valueForKey:@"_enabled"] boolValue]) == NO) {
+// 无卡情况
+                            network = @"NONE";
+                        }else {
+// 判断卡1还是卡2
+                            BOOL isCardOne = [[cellularEntry valueForKey:@"_enabled"] boolValue];
+                            int networkType = isCardOne ? [[cellularEntry valueForKey:@"type"] intValue] : [[secondaryCellularEntry valueForKey:@"type"] intValue];
+                            switch (networkType) {
+                                    case 0://无服务
+                                    network = [NSString stringWithFormat:@"%@-%@", isCardOne ? @"Card 1" : @"Card 2", @"NONE"];
+                                    break;
+                                    case 3:
+                                    network = [NSString stringWithFormat:@"%@-%@", isCardOne ? @"Card 1" : @"Card 2", @"2G/E"];
+                                    break;
+                                    case 4:
+                                    network = [NSString stringWithFormat:@"%@-%@", isCardOne ? @"Card 1" : @"Card 2", @"3G"];
+                                    break;
+                                    case 5:
+                                    network = [NSString stringWithFormat:@"%@-%@", isCardOne ? @"Card 1" : @"Card 2", @"4G"];
+                                    break;
+                                default:
+                                    break;
+                            }
+                            
+                        }
+                    }
+                
+                }else {
+                    
+                    for (id subview in subviews) {
+                        if ([subview isKindOfClass:NSClassFromString(@"_UIStatusBarWifiSignalView")]) {
+                            network = @"WIFI";
+                        }else if ([subview isKindOfClass:NSClassFromString(@"_UIStatusBarStringView")]) {
+                            network = [subview valueForKeyPath:@"originalText"];
+                        }
+                    }
+                }
+                
+            }else {
+// 非刘海屏
+                UIView *foregroundView = [statusBar valueForKeyPath:@"foregroundView"];
+                NSArray *subviews = [foregroundView subviews];
+                
+                for (id subview in subviews) {
+                    if ([subview isKindOfClass:NSClassFromString(@"UIStatusBarDataNetworkItemView")]) {
+                        int networkType = [[subview valueForKeyPath:@"dataNetworkType"] intValue];
+                        switch (networkType) {
+                            case 0:
+                                network = @"NONE";
+                                break;
+                            case 1:
+                                network = @"2G";
+                                break;
+                            case 2:
+                                network = @"3G";
+                                break;
+                            case 3:
+                                network = @"4G";
+                                break;
+                            case 5:
+                                network = @"WIFI";
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                }
+            }
+    }
+
+    if ([network isEqualToString:@""]) {
+        network = @"NO DISPLAY";
+    }
+    return network;
+}
+</code></pre></div></div>
+
+<h6 id="获取当前的wifi信息">获取当前的Wifi信息</h6>
+
+<p>获取当前的Wifi信息需要借助系统的SystemConfiguration这个库。<br />
+先导入头文件，如下：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#import &lt;SystemConfiguration/CaptiveNetwork.h&gt;
+</code></pre></div></div>
+
+<p>实现方法如下：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#pragma mark 获取Wifi信息
++ (id)fetchSSIDInfo
+{
+    NSArray *ifs = (__bridge_transfer id)CNCopySupportedInterfaces();
+    id info = nil;
+    for (NSString *ifnam in ifs) {
+        info = (__bridge_transfer id)CNCopyCurrentNetworkInfo((__bridge CFStringRef)ifnam);
+        
+        if (info &amp;&amp; [info count]) {
+            break;
+        }
+    }
+    return info;
+}
+#pragma mark 获取WIFI名字
++ (NSString *)getWifiSSID
+{
+    return (NSString *)[self fetchSSIDInfo][@"SSID"];
+}
+#pragma mark 获取WIFI的MAC地址
++ (NSString *)getWifiBSSID
+{
+    return (NSString *)[self fetchSSIDInfo][@"BSSID"];
+}
+</code></pre></div></div>
+
+<h6 id="获取当前的wifi信号强度">获取当前的Wifi信号强度</h6>
+
+<p>获取信号强度与获取网络状态有点类似，通过遍历状态栏，从而获取WIFI图标的信号强度。在获取前需注意当前状态是否为WIFI。如下：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>+ (int)getWifiSignalStrength{
+    
+    int signalStrength = 0;
+// 判断类型是否为WIFI
+    if ([[self getNetworkType]isEqualToString:@"WIFI"]) {
+// 判断是否为iOS 13
+        if (@available(iOS 13.0, *)) {
+            UIStatusBarManager *statusBarManager = [UIApplication sharedApplication].keyWindow.windowScene.statusBarManager;
+             
+            id statusBar = nil;
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wundeclared-selector"
+            if ([statusBarManager respondsToSelector:@selector(createLocalStatusBar)]) {
+                UIView *localStatusBar = [statusBarManager performSelector:@selector(createLocalStatusBar)];
+                if ([localStatusBar respondsToSelector:@selector(statusBar)]) {
+                    statusBar = [localStatusBar performSelector:@selector(statusBar)];
+                }
+            }
+#pragma clang diagnostic pop
+            if (statusBar) {
+                id currentData = [[statusBar valueForKeyPath:@"_statusBar"] valueForKeyPath:@"currentData"];
+                id wifiEntry = [currentData valueForKeyPath:@"wifiEntry"];
+                if ([wifiEntry isKindOfClass:NSClassFromString(@"_UIStatusBarDataIntegerEntry")]) {
+// 层级：_UIStatusBarDataNetworkEntry、_UIStatusBarDataIntegerEntry、_UIStatusBarDataEntry
+                    
+                    signalStrength = [[wifiEntry valueForKey:@"displayValue"] intValue];
+                }
+            }
+        }else {
+            UIApplication *app = [UIApplication sharedApplication];
+            id statusBar = [app valueForKey:@"statusBar"];
+            if ([[[self alloc]init]isLiuHaiScreen]) {
+// 刘海屏
+                id statusBarView = [statusBar valueForKeyPath:@"statusBar"];
+                UIView *foregroundView = [statusBarView valueForKeyPath:@"foregroundView"];
+                NSArray *subviews = [[foregroundView subviews][2] subviews];
+                       
+                if (subviews.count == 0) {
+// iOS 12
+                    id currentData = [statusBarView valueForKeyPath:@"currentData"];
+                    id wifiEntry = [currentData valueForKey:@"wifiEntry"];
+                    signalStrength = [[wifiEntry valueForKey:@"displayValue"] intValue];
+// dBm
+// int rawValue = [[wifiEntry valueForKey:@"rawValue"] intValue];
+                }else {
+                    for (id subview in subviews) {
+                        if ([subview isKindOfClass:NSClassFromString(@"_UIStatusBarWifiSignalView")]) {
+                            signalStrength = [[subview valueForKey:@"_numberOfActiveBars"] intValue];
+                        }
+                    }
+                }
+            }else {
+// 非刘海屏
+                UIView *foregroundView = [statusBar valueForKey:@"foregroundView"];
+                     
+                NSArray *subviews = [foregroundView subviews];
+                NSString *dataNetworkItemView = nil;
+                       
+                for (id subview in subviews) {
+                    if([subview isKindOfClass:[NSClassFromString(@"UIStatusBarDataNetworkItemView") class]]) {
+                        dataNetworkItemView = subview;
+                        break;
+                    }
+                }
+                       
+                signalStrength = [[dataNetworkItemView valueForKey:@"_wifiStrengthBars"] intValue];
+                        
+                return signalStrength;
+            }
+        }
+    }
+    return signalStrength;
+}
+</code></pre></div></div>
+
+<h3 id="2reachability的使用">2.Reachability的使用</h3>
+
+<p>下载开源类Reachability，然后根据文档使用即可（该类把移动网络统称为WWAN）：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>+ (NSString *)getNetworkTypeByReachability
+{
+    NSString *network = @"";
+    switch ([[Reachability reachabilityForInternetConnection]currentReachabilityStatus]) {
+        case NotReachable:
+            network = @"NONE";
+            break;
+        case ReachableViaWiFi:
+            network = @"WIFI";
+            break;
+        case ReachableViaWWAN:
+            network = @"WWAN";
+            break;
+        default:
+            break;
+    }
+    if ([network isEqualToString:@""]) {
+        network = @"NO DISPLAY";
+    }
+    return network;
+}
+</code></pre></div></div>
+
+<p>上次发布了这篇文章之后，有人问我，怎么才能获取设备的IP地址呢？在这里，小编附上获取iP地址的方法。<br />
+先导入头文件，如下：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#import &lt;ifaddrs.h&gt;
+#import &lt;arpa/inet.h&gt;
+</code></pre></div></div>
+
+<p>实现方法，如下：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#pragma mark 获取设备IP地址
++ (NSString *)getIPAddress
+{
+    NSString *address = @"error";
+    struct ifaddrs *interfaces = NULL;
+    struct ifaddrs *temp_addr = NULL;
+    int success = 0;
+    // 检索当前接口,在成功时,返回0
+    success = getifaddrs(&amp;interfaces);
+    if (success == 0) {
+        // 循环链表的接口
+        temp_addr = interfaces;
+        while(temp_addr != NULL) {
+// 开热点时本机的IP地址
+                if ([[NSString stringWithUTF8String:temp_addr-&gt;ifa_name] isEqualToString:@"bridge100"]
+                    ) {
+                    address = [NSString stringWithUTF8String:inet_ntoa(((struct sockaddr_in *)temp_addr-&gt;ifa_addr)-&gt;sin_addr)];
+                }
+            if(temp_addr-&gt;ifa_addr-&gt;sa_family == AF_INET) {
+                // 检查接口是否en0 wifi连接在iPhone上
+                if([[NSString stringWithUTF8String:temp_addr-&gt;ifa_name] isEqualToString:@"en0"]) {
+                    // 得到NSString从C字符串
+                    address = [NSString stringWithUTF8String:inet_ntoa(((struct sockaddr_in *)temp_addr-&gt;ifa_addr)-&gt;sin_addr)];
+                }
+            }
+            temp_addr = temp_addr-&gt;ifa_next;
+        }
+    }
+    // 释放内存
+    freeifaddrs(interfaces);
+    return address;
+}
+</code></pre></div></div>
+
+<h3 id="3ios-12下的补充">3.iOS 12下的补充</h3>
+
+<p>在iOS 12下xcode需要打开权限才可以正常操作，如下：</p>
+
+<p><img src="" alt="" /></p>
+
+<h3 id="4ios-13下的补充">4.iOS 13下的补充</h3>
+
+<p>在iOS 13下xcode需要打开权限才可以正常操作，如下：</p>
+
+<p><img src="" alt="" /></p>
+
+<p><img src="" alt="" /></p>
+
+<p>并且，在iOS 13下，若要获取SSID和BSSID，需要添加定位权限</p>
+
+<p><img src="" alt="" /></p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#import &lt;CoreLocation/CoreLocation.h&gt;
+
+@interface ViewController ()
+@property (strong, nonatomic) CLLocationManager *locationManager;
+@end
+
+@implementation ViewController
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    // Do any additional setup after loading the view, typically from a nib.
+    if (@available(iOS 13.0, *)) {
+// 如果是iOS13 未开启地理位置权限 需要提示一下
+           if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusNotDetermined) {
+               self.locationManager = [[CLLocationManager alloc] init];
+               [self.locationManager requestWhenInUseAuthorization];
+           }
+       }
+}
+</code></pre></div></div>
+
+<blockquote>
+  <p>到这里为止，这篇文章就结束了。在这里提醒一下各位看官，横屏时请注意不要把状态栏去掉。有说明不足的地方欢迎评论，这里附上Demo下载地址：<a href="https://links.jianshu.com/go?to=https%3A%2F%2Fgithub.com%2FshenSKY%2FGetNetwork.git">Demo</a>。最后，希望这篇文章对各位看官们有所帮助。对支持小编的看官们表示感谢。</p>
+</blockquote>
+
+<h3 id="推荐阅读更多精彩内容">推荐阅读<a href="/">更多精彩内容</a></h3>
+
+<ul>
+  <li></li>
+</ul>
+
+<p><a href="/p/3b3ed5a8bb46">光</a></p>
+
+<p>我来了 一个人 奔跑着 在晶莹美丽的清晨曦光里 你来了 两个人 手牵着 在刺眼苍白的晌午浓光里 他来了 一个人 等…</p>
+
+<p><a href="/u/1b5510bf9f43">默默磨墨s</a>阅读 53评论 0赞 1</p>
+
+<ul>
+  <li></li>
+</ul>
+
+<p><a href="/p/54d7bfe5eb2e">Nodejs: 不借助框架，如何最简单有效的实现异步编程 [简约有理]</a></p>
+
+<p>本文探讨利用原生机制，来最快速简单的实现异步事件流。这个傻瓜化的宗旨，是来自要面对的很实际的问题: 为了说明所采用…</p>
+
+<p><a href="/u/eefc22646652">Tulayang</a>阅读 2,737评论 6赞 9</p>
+
+<ul>
+  <li></li>
+</ul>
+
+<p><a href="/p/36b2be56f229">相见时难别亦难，看你存在真麻烦，看你离开真不愿</a></p>
+
+<p>我们很久没有这么长时间在一起了吧，从7月中末开始到9月将要初结，时间过得真快，你我又要面对不知多久的分别。 从各自…</p>
+
+<p><a href="/u/2f98737c61d2">GZ徐</a>阅读 167评论 5赞 1</p>
+
+<ul>
+  <li></li>
+</ul>
+
+<p><a href="/p/b5f2f125b447">秋色十里 不如你回身一按？</a></p>
+
+<p>风轻云淡的天空，随处可见的风景，快拿起手机，用镜头捕捉你身边的秋天吧！</p>
+
+<p><a href="/u/7a51172747d6">努比亚智能手机</a>阅读 112评论 0赞 1</p>
+
+<ul>
+  <li></li>
+</ul>
+
+<p><a href="/p/e36052e64b40">『原创手画』你的新娘，我的知己。</a></p>
+
+<p>囍: 无论什么样的女人，在穿上白纱的那一刻，都显得无比圣洁和美丽，这大概就是婚纱的魅力。 谢谢阅览！ 喜欢就点个赞…</p>
+
+<p><a href="/u/5dff3a55a85e">田螺姑娘Tina</a>阅读 630评论 10赞 33</p>
+
+<p>评论57</p>
+
+<p>赞35</p>
+
+<p>抽奖
+ <img src="data:image/png;base64,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" alt="reward" /></p>
+
+<p>35赞36赞</p>
+
+<p>赞赏</p>
+
+<p>更多好文</p>
+
+
+  </section>
+
+</article>
+
+<section>
+
+            <div class="content-play">
+              <p><a href="javascript:void(0)" onclick="dashangToggle()" class="dashang" title="打赏，支持一下">打赏一个呗</a></p>
+              <div class="hide_box-play"></div>
+              <div class="shang_box-play">
+                <a class="shang_close-play" href="javascript:void(0)" onclick="dashangToggle()" title="关闭"><img src="/images/payimg/close.jpg" alt="取消" /></a>
+                <div class="shang_tit-play">
+                  <p>感谢您的支持，我会继续努力的!</p>
+                </div>
+                <div class="shang_payimg">
+                    <img src="/images/payimg/alipayimg.jpg" alt="扫码支持" title="扫一扫" />
+                </div>
+              <div class="shang_payimg">    
+                    <img src="/images/payimg/weipayimg.jpg" alt="扫码支持" title="扫一扫" />
+                </div>
+                <div class="pay_explain">扫码打赏，你说多少就多少</div>
+                <div class="shang_payselect">
+                  <div class="pay_item checked" data-id="alipay">
+                    <span class="pay_logo"><img src="/images/payimg/alipay.jpg" alt="支付宝" /></span>
+                  </div>
+                  <div class="pay_item" data-id="weipay">
+                    <span class="pay_logo"><img src="/images/payimg/wechat.jpg" alt="微信" /></span>
+                  </div>
+                </div>
+                <div class="shang_info-play">
+                  <p>打开<span id="shang_pay_txt">支付宝</span>扫一扫，即可进行扫码打赏哦</p>
+                </div>
+              </div>
+            </div>
+            <script type="text/javascript">
+            function dashangToggle(){
+              $(".hide_box-play").fadeToggle();
+              $(".shang_box-play").fadeToggle();
+            }
+            </script>
+
+            <div style="text-align:center;margin:50px 0; font:normal 14px/24px 'MicroSoft YaHei';"></div>
+
+            <style type="text/css">
+              .content-play{width:80%;margin-top: 20px;margin-bottom: 10px;height:40px;}
+              .hide_box-play{z-index:999;filter:alpha(opacity=50);background:#666;opacity: 0.5;-moz-opacity: 0.5;left:0;top:0;height:99%;width:100%;position:fixed;display:none;}
+              .shang_box-play{width:540px;height:540px;padding:10px;background-color:#fff;border-radius:10px;position:fixed;z-index:1000;left:50%;top:50%;margin-left:-280px;margin-top:-280px;border:1px dotted #dedede;display:none;}
+              .shang_box-play img{border:none;border-width:0;}
+              .dashang{display:block;width:100px;margin:5px auto;height:25px;line-height:25px;padding:10px;background-color:#E74851;color:#fff;text-align:center;text-decoration:none;border-radius:10px;font-weight:bold;font-size:16px;transition: all 0.3s;}
+              .dashang:hover{opacity:0.8;padding:15px;font-size:18px;}
+              .shang_close-play{float:right;display:inline-block;
+                margin-right: 10px;margin-top: 20px;
+              }
+              .shang_logo{display:block;text-align:center;margin:20px auto;}
+              .shang_tit-play{width: 100%;height: 75px;text-align: center;line-height: 66px;color: #a3a3a3;font-size: 16px;background: url('/images/payimg/cy-reward-title-bg.jpg');font-family: 'Microsoft YaHei';margin-top: 7px;margin-right:2px;}
+              .shang_tit-play p{color:#a3a3a3;text-align:center;font-size:16px;}
+              .shang_payimg{width:140px;padding:10px;padding-left: 80px; /*border:6px solid #EA5F00;**/margin:0 auto;border-radius:3px;height:140px;display:inline-block;}
+              .shang_payimg img{display:inline-block;margin-right:10px;float:left;text-align:center;width:140px;height:140px; }
+              .pay_explain{text-align:center;margin:10px auto;font-size:12px;color:#545454;}
+              .shang_payselect{text-align:center;margin:0 auto;margin-top:40px;cursor:pointer;height:60px;width:500px;margin-left:110px;}
+              .shang_payselect .pay_item{display:inline-block;margin-right:140px;float:left;}
+              .shang_info-play{clear:both;}
+              .shang_info-play p,.shang_info-play a{color:#C3C3C3;text-align:center;font-size:12px;text-decoration:none;line-height:2em;}
+            </style>
+
+       <ul class="pager">
+        
+        
+        <li class="next">
+            <a href="/2016/09/11_SHELL/" data-toggle="tooltip" data-placement="top" title="Shell编程ls命令">下一篇：  <span>Shell编程ls命令</span>
+            </a>
+        </li>
+        
+    </ul>
+</section>
+
+<section class="post-comments">
+
+  
+
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zMDUwNi83MDYw">
+      <script type="text/javascript">
+         (function(d, s) {
+             var j, e = d.getElementsByTagName(s)[0];
+
+             if (typeof LivereTower === 'function') { return; }
+             j = d.createElement(s);
+             j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+             j.async = true;
+             e.parentNode.insertBefore(j, e);
+         })(document, 'script');
+      </script>
+      <noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+      </div>
+
+  
+
+</section>
+
+
+            <section class="footer">
+    <footer>
+        <div class = "footer_div">  
+        <nav class="cover-navigation navigation--social">
+          <ul class="navigation">
+
+          
+          <!-- Github -->
+          <li class="navigation__item_social">
+            <a href="https://github.com/lijingbiao" title="@lijingbiao 的 Github" target="_blank">
+              <div class="footer-social-icon" style="background:url(/images/github.png);"></div>
+            </a>
+          </li>
+          
+
+          
+
+          
+
+          
+          <!-- Zhihu -->
+          <li class="navigation__item_social">
+            <a href="https://www.jianshu.com/u/e66c74545d7e" title="@e66c74545d7e" target="_blank">
+              <div class="footer-social-icon" style="background:url(/images/jianshu.png);"></div>
+            </a>
+          </li>
+
+          
+
+          
+
+          
+          
+
+
+          
+          <!-- Email -->
+          <li class="navigation__item_social">
+            <a href="mailto:694292399@qq.com" title="Contact me">
+              <div class="footer-social-icon" style="background:url(/images/email.png);"></div>
+            </a>
+          </li>
+          
+          
+          <!-- RSS -->
+          <li class="navigation__item_social">
+            <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+              <div class="footer-social-icon" style="background:url(/images/rss.png);"></div>
+              <span class="label">RSS</span>
+            </a>
+          </li>
+
+          </ul>
+        </nav>
+
+        </div>
+
+        <div class = "footer_div">  
+           <p class="copyright text-muted">
+            Copyright &copy; LiJingBiao 2021  |
+            <iframe
+                style="margin-left: 2px; margin-bottom:-5px;"
+                frameborder="0" scrolling="0" width="91px" height="20px"
+                src="https://ghbtns.com/github-btn.html?user=lijingbiao&repo=lijingbiao.github.io&type=star&count=true" >
+            </iframe>
+            </p>
+        	<div align="right">
+    			<link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+          <!-- 访问统计 -->
+          <span id="busuanzi_container_site_pv">
+            本站总访问量
+            <span id="busuanzi_value_site_pv"></span>次
+          </span>
+
+        </div>
+        <div>
+    </footer>
+</section>
+
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+<script type="text/javascript" src="/js/main.js"></script>
+
+<script type="text/javascript" src="/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+    
+  </body>
+
+</html>
