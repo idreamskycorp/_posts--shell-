@@ -5,9 +5,761 @@
     <description>欢迎来到我的个人站~</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Thu, 22 Apr 2021 11:04:23 +0800</pubDate>
-    <lastBuildDate>Thu, 22 Apr 2021 11:04:23 +0800</lastBuildDate>
+    <pubDate>Fri, 23 Apr 2021 18:48:22 +0800</pubDate>
+    <lastBuildDate>Fri, 23 Apr 2021 18:48:22 +0800</lastBuildDate>
     <generator>Jekyll v3.8.5</generator>
+    
+      <item>
+        <title>PlistBuddy</title>
+        <description>&lt;h1 id=&quot;plistbuddy&quot;&gt;PlistBuddy&lt;/h1&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;PlistBuddy&lt;/code&gt; 是 &lt;code class=&quot;highlighter-rouge&quot;&gt;Mac&lt;/code&gt; 系统中一个用于命令行下读写 &lt;code class=&quot;highlighter-rouge&quot;&gt;plist&lt;/code&gt; 文件的工具。可以用来读取或修改 &lt;code class=&quot;highlighter-rouge&quot;&gt;plist&lt;/code&gt; 文件的内容。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;PlistBuddy&lt;/code&gt; 工具路径&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/usr/libexec/PlistBuddy
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;可以在 &lt;code class=&quot;highlighter-rouge&quot;&gt;/usr/local/bin/&lt;/code&gt; 目录下建立软连接，就可以直接使用 PlistBuddy 命令了&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# 不能直接使用 PlistBuddy 命令
+ln -s /usr/libexec/PlistBuddy /usr/local/bin/PlistBuddy
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;ul&gt;
+  &lt;li&gt;查看帮助&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/usr/libexec/PlistBuddy --help
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h1 id=&quot;操作-plist-文件&quot;&gt;操作 &lt;code class=&quot;highlighter-rouge&quot;&gt;plist&lt;/code&gt; 文件&lt;/h1&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;打印 &lt;code class=&quot;highlighter-rouge&quot;&gt;info.plist&lt;/code&gt; 文件&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/usr/libexec/PlistBuddy -c &quot;Print&quot; info.plist
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;ul&gt;
+  &lt;li&gt;打印字段相应的值&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# 打印 info.plist 中字段 name 值
+/usr/libexec/PlistBuddy -c 'Print :name' info.plist
+
+# 脚本中获取 plist 文件中字段 name 值，并赋值给变量
+name=$($PlistBuddy -c &quot;print :name&quot; info.plist)
+
+# 打印数组字段 testArr 第 0 项
+/usr/libexec/PlistBuddy -c 'Print :testArr:0' info.plist
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;添加字段&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;字段类型&lt;/th&gt;
+      &lt;th&gt; &lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;string&lt;/td&gt;
+      &lt;td&gt; &lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;array&lt;/td&gt;
+      &lt;td&gt; &lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;dict&lt;/td&gt;
+      &lt;td&gt; &lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;bool&lt;/td&gt;
+      &lt;td&gt; &lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;real&lt;/td&gt;
+      &lt;td&gt; &lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;integer&lt;/td&gt;
+      &lt;td&gt; &lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;date&lt;/td&gt;
+      &lt;td&gt; &lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;data&lt;/td&gt;
+      &lt;td&gt; &lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# string 类型：给 test.plist 文件添加字段 Version 值为 1.0.0
+/usr/libexec/PlistBuddy -c 'Add :Version string 1.0.0' test.plist
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# Array 类型：给 test.plist 文件添加数组字段 AppArr
+
+# 1. 添加 key 值
+/usr/libexec/PlistBuddy -c 'Add :AppArr array' test.plist
+
+# 注意：key之间用 : 隔开，且不能有空格：
+
+# 2. 添加 value 值 app1 、app2
+/usr/libexec/PlistBuddy -c 'Add :AppArr: string app1' test.plist
+/usr/libexec/PlistBuddy -c 'Add :AppArr: string app2' test.plist
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# Dictionary 类型： 给 test.plist 文件添加数组字段 AppDic
+
+# 1. 添加 key 值
+/usr/libexec/PlistBuddy -c 'Add :AppDic dict' test.plist
+
+# 2. 添加 value 值 name 、age
+/usr/libexec/PlistBuddy -c 'Add :AppDic:name string Tom' test.plist
+/usr/libexec/PlistBuddy -c 'Add :AppDic:age string 100' test.plist
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;删除字段&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# 删除 test.plist 中的字段 Version
+/usr/libexec/PlistBuddy -c 'Delete :Version' test.plist
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;修改字段值&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# 修改 string 类型
+/usr/libexec/PlistBuddy -c 'Set :version &quot;1.1.1&quot;' test.plist
+
+# 修改 array 类型. 修改 AppArr 字段中数组的第0个值.
+/usr/libexec/PlistBuddy -c 'Set :AppArr:0 &quot;this is app1&quot;' test.plist
+
+# 修改 dict 类型. 修改 AppDic 字段中 name 的值
+/usr/libexec/PlistBuddy -c 'Set :AppDic:name &quot;Jim&quot;' test.plist
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;合并两个 plist&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# 把 A.plist 合并到 B.plist. 有相同字段，会发生覆盖。
+/usr/libexec/PlistBuddy -c 'Merge A.plist' B.plist
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+</description>
+        <pubDate>Fri, 23 Apr 2021 00:00:00 +0800</pubDate>
+        <link>http://localhost:4000/2021/04/PlistBuddy/</link>
+        <guid isPermaLink="true">http://localhost:4000/2021/04/PlistBuddy/</guid>
+        
+        <category>iOS</category>
+        
+        
+      </item>
+    
+      <item>
+        <title>CocoaPods私有库常见问题拾遗</title>
+        <description>&lt;h1 id=&quot;cocoapods-私有库常见问题&quot;&gt;CocoaPods 私有库常见问题&lt;/h1&gt;
+
+&lt;h2 id=&quot;执行-pod-install-命令&quot;&gt;执行 &lt;code class=&quot;highlighter-rouge&quot;&gt;pod install&lt;/code&gt; 命令&lt;/h2&gt;
+
+&lt;h3 id=&quot;-unable-to-find-a-specification-for-mclib&quot;&gt;[!] Unable to find a specification for MCLib&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;原因：本地没有 &lt;code class=&quot;highlighter-rouge&quot;&gt;MCLib&lt;/code&gt; 的索引 &lt;code class=&quot;highlighter-rouge&quot;&gt;spec&lt;/code&gt;。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;操作：更新 &lt;code class=&quot;highlighter-rouge&quot;&gt;MCLib&lt;/code&gt; 对应的本地 &lt;code class=&quot;highlighter-rouge&quot;&gt;repos&lt;/code&gt;。&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# 更新本地 repo 
+pod repo udpate
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;备注：本地 &lt;code class=&quot;highlighter-rouge&quot;&gt;repos&lt;/code&gt; 仓库缓存目录：&lt;code class=&quot;highlighter-rouge&quot;&gt;~/.cocoapods/repos/&lt;/code&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h3 id=&quot;-unable-to-find-a-specification-for-fmdb-depended-upon-by-mclib&quot;&gt;[!] Unable to find a specification for &lt;code class=&quot;highlighter-rouge&quot;&gt;FMDB&lt;/code&gt; depended upon by &lt;code class=&quot;highlighter-rouge&quot;&gt;MCLib&lt;/code&gt;&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;原因：&lt;code class=&quot;highlighter-rouge&quot;&gt;Podfile&lt;/code&gt; 在私有库后面配置了 &lt;code class=&quot;highlighter-rouge&quot;&gt;source&lt;/code&gt;，没有考虑到私有库 &lt;code class=&quot;highlighter-rouge&quot;&gt;A&lt;/code&gt; 依赖的私有库 &lt;code class=&quot;highlighter-rouge&quot;&gt;B&lt;/code&gt;，而私有库 &lt;code class=&quot;highlighter-rouge&quot;&gt;B&lt;/code&gt; 依赖 &lt;code class=&quot;highlighter-rouge&quot;&gt;FMDB&lt;/code&gt;， 在设置的 &lt;code class=&quot;highlighter-rouge&quot;&gt;source&lt;/code&gt; 中找不到 &lt;code class=&quot;highlighter-rouge&quot;&gt;FMDB&lt;/code&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# Podfile 
+ pod 'A' , '0.0.1' , :source =&amp;gt; 'git@10.2.250.21:MCLib/specRepo_iOS.git'
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;操作：正确做法是在 &lt;code class=&quot;highlighter-rouge&quot;&gt;Podfile&lt;/code&gt; 头部配置多个 &lt;code class=&quot;highlighter-rouge&quot;&gt;source&lt;/code&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;source 'git@10.2.250.21:MCLib/specRepo_iOS.git'
+source 'https://github.com/CocoaPods/Specs.git'
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;h3 id=&quot;-cocoapods-could-not-find-compatible-versions-for-pod-mcstatistics&quot;&gt;[!] CocoaPods could not find compatible versions for pod “MCStatistics”&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;描述：&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;MacBook-Pro:$ pod install
+Analyzing dependencies
+Pre-downloading: `MCStatistics` from `https://gitlab.com/xxx/MCStatistics_framework.git`
+[!] CocoaPods could not find compatible versions for pod &quot;MCStatistics&quot;:
+ In Podfile:
+ MCStatistics (from `https://gitlab.com/xxxx/MCStatistics_framework.git`)
+
+Specs satisfying the `MCStatistics (from `https://gitlab.com/xxxxxxx/MCStatistics_framework.git`)` dependency were found, but they required a higher minimum deployment target.
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;原因：&lt;code class=&quot;highlighter-rouge&quot;&gt;Podfile&lt;/code&gt; 配置的最低支持平台低于 &lt;code class=&quot;highlighter-rouge&quot;&gt;spec&lt;/code&gt; 配置的最低平台 &lt;code class=&quot;highlighter-rouge&quot;&gt;8.0&lt;/code&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Podfile&lt;/code&gt; 配置最低平台支持 &lt;code class=&quot;highlighter-rouge&quot;&gt;7.0&lt;/code&gt; 。&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;platform :ios, '7.0'
+pod 'MCPrivateNetworking', :git =&amp;gt; 'https://gitlab.com/xxxxx/framwwork.git'
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;spec&lt;/code&gt; 配置最低平台支持 &lt;code class=&quot;highlighter-rouge&quot;&gt;8.0&lt;/code&gt;。&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;s.platform = :ios, '8.0' # 平台及支持的最低版本
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;执行-pod-repo-push-命令&quot;&gt;执行 &lt;code class=&quot;highlighter-rouge&quot;&gt;pod repo push&lt;/code&gt; 命令&lt;/h2&gt;
+
+&lt;p&gt;推送 &lt;code class=&quot;highlighter-rouge&quot;&gt;spec&lt;/code&gt; 文件时。&lt;/p&gt;
+
+&lt;h3 id=&quot;cocoapods-私有库静态-framework-验证失败&quot;&gt;CocoaPods 私有库，静态 Framework 验证失败&lt;/h3&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;The following build commands failed:
+ CompileC /Users/mengyueping/Library/Developer/Xcode/DerivedData/App-fbdglhmiocesdxeuqlwfuuhbmtht/Build/Intermediates.noindex/Pods.build/Release-iphonesimulator/MCLib.build/Objects-normal/i386/openssl_wrapper.o MCLib/MCLib/Lib/Util/openssl_wrapper.m normal i386 objective-c com.apple.compilers.llvm.clang.1_0.compiler
+ (1 failure)
+ Testing with `xcodebuild`. 
+ -&amp;gt; MCLib (0.0.1)
+ - ERROR | [iOS] xcodebuild: Returned an unsuccessful exit code.
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;指定私有库的源，验证 &lt;code class=&quot;highlighter-rouge&quot;&gt;.podspec&lt;/code&gt; 文件时，出现私有库找不到。&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h3 id=&quot;fatal-error-could-not-build-module-xxxxx&quot;&gt;fatal error: could not build module ‘xxxxx’&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;或者： Include of non-modular header inside framework module&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;原因：私有库的 &lt;code class=&quot;highlighter-rouge&quot;&gt;.h&lt;/code&gt; 文件中引入了依赖的源码库的 &lt;code class=&quot;highlighter-rouge&quot;&gt;.h&lt;/code&gt; 文件，导致根据的私有库的 &lt;code class=&quot;highlighter-rouge&quot;&gt;module.modulemap&lt;/code&gt; 找不到该头文件，导致错误。（比如：&lt;code class=&quot;highlighter-rouge&quot;&gt;MCFoundtion&lt;/code&gt; 库某个公开的头文件中引用了 &lt;code class=&quot;highlighter-rouge&quot;&gt;AFNetworking&lt;/code&gt; 类的头文件。分装库代码的时候应该尽量避免公开的头文件中，引入第三方依赖开源库的头文件。）&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;解决：设置 &lt;code class=&quot;highlighter-rouge&quot;&gt;BuildSetting&lt;/code&gt; 的 &lt;code class=&quot;highlighter-rouge&quot;&gt;Allow Non-modular Includes In Framework Modules&lt;/code&gt; 为 &lt;code class=&quot;highlighter-rouge&quot;&gt;YES&lt;/code&gt;&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;spec.user_target_xcconfig = { 'CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES' =&amp;gt; 'YES' }。
+
+# lint 命令只剩下 warning。
+
+# user_target_xcconfig 和 pod_target_xcconfig 的区别:
+# user_target_xcconfig 是对于编译工程中所有 pod 的设置，
+# 而 pod_target_xcconfig 只是针对当前 pod 的。
+# 所以如果多个 pod 的 podspec 中对 user_target_xcconfig 同一个值进行了设置，那么就可能存在冲突问题。
+# 但因为 CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES 在 pod_target_xcconfig 不起作用，只能按现在的配置来处理。
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Cloning into ‘/var/folders/rg/f1ycrs553dq2z2dq7mt0mbh80000gn/T/d20160921-12602-1bx4f8v’… remote: Not Found fatal: repository ‘http://192.168.110.114/xxxxxx.git/’ not found&lt;/code&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;原因：&lt;code class=&quot;highlighter-rouge&quot;&gt;pod spec lint&lt;/code&gt; 命令，校验 &lt;code class=&quot;highlighter-rouge&quot;&gt;pod&lt;/code&gt; 的代码和配置时是从 &lt;code class=&quot;highlighter-rouge&quot;&gt;git&lt;/code&gt; 上拉取响应版本（&lt;code class=&quot;highlighter-rouge&quot;&gt;Tag&lt;/code&gt;）的代码进行编译；没有创建 &lt;code class=&quot;highlighter-rouge&quot;&gt;git&lt;/code&gt; 代码仓库，报错。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;gt; Cloning into ‘/var/folders/rg/f1ycrs553dq2z2dq7mt0mbh80000gn/T/d20160921-12686-1o6vj1q’… fatal: Remote branch 0.1.0 not found in upstream origin&lt;/code&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;原因：没有在 &lt;code class=&quot;highlighter-rouge&quot;&gt;git&lt;/code&gt; 上增加对应的 &lt;code class=&quot;highlighter-rouge&quot;&gt;tag&lt;/code&gt; 值，报错。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h3 id=&quot;-found-multiple-specifications&quot;&gt;[!] Found multiple specifications&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;原因：将私有仓库拉到本地时可能会存在两个。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;解释：因为 &lt;code class=&quot;highlighter-rouge&quot;&gt;git&lt;/code&gt; 存在两个地址，分别是 &lt;code class=&quot;highlighter-rouge&quot;&gt;git@&lt;/code&gt; 和 &lt;code class=&quot;highlighter-rouge&quot;&gt;http/https&lt;/code&gt;，所以有时候可能会在本地 &lt;code class=&quot;highlighter-rouge&quot;&gt;repos&lt;/code&gt; 下出现两个基于同一个 &lt;code class=&quot;highlighter-rouge&quot;&gt;git&lt;/code&gt; 的仓库，仓库名字不同。因为一开始 &lt;code class=&quot;highlighter-rouge&quot;&gt;lint&lt;/code&gt; 的时候是指定了仓库名的，所以能通过，但 &lt;code class=&quot;highlighter-rouge&quot;&gt;pod repo push&lt;/code&gt; 的时候虽然指定了 &lt;code class=&quot;highlighter-rouge&quot;&gt;push&lt;/code&gt; 的仓库名，但因为没有指定校验的仓库名，一旦你的 &lt;code class=&quot;highlighter-rouge&quot;&gt;pod&lt;/code&gt; 依赖了私有仓库中的某个 &lt;code class=&quot;highlighter-rouge&quot;&gt;pod&lt;/code&gt;，校验时会出现类似 &lt;code class=&quot;highlighter-rouge&quot;&gt;[!] Found multiple specifications xxxxLibrary&lt;/code&gt; 的错误。此时需要删除掉一个私有仓库，然后重新 &lt;code class=&quot;highlighter-rouge&quot;&gt;push&lt;/code&gt; 才行。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;备注：这里需要明白 &lt;code class=&quot;highlighter-rouge&quot;&gt;pod spec lint&lt;/code&gt; 的时候，可以配置 &lt;code class=&quot;highlighter-rouge&quot;&gt;--sources&lt;/code&gt;。而 &lt;code class=&quot;highlighter-rouge&quot;&gt;pod repo push&lt;/code&gt; 的时候，是直接使用的本地仓库名。有可能 &lt;code class=&quot;highlighter-rouge&quot;&gt;--sources&lt;/code&gt; 指定的是 &lt;code class=&quot;highlighter-rouge&quot;&gt;http/https&lt;/code&gt; ，而本地 &lt;code class=&quot;highlighter-rouge&quot;&gt;repo&lt;/code&gt; 仓库是使用的 &lt;code class=&quot;highlighter-rouge&quot;&gt;git@&lt;/code&gt; 拉取的。&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;pod spec lint --verbose --use-libraries --allow-warnings --sources='私有仓库repo地址,https://github.com/CocoaPods/Specs'
+
+pod repo push MCRepo MCAppKit.podspec --verbose --use-libraries --allow-warnings
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;h3 id=&quot;pod-libraries-should-not-include-the-extension&quot;&gt;pod Libraries should not include the extension&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;原因：工程中导入了第三方 &lt;code class=&quot;highlighter-rouge&quot;&gt;SDK&lt;/code&gt; ，包含有二进制文件，没有在 &lt;code class=&quot;highlighter-rouge&quot;&gt;spec&lt;/code&gt; 文件中配置。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;解决：需要配置一下路径，保证 &lt;code class=&quot;highlighter-rouge&quot;&gt;push repo&lt;/code&gt; 的时候，不丢失二进制文件：&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;s.vendored_libraries = ['Class/SobotSDK/SobotLib/libSobotLib.a']
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;h3 id=&quot;编译时找不到宏定义&quot;&gt;编译时，找不到宏定义&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;原因：宏定义可能和环境有关。根据 &lt;code class=&quot;highlighter-rouge&quot;&gt;DEBUG&lt;/code&gt; 和 &lt;code class=&quot;highlighter-rouge&quot;&gt;RELEASE&lt;/code&gt; 定义了不同的宏。eg：&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;#ifdef DEBUG
+ #define kAppKey @“123456789”
+#endif
+#ifdef RELEASE
+ #define kAppKey @“987654321”
+#endif
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;解决：&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;编译时，找不到宏定义 &lt;code class=&quot;highlighter-rouge&quot;&gt;kAppKey&lt;/code&gt; ，需要设置查看：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Project -&amp;gt; Build Settings -&amp;gt; Preprocessor Macros -&amp;gt; 
+Debug DEBUG=1
+Release RELEASE
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;对应 Spec 文件设置：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;s.xcconfig = {
+&quot;GCC_PREPROCESSOR_DEFINITIONS&quot; =&amp;gt; &quot;RELEASE COCOAPODS=1&quot;
+ }
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;h3 id=&quot;shell-script-invocation-error-group&quot;&gt;Shell Script Invocation Error Group&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;错误信息：&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Shell Script Invocation Error Group
+
+sent 31754831 bytes received 54674 bytes 21206336.67 bytes/sec
+total size is 36763600 speedup is 1.16
+/* com.apple.actool.errors */
+: error: There are multiple stickers icon set or app icon set instances named &quot;AppIcon&quot;.
+/* com.apple.actool.compilation-results */
+/Users/mengyueping/Library/Developer/Xcode/DerivedData/Example-fdeuhzzwrdwyjrfsdeusamwbippd/Build/Products/Debug-iphonesimulator/Example.app/Assets.car
+/Users/mengyueping/Library/Developer/Xcode/DerivedData/Example-fdeuhzzwrdwyjrfsdeusamwbippd/Build/Intermediates.noindex/Example.build/Debug-iphonesimulator/Example.build/assetcatalog_generated_info_cocoapods.plist
+
+Command /bin/sh failed with exit code 1
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;原因：&lt;code class=&quot;highlighter-rouge&quot;&gt;Pod&lt;/code&gt; 资源拷贝脚本运行错误。不同 &lt;code class=&quot;highlighter-rouge&quot;&gt;Bundle&lt;/code&gt; 有同名资源。有多个 &lt;code class=&quot;highlighter-rouge&quot;&gt;AppIcon&lt;/code&gt; 。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;在自己工程 &lt;code class=&quot;highlighter-rouge&quot;&gt;Build Phases -&amp;gt; Copy Pods Resources&lt;/code&gt; 中，可以看到配置的资源拷贝脚本：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&quot;${SRCROOT}/Pods/Target Support Files/Pods-Example/Pods-Example-resources.sh&quot;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;这个脚本是 &lt;code class=&quot;highlighter-rouge&quot;&gt;pod&lt;/code&gt; 自己生成的，咱们也可以在物理文件夹下找到该脚本。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;解决：可以通过去除这个脚本来解决冲突，但是这样会丢失资源文件。所以最终解决方法是，应该去除重名的资源文件 &lt;code class=&quot;highlighter-rouge&quot;&gt;AppIcon&lt;/code&gt; 。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;duplicate-symbol&quot;&gt;duplicate symbol&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;错误信息：&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;duplicate symbol _OBJC_IVAR_$_ViewController._lastIndex in:
+ /Users/mengyueping/Library/Developer/Xcode/DerivedData/Example-fdeuhzzwrdwyjrfsdeusamwbippd/Build/Products/Debug-iphonesimulator/libMain.a(ViewController.o)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;原因：&lt;code class=&quot;highlighter-rouge&quot;&gt;duplicate symbol&lt;/code&gt; 重复符号。原因一，有可能是重复类。原因二，也有可能是在某个文件中引入了 &lt;code class=&quot;highlighter-rouge&quot;&gt;.m&lt;/code&gt; 文件。 eg：&lt;code class=&quot;highlighter-rouge&quot;&gt;#import &quot;ViewController.m&quot;&lt;/code&gt; 。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h3 id=&quot;unable-to-run-command-stripnib-tableviewlistcellnib---this-target-might-include-its-own-product&quot;&gt;Unable to run command ‘StripNIB TableViewListCell.nib’ - this target might include its own product.&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;原因：&lt;code class=&quot;highlighter-rouge&quot;&gt;xib&lt;/code&gt; 文件没有指定路径，&lt;code class=&quot;highlighter-rouge&quot;&gt;pod&lt;/code&gt; 的时候不会下载 &lt;code class=&quot;highlighter-rouge&quot;&gt;xib&lt;/code&gt;。&lt;code class=&quot;highlighter-rouge&quot;&gt;xib&lt;/code&gt; 文件算是资源文件的，需要另外添加 &lt;code class=&quot;highlighter-rouge&quot;&gt;s.resource&lt;/code&gt; 引入。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;解决：&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;s.source_files = &quot;pod/classes/**/*.{h,m}&quot;
+s.resource = &quot;pod/classes/TestViewController.xib&quot;
+
+# 或者把 xib 拷贝到 bundle 中，直接指定资源文件路径为 bundle 。
+
+s.resources = ['*.bundle', '*.strings']
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;h3 id=&quot;-unable-to-find-a-specification-for-basesdk--102-depended-upon-by-myproject&quot;&gt;[!] Unable to find a specification for &lt;code class=&quot;highlighter-rouge&quot;&gt;BaseSDK (= 1.0.2)&lt;/code&gt; depended upon by &lt;code class=&quot;highlighter-rouge&quot;&gt;MyProject&lt;/code&gt;&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;描述：&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Analyzing dependencies
+Fetching podspec for `MyProject` from `../`
+[!] Unable to find a specification for `BaseSDK (= 1.0.2)` depended upon by `MyProject`
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;原因：没有配置私有库的索引库地址。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;解决：&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;source 'git@10.2.24.2:MengCode/Specs.git'
+source 'https://github.com/CocoaPods/Specs.git'
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;h3 id=&quot;liblwapisdkalwapirequesto-does-not-contain-bitcode&quot;&gt;libLWApiSDK.a(LWApiRequest.o)’ does not contain bitcode.&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;描述：&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;ld: '/Users/mengyueping/MCModule/MCUIKit/MCUIKitCode/Example/Pods/UMengUShare/UShareSDK/SocialLibraries/LaiWang/libLWApiSDK.a(LWApiRequest.o)' does not contain bitcode. You must rebuild it with bitcode enabled (Xcode setting ENABLE_BITCODE), obtain an updated library from the vendor, or disable bitcode for this target. file '/Users/mengyueping/MCModule/MCUIKit/MCUIKitCode/Example/Pods/UMengUShare/UShareSDK/SocialLibraries/LaiWang/libLWApiSDK.a' for architecture arm64
+clang: error: linker command failed with exit code 1 (use -v to see invocation)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;解决：&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Build Settings -&amp;gt; Enable Bitcode -&amp;gt; NO
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;could-not-build-module-mcfoundation&quot;&gt;Could not build module ‘MCFoundation’&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;描述：&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Could not build module 'MCFoundation'
+
+- ERROR | xcodebuild: MCFoundationLib/MCFoundation/MCFoundation.framework/Headers/MCRefreshBackNormalFooter.h:9:9: error: include of non-modular header inside framework module 'MCFoundation.MCRefreshBackNormalFooter': 'Headers/Public/MJRefresh/MJRefreshBackNormalFooter.h' [-Werror,-Wnon-modular-include-in-framework-module]
+
+- NOTE | xcodebuild: Headers/Public/MCKit/MCSavaDataManager.h:11:9: fatal error: could not build module 'MCFoundation'
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;原因：在头文件中，引入了第三方 &lt;code class=&quot;highlighter-rouge&quot;&gt;pod&lt;/code&gt; 管理的库的头文件。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;s.user_target_xcconfig = { 
+&quot;CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES&quot; =&amp;gt; &quot;YES&quot;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;设置后，&lt;code class=&quot;highlighter-rouge&quot;&gt;push spec&lt;/code&gt; 会出现：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;[!] Smart quotes were detected and ignored in your Podfile. To avoid issues in the future, you should not use TextEdit for editing it. If you are not using TextEdit, you should turn off smart quotes in your editor of choice.
+
+[!] The `MC [Debug]` target overrides the `CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES` build setting defined in `Pods/Target Support Files/Pods-MC/Pods-MC.debug.xcconfig'. This can lead to problems with the CocoaPods installation
+ - Use the `$(inherited)` flag, or
+ - Remove the build settings from the target.
+
+[!] The `MC [Gamma]` target overrides the `CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES` build setting defined in `Pods/Target Support Files/Pods-MC/Pods-MC.gamma.xcconfig'. This can lead to problems with the CocoaPods installation
+ - Use the `$(inherited)` flag, or
+ - Remove the build settings from the target.
+
+[!] The `MC [PreRelease]` target overrides the `CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES` build setting defined in `Pods/Target Support Files/Pods-MC/Pods-MC.prerelease.xcconfig'. This can lead to problems with the CocoaPods installation
+ - Use the `$(inherited)` flag, or
+ - Remove the build settings from the target.
+
+[!] The `MC [Release]` target overrides the `CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES` build setting defined in `Pods/Target Support Files/Pods-MC/Pods-MC.release.xcconfig'. This can lead to problems with the CocoaPods installation
+ - Use the `$(inherited)` flag, or
+ - Remove the build settings from the target.
+
+[!] The `MC-Test [Debug]` target overrides the `CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES` build setting defined in `Pods/Target Support Files/Pods-MC-Test/Pods-MC-Test.debug.xcconfig'. This can lead to problems with the CocoaPods installation
+ - Use the `$(inherited)` flag, or
+ - Remove the build settings from the target.
+
+[!] The `MC-Test [Gamma]` target overrides the `CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES` build setting defined in `Pods/Target Support Files/Pods-MC-Test/Pods-MC-Test.gamma.xcconfig'. This can lead to problems with the CocoaPods installation
+ - Use the `$(inherited)` flag, or
+ - Remove the build settings from the target.
+
+[!] The `MC-Test [PreRelease]` target overrides the `CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES` build setting defined in `Pods/Target Support Files/Pods-MC-Test/Pods-MC-Test.prerelease.xcconfig'. This can lead to problems with the CocoaPods installation
+ - Use the `$(inherited)` flag, or
+ - Remove the build settings from the target.
+
+[!] The `MC-Test [Release]` target overrides the `CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES` build setting defined in `Pods/Target Support Files/Pods-MC-Test/Pods-MC-Test.release.xcconfig'. This can lead to problems with the CocoaPods installation
+ - Use the `$(inherited)` flag, or
+ - Remove the build settings from the target.
+
+[!] The `MC-Release [Debug]` target overrides the `CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES` build setting defined in `Pods/Target Support Files/Pods-MC-Release/Pods-MC-Release.debug.xcconfig'. This can lead to problems with the CocoaPods installation
+ - Use the `$(inherited)` flag, or
+ - Remove the build settings from the target.
+
+[!] The `MC-Release [Gamma]` target overrides the `CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES` build setting defined in `Pods/Target Support Files/Pods-MC-Release/Pods-MC-Release.gamma.xcconfig'. This can lead to problems with the CocoaPods installation
+ - Use the `$(inherited)` flag, or
+ - Remove the build settings from the target.
+
+[!] The `MC-Release [PreRelease]` target overrides the `CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES` build setting defined in `Pods/Target Support Files/Pods-MC-Release/Pods-MC-Release.prerelease.xcconfig'. This can lead to problems with the CocoaPods installation
+ - Use the `$(inherited)` flag, or
+ - Remove the build settings from the target.
+
+[!] The `MC-Release [Release]` target overrides the `CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES` build setting defined in `Pods/Target Support Files/Pods-MC-Release/Pods-MC-Release.release.xcconfig'. This can lead to problems with the CocoaPods installation
+ - Use the `$(inherited)` flag, or
+ - Remove the build settings from the target.
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;h3 id=&quot;the-pods-target-has-transitive-dependencies&quot;&gt;The ‘Pods’ target has transitive dependencies&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;原因：如果私有库添加了静态库或者 &lt;code class=&quot;highlighter-rouge&quot;&gt;dependency&lt;/code&gt; 用了静态库。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;解决：那么执行 &lt;code class=&quot;highlighter-rouge&quot;&gt;pod spec lint&lt;/code&gt; 或者 &lt;code class=&quot;highlighter-rouge&quot;&gt;pod repo push&lt;/code&gt; 时候需要加上 &lt;code class=&quot;highlighter-rouge&quot;&gt;—user-libraries&lt;/code&gt; 选项。否则会出现 &lt;code class=&quot;highlighter-rouge&quot;&gt;The 'Pods' target has transitive dependencies&lt;/code&gt; 错误。&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;执行-pod-spec-lint-命令&quot;&gt;执行 &lt;code class=&quot;highlighter-rouge&quot;&gt;pod spec lint&lt;/code&gt; 命令&lt;/h2&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;pod lib lint&lt;/code&gt; 是只从本地验证你的 &lt;code class=&quot;highlighter-rouge&quot;&gt;pod&lt;/code&gt; 能否通过验证。&lt;/p&gt;
+
+  &lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;pod spec lint&lt;/code&gt; 是从本地和远程验证你的 &lt;code class=&quot;highlighter-rouge&quot;&gt;pod&lt;/code&gt; 能否通过验证。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;在私有库引用了私有库的情况下，在验证和推送私有库的情况下都要加上所有的资源地址，不然 &lt;code class=&quot;highlighter-rouge&quot;&gt;pod&lt;/code&gt; 会默认从官方 &lt;code class=&quot;highlighter-rouge&quot;&gt;repo&lt;/code&gt; 查询。&lt;br /&gt;
+使用 &lt;code class=&quot;highlighter-rouge&quot;&gt;pod spec lint&lt;/code&gt; 去验证私有库能否通过验证时，应该要添加 &lt;code class=&quot;highlighter-rouge&quot;&gt;--sources&lt;/code&gt; 选项，不然会出现找不到 &lt;code class=&quot;highlighter-rouge&quot;&gt;repo&lt;/code&gt; 的错误。&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# 配置 `--sources` 下载源。
+
+pod spec lint --sources='私有仓库repo地址,https://github.com/CocoaPods/Specs'
+pod repo push 本地repo名 podspec名 --sources='私有仓库repo地址,https://github.com/CocoaPods/Specs'
+
+pod lib lint MCCommon.podspec --sources='http://10.2.250.21/MC/MCPrivateSourceCodeSpecRepo.git,https://github.com/CocoaPods/Specs.git' 
+
+pod spec lint MCCommon.podspec --sources='http://10.2.222.22/MC/MCPrivateSourceCodeSpecRepo.git,https://github.com/CocoaPods/Specs.git'
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;podfile-文件&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Podfile&lt;/code&gt; 文件&lt;/h2&gt;
+
+&lt;h3 id=&quot;inhibit_all_warnings&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;inhibit_all_warnings!&lt;/code&gt;&lt;/h3&gt;
+
+&lt;p&gt;屏蔽 &lt;code class=&quot;highlighter-rouge&quot;&gt;cocoapods&lt;/code&gt; 库里面的所有警告。这个特性也能在子 &lt;code class=&quot;highlighter-rouge&quot;&gt;target&lt;/code&gt; 里面定义。&lt;/p&gt;
+
+&lt;p&gt;如果你想屏蔽某 &lt;code class=&quot;highlighter-rouge&quot;&gt;pod&lt;/code&gt; 库里面的警告也是可以的:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;pod 'SSZipArchive', :inhibit_warnings =&amp;gt; true
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;h3 id=&quot;引用本地库&quot;&gt;引用本地库&lt;/h3&gt;
+
+&lt;p&gt;在 &lt;code class=&quot;highlighter-rouge&quot;&gt;Podfile&lt;/code&gt; 中配置引用本地库文件：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;pod '库名', :path =&amp;gt; '本地路径'
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;这样在通常的修改代码中是不需要执行 &lt;code class=&quot;highlighter-rouge&quot;&gt;pod update&lt;/code&gt; 的。但是对于如果修改了目录结构（添加、删除或者移动文件文件）或者是修改了 &lt;code class=&quot;highlighter-rouge&quot;&gt;Podspec&lt;/code&gt; 文件的配置的话，最好是运行一下 &lt;code class=&quot;highlighter-rouge&quot;&gt;pod update&lt;/code&gt; 的命令。普通修改代码的情况下就不需要运行 &lt;code class=&quot;highlighter-rouge&quot;&gt;pod update&lt;/code&gt; 命令。&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;pod 'iOS-Test', :path =&amp;gt; '../iOS-Test’
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;spec-文件&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;spec&lt;/code&gt; 文件&lt;/h2&gt;
+
+&lt;h3 id=&quot;包含有-mrc-文件类&quot;&gt;包含有 &lt;code class=&quot;highlighter-rouge&quot;&gt;MRC&lt;/code&gt; 文件类&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;方法一：&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;s.requires_arc = false
+s.source_files = &quot;MCFoundation/**/*.{h,m}&quot;
+s.requires_arc = &quot;MCFoundation/CommonComponent/**/*.{h,m}&quot;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;方法二：&lt;code class=&quot;highlighter-rouge&quot;&gt;subspec&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Pod::Spec.new do |s|
+
+s.name = &quot;MCFoundation&quot;
+s.version =&quot;0.1.3.3&quot;
+s.summary = &quot;源码仓库.&quot;
+s.description = &amp;lt;&amp;lt;-DESC
+封装了一些基础的工具
+DESC
+s.homepage = &quot;http://10.2.222.22/MC&quot;
+s.license = { :type =&amp;gt; &quot;MIT&quot;, :file =&amp;gt; &quot;LICENSE&quot; }
+s.author = { &quot;xxx&quot; =&amp;gt; &quot;xxx@xxx.com&quot; }
+s.ios.deployment_target = &quot;8.0&quot;
+s.source = { :git =&amp;gt; 'git@10.2.22.22:MCModuleiOS/MCFoundationCode.git', :tag =&amp;gt; s.version}
+
+s.default_subspec = 'MCFoundationARC'
+
+non_arc_files = 'MCFoundation/MRC/*.{h,m}'
+
+s.subspec 'MCFoundationARC' do |arc|
+ arc.requires_arc = true
+ arc.source_files = &quot;MCFoundation/CommonComponent/**/*.{h,m}&quot;
+ arc.exclude_files = non_arc_files 
+end
+
+s.subspec 'MCFoundationNonARC' do |non_arc|
+ non_arc.requires_arc = false
+ non_arc.source_files = non_arc_files
+ non_arc.dependency 'MCFoundation/MCFoundationARC'
+end
+
+s.dependency 'FMDB'
+s.dependency 'MJRefresh'
+
+end
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;h3 id=&quot;引用自己或第三方的-framework-或-a-文件时&quot;&gt;引用自己或第三方的 &lt;code class=&quot;highlighter-rouge&quot;&gt;framework&lt;/code&gt; 或 &lt;code class=&quot;highlighter-rouge&quot;&gt;.a&lt;/code&gt; 文件时&lt;/h3&gt;
+
+&lt;p&gt;在 &lt;code class=&quot;highlighter-rouge&quot;&gt;podsepc&lt;/code&gt; 中应该这样写:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;s.ios.vendored_frameworks = &quot;xxx/**/*.framework&quot;
+s.ios.vendored_libraries = &quot;xxx/**/*.a”
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;h3 id=&quot;资源文件&quot;&gt;资源文件&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;把资源文件放在 &lt;code class=&quot;highlighter-rouge&quot;&gt;bundle&lt;/code&gt; 中，&lt;code class=&quot;highlighter-rouge&quot;&gt;spec&lt;/code&gt; 文件需要配置：&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;spec.resource = &quot;Resources/MYLibrary.bundle&quot;
+
+spec.resource_bundles = {
+'MyLibrary' =&amp;gt; ['Resources/*.png'],
+'OtherResources' =&amp;gt; ['OtherResources/*.png']
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;也可以这样写，但是这些资源会在打包的时候直接拷贝的 &lt;code class=&quot;highlighter-rouge&quot;&gt;app&lt;/code&gt; 中，这样说不定会和其它资源产生命名冲突：&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;spec.resources = [&quot;Images/*.png&quot;, &quot;Sounds/*&quot;]
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;h3 id=&quot;配置执行脚本&quot;&gt;配置执行脚本&lt;/h3&gt;
+
+&lt;p&gt;可以在编译的某个时机，来配置要运行的脚本。&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# :execution_position 选项有 [:before_compile, :after_compile, :any]
+
+s.script_phase = { :name =&amp;gt; &quot;Script Name&quot;, :script =&amp;gt; &quot;echo 'Hello World'&quot;, :execution_position =&amp;gt; :any , :shell_path =&amp;gt; &quot;/bin/sh&quot;}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;h3 id=&quot;subspec&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;subspec&lt;/code&gt;&lt;/h3&gt;
+
+&lt;p&gt;为了让自己的 &lt;code class=&quot;highlighter-rouge&quot;&gt;Pod&lt;/code&gt; 被导入时显示出良好的文件层划分，&lt;code class=&quot;highlighter-rouge&quot;&gt;subspec&lt;/code&gt; 是必须的。&lt;br /&gt;
+若 &lt;code class=&quot;highlighter-rouge&quot;&gt;subspec&lt;/code&gt; 要依赖其它的 &lt;code class=&quot;highlighter-rouge&quot;&gt;subspec&lt;/code&gt; ，则 &lt;code class=&quot;highlighter-rouge&quot;&gt;subspec&lt;/code&gt; 的 &lt;code class=&quot;highlighter-rouge&quot;&gt;dependency&lt;/code&gt; 后面接的不是目录路径，而是 &lt;code class=&quot;highlighter-rouge&quot;&gt;specA/specB&lt;/code&gt; 这种 &lt;code class=&quot;highlighter-rouge&quot;&gt;spec&lt;/code&gt; 关系。&lt;/p&gt;
+
+&lt;h1 id=&quot;本文转自httpwwwmengyuepingcom20180816ios_cocoapods_03&quot;&gt;本文转自:http://www.mengyueping.com/2018/08/16/iOS_CocoaPods_03/&lt;/h1&gt;
+
+</description>
+        <pubDate>Fri, 23 Apr 2021 00:00:00 +0800</pubDate>
+        <link>http://localhost:4000/2021/04/CocoaPods%E7%A7%81%E6%9C%89%E5%BA%93%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E6%8B%BE%E9%81%97/</link>
+        <guid isPermaLink="true">http://localhost:4000/2021/04/CocoaPods%E7%A7%81%E6%9C%89%E5%BA%93%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E6%8B%BE%E9%81%97/</guid>
+        
+        <category>iOS</category>
+        
+        
+      </item>
     
       <item>
         <title>iOS 多线程：GCD详尽总结</title>
@@ -1767,891 +2519,6 @@ fi
         <guid isPermaLink="true">http://localhost:4000/2021/04/Shell_note/</guid>
         
         <category>Shell</category>
-        
-        
-      </item>
-    
-      <item>
-        <title>iOS 优化篇 - 启动优化之Clang插桩实现二进制重排</title>
-        <description>&lt;h2 id=&quot;前言&quot;&gt;前言&lt;/h2&gt;
-
-&lt;blockquote&gt;
-  &lt;ul&gt;
-    &lt;li&gt;&lt;/li&gt;
-  &lt;/ul&gt;
-
-  &lt;p&gt;自从抖音团队分享了这篇 &lt;a href=&quot;https://mp.weixin.qq.com/s/Drmmx5JtjG3UtTFksL6Q8Q&quot;&gt;抖音研发实践：基于二进制文件重排的解决方案 APP启动速度提升超15%&lt;/a&gt; 启动优化文章后 , 二进制重排优化 &lt;code class=&quot;highlighter-rouge&quot;&gt;pre-main&lt;/code&gt; 阶段的启动时间自此被大家广为流传 .&lt;/p&gt;
-
-  &lt;ul&gt;
-    &lt;li&gt;&lt;/li&gt;
-  &lt;/ul&gt;
-
-  &lt;p&gt;本篇文章首先讲述下二进制重排的原理 , ( 因为抖音团队在上述文章中原理部分大多是点到即止 , 多数朋友看完并没有什么实际收获 ) . 然后将结合 &lt;strong&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;clang&lt;/code&gt; 插桩的方式&lt;/strong&gt; 来实际讲述和演练一下如何解决抖音团队遗留下来的这一问题 :&lt;/p&gt;
-
-  &lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;hook Objc_msgSend 无法解决的 纯swift , block , c++ 方法&lt;/code&gt; .&lt;/p&gt;
-
-  &lt;p&gt;来达到完美的二进制重排方案 .&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;( 本篇文章由于会从原理角度讲解 , 有些已经比较熟悉的同学可能会觉得节奏偏啰嗦 , 为了照顾大部分同学 , 大家自行根据目录跳过即可 . )&lt;/p&gt;
-
-&lt;p&gt;了解二进制重排之前 , 我们需要了解一些前导知识 , 以及二进制重排是为了解决什么问题 .&lt;/p&gt;
-
-&lt;h2 id=&quot;虚拟内存与物理内存&quot;&gt;虚拟内存与物理内存&lt;/h2&gt;
-
-&lt;p&gt;在本篇文章里 , 笔者就不通过教科书或者大多数资料的方式来讲述这个概念了 . 我们通过实际问题和其对应的解决方式来看这个技术 &lt;code class=&quot;highlighter-rouge&quot;&gt;or&lt;/code&gt; 概念 .&lt;/p&gt;
-
-&lt;p&gt;在计算机领域 , 任何一个技术 &lt;code class=&quot;highlighter-rouge&quot;&gt;or&lt;/code&gt; 概念 , 都是为了解决实际的问题而诞生的 .&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;在早期的计算机中 , 并没有虚拟内存的概念 , 任何应用被从磁盘中加载到运行内存中时 , 都是完整加载和按序排列的 .&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/posts/iOS/optimize/17180fef76d0d455.webp&quot; alt=&quot;&quot; /&gt;
-那么因此 , 就会出现两个问题 :&lt;/p&gt;
-
-&lt;h3 id=&quot;使用物理内存时遗留的问题&quot;&gt;使用物理内存时遗留的问题&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;安全问题&lt;/code&gt; : 由于在内存条中使用的都是真实物理地址 , 而且内存条中各个应用进程都是按顺序依次排列的 . 那么在 &lt;code class=&quot;highlighter-rouge&quot;&gt;进程1&lt;/code&gt; 中通过地址偏移就可以访问到 &lt;code class=&quot;highlighter-rouge&quot;&gt;其他进程&lt;/code&gt; 的内存 .&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;效率问题&lt;/code&gt; : 随着软件的发展 , 一个软件运行时需要占用的内存越来越多 , 但往往用户并不会用到这个应用的所有功能 , 造成很大的内存浪费 , 而后面打开的进程往往需要排队等待 .&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;为了解决上述两个问题 , 虚拟内存应运而生 .&lt;/p&gt;
-
-&lt;h3 id=&quot;虚拟内存工作原理&quot;&gt;虚拟内存工作原理&lt;/h3&gt;
-
-&lt;p&gt;引用了虚拟内存后 , 在我们进程中认为自己有一大片连续的内存空间实际上是虚拟的 , 也就是说从 &lt;code class=&quot;highlighter-rouge&quot;&gt;0x000000&lt;/code&gt; ~ &lt;code class=&quot;highlighter-rouge&quot;&gt;0xffffff&lt;/code&gt; 我们是都可以访问的 . 但是实际上这个内存地址只是一个虚拟地址 , 而这个虚拟地址通过一张映射表映射后才可以获取到真实的物理地址 .&lt;/p&gt;
-
-&lt;p&gt;什么意思呢 ?&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;ul&gt;
-    &lt;li&gt;实际上我们可以理解为 , 系统对真实物理内存访问做了一层限制 , 只有被写到映射表中的地址才是被认可可以访问的 .&lt;/li&gt;
-    &lt;li&gt;例如 , 虚拟地址 &lt;code class=&quot;highlighter-rouge&quot;&gt;0x000000&lt;/code&gt; ~ &lt;code class=&quot;highlighter-rouge&quot;&gt;0xffffff&lt;/code&gt; 这个范围内的任意地址我们都可以访问 , 但是这个虚拟地址对应的实际物理地址是计算机来随机分配到内存页上的 .&lt;/li&gt;
-    &lt;li&gt;这里提到了实际物理内存分页的概念 , 下面会详细讲述 .&lt;/li&gt;
-  &lt;/ul&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;可能大家也有注意到 , 我们在一个工程中获取的地址 , 同时在另一个工程中去访问 , 并不能访问到数据 , 其原理就是虚拟内存 .&lt;/p&gt;
-
-&lt;p&gt;整个虚拟内存的工作原理这里用一张图来展示 :&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/posts/iOS/optimize/17181bac8873718e.webp&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-&lt;h3 id=&quot;虚拟内存解决进程间安全问题原理&quot;&gt;虚拟内存解决进程间安全问题原理&lt;/h3&gt;
-
-&lt;p&gt;显然 , 引用虚拟内存后就不存在通过偏移可以访问到其他进程的地址空间的问题了 .&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;因为每个进程的映射表是单独的 , 在你的进程中随便你怎么访问 , 这些地址都是受映射表限制的 , 其真实物理地址永远在规定范围内 , 也就不存在通过偏移获取到其他进程的内存空间的问题了 .&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;而且实际上 , 每次应用被加载到内存中 , 实际分配的物理内存并不一定是固定或者连续的 , 这是因为内存分页以及懒加载以及 &lt;a href=&quot;https://baike.baidu.com/item/%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4%E9%85%8D%E7%BD%AE%E9%9A%8F%E6%9C%BA%E5%8A%A0%E8%BD%BD?fromtitle=aslr&amp;amp;fromid=5779647&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;ASLR&lt;/code&gt;&lt;/a&gt; 所解决的安全问题 .&lt;/p&gt;
-
-&lt;h4 id=&quot;cpu-寻址过程&quot;&gt;cpu 寻址过程&lt;/h4&gt;
-
-&lt;p&gt;引入虚拟内存后 , &lt;code class=&quot;highlighter-rouge&quot;&gt;cpu&lt;/code&gt; 在通过虚拟内存地址访问数据的过程如下 :&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;通过虚拟内存地址 , 找到对应进程的映射表 .&lt;/li&gt;
-  &lt;li&gt;通过映射表找到其对应的真实物理地址 , 进而找到数据 .&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;这个过程被称为 &lt;strong&gt;地址翻译&lt;/strong&gt; , 这个过程是由操作系统以及 &lt;code class=&quot;highlighter-rouge&quot;&gt;cpu&lt;/code&gt; 上集成的一个 &lt;a href=&quot;https://baike.baidu.com/item/MMU/4542218?fr=aladdin&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;硬件单元 MMU&lt;/code&gt;&lt;/a&gt; 协同来完成的 .&lt;/p&gt;
-
-&lt;p&gt;那么安全问题解决了以后 , 效率问题如何解决呢 ?&lt;/p&gt;
-
-&lt;h3 id=&quot;虚拟内存解决效率问题&quot;&gt;虚拟内存解决效率问题&lt;/h3&gt;
-
-&lt;p&gt;刚刚提到虚拟内存和物理内存通过映射表进行映射 , 但是这个映射并不可能是一一对应的 , 那样就太过浪费内存了 . 为了解决效率问题 , 实际上真实物理内存是分页的 . 而映射表同样是以页为单位的 .&lt;/p&gt;
-
-&lt;p&gt;换句话说 , 映射表只会映射到一页 , 并不会映射到具体每一个地址 .&lt;/p&gt;
-
-&lt;p&gt;在 &lt;code class=&quot;highlighter-rouge&quot;&gt;linux&lt;/code&gt; 系统中 , 一页内存大小为 &lt;code class=&quot;highlighter-rouge&quot;&gt;4KB&lt;/code&gt; , 在不同平台可能各有不同 .&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Mac OS&lt;/code&gt; 系统中 , 一页为 &lt;code class=&quot;highlighter-rouge&quot;&gt;4KB&lt;/code&gt; ,&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;iOS&lt;/code&gt; 系统中 , 一页为 &lt;code class=&quot;highlighter-rouge&quot;&gt;16KB&lt;/code&gt; .&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;我们可以使用 &lt;code class=&quot;highlighter-rouge&quot;&gt;pagesize&lt;/code&gt; 命令直接查看 .&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/posts/iOS/optimize/17181d8f22b995e3.webp&quot; alt=&quot;&quot; /&gt;
-&lt;img src=&quot;/images/posts/iOS/optimize/17181ebc66588a31.webp&quot; alt=&quot;&quot; /&gt;
-那么为什么说内存分页就可以解决内存浪费的效率问题呢 ?&lt;/p&gt;
-
-&lt;h3 id=&quot;内存分页原理&quot;&gt;内存分页原理&lt;/h3&gt;
-
-&lt;p&gt;假设当前有两个进程正在运行 , 其状态就如下图所示 :&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/posts/iOS/optimize/17181dfdc74873b8.webp&quot; alt=&quot;&quot; /&gt;
-( 上图中我们也看出 , 实际物理内存并不是连续以及某个进程完整的 ) .&lt;/p&gt;
-
-&lt;p&gt;映射表左侧的 &lt;code class=&quot;highlighter-rouge&quot;&gt;0&lt;/code&gt; 和 &lt;code class=&quot;highlighter-rouge&quot;&gt;1&lt;/code&gt; 代表当前地址有没有在物理内存中 . 为什么这么说呢 ?&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;ul&gt;
-    &lt;li&gt;&lt;/li&gt;
-  &lt;/ul&gt;
-
-  &lt;p&gt;当应用被加载到内存中时 , 并不会将整个应用加载到内存中 . 只会放用到的那一部分 . 也就是懒加载的概念 , 换句话说就是应用使用多少 , 实际物理内存就实际存储多少 .&lt;/p&gt;
-
-  &lt;ul&gt;
-    &lt;li&gt;&lt;/li&gt;
-  &lt;/ul&gt;
-
-  &lt;p&gt;当应用访问到某个地址 , 映射表中为 &lt;code class=&quot;highlighter-rouge&quot;&gt;0&lt;/code&gt; , 也就是说并没有被加载到物理内存中时 , 系统就会立刻阻塞整个进程 , 触发一个我们所熟知的 &lt;a href=&quot;https://baike.baidu.com/item/%E7%BC%BA%E9%A1%B5%E4%B8%AD%E6%96%AD/5029040?fr=aladdin&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;缺页中断 - Page Fault&lt;/code&gt;&lt;/a&gt; .&lt;/p&gt;
-
-  &lt;ul&gt;
-    &lt;li&gt;&lt;/li&gt;
-  &lt;/ul&gt;
-
-  &lt;p&gt;当一个缺页中断被触发 , 操作系统会从磁盘中重新读取这页数据到物理内存上 , 然后将映射表中虚拟内存指向对应 ( 如果当前内存已满 , 操作系统会通过置换页算法 &lt;strong&gt;找一页数据进行覆盖&lt;/strong&gt; , 这也是为什么开再多的应用也不会崩掉 , 但是之前开的应用再打开时 , 就重新启动了的根本原因 ).&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;通过这种分页和覆盖机制 , 就完美的解决了内存浪费和效率问题 .&lt;/p&gt;
-
-&lt;p&gt;但是此时 , 又出现了一个问题 .&lt;/p&gt;
-
-&lt;p&gt;问 : 当应用开发完成以后由于采用了虚拟内存 , 那么其中一个函数无论如何运行 , 运行多少次 , 都会是虚拟内存中的固定地址 .&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;什么意思呢 ?&lt;/p&gt;
-
-  &lt;p&gt;假设应用有一个函数 , 基于首地址偏移量为 &lt;code class=&quot;highlighter-rouge&quot;&gt;0x00a000&lt;/code&gt; , 那么虚拟地址从 &lt;code class=&quot;highlighter-rouge&quot;&gt;0x000000 ~ 0xffffff&lt;/code&gt; , 基于这个 , 那么这个函数我无论如何只需要通过 &lt;code class=&quot;highlighter-rouge&quot;&gt;0x00a000&lt;/code&gt; 这个虚拟地址就可以拿到其真实实现地址 .&lt;/p&gt;
-
-  &lt;p&gt;而这种机制就给了很多黑客可操作性的空间 , 他们可以很轻易的提前写好程序获取固定函数的实现进行修改 &lt;code class=&quot;highlighter-rouge&quot;&gt;hook&lt;/code&gt; 操作 .&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;为了解决这个问题 , &lt;a href=&quot;https://baike.baidu.com/item/%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4%E9%85%8D%E7%BD%AE%E9%9A%8F%E6%9C%BA%E5%8A%A0%E8%BD%BD?fromtitle=aslr&amp;amp;fromid=5779647&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;ASLR&lt;/code&gt;&lt;/a&gt; 应运而生 . 其原理就是 &lt;strong&gt;每次&lt;/strong&gt; 虚拟地址在映射真实地址之前 , 增加一个随机偏移值 , 以此来解决我们刚刚所提到的这个问题 .&lt;/p&gt;
-
-&lt;p&gt;( &lt;code class=&quot;highlighter-rouge&quot;&gt;Android 4.0&lt;/code&gt; , &lt;code class=&quot;highlighter-rouge&quot;&gt;Apple iOS4.3&lt;/code&gt; , &lt;code class=&quot;highlighter-rouge&quot;&gt;OS X Mountain Lion10.8&lt;/code&gt; 开始全民引入 &lt;code class=&quot;highlighter-rouge&quot;&gt;ASLR&lt;/code&gt; 技术 , 而实际上自从引入 &lt;code class=&quot;highlighter-rouge&quot;&gt;ASLR&lt;/code&gt; 后 , 黑客的门槛也自此被拉高 . 不再是人人都可做黑客的年代了 ) .&lt;/p&gt;
-
-&lt;p&gt;至此 , 有关物理内存 , 虚拟内存 , 内存分页的完整流程和原理 , 我们已经讲述完毕了 , 那么接下来来到重点 , 二进制重排 .&lt;/p&gt;
-
-&lt;h2 id=&quot;二进制重排&quot;&gt;二进制重排&lt;/h2&gt;
-
-&lt;h3 id=&quot;概述&quot;&gt;概述&lt;/h3&gt;
-
-&lt;p&gt;在了解了内存分页会触发中断异常 &lt;code class=&quot;highlighter-rouge&quot;&gt;Page Fault&lt;/code&gt; 会阻塞进程后 , 我们就知道了这个问题是会对性能产生影响的 .&lt;/p&gt;
-
-&lt;p&gt;实际上在 &lt;code class=&quot;highlighter-rouge&quot;&gt;iOS&lt;/code&gt; 系统中 , 对于生产环境的应用 , 当产生缺页中断进行重新加载时 , &lt;code class=&quot;highlighter-rouge&quot;&gt;iOS&lt;/code&gt; 系统还会对其做一次签名验证 . 因此 &lt;code class=&quot;highlighter-rouge&quot;&gt;iOS&lt;/code&gt; 生产环境的应用 &lt;code class=&quot;highlighter-rouge&quot;&gt;page fault&lt;/code&gt; 所产生的耗时要更多 .&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;抖音团队分享的一个 &lt;code class=&quot;highlighter-rouge&quot;&gt;Page Fault&lt;/code&gt;，开销在 &lt;code class=&quot;highlighter-rouge&quot;&gt;0.6 ~ 0.8ms&lt;/code&gt; , 实际测试发现不同页会有所不同 , 也跟 &lt;code class=&quot;highlighter-rouge&quot;&gt;cpu&lt;/code&gt; 负荷状态有关 , 在 &lt;code class=&quot;highlighter-rouge&quot;&gt;0.1 ~ 1.0 ms&lt;/code&gt; 之间 。&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;当用户使用应用时 , 第一个直接印象就是启动 &lt;code class=&quot;highlighter-rouge&quot;&gt;app&lt;/code&gt; 耗时 , 而恰巧由于启动时期有大量的类 , 分类 , 三方 等等需要加载和执行 , 多个 &lt;code class=&quot;highlighter-rouge&quot;&gt;page fault&lt;/code&gt; 所产生的的耗时往往是不能小觑的 . 这也是二进制重排进行启动优化的必要性 .&lt;/p&gt;
-
-&lt;h3 id=&quot;二进制重排优化原理&quot;&gt;二进制重排优化原理&lt;/h3&gt;
-
-&lt;p&gt;假设在启动时期我们需要调用两个函数 &lt;code class=&quot;highlighter-rouge&quot;&gt;method1&lt;/code&gt; 与 &lt;code class=&quot;highlighter-rouge&quot;&gt;method4&lt;/code&gt; . 函数编译在 &lt;code class=&quot;highlighter-rouge&quot;&gt;mach-o&lt;/code&gt; 中的位置是根据 &lt;code class=&quot;highlighter-rouge&quot;&gt;ld&lt;/code&gt; ( &lt;code class=&quot;highlighter-rouge&quot;&gt;Xcode&lt;/code&gt; 的链接器) 的编译顺序并非调用顺序来的 . 因此很可能这两个函数分布在不同的内存页上 .&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/posts/iOS/optimize/171823985c7f3bc8.webp&quot; alt=&quot;&quot; /&gt;
-那么启动时 , &lt;code class=&quot;highlighter-rouge&quot;&gt;page1&lt;/code&gt; 与 &lt;code class=&quot;highlighter-rouge&quot;&gt;page2&lt;/code&gt; 则都需要从无到有加载到物理内存中 , 从而触发两次 &lt;code class=&quot;highlighter-rouge&quot;&gt;page fault&lt;/code&gt; .&lt;/p&gt;
-
-&lt;p&gt;而二进制重排的做法就是将 &lt;code class=&quot;highlighter-rouge&quot;&gt;method1&lt;/code&gt; 与 &lt;code class=&quot;highlighter-rouge&quot;&gt;method4&lt;/code&gt; 放到一个内存页中 , 那么启动时则只需要加载 &lt;code class=&quot;highlighter-rouge&quot;&gt;page1&lt;/code&gt; 即可 , 也就是只触发一次 &lt;code class=&quot;highlighter-rouge&quot;&gt;page fault&lt;/code&gt; , 达到优化目的 .&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;实际项目中的做法是将启动时需要调用的函数放到一起 ( 比如 &lt;code class=&quot;highlighter-rouge&quot;&gt;前10页&lt;/code&gt;中 ) 以尽可能减少 &lt;code class=&quot;highlighter-rouge&quot;&gt;page fault&lt;/code&gt; , 达到优化目的&lt;/strong&gt;. 而这个做法就叫做 : &lt;code class=&quot;highlighter-rouge&quot;&gt;二进制重排&lt;/code&gt; .&lt;/p&gt;
-
-&lt;p&gt;讲到这里相信很多同学已经迫不及待的想要看看具体怎么二进制重排了 . 其实操作很简单 , 但是在操作之前我们还需要知道这几点 :&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;ul&gt;
-    &lt;li&gt;&lt;/li&gt;
-  &lt;/ul&gt;
-
-  &lt;p&gt;如何检测 &lt;code class=&quot;highlighter-rouge&quot;&gt;page fault&lt;/code&gt; : 首先我们要想看到优化效果 , 就应该知道如何查看 page fault , 以此来帮助我们查看优化前以及优化后的效果 .&lt;/p&gt;
-
-  &lt;ul&gt;
-    &lt;li&gt;&lt;/li&gt;
-  &lt;/ul&gt;
-
-  &lt;p&gt;如何重排二进制 .&lt;/p&gt;
-
-  &lt;ul&gt;
-    &lt;li&gt;&lt;/li&gt;
-  &lt;/ul&gt;
-
-  &lt;p&gt;如何查看自己重排成功了没有 ?&lt;/p&gt;
-
-  &lt;ul&gt;
-    &lt;li&gt;&lt;/li&gt;
-  &lt;/ul&gt;
-
-  &lt;p&gt;如何检测自己启动时刻需要调用的所有方法 .&lt;/p&gt;
-
-  &lt;ul&gt;
-    &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;hook objc_MsgSend&lt;/code&gt; ( 只能拿到 &lt;code class=&quot;highlighter-rouge&quot;&gt;oc&lt;/code&gt; 以及 &lt;code class=&quot;highlighter-rouge&quot;&gt;swift&lt;/code&gt; 加上 &lt;code class=&quot;highlighter-rouge&quot;&gt;@objc dynamic&lt;/code&gt; 修饰后的方法 ) .&lt;/li&gt;
-    &lt;li&gt;静态扫描 &lt;code class=&quot;highlighter-rouge&quot;&gt;macho&lt;/code&gt; 特定段和节里面所存储的符号以及函数数据 . (静态扫描 , 主要用来获取 &lt;code class=&quot;highlighter-rouge&quot;&gt;load&lt;/code&gt; 方法 , &lt;code class=&quot;highlighter-rouge&quot;&gt;c++ 构造&lt;/code&gt;(有关 c++ 构造 , 参考 &lt;a href=&quot;https://juejin.im/post/6844904040149729294&quot;&gt;从头梳理 dyld 加载流程&lt;/a&gt; 这篇文章有详细讲述和演示 ) .&lt;/li&gt;
-    &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;clang&lt;/code&gt; 插桩 ( 完美版本 , 完全拿到 &lt;code class=&quot;highlighter-rouge&quot;&gt;swift&lt;/code&gt; , &lt;code class=&quot;highlighter-rouge&quot;&gt;oc&lt;/code&gt; , &lt;code class=&quot;highlighter-rouge&quot;&gt;c&lt;/code&gt; , &lt;code class=&quot;highlighter-rouge&quot;&gt;block&lt;/code&gt; 全部函数 )&lt;/li&gt;
-  &lt;/ul&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;内容很多 , 我们一项一项来 .&lt;/p&gt;
-
-&lt;h3 id=&quot;如何查看-page-fault&quot;&gt;如何查看 page fault&lt;/h3&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;提示 :&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;如果想查看真实 &lt;code class=&quot;highlighter-rouge&quot;&gt;page fault&lt;/code&gt; 次数 , 应该将应用卸载 , 查看第一次应用安装后的效果 , 或者先打开很多个其他应用 .&lt;/p&gt;
-
-  &lt;p&gt;因为之前运行过 &lt;code class=&quot;highlighter-rouge&quot;&gt;app&lt;/code&gt; , 应用其中一部分已经被加载到物理内存并做好映射表映射 , 这时再启动就会少触发一部分缺页中断 , 并且杀掉应用再打开也是如此 .&lt;/p&gt;
-
-  &lt;p&gt;其实就是希望将物理内存中之前加载的覆盖/清理掉 , 减少误差 .&lt;/p&gt;
-  &lt;ul&gt;
-    &lt;li&gt;1️⃣ : 打开 Instruments , 选择 System Trace .
-&lt;img src=&quot;/images/posts/iOS/optimize/171826390aca9ec8.webp&quot; alt=&quot;&quot; /&gt;&lt;/li&gt;
-    &lt;li&gt;2️⃣ : 选择真机 , 选择工程 , 点击启动 , 当首个页面加载出来点击停止 . 这里注意 , 最好是将应用杀掉重新安装 , 因为冷热启动的界定其实由于进程的原因并不一定后台杀掉应用重新打开就是冷启动 .
-&lt;img src=&quot;/images/posts/iOS/optimize/171826cb437d4038.webp&quot; alt=&quot;&quot; /&gt;&lt;/li&gt;
-    &lt;li&gt;3️⃣ : 等待分析完成 , 查看缺页次数
-      &lt;ul&gt;
-        &lt;li&gt;后台杀掉重启应用
-&lt;img src=&quot;/images/posts/iOS/optimize/1718278469553f07.webp&quot; alt=&quot;&quot; /&gt;&lt;/li&gt;
-        &lt;li&gt;第一次安装启动应用
-&lt;img src=&quot;/images/posts/iOS/optimize/17185f8b44166292.webp&quot; alt=&quot;&quot; /&gt;
-当然 , 你可以通过添加 &lt;code class=&quot;highlighter-rouge&quot;&gt;DYLD_PRINT_STATISTICS&lt;/code&gt; 来查看 &lt;code class=&quot;highlighter-rouge&quot;&gt;pre-main&lt;/code&gt; 阶段总耗时来做一个侧面辅证 .&lt;/li&gt;
-      &lt;/ul&gt;
-    &lt;/li&gt;
-  &lt;/ul&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;大家可以分别测试以下几种情况 , 来深度理解冷启动 &lt;code class=&quot;highlighter-rouge&quot;&gt;or&lt;/code&gt; 热启动以及物理内存分页覆盖的实际情况 .&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;应用第一次安装启动&lt;/li&gt;
-  &lt;li&gt;应用后台没有打开时启动&lt;/li&gt;
-  &lt;li&gt;杀掉后台后重新启动&lt;/li&gt;
-  &lt;li&gt;不杀掉后台重新启动&lt;/li&gt;
-  &lt;li&gt;杀掉后台后多打开一些其他应用再次启动&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;二进制重排具体如何操作&quot;&gt;二进制重排具体如何操作&lt;/h3&gt;
-
-&lt;p&gt;说了这么多前导知识 , 终于要开始做二进制重排了 , 其实具体操作很简单 , &lt;code class=&quot;highlighter-rouge&quot;&gt;Xcode&lt;/code&gt; 已经提供好这个机制 , 并且 &lt;code class=&quot;highlighter-rouge&quot;&gt;libobjc&lt;/code&gt; 实际上也是用了二进制重排进行优化 .&lt;/p&gt;
-
-&lt;p&gt;参考下图&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/posts/iOS/optimize/171831e4bf9052fc.webp&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-&lt;ul&gt;
-  &lt;li&gt;首先 , &lt;code class=&quot;highlighter-rouge&quot;&gt;Xcode&lt;/code&gt; 是用的链接器叫做 &lt;code class=&quot;highlighter-rouge&quot;&gt;ld&lt;/code&gt; , &lt;code class=&quot;highlighter-rouge&quot;&gt;ld&lt;/code&gt; 有一个参数叫 &lt;code class=&quot;highlighter-rouge&quot;&gt;Order File&lt;/code&gt; , 我们可以通过这个参数配置一个 &lt;code class=&quot;highlighter-rouge&quot;&gt;order&lt;/code&gt; 文件的路径 .&lt;/li&gt;
-  &lt;li&gt;在这个 &lt;code class=&quot;highlighter-rouge&quot;&gt;order&lt;/code&gt; 文件中 , 将你需要的符号按顺序写在里面 .&lt;/li&gt;
-  &lt;li&gt;当工程 &lt;code class=&quot;highlighter-rouge&quot;&gt;build&lt;/code&gt; 的时候 , &lt;code class=&quot;highlighter-rouge&quot;&gt;Xcode&lt;/code&gt; 会读取这个文件 , 打的二进制包就会按照这个文件中的符号顺序进行生成对应的 &lt;code class=&quot;highlighter-rouge&quot;&gt;mach-O&lt;/code&gt; .&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/posts/iOS/optimize/171881912d486b43.webp&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-&lt;h3 id=&quot;二进制重排疑问---题外话-&quot;&gt;二进制重排疑问 - 题外话 :&lt;/h3&gt;
-
-&lt;blockquote&gt;
-  &lt;ul&gt;
-    &lt;li&gt;&lt;/li&gt;
-  &lt;/ul&gt;
-
-  &lt;p&gt;1️⃣ : &lt;code class=&quot;highlighter-rouge&quot;&gt;order&lt;/code&gt; 文件里 符号写错了或者这个符号不存在会不会有问题 ?&lt;/p&gt;
-
-  &lt;ul&gt;
-    &lt;li&gt;答 : &lt;code class=&quot;highlighter-rouge&quot;&gt;ld&lt;/code&gt; 会忽略这些符号 , 实际上如果提供了 &lt;code class=&quot;highlighter-rouge&quot;&gt;link&lt;/code&gt; 选项 &lt;code class=&quot;highlighter-rouge&quot;&gt;-order_file_statistics&lt;/code&gt;，会以 &lt;code class=&quot;highlighter-rouge&quot;&gt;warning&lt;/code&gt; 的形式把这些没找到的符号打印在日志里。 .&lt;/li&gt;
-    &lt;li&gt;&lt;/li&gt;
-  &lt;/ul&gt;
-
-  &lt;p&gt;2️⃣ : 有部分同学可能会考虑这种方式会不会影响上架 ?&lt;/p&gt;
-
-  &lt;ul&gt;
-    &lt;li&gt;答 : 首先 , &lt;code class=&quot;highlighter-rouge&quot;&gt;objc&lt;/code&gt; 源码自己也在用这种方式 .&lt;/li&gt;
-    &lt;li&gt;二进制重排只是重新排列了所生成的 &lt;code class=&quot;highlighter-rouge&quot;&gt;macho&lt;/code&gt; 中函数表与符号表的顺序 .&lt;/li&gt;
-  &lt;/ul&gt;
-&lt;/blockquote&gt;
-
-&lt;h3 id=&quot;如何查看自己工程的符号顺序&quot;&gt;如何查看自己工程的符号顺序&lt;/h3&gt;
-
-&lt;p&gt;重排前后我们需要查看自己的符号顺序有没有修改成功 , 这时候就用到了&lt;code class=&quot;highlighter-rouge&quot;&gt;Link Map&lt;/code&gt; .&lt;/p&gt;
-
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Link Map&lt;/code&gt; 是编译期间产生的产物 , ( ld 的读取二进制文件顺序默认是按照 &lt;code class=&quot;highlighter-rouge&quot;&gt;Compile Sources&lt;/code&gt; - &lt;code class=&quot;highlighter-rouge&quot;&gt;GUI&lt;/code&gt; 里的顺序 ) , 它记录了二进制文件的布局 . 通过设置 &lt;code class=&quot;highlighter-rouge&quot;&gt;Write Link Map File&lt;/code&gt; 来设置输出与否 , 默认是 &lt;code class=&quot;highlighter-rouge&quot;&gt;no&lt;/code&gt; .&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/posts/iOS/optimize/171834c80dfceea3.webp&quot; alt=&quot;&quot; /&gt;
-修改完毕后 &lt;code class=&quot;highlighter-rouge&quot;&gt;clean&lt;/code&gt; 一下 , 运行工程 , &lt;code class=&quot;highlighter-rouge&quot;&gt;Products&lt;/code&gt; - &lt;code class=&quot;highlighter-rouge&quot;&gt;show in finder&lt;/code&gt;, 找到 &lt;code class=&quot;highlighter-rouge&quot;&gt;macho&lt;/code&gt; 的上上层目录.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/posts/iOS/optimize/171835a71be25590.webp&quot; alt=&quot;&quot; /&gt;
-按下图依次找到最新的一个 .txt 文件并打开.
-&lt;img src=&quot;/images/posts/iOS/optimize/171835c7f1f3709b.webp&quot; alt=&quot;&quot; /&gt;
-这个文件中就存储了所有符号的顺序 , 在 &lt;code class=&quot;highlighter-rouge&quot;&gt;# Symbols:&lt;/code&gt; 部分 ( 前面的 &lt;code class=&quot;highlighter-rouge&quot;&gt;.o&lt;/code&gt; 等内容忽略 , 这部分在笔者后续讲述 &lt;code class=&quot;highlighter-rouge&quot;&gt;llvm&lt;/code&gt; 编译器篇章会详细讲解 ) .&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/posts/iOS/optimize/171835fc4977d819.webp&quot; alt=&quot;&quot; /&gt;
-可以看到 , 这个符号顺序明显是按照 &lt;code class=&quot;highlighter-rouge&quot;&gt;Compile Sources&lt;/code&gt; 的文件顺序来排列的 .&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/posts/iOS/optimize/1718365d7afc7248.webp&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-&lt;h4 id=&quot;提示-&quot;&gt;提示 :&lt;/h4&gt;
-
-&lt;p&gt;上述文件中最左侧地址就是 &lt;strong&gt;实际代码地址而并非符号地址&lt;/strong&gt; , &lt;strong&gt;因此我们二进制重排并非只是修改符号地址 , 而是利用符号顺序 , 重新排列整个代码在文件的偏移地址 , 将启动需要加载的方法地址放到前面内存页中 , 以此达到减少 &lt;code class=&quot;highlighter-rouge&quot;&gt;page fault&lt;/code&gt; 的次数从而实现时间上的优化&lt;/strong&gt; , 一定要清楚这一点 .&lt;/p&gt;
-
-&lt;p&gt;你可以利用 &lt;code class=&quot;highlighter-rouge&quot;&gt;MachOView&lt;/code&gt; 查看排列前后在 &lt;code class=&quot;highlighter-rouge&quot;&gt;_text&lt;/code&gt; 段 ( 代码段 ) 中的源码顺序来帮助理解 .&lt;/p&gt;
-
-&lt;h3 id=&quot;实战演练&quot;&gt;实战演练&lt;/h3&gt;
-
-&lt;p&gt;来到工程根目录 , 新建一个文件 &lt;code class=&quot;highlighter-rouge&quot;&gt;touch lb.order&lt;/code&gt; . 随便挑选几个启动时就需要加载的方法 , 例如我这里选了以下几个 .&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;-[LBOCTools lbCurrentPresentingVC]
-+[LBOCTools lbGetCurrentTimes]
-+[RSAEncryptor stripPublicKeyHeader:]
-复制代码
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;写到该文件中 , 保存 , 配置文件路径 .&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/posts/iOS/optimize/171837e1db3da1b2.webp&quot; alt=&quot;&quot; /&gt;
-重新运行 , 查看 .&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/posts/iOS/optimize/1718384f9679b381.webp&quot; alt=&quot;&quot; /&gt;
-可以看到 , 我们所写的这三个方法已经被放到最前面了 , 至此 , 生成的 &lt;code class=&quot;highlighter-rouge&quot;&gt;macho&lt;/code&gt; 中距离首地址偏移量最小的代码就是我们所写的这三个方法 , 假设这三个方法原本在不同的三页 , 那么我们就已经优化掉了两个 &lt;code class=&quot;highlighter-rouge&quot;&gt;page fault&lt;/code&gt;.&lt;/p&gt;
-
-&lt;h4 id=&quot;错误提示&quot;&gt;错误提示&lt;/h4&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;有部分同学可能配置完运行会发现报错说&lt;code class=&quot;highlighter-rouge&quot;&gt;can't open&lt;/code&gt; 这个 &lt;code class=&quot;highlighter-rouge&quot;&gt;order file&lt;/code&gt; . 是因为文件格式的问题 . 不用使用 &lt;code class=&quot;highlighter-rouge&quot;&gt;mac&lt;/code&gt; 自带的文本编辑 . 使用命令工具 &lt;code class=&quot;highlighter-rouge&quot;&gt;touch&lt;/code&gt; 创建即可 .&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;h2 id=&quot;获取启动加载所有函数的符号&quot;&gt;获取启动加载所有函数的符号&lt;/h2&gt;
-
-&lt;p&gt;讲到这 , 我们就只差一个问题了 , 那就是如何知道我的项目启动需要调用哪些方法 , 上述篇章中我们也有稍微提到一点 .&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;ul&gt;
-    &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;hook objc_MsgSend&lt;/code&gt; ( 只能拿到 &lt;code class=&quot;highlighter-rouge&quot;&gt;oc&lt;/code&gt; 以及 &lt;code class=&quot;highlighter-rouge&quot;&gt;swift&lt;/code&gt; &lt;code class=&quot;highlighter-rouge&quot;&gt;@objc dynamic&lt;/code&gt; 后的方法 , 并且由于可变参数个数 , 需要用汇编来获取参数 .)&lt;/li&gt;
-    &lt;li&gt;静态扫描 &lt;code class=&quot;highlighter-rouge&quot;&gt;macho&lt;/code&gt; 特定段和节里面所存储的符号以及函数数据 . (静态扫描 , 主要用来获取 &lt;code class=&quot;highlighter-rouge&quot;&gt;load&lt;/code&gt; 方法 , &lt;code class=&quot;highlighter-rouge&quot;&gt;c++ 构造&lt;/code&gt;(有关 c++ 构造 , 参考 &lt;a href=&quot;https://juejin.im/post/6844904040149729294&quot;&gt;从头梳理 dyld 加载流程&lt;/a&gt; 这篇文章有详细讲述和演示 ) .&lt;/li&gt;
-    &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;clang&lt;/code&gt; 插桩 ( 完美版本 , 完全拿到 &lt;code class=&quot;highlighter-rouge&quot;&gt;swift&lt;/code&gt; , &lt;code class=&quot;highlighter-rouge&quot;&gt;oc&lt;/code&gt; , &lt;code class=&quot;highlighter-rouge&quot;&gt;c&lt;/code&gt; , &lt;code class=&quot;highlighter-rouge&quot;&gt;block&lt;/code&gt; 全部函数 ) .&lt;/li&gt;
-  &lt;/ul&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;前两种这里我们就不在赘述了 . 网上参考资料也较多 , 而且实现效果也并不是完美状态 , 本文我们来谈谈如何通过编译期插桩的方式来 &lt;code class=&quot;highlighter-rouge&quot;&gt;hook&lt;/code&gt; 获取所有的函数符号 .&lt;/p&gt;
-
-&lt;h2 id=&quot;clang-插桩&quot;&gt;clang 插桩&lt;/h2&gt;
-
-&lt;p&gt;关于 &lt;code class=&quot;highlighter-rouge&quot;&gt;clang&lt;/code&gt; 的插桩覆盖的官方文档如下 : &lt;a href=&quot;http://clang.llvm.org/docs/SanitizerCoverage.html&quot;&gt;clang 自带代码覆盖工具&lt;/a&gt;文档中有详细概述 , 以及简短 &lt;code class=&quot;highlighter-rouge&quot;&gt;Demo&lt;/code&gt; 演示 .&lt;/p&gt;
-
-&lt;h3 id=&quot;思考&quot;&gt;思考&lt;/h3&gt;
-
-&lt;p&gt;其实 &lt;code class=&quot;highlighter-rouge&quot;&gt;clang&lt;/code&gt; 插桩主要有两个实现思路 , 一是自己编写 &lt;code class=&quot;highlighter-rouge&quot;&gt;clang&lt;/code&gt; 插件 ( 自定义 &lt;code class=&quot;highlighter-rouge&quot;&gt;clang&lt;/code&gt; 插件在后续底层篇 &lt;code class=&quot;highlighter-rouge&quot;&gt;llvm&lt;/code&gt; 中会带着大家来手写一个自己的插件 ) , 另外一个就是利用 clang 本身已经提供的一个工具 &lt;code class=&quot;highlighter-rouge&quot;&gt;or&lt;/code&gt; 机制来实现我们获取所有符号的需求 . 本文我们就按照第二种思路来实际演练一下 .&lt;/p&gt;
-
-&lt;h3 id=&quot;原理探索&quot;&gt;原理探索&lt;/h3&gt;
-
-&lt;p&gt;新建一个工程来测试和使用一下这个静态插桩代码覆盖工具的机制和原理 . ( 不想看这个过程的自行跳到静态插桩原理总结章节 )&lt;/p&gt;
-
-&lt;p&gt;按照文档指示来走 .&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;首先 , 添加编译设置 .&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;直接搜索 &lt;code class=&quot;highlighter-rouge&quot;&gt;Other C Flags&lt;/code&gt; 来到 &lt;code class=&quot;highlighter-rouge&quot;&gt;Apple Clang - Custom Compiler Flags&lt;/code&gt; 中 , 添加&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;-fsanitize-coverage=trace-pc-guard
-复制代码
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;添加 &lt;code class=&quot;highlighter-rouge&quot;&gt;hook&lt;/code&gt; 代码 .&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;void __sanitizer_cov_trace_pc_guard_init(uint32_t *start,
-                                                    uint32_t *stop) {
-  static uint64_t N; // Counter for the guards.
-  if (start == stop || *start) return; // Initialize only once.
-  printf(&quot;INIT: %p %p\n&quot;, start, stop);
-  for (uint32_t *x = start; x &amp;lt; stop; x++)
-    *x = ++N; // Guards should start from 1.
-}
-
-void __sanitizer_cov_trace_pc_guard(uint32_t *guard) {
-  if (!*guard) return; // Duplicate the guard check.
-
-  void *PC = __builtin_return_address(0);
-  char PcDescr[1024];
-  //__sanitizer_symbolize_pc(PC, &quot;%p %F %L&quot;, PcDescr, sizeof(PcDescr));
-  printf(&quot;guard: %p %x PC %s\n&quot;, guard, *guard, PcDescr);
-}
-复制代码
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;笔者这里是写在空工程的 &lt;code class=&quot;highlighter-rouge&quot;&gt;ViewController.m&lt;/code&gt; 里的.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/posts/iOS/optimize/17186308fe437f30.webp&quot; alt=&quot;&quot; /&gt;
-代码命名 &lt;code class=&quot;highlighter-rouge&quot;&gt;INIT&lt;/code&gt; 后面打印的两个指针地址叫 &lt;code class=&quot;highlighter-rouge&quot;&gt;start&lt;/code&gt; 和 &lt;code class=&quot;highlighter-rouge&quot;&gt;stop&lt;/code&gt; . 那么我们通过 &lt;code class=&quot;highlighter-rouge&quot;&gt;lldb&lt;/code&gt; 来查看下从 &lt;code class=&quot;highlighter-rouge&quot;&gt;start&lt;/code&gt; 到 &lt;code class=&quot;highlighter-rouge&quot;&gt;stop&lt;/code&gt; 这个内存地址里面所存储的到底是啥 .&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/posts/iOS/optimize/17186339ca5b17f2.webp&quot; alt=&quot;&quot; /&gt;
-发现存储的是从 &lt;strong&gt;1&lt;/strong&gt; 到 &lt;strong&gt;14&lt;/strong&gt; 这个序号 . 那么我们来添加一个 &lt;code class=&quot;highlighter-rouge&quot;&gt;oc&lt;/code&gt; 方法 .&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;- (void)testOCFunc{
-    
-}
-复制代码
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;再次运行查看 .&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/posts/iOS/optimize/1718637b18b59fb1.webp&quot; alt=&quot;&quot; /&gt;
-发现从 &lt;code class=&quot;highlighter-rouge&quot;&gt;0e&lt;/code&gt; 变成了 &lt;code class=&quot;highlighter-rouge&quot;&gt;0f&lt;/code&gt; . 也就是说存储的 1 到 14 这个序号变成了 1 到 15 .&lt;/p&gt;
-
-&lt;p&gt;那么我们再添加一个 &lt;code class=&quot;highlighter-rouge&quot;&gt;c&lt;/code&gt; 函数 , 一个 &lt;code class=&quot;highlighter-rouge&quot;&gt;block&lt;/code&gt; , 和一个触摸屏幕方法来看下 .&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/posts/iOS/optimize/171868f0c8146022.webp&quot; alt=&quot;&quot; /&gt;
-同样发现序号依次增加到了 &lt;code class=&quot;highlighter-rouge&quot;&gt;18&lt;/code&gt; 个 , 那么我们得到一个猜想 , 这个内存区间保存的就是工程所有符号的个数 .&lt;/p&gt;
-
-&lt;p&gt;其次 , 我们在触摸屏幕方法调用了 &lt;code class=&quot;highlighter-rouge&quot;&gt;c&lt;/code&gt; 函数 , &lt;code class=&quot;highlighter-rouge&quot;&gt;c&lt;/code&gt; 函数中调用了 &lt;code class=&quot;highlighter-rouge&quot;&gt;block&lt;/code&gt; . 那么我们点击屏幕 , 发现如下 :&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/posts/iOS/optimize/171868fda686fd0d.webp&quot; alt=&quot;&quot; /&gt;
-发现我们实际调用几个方法 , 就会打印几次 &lt;code class=&quot;highlighter-rouge&quot;&gt;guard :&lt;/code&gt; .&lt;/p&gt;
-
-&lt;p&gt;实际上就类似我们埋点统计所实现的效果 . 在触摸方法添加一个断点查看汇编 :&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/posts/iOS/optimize/1718693991f87419.webp&quot; alt=&quot;&quot; /&gt;
-&lt;img src=&quot;/images/posts/iOS/optimize/1718694aa700d3e3.webp&quot; alt=&quot;&quot; /&gt;
-通过汇编我们发现 , &lt;strong&gt;在每个函数调用的第一句实际代码 ( 栈平衡与寄存器数据准备除外 ) , 被添加进去了一个 bl 调用到 &lt;code class=&quot;highlighter-rouge&quot;&gt;__sanitizer_cov_trace_pc_guard&lt;/code&gt; 这个函数中来&lt;/strong&gt;.&lt;/p&gt;
-
-&lt;p&gt;而实际上这也是静态插桩的原理和名称由来 .&lt;/p&gt;
-
-&lt;h3 id=&quot;静态插桩总结&quot;&gt;静态插桩总结&lt;/h3&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;静态插桩实际上是在编译期就在每一个函数内部二进制源数据添加 &lt;code class=&quot;highlighter-rouge&quot;&gt;hook&lt;/code&gt; 代码 ( 我们添加的 &lt;code class=&quot;highlighter-rouge&quot;&gt;__sanitizer_cov_trace_pc_guard&lt;/code&gt; 函数 ) 来实现全局的方法 &lt;code class=&quot;highlighter-rouge&quot;&gt;hook&lt;/code&gt; 的效果 .&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;h3 id=&quot;疑问&quot;&gt;疑问&lt;/h3&gt;
-
-&lt;p&gt;可能有部分同学对我上述表述的原理总结有些疑问 .&lt;/p&gt;
-
-&lt;p&gt;究竟是直接修改二进制在每个函数内部都添加了调用 hook 函数这个汇编代码 , 还是只是类似于编译器在所生成的二进制文件添加了一个标记 , 然后在运行时如果有这个标记就会自动多做一步调用 &lt;code class=&quot;highlighter-rouge&quot;&gt;hook&lt;/code&gt; 代码呢 ?&lt;/p&gt;
-
-&lt;p&gt;笔者这里使用 &lt;code class=&quot;highlighter-rouge&quot;&gt;hopper&lt;/code&gt; 来看下生成的 &lt;code class=&quot;highlighter-rouge&quot;&gt;mach-o&lt;/code&gt; 二进制文件 .&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/posts/iOS/optimize/17186a02c7b5eeff.webp&quot; alt=&quot;&quot; /&gt;
-上述二进制源文件我们就发现 , 的确是函数内部 一开始就添加了 调用额外方法的汇编代码 . 这也是我们为什么称其为 &lt;strong&gt;” 静态插桩 “&lt;/strong&gt;.&lt;/p&gt;
-
-&lt;p&gt;讲到这里 , 原理我们大体上了解了 , 那么到底如何才能拿到函数的符号呢 ?&lt;/p&gt;
-
-&lt;h3 id=&quot;获取所有函数符号&quot;&gt;获取所有函数符号&lt;/h3&gt;
-
-&lt;p&gt;先理一下思路 .&lt;/p&gt;
-
-&lt;h4 id=&quot;思路&quot;&gt;思路&lt;/h4&gt;
-
-&lt;p&gt;我们现在知道了 , 所有函数内部第一步都会去调用 &lt;code class=&quot;highlighter-rouge&quot;&gt;__sanitizer_cov_trace_pc_guard&lt;/code&gt; 这个函数 . 那么熟悉汇编的同学可能就有这么个想法 :&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;函数嵌套时 , 在跳转子函数时都会保存下一条指令的地址在 &lt;code class=&quot;highlighter-rouge&quot;&gt;X30&lt;/code&gt; ( 又叫 &lt;code class=&quot;highlighter-rouge&quot;&gt;lr&lt;/code&gt; 寄存器) 里 .&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;例如 , &lt;code class=&quot;highlighter-rouge&quot;&gt;A&lt;/code&gt; 函数中调用了 &lt;code class=&quot;highlighter-rouge&quot;&gt;B&lt;/code&gt; 函数 , 在 &lt;code class=&quot;highlighter-rouge&quot;&gt;arm&lt;/code&gt; 汇编中即 &lt;code class=&quot;highlighter-rouge&quot;&gt;bl + 0x **** &lt;/code&gt; 指令 , 该指令会首先将下一条汇编指令的地址保存在 &lt;code class=&quot;highlighter-rouge&quot;&gt;x30&lt;/code&gt; 寄存器中 ,&lt;br /&gt;
-然后在跳转到 &lt;code class=&quot;highlighter-rouge&quot;&gt;bl&lt;/code&gt; 后面传递的指定地址去执行 . ( 提示 : &lt;code class=&quot;highlighter-rouge&quot;&gt;bl&lt;/code&gt; 能实现跳转到某个地址的汇编指令 , 其原理就是修改 &lt;code class=&quot;highlighter-rouge&quot;&gt;pc&lt;/code&gt; 寄存器的值来指向到要跳转的地址 , 而且实际上 &lt;code class=&quot;highlighter-rouge&quot;&gt;B&lt;/code&gt; 函数中也会对 &lt;code class=&quot;highlighter-rouge&quot;&gt;x29 / x30&lt;/code&gt; 寄存器的值做保护防止子函数又跳转其他函数会覆盖掉 &lt;code class=&quot;highlighter-rouge&quot;&gt;x30&lt;/code&gt; 的值 , 当然 , 叶子函数除外 . ) .&lt;/p&gt;
-
-&lt;p&gt;当 &lt;code class=&quot;highlighter-rouge&quot;&gt;B&lt;/code&gt; 函数执行 &lt;code class=&quot;highlighter-rouge&quot;&gt;ret&lt;/code&gt; 也就是返回指令时 , 就会去读取 &lt;code class=&quot;highlighter-rouge&quot;&gt;x30&lt;/code&gt; 寄存器的地址 , 跳转过去 , 因此也就回到了上一层函数的下一步 .&lt;/p&gt;
-
-&lt;p&gt;这种思路来实现实际上是可以的 . 我们所写的 &lt;code class=&quot;highlighter-rouge&quot;&gt;__sanitizer_cov_trace_pc_guard&lt;/code&gt; 函数中的这一句代码 :&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;void *PC = __builtin_return_address(0); 
-复制代码
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;它的作用其实就是去读取 &lt;code class=&quot;highlighter-rouge&quot;&gt;x30&lt;/code&gt; 中所存储的要返回时下一条指令的地址 . 所以他名称叫做 &lt;code class=&quot;highlighter-rouge&quot;&gt;__builtin_return_address&lt;/code&gt; . 换句话说 , 这个地址就是我当前这个函数执行完毕后 , 要返回到哪里去 .&lt;/p&gt;
-
-&lt;p&gt;其实 , &lt;code class=&quot;highlighter-rouge&quot;&gt;bt&lt;/code&gt; 函数调用栈也是这种思路来实现的 .&lt;/p&gt;
-
-&lt;p&gt;也就是说 , &lt;strong&gt;我们现在可以在 ` __sanitizer_cov_trace_pc_guard&lt;code class=&quot;highlighter-rouge&quot;&gt; 这个函数中 , 通过 &lt;/code&gt;__ builtin_return_address&lt;code class=&quot;highlighter-rouge&quot;&gt; 数拿到原函数调用 &lt;/code&gt;__sanitizer_cov_trace_pc_guard` 这句汇编代码的下一条指令的地址&lt;/strong&gt;.&lt;/p&gt;
-
-&lt;p&gt;可能有点绕 , 画个图来梳理一下流程 .&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/posts/iOS/optimize/171872a841e4a676.webp&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-&lt;h4 id=&quot;根据内存地址获取函数名称&quot;&gt;根据内存地址获取函数名称&lt;/h4&gt;
-
-&lt;p&gt;拿到了函数内部一行代码的地址 , 如何获取函数名称呢 ? 这里笔者分享一下自己的思路 .&lt;/p&gt;
-
-&lt;p&gt;熟悉安全攻防 , 逆向的同学可能会清楚 . 我们为了防止某些特定的方法被别人使用 &lt;code class=&quot;highlighter-rouge&quot;&gt;fishhook&lt;/code&gt; &lt;code class=&quot;highlighter-rouge&quot;&gt;hook&lt;/code&gt; 掉 , 会利用 &lt;code class=&quot;highlighter-rouge&quot;&gt;dlopen&lt;/code&gt; 打开动态库 , 拿到一个句柄 , 进而拿到函数的内存地址直接调用 .&lt;/p&gt;
-
-&lt;p&gt;是不是跟我们这个流程有点相似 , 只是我们好像是反过来的 . 其实反过来也是可以的 .&lt;/p&gt;
-
-&lt;p&gt;与 &lt;code class=&quot;highlighter-rouge&quot;&gt;dlopen&lt;/code&gt; 相同 , 在 &lt;code class=&quot;highlighter-rouge&quot;&gt;dlfcn.h&lt;/code&gt; 中有一个方法如下 :&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;typedef struct dl_info {
-        const char *dli_fname; /* 所在文件 */
-        void *dli_fbase; /* 文件地址 */
-        const char *dli_sname; /* 符号名称 */
-        void *dli_saddr; /* 函数起始地址 */
-} Dl_info;
-
-//这个函数能通过函数内部地址找到函数符号
-int dladdr(const void *, Dl_info *);
-复制代码
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;紧接着我们来实验一下 , 先导入头文件&lt;code class=&quot;highlighter-rouge&quot;&gt;#import &amp;lt;dlfcn.h&amp;gt;&lt;/code&gt; , 然后修改代码如下 :&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;void __sanitizer_cov_trace_pc_guard(uint32_t *guard) {
-    if (!*guard) return; // Duplicate the guard check.
-    
-    void *PC = __builtin_return_address(0);
-    Dl_info info;
-    dladdr(PC, &amp;amp;info);
-    
-    printf(&quot;fname=%s \nfbase=%p \nsname=%s\nsaddr=%p \n&quot;,info.dli_fname,info.dli_fbase,info.dli_sname,info.dli_saddr);
-    
-    char PcDescr[1024];
-    printf(&quot;guard: %p %x PC %s\n&quot;, guard, *guard, PcDescr);
-}
-复制代码
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;查看打印结果 :&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/posts/iOS/optimize/171873d06b5bfd62.webp&quot; alt=&quot;&quot; /&gt;
-终于看到我们要找的符号了 .&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;h3 id=&quot;收集符号&quot;&gt;收集符号&lt;/h3&gt;
-
-&lt;p&gt;看到这里 , 很多同学可能想的是 , 那马上到工程里去拿到我所有的符号 , 写到 &lt;code class=&quot;highlighter-rouge&quot;&gt;order&lt;/code&gt; 文件里不就完事了吗 ?&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/posts/iOS/optimize/17187432df608495.webp&quot; alt=&quot;&quot; /&gt;
-为什么呢 ??&lt;/p&gt;
-
-&lt;h3 id=&quot;clang静态插桩---坑点1&quot;&gt;clang静态插桩 - 坑点1&lt;/h3&gt;
-
-&lt;p&gt;&lt;strong&gt;→ : 多线程问题&lt;/strong&gt;&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;这是一个多线程的问题 , 由于你的项目各个方法肯定有可能会在不同的函数执行 , 因此 &lt;code class=&quot;highlighter-rouge&quot;&gt;__sanitizer_cov_trace_pc_guard&lt;/code&gt; 这个函数也有可能受多线程影响 , 所以你当然不可能简简单单用一个数组来接收所有的符号就搞定了 .&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;那方法有很多 , 笔者在这里分享一下自己的做法 :&lt;/p&gt;
-
-&lt;p&gt;考虑到这个方法会来特别多次 , 使用锁会影响性能 , 这里使用苹果底层的原子队列 ( 底层实际上是个栈结构 , 利用队列结构 + 原子性来保证顺序 ) 来实现 .&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;- (void)touchesBegan:(NSSet&amp;lt;UITouch *&amp;gt; *)touches withEvent:(UIEvent *)event{
-    //遍历出队
-    while (true) {
-        //offsetof 就是针对某个结构体找到某个属性相对这个结构体的偏移量
-        SymbolNode * node = OSAtomicDequeue(&amp;amp;symboList, offsetof(SymbolNode, next));
-        if (node == NULL) break;
-        Dl_info info;
-        dladdr(node-&amp;gt;pc, &amp;amp;info);
-        
-        printf(&quot;%s \n&quot;,info.dli_sname);
-    }
-}
-//原子队列
-static OSQueueHead symboList = OS_ATOMIC_QUEUE_INIT;
-//定义符号结构体
-typedef struct{
-    void * pc;
-    void * next;
-}SymbolNode;
-
-void __sanitizer_cov_trace_pc_guard(uint32_t *guard) {
-    if (!*guard) return; // Duplicate the guard check.
-    void *PC = __builtin_return_address(0);
-    SymbolNode * node = malloc(sizeof(SymbolNode));
-    *node = (SymbolNode){PC,NULL};
-    
-    //入队
-    // offsetof 用在这里是为了入队添加下一个节点找到 前一个节点next指针的位置
-    OSAtomicEnqueue(&amp;amp;symboList, node, offsetof(SymbolNode, next));
-}
-复制代码
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;当你兴致冲冲开始考虑好多线程的解决方法写完之后 , 运行发现 :&lt;/p&gt;
-
-&lt;p&gt;死循环了 .&lt;/p&gt;
-
-&lt;h3 id=&quot;clang静态插桩---坑点2&quot;&gt;clang静态插桩 - 坑点2&lt;/h3&gt;
-
-&lt;p&gt;&lt;strong&gt;→ : 上述这种 &lt;code class=&quot;highlighter-rouge&quot;&gt;clang&lt;/code&gt; 插桩的方式 , 会在循环中同样插入 &lt;code class=&quot;highlighter-rouge&quot;&gt;hook&lt;/code&gt; 代码&lt;/strong&gt;.&lt;/p&gt;
-
-&lt;p&gt;当确定了我们队列入队和出队都是没问题的 , 你自己的写法对应的保存和读取也是没问题的 , 我们发现了这个坑点 , 这个会死循环 , 为什么呢 ?&lt;/p&gt;
-
-&lt;p&gt;这里我就不带着大家去分析汇编了 , 直接说结论 :&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;通过汇编会查看到 一个带有 &lt;code class=&quot;highlighter-rouge&quot;&gt;while&lt;/code&gt; 循环的方法 , 会被静态加入多次 &lt;code class=&quot;highlighter-rouge&quot;&gt;__sanitizer_cov_trace_pc_guard&lt;/code&gt; 调用 , 导致死循环.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;&lt;strong&gt;→ : 解决方案&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Other C Flags&lt;/code&gt; 修改为如下 :&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;-fsanitize-coverage=func,trace-pc-guard
-复制代码
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;代表进针对 &lt;code class=&quot;highlighter-rouge&quot;&gt;func&lt;/code&gt; 进行 &lt;code class=&quot;highlighter-rouge&quot;&gt;hook&lt;/code&gt; . 再次运行 .&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/posts/iOS/optimize/171877672af5a92d.webp&quot; alt=&quot;&quot; /&gt;
-又以为完事了 ? 还没有..&lt;/p&gt;
-
-&lt;h3 id=&quot;坑点3--load-方法&quot;&gt;坑点3 : load 方法&lt;/h3&gt;
-
-&lt;p&gt;&lt;strong&gt;→ : &lt;code class=&quot;highlighter-rouge&quot;&gt;load&lt;/code&gt; 方法时 , &lt;code class=&quot;highlighter-rouge&quot;&gt;__sanitizer_cov_trace_pc_guard&lt;/code&gt; 函数的参数 &lt;code class=&quot;highlighter-rouge&quot;&gt;guard&lt;/code&gt; 是 0&lt;/strong&gt;.&lt;/p&gt;
-
-&lt;p&gt;上述打印并没有发现 &lt;code class=&quot;highlighter-rouge&quot;&gt;load&lt;/code&gt; .&lt;/p&gt;
-
-&lt;p&gt;解决 : 屏蔽掉 &lt;code class=&quot;highlighter-rouge&quot;&gt;__sanitizer_cov_trace_pc_guard&lt;/code&gt; 函数中的&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;if (!*guard) return;
-复制代码
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/posts/iOS/optimize/171877cd4dca5b6b.webp&quot; alt=&quot;&quot; /&gt;
-&lt;code class=&quot;highlighter-rouge&quot;&gt;load&lt;/code&gt; 方法就有了 .&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;这里也为我们提供了一点启示:&lt;/p&gt;
-
-  &lt;p&gt;如果我们希望从某个函数之后/之前开始优化 , 通过一个全局静态变量 , 在特定的时机修改其值 , 在 &lt;code class=&quot;highlighter-rouge&quot;&gt;__sanitizer_cov_trace_pc_guard&lt;/code&gt; 这个函数中做好对应的处理即可 .&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;h3 id=&quot;剩余细化工作&quot;&gt;剩余细化工作&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;如果你也是使用笔者这种多线程处理方式的话 , 由于用的先进后出原因 , 我们要倒叙一下&lt;/li&gt;
-  &lt;li&gt;还需要做去重 .&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;order&lt;/code&gt; 文件格式要求 &lt;strong&gt;c&lt;/strong&gt; 函数 , &lt;code class=&quot;highlighter-rouge&quot;&gt;block&lt;/code&gt; 调用前面还需要加 &lt;code class=&quot;highlighter-rouge&quot;&gt;_&lt;/code&gt; , 下划线 .&lt;/li&gt;
-  &lt;li&gt;写入文件即可 .&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;笔者 &lt;code class=&quot;highlighter-rouge&quot;&gt;demo&lt;/code&gt; 完整代码如下 :&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;#import &quot;ViewController.h&quot;
-#import &amp;lt;dlfcn.h&amp;gt;
-#import &amp;lt;libkern/OSAtomic.h&amp;gt;
-@interface ViewController ()
-@end
-
-@implementation ViewController
-+ (void)load{
-    
-}
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    testCFunc();
-    [self testOCFunc];
-}
-- (void)testOCFunc{
-    NSLog(@&quot;oc函数&quot;);
-}
-void testCFunc(){
-    LBBlock();
-}
-void(^LBBlock)(void) = ^(void){
-    NSLog(@&quot;block&quot;);
-};
-
-void __sanitizer_cov_trace_pc_guard_init(uint32_t *start,
-                                         uint32_t *stop) {
-    static uint64_t N; // Counter for the guards.
-    if (start == stop || *start) return; // Initialize only once.
-    printf(&quot;INIT: %p %p\n&quot;, start, stop);
-    for (uint32_t *x = start; x &amp;lt; stop; x++)
-        *x = ++N; // Guards should start from 1.
-}
-- (void)touchesBegan:(NSSet&amp;lt;UITouch *&amp;gt; *)touches withEvent:(UIEvent *)event{
-    NSMutableArray&amp;lt;NSString *&amp;gt; * symbolNames = [NSMutableArray array];
-    while (true) {
-        //offsetof 就是针对某个结构体找到某个属性相对这个结构体的偏移量
-        SymbolNode * node = OSAtomicDequeue(&amp;amp;symboList, offsetof(SymbolNode, next));
-        if (node == NULL) break;
-        Dl_info info;
-        dladdr(node-&amp;gt;pc, &amp;amp;info);
-        
-        NSString * name = @(info.dli_sname);
-        
-        // 添加 _
-        BOOL isObjc = [name hasPrefix:@&quot;+[&quot;] || [name hasPrefix:@&quot;-[&quot;];
-        NSString * symbolName = isObjc ? name : [@&quot;_&quot; stringByAppendingString:name];
-        
-        //去重
-        if (![symbolNames containsObject:symbolName]) {
-            [symbolNames addObject:symbolName];
-        }
-    }
-
-    //取反
-    NSArray * symbolAry = [[symbolNames reverseObjectEnumerator] allObjects];
-    NSLog(@&quot;%@&quot;,symbolAry);
-    
-    //将结果写入到文件
-    NSString * funcString = [symbolAry componentsJoinedByString:@&quot;\n&quot;];
-    NSString * filePath = [NSTemporaryDirectory() stringByAppendingPathComponent:@&quot;lb.order&quot;];
-    NSData * fileContents = [funcString dataUsingEncoding:NSUTF8StringEncoding];
-    BOOL result = [[NSFileManager defaultManager] createFileAtPath:filePath contents:fileContents attributes:nil];
-    if (result) {
-        NSLog(@&quot;%@&quot;,filePath);
-    }else{
-        NSLog(@&quot;文件写入出错&quot;);
-    }
-    
-}
-//原子队列
-static OSQueueHead symboList = OS_ATOMIC_QUEUE_INIT;
-//定义符号结构体
-typedef struct{
-    void * pc;
-    void * next;
-}SymbolNode;
-
-void __sanitizer_cov_trace_pc_guard(uint32_t *guard) {
-    //if (!*guard) return; // Duplicate the guard check.
-    
-    void *PC = __builtin_return_address(0);
-    
-    SymbolNode * node = malloc(sizeof(SymbolNode));
-    *node = (SymbolNode){PC,NULL};
-    
-    //入队
-    // offsetof 用在这里是为了入队添加下一个节点找到 前一个节点next指针的位置
-    OSAtomicEnqueue(&amp;amp;symboList, node, offsetof(SymbolNode, next));
-}
-@end
-复制代码
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;文件写入到了 &lt;code class=&quot;highlighter-rouge&quot;&gt;tmp&lt;/code&gt; 路径下 , 运行 , 打开手机下载查看 :&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/posts/iOS/optimize/17187982a312a97d.webp&quot; alt=&quot;&quot; /&gt;
-&lt;img src=&quot;/images/posts/iOS/optimize/171879959d85dbe6.webp&quot; alt=&quot;&quot; /&gt;
-搞定 , 小伙伴们就可以立马去优化自己的工程了 .&lt;/p&gt;
-
-&lt;h2 id=&quot;swift-工程--混编工程问题&quot;&gt;swift 工程 / 混编工程问题&lt;/h2&gt;
-
-&lt;p&gt;通过如上方式适合纯 &lt;code class=&quot;highlighter-rouge&quot;&gt;OC&lt;/code&gt; 工程获取符号方式 .&lt;/p&gt;
-
-&lt;p&gt;由于 &lt;code class=&quot;highlighter-rouge&quot;&gt;swift&lt;/code&gt; 的编译器前端是自己的 &lt;code class=&quot;highlighter-rouge&quot;&gt;swift&lt;/code&gt; 编译前端程序 , 因此配置稍有不同 .&lt;/p&gt;
-
-&lt;p&gt;搜索 &lt;code class=&quot;highlighter-rouge&quot;&gt;Other Swift Flags&lt;/code&gt; , 添加两条配置即可 :&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;-sanitize-coverage=func&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;-sanitize=undefined&lt;/code&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;swift&lt;/code&gt; 类通过上述方法同样可以获取符号 .&lt;/p&gt;
-
-&lt;h2 id=&quot;cocoapod-工程问题&quot;&gt;cocoapod 工程问题&lt;/h2&gt;
-
-&lt;p&gt;对于 &lt;code class=&quot;highlighter-rouge&quot;&gt;cocoapod&lt;/code&gt; 工程引入的库 , 由于针对不同的 &lt;code class=&quot;highlighter-rouge&quot;&gt;target&lt;/code&gt; . 那么我们在主程序中的 &lt;code class=&quot;highlighter-rouge&quot;&gt;target&lt;/code&gt; 添加的编译设置 &lt;code class=&quot;highlighter-rouge&quot;&gt;Write Link Map File&lt;/code&gt; , &lt;code class=&quot;highlighter-rouge&quot;&gt;-fsanitize-coverage=func,trace-pc-guard&lt;/code&gt; 以及 &lt;code class=&quot;highlighter-rouge&quot;&gt;order file&lt;/code&gt; 等设置肯定是不会生效的 . 解决方法就是针对需要的 &lt;code class=&quot;highlighter-rouge&quot;&gt;target&lt;/code&gt; 去做对应的设置即可 .&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/posts/iOS/optimize/171c6046384cd6a3.webp&quot; alt=&quot;&quot; /&gt;
-对于直接手动导入到工程里的 &lt;code class=&quot;highlighter-rouge&quot;&gt;sdk&lt;/code&gt; , 不管是 &lt;code class=&quot;highlighter-rouge&quot;&gt;静态库 .a&lt;/code&gt; 还是 &lt;code class=&quot;highlighter-rouge&quot;&gt;动态库&lt;/code&gt; , 默认主工程的设置就可以了 , 是可以拿到符号的 .&lt;/p&gt;
-
-&lt;p&gt;最后提示一下 , 手动导入的三方库如果没有导入并且使用的话 , 是不会加载的 . 添加了 &lt;code class=&quot;highlighter-rouge&quot;&gt;load&lt;/code&gt; 方法也是如此 .&lt;/p&gt;
-
-&lt;h2 id=&quot;部分同学反应的添加设置后报错问题&quot;&gt;部分同学反应的添加设置后报错问题&lt;/h2&gt;
-
-&lt;p&gt;部分同学反应添加了 &lt;code class=&quot;highlighter-rouge&quot;&gt;-fsanitize-coverage=func,trace-pc-guard&lt;/code&gt; 的 &lt;code class=&quot;highlighter-rouge&quot;&gt;Other C Flags&lt;/code&gt; 时 , 直接编译工程会报错 .&lt;/p&gt;
-
-&lt;p&gt;这个是由于没有跟着文章所讲完成导致的 . 添加了这个 flag 之后 , 需要实现 &lt;code class=&quot;highlighter-rouge&quot;&gt;hook&lt;/code&gt; 代码 , 否则编译会提示找不到这个符号 .&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/posts/iOS/optimize/171c60b664bf6233.webp&quot; alt=&quot;&quot; /&gt;
-根据本文 “&lt;code class=&quot;highlighter-rouge&quot;&gt;clang 插桩 -&amp;gt; 原理探索&lt;/code&gt;” 部分添加 &lt;code class=&quot;highlighter-rouge&quot;&gt;hook&lt;/code&gt; 函数实现即可 . 或者可以直接使用 &lt;code class=&quot;highlighter-rouge&quot;&gt;笔者 demo 完整代码&lt;/code&gt; .&lt;/p&gt;
-
-&lt;h2 id=&quot;优化后效果监测&quot;&gt;优化后效果监测&lt;/h2&gt;
-
-&lt;p&gt;在完全第一次安装冷启动 , 保证同样的环境 , &lt;code class=&quot;highlighter-rouge&quot;&gt;page fault&lt;/code&gt; 采样同样截取到第一个可交互界面 , 使用重排优化前后效果如下 .&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/posts/iOS/optimize/17185f8b44166292-1.webp&quot; alt=&quot;&quot; /&gt;
-&lt;img src=&quot;/images/posts/iOS/optimize/171881e08c14e025.webp&quot; alt=&quot;&quot; /&gt;
-实际上 , 在生产环境中 , 由于 &lt;code class=&quot;highlighter-rouge&quot;&gt;page fault&lt;/code&gt; 还需要签名验证 , 因此在分发环境下 , 优化效果其实更多 .&lt;/p&gt;
-
-&lt;h2 id=&quot;总结&quot;&gt;总结&lt;/h2&gt;
-
-&lt;p&gt;本篇文章通过以实际碳素过程为基准 , 一步一步实现 &lt;code class=&quot;highlighter-rouge&quot;&gt;clang&lt;/code&gt; 静态插桩达到二进制重排优化启动时间的完整流程 .&lt;/p&gt;
-
-&lt;p&gt;具体实现步骤如下 :&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;1️⃣ : 利用 &lt;code class=&quot;highlighter-rouge&quot;&gt;clang&lt;/code&gt; 插桩获得启动时期需要加载的所有 &lt;code class=&quot;highlighter-rouge&quot;&gt;函数/方法&lt;/code&gt; , &lt;code class=&quot;highlighter-rouge&quot;&gt;block&lt;/code&gt; , &lt;code class=&quot;highlighter-rouge&quot;&gt;swift 方法&lt;/code&gt;以及 &lt;code class=&quot;highlighter-rouge&quot;&gt;c++构造方法&lt;/code&gt;的符号 .&lt;/li&gt;
-  &lt;li&gt;2️⃣ : 通过 order file 机制实现二进制重排 .&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://juejin.cn/post/6844904130406793224&quot;&gt;转自掘金&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;如有疑问或者不同看法 , 欢迎留言交流 .&lt;/p&gt;
-
-</description>
-        <pubDate>Sat, 12 Dec 2020 00:00:00 +0800</pubDate>
-        <link>http://localhost:4000/2020/12/iOS%E4%BC%98%E5%8C%96%E7%AF%87-%E5%90%AF%E5%8A%A8%E4%BC%98%E5%8C%96%E4%B9%8BClang%E6%8F%92%E6%A1%A9%E5%AE%9E%E7%8E%B0%E4%BA%8C%E8%BF%9B%E5%88%B6%E9%87%8D%E6%8E%92/</link>
-        <guid isPermaLink="true">http://localhost:4000/2020/12/iOS%E4%BC%98%E5%8C%96%E7%AF%87-%E5%90%AF%E5%8A%A8%E4%BC%98%E5%8C%96%E4%B9%8BClang%E6%8F%92%E6%A1%A9%E5%AE%9E%E7%8E%B0%E4%BA%8C%E8%BF%9B%E5%88%B6%E9%87%8D%E6%8E%92/</guid>
-        
-        <category>iOS</category>
-        
-        
-      </item>
-    
-      <item>
-        <title>博客模板功能介绍</title>
-        <description>&lt;p&gt;这篇文章主要讲的是如何使用和修改我的博客主题，文章内容含以下几点：&lt;/p&gt;
-
-&lt;h2 id=&quot;博客特性&quot;&gt;博客特性&lt;/h2&gt;
-
-&lt;ul class=&quot;task-list&quot;&gt;
-  &lt;li class=&quot;task-list-item&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;task-list-item-checkbox&quot; disabled=&quot;disabled&quot; checked=&quot;checked&quot; /&gt;适配电脑、手机、平板等各屏幕&lt;/li&gt;
-  &lt;li class=&quot;task-list-item&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;task-list-item-checkbox&quot; disabled=&quot;disabled&quot; checked=&quot;checked&quot; /&gt;响应式设计&lt;/li&gt;
-  &lt;li class=&quot;task-list-item&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;task-list-item-checkbox&quot; disabled=&quot;disabled&quot; checked=&quot;checked&quot; /&gt;个性化头像&lt;/li&gt;
-  &lt;li class=&quot;task-list-item&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;task-list-item-checkbox&quot; disabled=&quot;disabled&quot; checked=&quot;checked&quot; /&gt;每篇文章自动添加打赏功能&lt;/li&gt;
-  &lt;li class=&quot;task-list-item&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;task-list-item-checkbox&quot; disabled=&quot;disabled&quot; checked=&quot;checked&quot; /&gt;支持Disqus、livere评论系统&lt;/li&gt;
-  &lt;li class=&quot;task-list-item&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;task-list-item-checkbox&quot; disabled=&quot;disabled&quot; checked=&quot;checked&quot; /&gt;支持站点总数访问统计，每篇文章访问统计&lt;/li&gt;
-  &lt;li class=&quot;task-list-item&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;task-list-item-checkbox&quot; disabled=&quot;disabled&quot; checked=&quot;checked&quot; /&gt;支持文章自动生成目录&lt;/li&gt;
-  &lt;li class=&quot;task-list-item&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;task-list-item-checkbox&quot; disabled=&quot;disabled&quot; checked=&quot;checked&quot; /&gt;支持标签分类&lt;/li&gt;
-  &lt;li class=&quot;task-list-item&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;task-list-item-checkbox&quot; disabled=&quot;disabled&quot; checked=&quot;checked&quot; /&gt;支持代码高亮&lt;/li&gt;
-  &lt;li class=&quot;task-list-item&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;task-list-item-checkbox&quot; disabled=&quot;disabled&quot; checked=&quot;checked&quot; /&gt;支持文章H1、H2、H3、H4标题样式多样化&lt;/li&gt;
-  &lt;li class=&quot;task-list-item&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;task-list-item-checkbox&quot; disabled=&quot;disabled&quot; checked=&quot;checked&quot; /&gt;支持多种三方社交icon展示，能从博客直接跳转到自己的三方社交主页&lt;/li&gt;
-  &lt;li class=&quot;task-list-item&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;task-list-item-checkbox&quot; disabled=&quot;disabled&quot; checked=&quot;checked&quot; /&gt;支持三方社交分享(facebook、twitter)&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;博客主要模块介绍&quot;&gt;博客主要模块介绍&lt;/h2&gt;
-
-&lt;h3 id=&quot;_configyml&quot;&gt;_config.yml&lt;/h3&gt;
-
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;_config.yml&lt;/code&gt; 是博客的配置文件，整个站点的信息都在这修改，想要把我的模板改成你自己的也需要修改&lt;code class=&quot;highlighter-rouge&quot;&gt;_config.yml&lt;/code&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;重要字段说明&lt;/strong&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;enableToc: 是否开启文章自动生成目录，设置为false文章不会自动生成目录&lt;/li&gt;
-  &lt;li&gt;comment/livere: livere评论系统，支持微信、qq、微博、豆瓣、twitter等登录后可以直接评论&lt;/li&gt;
-  &lt;li&gt;comment/disqus: disqus评论系统，支持facebook、twitter等登录后可以直接评论&lt;/li&gt;
-  &lt;li&gt;social/weibo、github、zhihu、jianshu等: 个人站底部展示的微博等三方社交按钮，点击后直接跳转到个人微博或其他社交主页&lt;/li&gt;
-  &lt;li&gt;baidu/id: 百度统计，用来统计你个人站点的用户访问情况&lt;/li&gt;
-  &lt;li&gt;ga/id: google统计，用来统计你个人站点的用户访问情况&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;_config.yml 文件除以上字段还有一些可以自行修改，例如title之类的字段&lt;/p&gt;
-
-&lt;h3 id=&quot;_posts&quot;&gt;_posts&lt;/h3&gt;
-
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;_posts&lt;/code&gt; 目录是用来存放文章的目录，写新文章，直接放在这个目录即可&lt;/p&gt;
-
-&lt;p&gt;使用博客模板时，请把博客自带的文章给去掉，如果想使用博客自带的文章请 &lt;code class=&quot;highlighter-rouge&quot;&gt;注明出处&lt;/code&gt;。&lt;/p&gt;
-
-&lt;h3 id=&quot;自定义页面&quot;&gt;自定义页面&lt;/h3&gt;
-
-&lt;p&gt;about.md、support.md 等为自定义页面，如果你想添加自动以页面可以直接复制about.md 文件修改文件名和里面的内容即可。&lt;/p&gt;
-
-&lt;p&gt;如果需要在导航显示你新增的页面，直接在&lt;code class=&quot;highlighter-rouge&quot;&gt;_config.yml&lt;/code&gt; 文件的nav字段中添加你新页面配置即可&lt;/p&gt;
-
-&lt;h3 id=&quot;修改说明&quot;&gt;修改说明&lt;/h3&gt;
-
-&lt;p&gt;如果要修改博客模板信息建议只修改&lt;code class=&quot;highlighter-rouge&quot;&gt;_config.yml&lt;/code&gt; 文件内容和 &lt;code class=&quot;highlighter-rouge&quot;&gt;_posts&lt;/code&gt; 里面的文章信息。因为博客模板一直在更新迭代，改动多了以免你后期更新博客模板的时候不方便。&lt;/p&gt;
-
-&lt;p&gt;如果你想改动模板的样式又想继续更新迭代博客模板，你可以提交在github上提交&lt;code class=&quot;highlighter-rouge&quot;&gt;pull request&lt;/code&gt; 或者直接给我发邮件建议改成什么样，如果你的提议确实可以，我会采纳的，并且非常感谢你的建议。&lt;/p&gt;
-
-</description>
-        <pubDate>Sat, 11 Jul 2020 00:00:00 +0800</pubDate>
-        <link>http://localhost:4000/2020/07/blog_info/</link>
-        <guid isPermaLink="true">http://localhost:4000/2020/07/blog_info/</guid>
-        
-        <category>jekyll</category>
         
         
       </item>
