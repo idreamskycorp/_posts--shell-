@@ -5,8 +5,8 @@
     <description>欢迎来到我的个人站~</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sun, 25 Apr 2021 16:29:50 +0800</pubDate>
-    <lastBuildDate>Sun, 25 Apr 2021 16:29:50 +0800</lastBuildDate>
+    <pubDate>Sun, 25 Apr 2021 16:52:13 +0800</pubDate>
+    <lastBuildDate>Sun, 25 Apr 2021 16:52:13 +0800</lastBuildDate>
     <generator>Jekyll v3.8.5</generator>
     
       <item>
@@ -40,6 +40,108 @@
         <guid isPermaLink="true">http://localhost:4000/2021/04/iOS%E5%88%A4%E6%96%AD%E5%AF%86%E7%A0%81%E6%98%AF%E5%90%A6%E5%90%88%E6%B3%95/</guid>
         
         <category>iOS</category>
+        
+        
+      </item>
+    
+      <item>
+        <title>Shell自动提交Git脚本</title>
+        <description>&lt;h1 id=&quot;网上自动提交的脚本&quot;&gt;网上自动提交的脚本&lt;/h1&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;单次提交&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;#!/bin/bash&lt;/span&gt;
+git status
+ 
+&lt;span class=&quot;nb&quot;&gt;read&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-r&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-p&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;是否继续提交? [Y/n] &quot;&lt;/span&gt; input
+ 
+&lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$input&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;in&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;yY][eE][sS]|[yY]&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;继续提交&quot;&lt;/span&gt;
+        git add &lt;span class=&quot;nt&quot;&gt;-A&lt;/span&gt;
+        git commit &lt;span class=&quot;nt&quot;&gt;-m&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$1&lt;/span&gt;
+        git push origin &lt;span class=&quot;nv&quot;&gt;$2&lt;/span&gt;
+                    &lt;span class=&quot;nb&quot;&gt;exit &lt;/span&gt;1
+        &lt;span class=&quot;p&quot;&gt;;;&lt;/span&gt;
+
+    &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;nN][oO]|[nN]&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;中断提交&quot;&lt;/span&gt;
+        &lt;span class=&quot;nb&quot;&gt;exit &lt;/span&gt;1
+            &lt;span class=&quot;p&quot;&gt;;;&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;输入错误，请重新输入&quot;&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;;;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;esac&lt;/span&gt;
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;循环提交&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;#!/bin/bash&lt;/span&gt;
+git status
+ 
+&lt;span class=&quot;k&quot;&gt;while &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;do
+    &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;read&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-r&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-p&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;是否继续提交? [Y/n] &quot;&lt;/span&gt; input
+ 
+    &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$input&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;in&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;yY][eE][sS]|[yY]&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+            &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;继续提交&quot;&lt;/span&gt;
+            git add &lt;span class=&quot;nt&quot;&gt;-A&lt;/span&gt;
+            git commit &lt;span class=&quot;nt&quot;&gt;-m&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$1&lt;/span&gt;
+            git push origin &lt;span class=&quot;nv&quot;&gt;$2&lt;/span&gt;
+                        &lt;span class=&quot;nb&quot;&gt;exit &lt;/span&gt;1
+            &lt;span class=&quot;p&quot;&gt;;;&lt;/span&gt;
+ 
+        &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;nN][oO]|[nN]&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+            &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;中断提交&quot;&lt;/span&gt;
+            &lt;span class=&quot;nb&quot;&gt;exit &lt;/span&gt;1
+                   &lt;span class=&quot;p&quot;&gt;;;&lt;/span&gt;
+ 
+        &lt;span class=&quot;k&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;输入错误，请重新输入&quot;&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;;;&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;esac&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;done&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h1 id=&quot;自己编写的定制化的脚本&quot;&gt;自己编写的定制化的脚本&lt;/h1&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;dirname=`dirname $0`
+files=`ls -t ./_posts`
+files=($files)
+if [[ ${#files[@]} &amp;gt; 1 ]]; then
+    lastModifyFile=${files[0]}
+fi
+if [ ! -z $lastModifyFile ]; then
+     lastModifyFile=&quot;${dirname}/_posts/${lastModifyFile}&quot;
+     echo $lastModifyFile
+fi
+if [ -e $lastModifyFile ]; then
+    title=`awk '/^title:/{gsub(/[[:blank:]]*/,&quot;&quot;,$0);print $0}' &quot;&quot;$lastModifyFile&quot;&quot;`
+    title=${title#*:}
+fi
+
+if [ ! -z $title ]; then
+     git add -A
+     git commit -m &quot;更新${title}&quot;
+     git push
+     echo &quot;提交${title}成功&quot;
+else
+     echo &quot;提交失败&quot;
+fi
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+</description>
+        <pubDate>Sun, 25 Apr 2021 00:00:00 +0800</pubDate>
+        <link>http://localhost:4000/2021/04/Shell%E8%87%AA%E5%8A%A8%E6%8F%90%E4%BA%A4Git%E8%84%9A%E6%9C%AC/</link>
+        <guid isPermaLink="true">http://localhost:4000/2021/04/Shell%E8%87%AA%E5%8A%A8%E6%8F%90%E4%BA%A4Git%E8%84%9A%E6%9C%AC/</guid>
+        
+        <category>Shell</category>
         
         
       </item>
@@ -2284,139 +2386,6 @@ end
         <guid isPermaLink="true">http://localhost:4000/2021/04/Ruby_note/</guid>
         
         <category>ruby</category>
-        
-        
-      </item>
-    
-      <item>
-        <title>Shell批量重命名</title>
-        <description>&lt;h2 id=&quot;第一种方法&quot;&gt;第一种方法&lt;/h2&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;CURRENT_DIR=`pwd`
-
-for dir in *
-do
-    if [ -d $dir ];then
-        for file in $dir/*
-        do
-            NEW_FILE=${file/XXXXXXX/}
-            if [ &quot;$NEW_FILE&quot; != &quot;$file&quot; ] ;then
-                mv &quot;${CURRENT_DIR}/$file&quot; &quot;${CURRENT_DIR}/${NEW_FILE}&quot;
-                if [ $? -eq 0 ] ;then
-                    echo &quot;${CURRENT_DIR}/${NEW_FILE}&quot;
-                    echo &quot;替换成功&quot;
-                fi
-            fi
-            #echo $CURRENT_DIR ----- $dir --- $file
-            
-        done
-    fi
-    
-done
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;h2 id=&quot;其他实现&quot;&gt;其他实现&lt;/h2&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;0、用类似 GPRename 这样的图形软件进行批量重命名
-
-#1、删除所有的 .bak 后缀：
-rename 's/\.bak$//' *.bak
-
-#2、把 .jpe 文件后缀修改为 .jpg：
-rename 's/\.jpe$/\.jpg/' *.jpe
-
-#3、把所有文件的文件名改为小写：
-rename 'y/A-Z/a-z/' *
-
-#4、将 abcd.jpg 重命名为 abcd_efg.jpg：
-for var in *.jpg; do mv &quot;$var&quot; &quot;${var%.jpg}_efg.jpg&quot;; done
-
-#5、将 abcd_efg.jpg 重命名为 abcd_lmn.jpg：
-for var in *.jpg; do mv &quot;$var&quot; &quot;${var%_efg.jpg}_lmn.jpg&quot;; done
-
-#6、把文件名中所有小写字母改为大写字母：
-for var in `ls`; do mv -f &quot;$var&quot; `echo &quot;$var&quot; |tr a-z A-Z`; done
-
-#7、把格式 *_?.jpg 的文件改为 *_0?.jpg：
-for var in `ls *_?.jpg`; do mv &quot;$var&quot; `echo &quot;$var&quot; |awk -F '_' '{print $1 &quot;_0&quot; $2}'`; done
-
-#8、把文件名的前三个字母变为 vzomik：
-for var in `ls`; do mv -f &quot;$var&quot; `echo &quot;$var&quot; |sed 's/^.../vzomik/'`; done
-
-#9、把文件名的后四个字母变为 vzomik：
-for var in `ls`; do mv -f &quot;$var&quot; `echo &quot;$var&quot; |sed 's/....$/vzomik/'`; done
-
-#10. 把.txt变成.txt_bak 的后缀
-ls *.txt|xargs -n1 -i{} mv {} {}_bak
-# xargs -n1 –i{} 类似for循环，-n1意思是一个一个对象的去处理，-i{} 把前面的对象使用{}取代，mv {} {}_bak 相当于 mv 1.txt 1.txt_bak
-
-find ./*.txt -exec mv {} {}_bak \;  
-#这个命令中也是把{}作为前面find出来的文件的替代符，后面的”\”为”;”的脱意符，不然shell会把分号作为该行命令的结尾.
-
-
-==================================================================
-
-既然要批量替换文件名，那么肯定得用一个for循环依次遍历指定目录下的每个文件。对于每个文件，假如该文件的名称为name.oldext，那么我们必须原始文件名中挖出name，再将它与新的文件扩展名newext拼接形成新的文件名name.newext。依照这样的思路，就诞生了下面的脚本：
-#!/bin/bash
-oldext=&quot;JPG&quot;
-newext=&quot;jpg&quot;
-dir=$(eval pwd)
-
-for file in $(ls $dir | grep .$oldext)
-        do
-        name=$(ls $file | cut -d. -f1)
-        mv $file ${name}.$newext
-        done
-echo &quot;change JPG=====&amp;gt;jpg done!&quot;
-
-        下面对针对这个程序作简单说明：
-1.变量oldext和newext分别指定旧的扩展名和新的扩展名。dir指定文件所在目录；
-2.“ls $dir | grep .$oldext”用来在指定目录dir中获取扩展名为旧扩展名的所有文件；
-3.在循环体内先利用cut命令将文件名中“.”之前的字符串剪切出来，并赋值给name变量；接着将当前的文件名重命名为新的文件名。
-        通过这个脚本，所有照片的扩展名都成功修改。为了使这个脚本更具有通用型，我们可以增加几条read命令实现脚本和用户之间的交互。改进版的脚本如下：
-#!/bin/bash
-read -p &quot;old extension:&quot; oldext
-read -p &quot;new extension:&quot; newext
-read -p &quot;The directory:&quot; dir
-cd $dir
-
-for file in $(ls $dir | grep .$oldext)
-        do
-        name=$(ls $file | cut -d. -f1)
-        mv $file ${name}.$newext
-        echo &quot;$name.$oldext ====&amp;gt; $name.$newext&quot;
-        done
-
-echo &quot;all files has been modified.&quot;
-        修改后的脚本可以批量修改任意扩展名。
-
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Shell批量重命名文件名
-#!/bin/sh
-#替换文件名中的空格
-find . -name &quot;* *&quot;|
-while read name;do
-    na=$(echo $name | tr ' ' '_')
-    mv &quot;$name&quot; $na
-done
-
-#将文件名替换成1、2、3、4、5、6等文件名，后缀名保持不变（例如test.log --&amp;gt;1.log）
-for file in `find . -type f -name &quot;*&quot;`;do 
-dirname=`dirname $file`
-
- i=`expr $i + 1`;
-#获取文件后缀名
- P=&quot;${file##*.}&quot;
-echo $file $dirname/$i.$P;
-
-mv $file $dirname/$i.$P;
-done
-
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-</description>
-        <pubDate>Sat, 17 Apr 2021 00:00:00 +0800</pubDate>
-        <link>http://localhost:4000/2021/04/Shell_rename/</link>
-        <guid isPermaLink="true">http://localhost:4000/2021/04/Shell_rename/</guid>
-        
-        <category>Shell</category>
         
         
       </item>

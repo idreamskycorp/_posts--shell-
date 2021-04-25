@@ -199,6 +199,27 @@
     </li>
     
     <li>
+      <h2 class="post-list__post-title post-title"><a href="/2021/04/Shell%E8%87%AA%E5%8A%A8%E6%8F%90%E4%BA%A4Git%E8%84%9A%E6%9C%AC/" title="访问 Shell自动提交Git脚本">Shell自动提交Git脚本</a></h2>
+      <p class="excerpt">网上自动提交的脚本  单次提交#!/bin/bashgit status read -r -p "是否继续提交? [Y/n] " input case $input in    [yY][eE][sS]|[yY])        echo "继续提交"        git add -A        git commit -m $1        git push origin $2                    exit 1        ;;    [nN][oO]|[nN]...&hellip;</p>
+      <div class="post-list__meta">        
+        <time datetime="2021-04-25 00:00:00 +0800" class="post-list__meta--date date">
+          <img src="/images/calendar.png" width="20px" /> 
+          2021-04-25</time> 
+        <div class = "tag-img-icon">
+          <img src="/images/tag-icon.svg" width="20px" /> 
+        </div>
+        <a href="/tags">
+          <div class = "post-list-icon-mate">
+            <span class="post-list__meta--tags-right">Shell</span>
+          </div>
+          <div class = "post-list-small-mate">
+          <a class="btn-border-small" href=/2021/04/Shell%E8%87%AA%E5%8A%A8%E6%8F%90%E4%BA%A4Git%E8%84%9A%E6%9C%AC/>阅读全文 » </a>
+          </div>
+      </div>
+      <hr class="post-list__divider" />
+    </li>
+    
+    <li>
       <h2 class="post-list__post-title post-title"><a href="/2021/04/PlistBuddy/" title="访问 PlistBuddy">PlistBuddy</a></h2>
       <p class="excerpt">PlistBuddyPlistBuddy 是 Mac 系统中一个用于命令行下读写 plist 文件的工具。可以用来读取或修改 plist 文件的内容。  PlistBuddy 工具路径/usr/libexec/PlistBuddy  可以在 /usr/local/bin/ 目录下建立软连接，就可以直接使用 PlistBuddy 命令了# 不能直接使用 PlistBuddy 命令ln -s /usr/libexec/PlistBuddy /usr/local/bin/PlistBuddy  ...&hellip;</p>
       <div class="post-list__meta">        
@@ -571,27 +592,6 @@
           </div>
           <div class = "post-list-small-mate">
           <a class="btn-border-small" href=/2018/04/07_SHELL/>阅读全文 » </a>
-          </div>
-      </div>
-      <hr class="post-list__divider" />
-    </li>
-    
-    <li>
-      <h2 class="post-list__post-title post-title"><a href="/2018/04/06_SHELL/" title="访问 06_SHELL编程之CASE语句+函数+正则">06_SHELL编程之CASE语句+函数+正则</a></h2>
-      <p class="excerpt">课程目标  掌握case语句的基本语法结构  掌握函数的定义及调用  掌握常用的正则表达式元字符含义一、case语句关键词：确认过眼神，你是对的人:couple_with_heart:  case语句为多重匹配语句  如果匹配成功，执行相匹配的命令1. 语法结构说明：pattern表示需要匹配的模式case var in             定义变量;var代表是变量名pattern 1)              模式1;用 | 分割多个模式，相当于or    command1   ...&hellip;</p>
-      <div class="post-list__meta">        
-        <time datetime="2018-04-25 00:00:00 +0800" class="post-list__meta--date date">
-          <img src="/images/calendar.png" width="20px" /> 
-          2018-04-25</time> 
-        <div class = "tag-img-icon">
-          <img src="/images/tag-icon.svg" width="20px" /> 
-        </div>
-        <a href="/tags">
-          <div class = "post-list-icon-mate">
-            <span class="post-list__meta--tags-right">Shell</span>
-          </div>
-          <div class = "post-list-small-mate">
-          <a class="btn-border-small" href=/2018/04/06_SHELL/>阅读全文 » </a>
           </div>
       </div>
       <hr class="post-list__divider" />

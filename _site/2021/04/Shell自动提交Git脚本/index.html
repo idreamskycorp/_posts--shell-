@@ -6,17 +6,17 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <title>iOS判断密码是否合法</title>
-  <meta name="description" content="iOS判断密码是否合法">
+  <title>Shell自动提交Git脚本</title>
+  <meta name="description" content="网上自动提交的脚本">
   <meta name="author" content="leopardpan">
 
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="iOS判断密码是否合法">
-  <meta name="twitter:description" content="iOS判断密码是否合法">
+  <meta name="twitter:title" content="Shell自动提交Git脚本">
+  <meta name="twitter:description" content="网上自动提交的脚本">
   
   <meta property="og:type" content="article">
-  <meta property="og:title" content="iOS判断密码是否合法">
-  <meta property="og:description" content="iOS判断密码是否合法">
+  <meta property="og:title" content="Shell自动提交Git脚本">
+  <meta property="og:description" content="网上自动提交的脚本">
   
   <link rel="icon" type="image/png" href="/images/favicon.png" />
   <link href="/images/favicon.png" rel="shortcut icon" type="image/png">
@@ -24,7 +24,7 @@
   <link rel="stylesheet" href="/css/main.css">
   <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 
-  <link rel="canonical" href="http://localhost:4000/2021/04/iOS%E5%88%A4%E6%96%AD%E5%AF%86%E7%A0%81%E6%98%AF%E5%90%A6%E5%90%88%E6%B3%95/">
+  <link rel="canonical" href="http://localhost:4000/2021/04/Shell%E8%87%AA%E5%8A%A8%E6%8F%90%E4%BA%A4Git%E8%84%9A%E6%9C%AC/">
   <link rel="alternate" type="application/rss+xml" title="LiJingBiao" href="http://localhost:4000/feed.xml">
   
   <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
@@ -179,7 +179,7 @@
 
 <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
   <header class="post-header">
-    <h1 class="post-title">iOS判断密码是否合法</h1>
+    <h1 class="post-title">Shell自动提交Git脚本</h1>
     <div class="post-meta">
       <img src="/images/calendar.png" width="20px"/> 
       <time datetime="2021-04-25 00:00:00 +0800" itemprop="datePublished" class="post-meta__date date">2021-04-25</time>  
@@ -192,34 +192,102 @@
   
     <h2 class="post-title">目录</h2>
     <ul>
-  <li><a href="#ios判断密码是否合法">iOS判断密码是否合法</a></li>
+  <li><a href="#网上自动提交的脚本">网上自动提交的脚本</a></li>
+  <li><a href="#自己编写的定制化的脚本">自己编写的定制化的脚本</a></li>
 </ul>
 
   
 
   <section class="post">
-    <h1 id="ios判断密码是否合法">iOS判断密码是否合法</h1>
+    <h1 id="网上自动提交的脚本">网上自动提交的脚本</h1>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
-- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
-    
-    NSCharacterSet *cs = [[NSCharacterSet characterSetWithCharactersInString:@"qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890-/:;()$&amp;@\".,?!'[]{}#%^*+=_'\'|~&lt;&gt;£¥.,?!'"] invertedSet];
-    NSString *filtered = [[string componentsSeparatedByCharactersInSet:cs] componentsJoinedByString:@""];
-    if (![string isEqualToString:filtered]) {
-        return NO;
-    }
-    
-    NSString * inputString = [textField.text stringByReplacingCharactersInRange:range withString:string];
-    
-    //输入密码超过16位 不让其再输入,密码8~16位
-    if (inputString.length &gt; KPasswordMaxLength) {
-        textField.text = [inputString substringToIndex:KPasswordMaxLength];
-    }else{
-        textField.text = inputString;
-    }
-    return NO;
-}
+<ul>
+  <li>单次提交</li>
+</ul>
 
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
+git status
+ 
+<span class="nb">read</span> <span class="nt">-r</span> <span class="nt">-p</span> <span class="s2">"是否继续提交? [Y/n] "</span> input
+ 
+<span class="k">case</span> <span class="nv">$input</span> <span class="k">in</span>
+    <span class="o">[</span>yY][eE][sS]|[yY]<span class="p">)</span>
+        <span class="nb">echo</span> <span class="s2">"继续提交"</span>
+        git add <span class="nt">-A</span>
+        git commit <span class="nt">-m</span> <span class="nv">$1</span>
+        git push origin <span class="nv">$2</span>
+                    <span class="nb">exit </span>1
+        <span class="p">;;</span>
+
+    <span class="o">[</span>nN][oO]|[nN]<span class="p">)</span>
+        <span class="nb">echo</span> <span class="s2">"中断提交"</span>
+        <span class="nb">exit </span>1
+            <span class="p">;;</span>
+
+    <span class="k">*</span><span class="p">)</span>
+    <span class="nb">echo</span> <span class="s2">"输入错误，请重新输入"</span>
+    <span class="p">;;</span>
+<span class="k">esac</span>
+
+</code></pre></div></div>
+
+<ul>
+  <li>循环提交</li>
+</ul>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
+git status
+ 
+<span class="k">while </span><span class="nb">true</span><span class="p">;</span>
+<span class="k">do
+    </span><span class="nb">read</span> <span class="nt">-r</span> <span class="nt">-p</span> <span class="s2">"是否继续提交? [Y/n] "</span> input
+ 
+    <span class="k">case</span> <span class="nv">$input</span> <span class="k">in</span>
+        <span class="o">[</span>yY][eE][sS]|[yY]<span class="p">)</span>
+            <span class="nb">echo</span> <span class="s2">"继续提交"</span>
+            git add <span class="nt">-A</span>
+            git commit <span class="nt">-m</span> <span class="nv">$1</span>
+            git push origin <span class="nv">$2</span>
+                        <span class="nb">exit </span>1
+            <span class="p">;;</span>
+ 
+        <span class="o">[</span>nN][oO]|[nN]<span class="p">)</span>
+            <span class="nb">echo</span> <span class="s2">"中断提交"</span>
+            <span class="nb">exit </span>1
+                   <span class="p">;;</span>
+ 
+        <span class="k">*</span><span class="p">)</span>
+        <span class="nb">echo</span> <span class="s2">"输入错误，请重新输入"</span>
+        <span class="p">;;</span>
+    <span class="k">esac</span>
+<span class="k">done</span>
+</code></pre></div></div>
+
+<h1 id="自己编写的定制化的脚本">自己编写的定制化的脚本</h1>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>dirname=`dirname $0`
+files=`ls -t ./_posts`
+files=($files)
+if [[ ${#files[@]} &gt; 1 ]]; then
+    lastModifyFile=${files[0]}
+fi
+if [ ! -z $lastModifyFile ]; then
+     lastModifyFile="${dirname}/_posts/${lastModifyFile}"
+     echo $lastModifyFile
+fi
+if [ -e $lastModifyFile ]; then
+    title=`awk '/^title:/{gsub(/[[:blank:]]*/,"",$0);print $0}' ""$lastModifyFile""`
+    title=${title#*:}
+fi
+
+if [ ! -z $title ]; then
+     git add -A
+     git commit -m "更新${title}"
+     git push
+     echo "提交${title}成功"
+else
+     echo "提交失败"
+fi
 </code></pre></div></div>
 
   </section>
@@ -290,10 +358,15 @@
        <ul class="pager">
         
         <li class="previous">
-            <a href="/2021/04/Shell%E8%87%AA%E5%8A%A8%E6%8F%90%E4%BA%A4Git%E8%84%9A%E6%9C%AC/" data-toggle="tooltip" data-placement="top" title="Shell自动提交Git脚本">上一篇：  <span>Shell自动提交Git脚本</span>
+            <a href="/2021/04/PlistBuddy/" data-toggle="tooltip" data-placement="top" title="PlistBuddy">上一篇：  <span>PlistBuddy</span>
             </a>
         </li>
         
+        
+        <li class="next">
+            <a href="/2021/04/iOS%E5%88%A4%E6%96%AD%E5%AF%86%E7%A0%81%E6%98%AF%E5%90%A6%E5%90%88%E6%B3%95/" data-toggle="tooltip" data-placement="top" title="iOS判断密码是否合法">下一篇：  <span>iOS判断密码是否合法</span>
+            </a>
+        </li>
         
     </ul>
 </section>
