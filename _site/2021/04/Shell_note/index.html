@@ -207,6 +207,7 @@
   <li><a href="#12创建文件">12、创建文件</a></li>
   <li><a href="#13字符串正则匹配">13、字符串正则匹配</a></li>
   <li><a href="#14shell替换空格">14、shell替换空格</a></li>
+  <li><a href="#15将查找的字符串转换为命令">15、将查找的字符串转换为命令</a></li>
 </ul>
 
   
@@ -355,6 +356,11 @@ fi
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>awk -F: 'BEGIN{};/cdtp_dns_router/{ gsub(/[[:blank:]]*/,"",$0);print $0 }' $SRCROOT/../README.MD
 </code></pre></div></div>
 
+<h2 id="15将查找的字符串转换为命令">15、将查找的字符串转换为命令</h2>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>`awk '/^TN/{print $0; system($0)}' ./README.MD`
+
+</code></pre></div></div>
 
   </section>
 

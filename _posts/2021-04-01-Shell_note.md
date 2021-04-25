@@ -159,4 +159,9 @@ fi
 awk -F: 'BEGIN{};/cdtp_dns_router/{ gsub(/[[:blank:]]*/,"",$0);print $0 }' $SRCROOT/../README.MD
 ```
 
+## 15、将查找的字符串转换为命令
 
+```
+`awk '/^TN/{print $0; system($0)}' ./README.MD`
+
+```
