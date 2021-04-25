@@ -6,17 +6,17 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <title>iOS判断密码是否合法</title>
-  <meta name="description" content="iOS判断密码是否合法">
+  <title>iOS使用Shell自动切换环境</title>
+  <meta name="description" content="```ENV_TOON=awk -F: 'BEGIN{};/toon_router_domain/{ gsub(/[[:blank:]]*/,"",$0);print $0 }' $SRCROOT/../README.MDENV_CDTP=awk -F: 'BEGIN{};/cdtp_dns_router/{ g...">
   <meta name="author" content="leopardpan">
 
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="iOS判断密码是否合法">
-  <meta name="twitter:description" content="iOS判断密码是否合法">
+  <meta name="twitter:title" content="iOS使用Shell自动切换环境">
+  <meta name="twitter:description" content="```ENV_TOON=awk -F: 'BEGIN{};/toon_router_domain/{ gsub(/[[:blank:]]*/,"",$0);print $0 }' $SRCROOT/../README.MDENV_CDTP=awk -F: 'BEGIN{};/cdtp_dns_router/{ g...">
   
   <meta property="og:type" content="article">
-  <meta property="og:title" content="iOS判断密码是否合法">
-  <meta property="og:description" content="iOS判断密码是否合法">
+  <meta property="og:title" content="iOS使用Shell自动切换环境">
+  <meta property="og:description" content="```ENV_TOON=awk -F: 'BEGIN{};/toon_router_domain/{ gsub(/[[:blank:]]*/,"",$0);print $0 }' $SRCROOT/../README.MDENV_CDTP=awk -F: 'BEGIN{};/cdtp_dns_router/{ g...">
   
   <link rel="icon" type="image/png" href="/images/favicon.png" />
   <link href="/images/favicon.png" rel="shortcut icon" type="image/png">
@@ -24,7 +24,7 @@
   <link rel="stylesheet" href="/css/main.css">
   <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 
-  <link rel="canonical" href="http://localhost:4000/2021/04/iOS%E5%88%A4%E6%96%AD%E5%AF%86%E7%A0%81%E6%98%AF%E5%90%A6%E5%90%88%E6%B3%95/">
+  <link rel="canonical" href="http://localhost:4000/2021/04/iOS%E4%BD%BF%E7%94%A8Shell%E8%87%AA%E5%8A%A8%E5%88%87%E6%8D%A2%E7%8E%AF%E5%A2%83/">
   <link rel="alternate" type="application/rss+xml" title="LiJingBiao" href="http://localhost:4000/feed.xml">
   
   <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
@@ -179,7 +179,7 @@
 
 <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
   <header class="post-header">
-    <h1 class="post-title">iOS判断密码是否合法</h1>
+    <h1 class="post-title">iOS使用Shell自动切换环境</h1>
     <div class="post-meta">
       <img src="/images/calendar.png" width="20px"/> 
       <time datetime="2021-04-25 00:00:00 +0800" itemprop="datePublished" class="post-meta__date date">2021-04-25</time>  
@@ -191,34 +191,52 @@
 
   
     <h2 class="post-title">目录</h2>
-    <ul>
-  <li><a href="#ios判断密码是否合法">iOS判断密码是否合法</a></li>
-</ul>
+    
 
   
 
   <section class="post">
-    <h1 id="ios判断密码是否合法">iOS判断密码是否合法</h1>
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ENV_TOON=`awk -F: 'BEGIN{};/toon_router_domain/{ gsub(/[[:blank:]]*/,"",$0);print $0 }' $SRCROOT/../README.MD`
+ENV_CDTP=`awk -F: 'BEGIN{};/cdtp_dns_router/{ gsub(/[[:blank:]]*/,"",$0);print $0 }' $SRCROOT/../README.MD`
+ENV_TOON=($ENV_TOON)
+ENV_CDTP=($ENV_CDTP)
+if [ ${#ENV_TOON[*]} -eq 2 -a ${#ENV_CDTP[*]} -eq 2 ]; then
+    ENV_TOON_DEVELOPMENT=${ENV_TOON[0]}
+    ENV_TOON_DEVELOPMENT=${ENV_TOON_DEVELOPMENT#*:}
+    ENV_TOON_RELEASE=${ENV_TOON[1]}
+    ENV_TOON_RELEASE=${ENV_TOON_RELEASE#*:}
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
-- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
-    
-    NSCharacterSet *cs = [[NSCharacterSet characterSetWithCharactersInString:@"qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890-/:;()$&amp;@\".,?!'[]{}#%^*+=_'\'|~&lt;&gt;£¥.,?!'"] invertedSet];
-    NSString *filtered = [[string componentsSeparatedByCharactersInSet:cs] componentsJoinedByString:@""];
-    if (![string isEqualToString:filtered]) {
-        return NO;
-    }
-    
-    NSString * inputString = [textField.text stringByReplacingCharactersInRange:range withString:string];
-    
-    //输入密码超过16位 不让其再输入,密码8~16位
-    if (inputString.length &gt; KPasswordMaxLength) {
-        textField.text = [inputString substringToIndex:KPasswordMaxLength];
-    }else{
-        textField.text = inputString;
-    }
-    return NO;
-}
+
+    ENV_CDTP_DEVELOPMENT=${ENV_CDTP[0]}
+    ENV_CDTP_DEVELOPMENT=${ENV_CDTP_DEVELOPMENT#*:}
+    ENV_CDTP_RELEASE=${ENV_CDTP[1]}
+    ENV_CDTP_RELEASE=${ENV_CDTP_RELEASE#*:}
+else 
+    echo 获取失败
+    exit 0
+fi
+
+echo $ENV_TOON_DEVELOPMENT
+echo $ENV_CDTP_DEVELOPMENT
+
+echo $ENV_TOON_RELEASE
+echo $ENV_CDTP_RELEASE
+
+info_plist=$SRCROOT/TLauncher/Info.plist
+CURRENT_TOON_ENV=$(/usr/libexec/PlistBuddy -c 'Print toon_router_domain' $info_plist)
+echo $CURRENT_TOON_ENV
+
+if [ $ENV_TOON_DEVELOPMENT == $CURRENT_TOON_ENV ]; then
+    #echo 当前为测试环境
+    /usr/libexec/PlistBuddy -c "Set :toon_router_domain $ENV_TOON_RELEASE" $info_plist
+    /usr/libexec/PlistBuddy -c "Set :cdtp_dns_router $ENV_CDTP_RELEASE" $info_plist
+    echo 由之前测试环境修改为线上环境
+ else
+    #echo 当前为线上环境
+    /usr/libexec/PlistBuddy -c "Set :toon_router_domain $ENV_TOON_DEVELOPMENT" $info_plist
+    /usr/libexec/PlistBuddy -c "Set :cdtp_dns_router $ENV_CDTP_DEVELOPMENT" $info_plist
+    echo 由之前线上环境修改为测试环境
+fi
 
 </code></pre></div></div>
 
@@ -290,10 +308,15 @@
        <ul class="pager">
         
         <li class="previous">
-            <a href="/2021/04/iOS%E4%BD%BF%E7%94%A8Shell%E8%87%AA%E5%8A%A8%E5%88%87%E6%8D%A2%E7%8E%AF%E5%A2%83/" data-toggle="tooltip" data-placement="top" title="iOS使用Shell自动切换环境">上一篇：  <span>iOS使用Shell自动切换环境</span>
+            <a href="/2021/04/Shell%E8%87%AA%E5%8A%A8%E6%8F%90%E4%BA%A4Git%E8%84%9A%E6%9C%AC/" data-toggle="tooltip" data-placement="top" title="Shell自动提交Git脚本">上一篇：  <span>Shell自动提交Git脚本</span>
             </a>
         </li>
         
+        
+        <li class="next">
+            <a href="/2021/04/iOS%E5%88%A4%E6%96%AD%E5%AF%86%E7%A0%81%E6%98%AF%E5%90%A6%E5%90%88%E6%B3%95/" data-toggle="tooltip" data-placement="top" title="iOS判断密码是否合法">下一篇：  <span>iOS判断密码是否合法</span>
+            </a>
+        </li>
         
     </ul>
 </section>

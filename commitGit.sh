@@ -18,7 +18,7 @@ fi
 
 if [ ! -z $title ]; then
      git add -A
-     git commit -m "更新${title}"
+     git commit -m "更新【${title}】"
      git push
      echo "提交${title}成功"
 else

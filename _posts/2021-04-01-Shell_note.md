@@ -135,6 +135,7 @@ RESOURCES_TO_COPY=${PODS_ROOT}/resources-to-copy-${TARGETNAME}.txt
 > "$RESOURCES_TO_COPY"
 ```
 ## 13、字符串正则匹配
+
 ```
 str1=我是中国人
 if [[ "$str1" == 我是* ]]; then
@@ -143,3 +144,19 @@ else
      echo 没有前缀
 fi
 ```
+
+## 14、shell替换空格
+
+- 方法1
+
+```
+"21241       2412  " | sed s/[[:space:]]//g
+```
+
+- 方法2
+
+```
+awk -F: 'BEGIN{};/cdtp_dns_router/{ gsub(/[[:blank:]]*/,"",$0);print $0 }' $SRCROOT/../README.MD
+```
+
+

@@ -206,6 +206,7 @@
   <li><a href="#11懒加载代码">11、懒加载代码</a></li>
   <li><a href="#12创建文件">12、创建文件</a></li>
   <li><a href="#13字符串正则匹配">13、字符串正则匹配</a></li>
+  <li><a href="#14shell替换空格">14、shell替换空格</a></li>
 </ul>
 
   
@@ -329,6 +330,7 @@ iosBatchLazyCode<span class="o">(){</span>
 &gt; "$RESOURCES_TO_COPY"
 </code></pre></div></div>
 <h2 id="13字符串正则匹配">13、字符串正则匹配</h2>
+
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>str1=我是中国人
 if [[ "$str1" == 我是* ]]; then
      echo 有前缀
@@ -336,6 +338,23 @@ else
      echo 没有前缀
 fi
 </code></pre></div></div>
+
+<h2 id="14shell替换空格">14、shell替换空格</h2>
+
+<ul>
+  <li>方法1</li>
+</ul>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"21241       2412  " | sed s/[[:space:]]//g
+</code></pre></div></div>
+
+<ul>
+  <li>方法2</li>
+</ul>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>awk -F: 'BEGIN{};/cdtp_dns_router/{ gsub(/[[:blank:]]*/,"",$0);print $0 }' $SRCROOT/../README.MD
+</code></pre></div></div>
+
 
   </section>
 

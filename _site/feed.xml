@@ -5,8 +5,8 @@
     <description>欢迎来到我的个人站~</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sun, 25 Apr 2021 16:52:13 +0800</pubDate>
-    <lastBuildDate>Sun, 25 Apr 2021 16:52:13 +0800</lastBuildDate>
+    <pubDate>Sun, 25 Apr 2021 17:11:34 +0800</pubDate>
+    <lastBuildDate>Sun, 25 Apr 2021 17:11:34 +0800</lastBuildDate>
     <generator>Jekyll v3.8.5</generator>
     
       <item>
@@ -40,6 +40,61 @@
         <guid isPermaLink="true">http://localhost:4000/2021/04/iOS%E5%88%A4%E6%96%AD%E5%AF%86%E7%A0%81%E6%98%AF%E5%90%A6%E5%90%88%E6%B3%95/</guid>
         
         <category>iOS</category>
+        
+        
+      </item>
+    
+      <item>
+        <title>iOS使用Shell自动切换环境</title>
+        <description>&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;ENV_TOON=`awk -F: 'BEGIN{};/toon_router_domain/{ gsub(/[[:blank:]]*/,&quot;&quot;,$0);print $0 }' $SRCROOT/../README.MD`
+ENV_CDTP=`awk -F: 'BEGIN{};/cdtp_dns_router/{ gsub(/[[:blank:]]*/,&quot;&quot;,$0);print $0 }' $SRCROOT/../README.MD`
+ENV_TOON=($ENV_TOON)
+ENV_CDTP=($ENV_CDTP)
+if [ ${#ENV_TOON[*]} -eq 2 -a ${#ENV_CDTP[*]} -eq 2 ]; then
+    ENV_TOON_DEVELOPMENT=${ENV_TOON[0]}
+    ENV_TOON_DEVELOPMENT=${ENV_TOON_DEVELOPMENT#*:}
+    ENV_TOON_RELEASE=${ENV_TOON[1]}
+    ENV_TOON_RELEASE=${ENV_TOON_RELEASE#*:}
+
+
+    ENV_CDTP_DEVELOPMENT=${ENV_CDTP[0]}
+    ENV_CDTP_DEVELOPMENT=${ENV_CDTP_DEVELOPMENT#*:}
+    ENV_CDTP_RELEASE=${ENV_CDTP[1]}
+    ENV_CDTP_RELEASE=${ENV_CDTP_RELEASE#*:}
+else 
+    echo 获取失败
+    exit 0
+fi
+
+echo $ENV_TOON_DEVELOPMENT
+echo $ENV_CDTP_DEVELOPMENT
+
+echo $ENV_TOON_RELEASE
+echo $ENV_CDTP_RELEASE
+
+info_plist=$SRCROOT/TLauncher/Info.plist
+CURRENT_TOON_ENV=$(/usr/libexec/PlistBuddy -c 'Print toon_router_domain' $info_plist)
+echo $CURRENT_TOON_ENV
+
+if [ $ENV_TOON_DEVELOPMENT == $CURRENT_TOON_ENV ]; then
+    #echo 当前为测试环境
+    /usr/libexec/PlistBuddy -c &quot;Set :toon_router_domain $ENV_TOON_RELEASE&quot; $info_plist
+    /usr/libexec/PlistBuddy -c &quot;Set :cdtp_dns_router $ENV_CDTP_RELEASE&quot; $info_plist
+    echo 由之前测试环境修改为线上环境
+ else
+    #echo 当前为线上环境
+    /usr/libexec/PlistBuddy -c &quot;Set :toon_router_domain $ENV_TOON_DEVELOPMENT&quot; $info_plist
+    /usr/libexec/PlistBuddy -c &quot;Set :cdtp_dns_router $ENV_CDTP_DEVELOPMENT&quot; $info_plist
+    echo 由之前线上环境修改为测试环境
+fi
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+</description>
+        <pubDate>Sun, 25 Apr 2021 00:00:00 +0800</pubDate>
+        <link>http://localhost:4000/2021/04/iOS%E4%BD%BF%E7%94%A8Shell%E8%87%AA%E5%8A%A8%E5%88%87%E6%8D%A2%E7%8E%AF%E5%A2%83/</link>
+        <guid isPermaLink="true">http://localhost:4000/2021/04/iOS%E4%BD%BF%E7%94%A8Shell%E8%87%AA%E5%8A%A8%E5%88%87%E6%8D%A2%E7%8E%AF%E5%A2%83/</guid>
+        
+        <category>Shell</category>
         
         
       </item>
@@ -2362,30 +2417,6 @@ strstr = str.delete(&quot; &quot;)                    #去掉tab
         <guid isPermaLink="true">http://localhost:4000/2021/04/Shell_lazy_load/</guid>
         
         <category>jekyll</category>
-        
-        
-      </item>
-    
-      <item>
-        <title>Ruby笔记</title>
-        <description>&lt;p&gt;学习Ruby过程中的一些笔记&lt;/p&gt;
-
-&lt;h2 id=&quot;1invalid-byte-sequence-in-utf-8-argumenterror&quot;&gt;1、Invalid byte sequence in UTF-8 (ArgumentError)&lt;/h2&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;if ! file_content.valid_encoding?
-  s = file_content.encode(&quot;UTF-16be&quot;, :invalid=&amp;gt;:replace, :replace=&amp;gt;&quot;?&quot;).encode('UTF-8')
-  s.gsub(/dr/i,'med')
-end
-
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;h2 id=&quot;2ruby-里的-q-q-w-w-x-r-s-i&quot;&gt;2、&lt;a href=&quot;https://ruby-china.org/topics/18512&quot;&gt;Ruby 里的 %Q, %q, %W, %w, %x, %r, %s, %i&lt;/a&gt; &lt;/h2&gt;
-&lt;h2 id=&quot;3podfile-的解析逻辑&quot;&gt;3、&lt;a href=&quot;https://blog.csdn.net/Desgard_Duan/article/details/108633619?spm=1001.2014.3001.5502&quot;&gt;Podfile 的解析逻辑&lt;/a&gt;&lt;/h2&gt;
-
-</description>
-        <pubDate>Mon, 19 Apr 2021 00:00:00 +0800</pubDate>
-        <link>http://localhost:4000/2021/04/Ruby_note/</link>
-        <guid isPermaLink="true">http://localhost:4000/2021/04/Ruby_note/</guid>
-        
-        <category>ruby</category>
         
         
       </item>
