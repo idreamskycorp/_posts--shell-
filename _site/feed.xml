@@ -5,8 +5,8 @@
     <description>欢迎来到我的个人站~</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sun, 25 Apr 2021 17:11:34 +0800</pubDate>
-    <lastBuildDate>Sun, 25 Apr 2021 17:11:34 +0800</lastBuildDate>
+    <pubDate>Sun, 25 Apr 2021 17:17:04 +0800</pubDate>
+    <lastBuildDate>Sun, 25 Apr 2021 17:17:04 +0800</lastBuildDate>
     <generator>Jekyll v3.8.5</generator>
     
       <item>
@@ -93,6 +93,99 @@ fi
         <pubDate>Sun, 25 Apr 2021 00:00:00 +0800</pubDate>
         <link>http://localhost:4000/2021/04/iOS%E4%BD%BF%E7%94%A8Shell%E8%87%AA%E5%8A%A8%E5%88%87%E6%8D%A2%E7%8E%AF%E5%A2%83/</link>
         <guid isPermaLink="true">http://localhost:4000/2021/04/iOS%E4%BD%BF%E7%94%A8Shell%E8%87%AA%E5%8A%A8%E5%88%87%E6%8D%A2%E7%8E%AF%E5%A2%83/</guid>
+        
+        <category>Shell</category>
+        
+        
+      </item>
+    
+      <item>
+        <title>iOS使用Shell脚本签名</title>
+        <description>&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# ${SRCROOT} 它是工程文件所在的目录
+TEMP_PATH=&quot;${SRCROOT}/Temp&quot;
+#资源文件夹，我们提前在工程目录下新建一个APP文件夹，里面放ipa包
+ASSETS_PATH=&quot;${SRCROOT}/APP&quot;
+#目标ipa包路径
+TARGET_IPA_PATH=&quot;${ASSETS_PATH}/*.ipa&quot;
+#清空Temp文件夹
+rm -rf &quot;${SRCROOT}/Temp&quot;
+mkdir -p &quot;${SRCROOT}/Temp&quot;
+
+
+
+#----------------------------------------
+# 1. 解压IPA到Temp下
+unzip -oqq &quot;$TARGET_IPA_PATH&quot; -d &quot;$TEMP_PATH&quot;
+# 拿到解压的临时的APP的路径
+TEMP_APP_PATH=$(set -- &quot;$TEMP_PATH/Payload/&quot;*.app;echo &quot;$1&quot;)
+# echo &quot;路径是:$TEMP_APP_PATH&quot;
+
+
+#----------------------------------------
+# 2. 将解压出来的.app拷贝进入工程下
+# BUILT_PRODUCTS_DIR 工程生成的APP包的路径
+# TARGET_NAME target名称
+TARGET_APP_PATH=&quot;$BUILT_PRODUCTS_DIR/$TARGET_NAME.app&quot;
+echo &quot;app路径:$TARGET_APP_PATH&quot;
+
+rm -rf &quot;$TARGET_APP_PATH&quot;
+mkdir -p &quot;$TARGET_APP_PATH&quot;
+cp -rf &quot;$TEMP_APP_PATH/&quot; &quot;$TARGET_APP_PATH&quot;
+
+
+
+#----------------------------------------
+# 3. 删除extension和WatchAPP.个人证书没法签名Extention
+rm -rf &quot;$TARGET_APP_PATH/PlugIns&quot;
+rm -rf &quot;$TARGET_APP_PATH/Watch&quot;
+
+
+
+#----------------------------------------
+# 4. 更新info.plist文件 CFBundleIdentifier
+#  设置:&quot;Set : KEY Value&quot; &quot;目标文件路径&quot;
+/usr/libexec/PlistBuddy -c &quot;Set :CFBundleIdentifier $PRODUCT_BUNDLE_IDENTIFIER&quot; &quot;$TARGET_APP_PATH/Info.plist&quot;
+
+
+#----------------------------------------
+# 5. 给MachO文件上执行权限
+# 拿到MachO文件的路径
+APP_BINARY=`plutil -convert xml1 -o - $TARGET_APP_PATH/Info.plist|grep -A1 Exec|tail -n1|cut -f2 -d\&amp;gt;|cut -f1 -d\&amp;lt;`
+#上可执行权限
+chmod +x &quot;$TARGET_APP_PATH/$APP_BINARY&quot;
+
+
+
+#----------------------------------------
+# 6. 重签名第三方 FrameWorks
+TARGET_APP_FRAMEWORKS_PATH=&quot;$TARGET_APP_PATH/Frameworks&quot;
+if [ -d &quot;$TARGET_APP_FRAMEWORKS_PATH&quot; ];
+then
+for FRAMEWORK in &quot;$TARGET_APP_FRAMEWORKS_PATH/&quot;*
+do
+
+#签名
+/usr/bin/codesign --force --sign &quot;$EXPANDED_CODE_SIGN_IDENTITY&quot; &quot;$FRAMEWORK&quot;
+done
+fi
+
+
+#注入
+#yololib &quot;$TARGET_APP_PATH/$APP_BINARY&quot; &quot;Frameworks/HankHook.framework/HankHook&quot;
+
+
+
+
+
+
+
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+</description>
+        <pubDate>Sun, 25 Apr 2021 00:00:00 +0800</pubDate>
+        <link>http://localhost:4000/2021/04/iOS%E4%BD%BF%E7%94%A8Shell%E8%84%9A%E6%9C%AC%E7%AD%BE%E5%90%8D/</link>
+        <guid isPermaLink="true">http://localhost:4000/2021/04/iOS%E4%BD%BF%E7%94%A8Shell%E8%84%9A%E6%9C%AC%E7%AD%BE%E5%90%8D/</guid>
         
         <category>Shell</category>
         
@@ -2398,25 +2491,6 @@ strstr = str.delete(&quot; &quot;)                    #去掉tab
         <guid isPermaLink="true">http://localhost:4000/2021/04/ruby%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%A0%BC%E5%BC%8F%E5%8C%96-%E8%BF%9B%E5%88%B6%E8%BD%AC%E6%8D%A2-%E5%B0%8F%E6%95%B0%E4%BD%8D%E6%95%B0%E6%8E%A7%E5%88%B6/</guid>
         
         <category>ruby</category>
-        
-        
-      </item>
-    
-      <item>
-        <title>运行jekyll报错</title>
-        <description>&lt;p&gt;运行 &lt;code class=&quot;highlighter-rouge&quot;&gt;jekyll serve&lt;/code&gt;报错&lt;code class=&quot;highlighter-rouge&quot;&gt;You have already activated public_suffix 4.0.6, but your Gemfile requires public_suffix 3.0.3. Prepending 'bundle exec'to your command may solve this. (Gem::LoadError)&lt;/code&gt;&lt;/p&gt;
-
-&lt;p&gt;执行命令&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;bundle exec jekyll serve
-
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-</description>
-        <pubDate>Mon, 19 Apr 2021 00:00:00 +0800</pubDate>
-        <link>http://localhost:4000/2021/04/Shell_lazy_load/</link>
-        <guid isPermaLink="true">http://localhost:4000/2021/04/Shell_lazy_load/</guid>
-        
-        <category>jekyll</category>
         
         
       </item>
