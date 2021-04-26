@@ -2,11 +2,11 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>LiJingBiao</title>
-    <description>欢迎来到我的个人站~</description>
+    <description>欢迎来到我的个人博客~</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 26 Apr 2021 11:05:32 +0800</pubDate>
-    <lastBuildDate>Mon, 26 Apr 2021 11:05:32 +0800</lastBuildDate>
+    <pubDate>Mon, 26 Apr 2021 13:38:52 +0800</pubDate>
+    <lastBuildDate>Mon, 26 Apr 2021 13:38:52 +0800</lastBuildDate>
     <generator>Jekyll v3.8.5</generator>
     
       <item>
