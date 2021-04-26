@@ -6,17 +6,17 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <title>shell编程之wc命令</title>
-  <meta name="description" content="Linux wc命令用于计算字数。">
+  <title>高级Bash脚本编程指南</title>
+  <meta name="description" content="《高级Bash脚本编程指南》Revision 10中文版">
   <meta name="author" content="leopardpan">
 
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="shell编程之wc命令">
-  <meta name="twitter:description" content="Linux wc命令用于计算字数。">
+  <meta name="twitter:title" content="高级Bash脚本编程指南">
+  <meta name="twitter:description" content="《高级Bash脚本编程指南》Revision 10中文版">
   
   <meta property="og:type" content="article">
-  <meta property="og:title" content="shell编程之wc命令">
-  <meta property="og:description" content="Linux wc命令用于计算字数。">
+  <meta property="og:title" content="高级Bash脚本编程指南">
+  <meta property="og:description" content="《高级Bash脚本编程指南》Revision 10中文版">
   
   <link rel="icon" type="image/png" href="/images/favicon.png" />
   <link href="/images/favicon.png" rel="shortcut icon" type="image/png">
@@ -24,7 +24,7 @@
   <link rel="stylesheet" href="/css/main.css">
   <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 
-  <link rel="canonical" href="http://localhost:4000/2021/04/shell%E7%BC%96%E7%A8%8B%E4%B9%8Bwc%E5%91%BD%E4%BB%A4/">
+  <link rel="canonical" href="http://localhost:4000/2021/04/%E9%AB%98%E7%BA%A7Bash%E8%84%9A%E6%9C%AC%E7%BC%96%E7%A8%8B%E6%8C%87%E5%8D%97/">
   <link rel="alternate" type="application/rss+xml" title="LiJingBiao" href="http://localhost:4000/feed.xml">
   
   <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
@@ -179,7 +179,7 @@
 
 <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
   <header class="post-header">
-    <h1 class="post-title">shell编程之wc命令</h1>
+    <h1 class="post-title">高级Bash脚本编程指南</h1>
     <div class="post-meta">
       <img src="/images/calendar.png" width="20px"/> 
       <time datetime="2021-04-26 00:00:00 +0800" itemprop="datePublished" class="post-meta__date date">2021-04-26</time>  
@@ -191,68 +191,18 @@
 
   
     <h2 class="post-title">目录</h2>
-    <ul>
-  <li><a href="#语法">语法</a>
-    <ul>
-      <li><a href="#参数">参数：</a></li>
-      <li><a href="#实例">实例</a></li>
-    </ul>
-  </li>
-</ul>
+    
 
   
 
   <section class="post">
-    <p>Linux wc命令用于计算字数。</p>
+    <p>《高级Bash脚本编程指南》Revision 10中文版</p>
 
-<p>利用wc指令我们可以计算文件的Byte数、字数、或是列数，若不指定文件名称、或是所给予的文件名为”-“，则wc指令会从标准输入设备读取数据。</p>
+<p>在线阅读链接：http://www.linuxplus.org/kb/
+英文版:https://tldp.org/LDP/abs/html/</p>
 
-<h1 id="语法">语法</h1>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>wc [-clw][--help][--version][文件...]
-</code></pre></div></div>
-<h2 id="参数">参数：</h2>
+<p>gitbook地址：https://linuxstory.gitbook.io/advanced-bash-scripting-guide-in-chinese/</p>
 
-<ul>
-  <li>-c或–bytes或–chars 只显示Bytes数。</li>
-  <li>-l或–lines 显示行数。</li>
-  <li>-w或–words 只显示字数。</li>
-  <li>–help 在线帮助。</li>
-  <li>–version 显示版本信息。
-    <h2 id="实例">实例</h2>
-    <p>在默认的情况下，wc将计算指定文件的行数、字数，以及字节数。使用的命令为：</p>
-  </li>
-</ul>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>wc testfile 
-</code></pre></div></div>
-<p>先查看testfile文件的内容，可以看到：</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ cat testfile  
-Linux networks are becoming more and more common, but scurity is often an overlooked  
-issue. Unfortunately, in today’s environment all networks are potential hacker targets,  
-fro0m tp-secret military research networks to small home LANs.  
-Linux Network Securty focuses on securing Linux in a networked environment, where the  
-security of the entire network needs to be considered rather than just isolated machines.  
-It uses a mix of theory and practicl techniques to teach administrators how to install and  
-use security applications, as well as how the applcations work and why they are necesary. 
-</code></pre></div></div>
-<p>使用 wc统计，结果如下：</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ wc testfile           # testfile文件的统计信息  
-3 92 598 testfile       # testfile文件的行数为3、单词数92、字节数598 
-</code></pre></div></div>
-<p>其中，3 个数字分别表示testfile文件的行数、单词数，以及该文件的字节数。
-如果想同时统计多个文件的信息，例如同时统计testfile、testfile_1、testfile_2，可使用如下命令：</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>wc testfile testfile_1 testfile_2   #统计三个文件的信息 
-输出结果如下：
-
-$ wc testfile testfile_1 testfile_2  #统计三个文件的信息  
-3 92 598 testfile                    #第一个文件行数为3、单词数92、字节数598  
-9 18 78 testfile_1                   #第二个文件的行数为9、单词数18、字节数78  
-3 6 32 testfile_2                    #第三个文件的行数为3、单词数6、字节数32  
-15 116 708 总用量                    #三个文件总共的行数为15、单词数116、字节数708 
-</code></pre></div></div>
 
   </section>
 
@@ -322,15 +272,10 @@ $ wc testfile testfile_1 testfile_2  #统计三个文件的信息
        <ul class="pager">
         
         <li class="previous">
-            <a href="/2021/04/iOS%E5%88%A4%E6%96%AD%E5%AF%86%E7%A0%81%E6%98%AF%E5%90%A6%E5%90%88%E6%B3%95/" data-toggle="tooltip" data-placement="top" title="iOS判断密码是否合法">上一篇：  <span>iOS判断密码是否合法</span>
+            <a href="/2021/04/shell%E7%BC%96%E7%A8%8B%E4%B9%8Bwc%E5%91%BD%E4%BB%A4/" data-toggle="tooltip" data-placement="top" title="shell编程之wc命令">上一篇：  <span>shell编程之wc命令</span>
             </a>
         </li>
         
-        
-        <li class="next">
-            <a href="/2021/04/%E9%AB%98%E7%BA%A7Bash%E8%84%9A%E6%9C%AC%E7%BC%96%E7%A8%8B%E6%8C%87%E5%8D%97/" data-toggle="tooltip" data-placement="top" title="高级Bash脚本编程指南">下一篇：  <span>高级Bash脚本编程指南</span>
-            </a>
-        </li>
         
     </ul>
 </section>

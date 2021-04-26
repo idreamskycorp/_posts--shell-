@@ -5,9 +5,28 @@
     <description>欢迎来到我的个人博客~</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 26 Apr 2021 13:38:52 +0800</pubDate>
-    <lastBuildDate>Mon, 26 Apr 2021 13:38:52 +0800</lastBuildDate>
+    <pubDate>Mon, 26 Apr 2021 14:25:09 +0800</pubDate>
+    <lastBuildDate>Mon, 26 Apr 2021 14:25:09 +0800</lastBuildDate>
     <generator>Jekyll v3.8.5</generator>
+    
+      <item>
+        <title>高级Bash脚本编程指南</title>
+        <description>&lt;p&gt;《高级Bash脚本编程指南》Revision 10中文版&lt;/p&gt;
+
+&lt;p&gt;在线阅读链接：http://www.linuxplus.org/kb/
+英文版:https://tldp.org/LDP/abs/html/&lt;/p&gt;
+
+&lt;p&gt;gitbook地址：https://linuxstory.gitbook.io/advanced-bash-scripting-guide-in-chinese/&lt;/p&gt;
+
+</description>
+        <pubDate>Mon, 26 Apr 2021 00:00:00 +0800</pubDate>
+        <link>http://localhost:4000/2021/04/%E9%AB%98%E7%BA%A7Bash%E8%84%9A%E6%9C%AC%E7%BC%96%E7%A8%8B%E6%8C%87%E5%8D%97/</link>
+        <guid isPermaLink="true">http://localhost:4000/2021/04/%E9%AB%98%E7%BA%A7Bash%E8%84%9A%E6%9C%AC%E7%BC%96%E7%A8%8B%E6%8C%87%E5%8D%97/</guid>
+        
+        <category>shell</category>
+        
+        
+      </item>
     
       <item>
         <title>shell编程之wc命令</title>
@@ -2431,62 +2450,6 @@ sudo kill -9 8700
         <guid isPermaLink="true">http://localhost:4000/2021/04/%E7%AB%AF%E5%8F%A3%E5%8D%A0%E7%94%A8/</guid>
         
         <category>mark</category>
-        
-        
-      </item>
-    
-      <item>
-        <title>Shell 批量实现iOS的懒加载</title>
-        <description>&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;#!/bin/bash&lt;/span&gt;
-iosBatchLazyCode&lt;span class=&quot;o&quot;&gt;(){&lt;/span&gt;
-    
-    &lt;span class=&quot;k&quot;&gt;if &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;test&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;UIButton&quot;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;then
-           &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;str&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;[&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$1&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt; buttonWithType:UIButtonTypeCustom];&quot;&lt;/span&gt;
-       &lt;span class=&quot;k&quot;&gt;else
-           &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;str&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;[[&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$1&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt; alloc]init];&quot;&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;fi
-  &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-e&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;
-- (&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$1&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt; *)&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$2&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;{
-    if (_&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$2&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt; == nil) {
-        _&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$2&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt; = &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$str&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;
-    }
-    return _&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$2&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;;
-}&quot;&lt;/span&gt; 
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-&lt;span class=&quot;c&quot;&gt;#追加一行空格&lt;/span&gt;
-&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-e&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'\n'&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&lt;/span&gt; propertys.txt
-
-&lt;span class=&quot;c&quot;&gt;#读取文件存数组&lt;/span&gt;
-&lt;span class=&quot;nv&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;0
-&lt;span class=&quot;k&quot;&gt;while &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;read &lt;/span&gt;line
-&lt;span class=&quot;k&quot;&gt;do
-    &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;lineStr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$line&lt;/span&gt;
-    &lt;span class=&quot;nv&quot;&gt;noneSpaceStr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;lineStr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;// /&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;
-    ARR[&lt;span class=&quot;nv&quot;&gt;$i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]=&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$noneSpaceStr&lt;/span&gt;
-    &lt;span class=&quot;nb&quot;&gt;let &lt;/span&gt;i+&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;1
-&lt;span class=&quot;k&quot;&gt;done&lt;/span&gt; &amp;lt; propertys.txt
-
-&lt;span class=&quot;c&quot;&gt;#格式化输出到out.txt&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;for &lt;/span&gt;str &lt;span class=&quot;k&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;ARR&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[*]&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;do
-    &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;str&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;#*)&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;nv&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;*&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;
-
-    &lt;span class=&quot;nv&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;str&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;#*&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;*&quot;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;nv&quot;&gt;d&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;%*;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;
-    iosBatchLazyCode &lt;span class=&quot;nv&quot;&gt;$b&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$d&lt;/span&gt; 
-&lt;span class=&quot;k&quot;&gt;done&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&lt;/span&gt; out.txt 
-
-
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-</description>
-        <pubDate>Mon, 19 Apr 2021 00:00:00 +0800</pubDate>
-        <link>http://localhost:4000/2021/04/run_jekyll_error/</link>
-        <guid isPermaLink="true">http://localhost:4000/2021/04/run_jekyll_error/</guid>
-        
-        <category>shell</category>
         
         
       </item>
