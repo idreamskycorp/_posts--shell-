@@ -165,3 +165,37 @@ awk -F: 'BEGIN{};/cdtp_dns_router/{ gsub(/[[:blank:]]*/,"",$0);print $0 }' $SRCR
 `awk '/^TN/{print $0; system($0)}' ./README.MD`
 
 ```
+
+## 16、awk清除空格
+
+```
+sub(/^[[:blank:]]*/,"",变量)  #是去掉变量左边的空白符
+sub(/[[:blank:]]*$/,"",变量)  #是去掉变量右边的空白符
+gsub(/[[:blank:]]*/,"",变量)  #是去掉变量中所有的空白符
+```
+示例：
+```
+echo ' 123 456 789  ' | awk '{
+print "<" $0 ">";
+sub(/^[[:blank:]]*/,"",$0);print "[" $0 "]";
+sub(/[[:blank:]]*$/,"",$0);print "|" $0 "|";
+gsub(/[[:blank:]]*/,"",$0);print "/" $0 "/";
+```
+gsub返值是替换次数，而不是替换结果。
+
+
+## 17、shell下alias 添加参数
+
+`alias` 默认是无法添加参数的，要想添加参数，只能定义一个函数来调用，示例如下：
+```
+alias tcstart='new() { /root/bin/tc-single-start "$1"; /root/bin/tclog "$1"; }; new'
+
+alias pod1='podcmd() { echo $1; awk -v rst=$1 -v cmd="$*" "/^TN/{ gsub(/update/,\"\", \$0);print \$0 cmd}" ../README.MD;}; podcmd install'
+
+alias pod1='podcmd() { echo $1; awk -v rst=$1 -v cmd="$*" "/^TN/{ gsub(/update/,cmd, \$0);print \$0; system("\$0")}" ../README.MD;}; podcmd install'
+```
+
+其中注意：`{`和`/root/bin/tc-single-start`之间要有空格，`"$1";`和`}`之间要有分号，函数末尾也要有分号。
+
+
+

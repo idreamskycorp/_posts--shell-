@@ -208,6 +208,8 @@
   <li><a href="#13字符串正则匹配">13、字符串正则匹配</a></li>
   <li><a href="#14shell替换空格">14、shell替换空格</a></li>
   <li><a href="#15将查找的字符串转换为命令">15、将查找的字符串转换为命令</a></li>
+  <li><a href="#16awk清除空格">16、awk清除空格</a></li>
+  <li><a href="#17shell下alias-添加参数">17、shell下alias 添加参数</a></li>
 </ul>
 
   
@@ -361,6 +363,34 @@ fi
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>`awk '/^TN/{print $0; system($0)}' ./README.MD`
 
 </code></pre></div></div>
+
+<h2 id="16awk清除空格">16、awk清除空格</h2>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sub(/^[[:blank:]]*/,"",变量)  #是去掉变量左边的空白符
+sub(/[[:blank:]]*$/,"",变量)  #是去掉变量右边的空白符
+gsub(/[[:blank:]]*/,"",变量)  #是去掉变量中所有的空白符
+</code></pre></div></div>
+<p>示例：</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>echo ' 123 456 789  ' | awk '{
+print "&lt;" $0 "&gt;";
+sub(/^[[:blank:]]*/,"",$0);print "[" $0 "]";
+sub(/[[:blank:]]*$/,"",$0);print "|" $0 "|";
+gsub(/[[:blank:]]*/,"",$0);print "/" $0 "/";
+</code></pre></div></div>
+<p>gsub返值是替换次数，而不是替换结果。</p>
+
+<h2 id="17shell下alias-添加参数">17、shell下alias 添加参数</h2>
+
+<p><code class="highlighter-rouge">alias</code> 默认是无法添加参数的，要想添加参数，只能定义一个函数来调用，示例如下：</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>alias tcstart='new() { /root/bin/tc-single-start "$1"; /root/bin/tclog "$1"; }; new'
+
+alias pod1='podcmd() { echo $1; awk -v rst=$1 -v cmd="$*" "/^TN/{ gsub(/update/,\"\", \$0);print \$0 cmd}" ../README.MD;}; podcmd install'
+
+alias pod1='podcmd() { echo $1; awk -v rst=$1 -v cmd="$*" "/^TN/{ gsub(/update/,cmd, \$0);print \$0; system("\$0")}" ../README.MD;}; podcmd install'
+</code></pre></div></div>
+
+<p>其中注意：<code class="highlighter-rouge">{</code>和<code class="highlighter-rouge">/root/bin/tc-single-start</code>之间要有空格，<code class="highlighter-rouge">"$1";</code>和<code class="highlighter-rouge">}</code>之间要有分号，函数末尾也要有分号。</p>
+
 
   </section>
 
