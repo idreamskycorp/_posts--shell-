@@ -362,6 +362,13 @@ fi
 
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>`awk '/^TN/{print $0; system($0)}' ./README.MD`
 
+#第二种方法
+export LANG=en_US.UTF-8
+
+$(pod repo update 6-toon_pod_spec)
+
+awk 'BEGIN{ORS="~"};/^TN/{print $0}' ../README.md | cut -d~ -f1|awk '{sub(/[[:blank:]]*$/,"",$0); system($0)}'
+
 </code></pre></div></div>
 
 <h2 id="16awk清除空格">16、awk清除空格</h2>

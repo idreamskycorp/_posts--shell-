@@ -164,6 +164,13 @@ awk -F: 'BEGIN{};/cdtp_dns_router/{ gsub(/[[:blank:]]*/,"",$0);print $0 }' $SRCR
 ```
 `awk '/^TN/{print $0; system($0)}' ./README.MD`
 
+#第二种方法
+export LANG=en_US.UTF-8
+
+$(pod repo update 6-toon_pod_spec)
+
+awk 'BEGIN{ORS="~"};/^TN/{print $0}' ../README.md | cut -d~ -f1|awk '{sub(/[[:blank:]]*$/,"",$0); system($0)}'
+
 ```
 
 ## 16、awk清除空格
