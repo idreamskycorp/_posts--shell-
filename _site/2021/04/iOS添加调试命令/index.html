@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>iOS添加调试命令</title>
+  <meta name="description" content="MonkeyDev里面的添加lldb命令LLDBTools.h文件 ``` #import &lt;UIKit/UIKit.h&gt; #import &lt;mach/vm_types.h&gt;">
+  <meta name="author" content="leopardpan">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="iOS添加调试命令">
+  <meta name="twitter:description" content="MonkeyDev里面的添加lldb命令LLDBTools.h文件 ``` #import &lt;UIKit/UIKit.h&gt; #import &lt;mach/vm_types.h&gt;">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="iOS添加调试命令">
+  <meta property="og:description" content="MonkeyDev里面的添加lldb命令LLDBTools.h文件 ``` #import &lt;UIKit/UIKit.h&gt; #import &lt;mach/vm_types.h&gt;">
+  
+  <link rel="icon" type="image/png" href="/images/favicon.png" />
+  <link href="/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://localhost:4000/2021/04/iOS%E6%B7%BB%E5%8A%A0%E8%B0%83%E8%AF%95%E5%91%BD%E4%BB%A4/">
+  <link rel="alternate" type="application/rss+xml" title="LiJingBiao" href="http://localhost:4000/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+
+<!-- 站点统计 -->
+  <script 
+  async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js">
+  </script>  
+
+<!-- 百度统计 -->
+  
+  <script>
+      var _hmt = _hmt || [];
+      (function() {
+        var hm = document.createElement("script");
+        hm.src = "//hm.baidu.com/hm.js?e75b13a108d5f088539c03b796edf58e";
+        var s = document.getElementsByTagName("script")[0]; 
+        s.parentNode.insertBefore(hm, s);
+      })();
+  </script>
+  
+
+<!-- google 统计 -->
+  
+  <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+      ga('create', 'UA-84134159-3', 'auto');
+      ga('send', 'pageview');
+  </script>
+  
+
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-9005224472374751",
+    enable_page_level_ads: true
+  });
+</script>
+
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">        
+      <div class="nav_container">
+         <nav class="nav-menu-item" style = "float:right">
+            <i class="nav-menu-item">
+              <a href="/#blog" title="" class="blog-button">  博客主页
+              </a>
+            </i>
+            
+                <i class="nav-menu-item">
+
+                  <a href="/archive" title="archive" class="btn-mobile-menu__icon">
+                      所有文章
+                  </a>
+                </i>
+            
+                <i class="nav-menu-item">
+
+                  <a href="/tags" title="tags" class="btn-mobile-menu__icon">
+                      标签
+                  </a>
+                </i>
+            
+                <i class="nav-menu-item">
+
+                  <a href="/about" title="about" class="btn-mobile-menu__icon">
+                      关于我
+                  </a>
+                </i>
+            
+          </nav>
+      </div>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+        <!-- 头像效果-start -->
+        <div class="ih-item circle effect right_to_left">            
+            <a href="/#blog" title="前往 LiJingBiao 的主页" class="blog-button">
+                <div class="img"><img src="/images/avatar.jpg" alt="img"></div>
+                <div class="info">
+                    <div class="info-back">
+                        <h2> 
+                            
+                                天道酬勤
+                            
+                        </h2>
+                        <p>
+                           
+                                iOS / Ruby /Shell
+                            
+                        </p>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <!-- 头像效果-end -->
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for LiJingBiao" class="blog-button">LiJingBiao</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">个人网站</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">欢迎来到我的个人博客~</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        
+
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="" class="blog-button">博客主页</a></li>
+                
+                  <li class="navigation__item"><a href="/archive" title="archive">所有文章</a></li>
+                
+                  <li class="navigation__item"><a href="/tags" title="tags">标签</a></li>
+                
+                  <li class="navigation__item"><a href="/about" title="about">关于我</a></li>
+                
+              </ul>
+            </nav>
+          </div>          
+        </div>
+
+
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-clear"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <head>
+  <link rel="stylesheet" href="/css/post.css">
+</head>
+
+<article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <h1 class="post-title">iOS添加调试命令</h1>
+    <div class="post-meta">
+      <img src="/images/calendar.png" width="20px"/> 
+      <time datetime="2021-04-30 00:00:00 +0800" itemprop="datePublished" class="post-meta__date date">2021-04-30</time>  
+
+      <span id="busuanzi_container_page_pv"> | 阅读：<span id="busuanzi_value_page_pv"></span>次</span>
+    </p>
+    </div>
+  </header>
+
+  
+    <h2 class="post-title">目录</h2>
+    
+
+  
+
+  <section class="post">
+    <p>MonkeyDev里面的添加lldb命令</p>
+
+<p>LLDBTools.h文件</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> #import &lt;UIKit/UIKit.h&gt;
+ #import &lt;mach/vm_types.h&gt;
+
+ //(lldb) po pviews()
+
+ NSString* pvc(void);
+
+ NSString* pviews(void);
+
+ NSString* pactions(vm_address_t address);
+
+ NSString* pblock(vm_address_t address);
+
+ NSString* methods(const char * classname);
+
+ NSString* ivars(vm_address_t address);
+
+ NSString* choose(const char* classname);
+
+ NSString* vmmap();
+
+</code></pre></div></div>
+
+<p>LLDBTools.mm文件</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#pragma GCC diagnostic ignored "-Wundeclared-selector"
+
+#import "LLDBTools.h"
+#import &lt;set&gt;
+#import &lt;mach/mach_types.h&gt;
+#import &lt;malloc/malloc.h&gt;
+#import &lt;objc/runtime.h&gt;
+#import &lt;mach/mach_init.h&gt;
+#import &lt;mach/mach_error.h&gt;
+
+enum {
+    BLOCK_HAS_COPY_DISPOSE =  (1 &lt;&lt; 25),
+    BLOCK_HAS_CTOR =          (1 &lt;&lt; 26), // helpers have C++ code
+    BLOCK_IS_GLOBAL =         (1 &lt;&lt; 28),
+    BLOCK_HAS_STRET =         (1 &lt;&lt; 29), // IFF BLOCK_HAS_SIGNATURE
+    BLOCK_HAS_SIGNATURE =     (1 &lt;&lt; 30),
+};
+
+struct Block_literal_1 {
+    void *isa; // initialized to &amp;_NSConcreteStackBlock or &amp;_NSConcreteGlobalBlock
+    int flags;
+    int reserved;
+    void (*invoke)(void *, ...);
+    struct Block_descriptor_1 {
+        unsigned long int reserved; // NULL
+        unsigned long int size;         // sizeof(struct Block_literal_1)
+        // optional helper functions
+        void (*copy_helper)(void *dst, void *src);     // IFF (1&lt;&lt;25)
+        void (*dispose_helper)(void *src);             // IFF (1&lt;&lt;25)
+        // required ABI.2010.3.16
+        const char *signature;                         // IFF (1&lt;&lt;30)
+    } *descriptor;
+    // imported variables
+};
+
+NSString* decode(NSString* code);
+NSArray* choose_inner(const char * classname);
+char * protection_bits_to_rwx (vm_prot_t p);
+const char * unparse_inheritance (vm_inherit_t i);
+char * behavior_to_text (vm_behavior_t  b);
+
+NSString* decode(NSString* code){
+    NSDictionary * encodeMap = @{
+                                 @"c": @"char",
+                                 @"i": @"int",
+                                 @"s": @"short",
+                                 @"l": @"long",
+                                 @"q": @"long long",
+                                 
+                                 @"C": @"unsigned char",
+                                 @"I": @"unsigned int",
+                                 @"S": @"unsigned short",
+                                 @"L": @"unsigned long",
+                                 @"Q": @"unsigned long long",
+                                 
+                                 @"f": @"float",
+                                 @"d": @"double",
+                                 @"B": @"bool",
+                                 @"v": @"void",
+                                 @"*": @"char *",
+                                 @"@": @"id",
+                                 @"#": @"Class",
+                                 @":": @"SEL"
+                                 };
+    
+    if(encodeMap[code]){
+        return encodeMap[code];
+    }else if([code characterAtIndex:0] == '@'){
+        if([code characterAtIndex:1] == '?'){
+            return code;
+        }else if([code characterAtIndex:2] == '&lt;'){
+            return [NSString stringWithFormat:@"id%@", [[code substringWithRange:NSMakeRange(2, code.length-3)] stringByReplacingOccurrencesOfString:@"&gt;&lt;" withString:@", "]];
+        }else{
+            return [NSString stringWithFormat:@"%@ *", [code substringWithRange:NSMakeRange(2, code.length-3)]];
+        }
+    }else if([code characterAtIndex:0] == '^'){
+        return [NSString stringWithFormat:@"%@ *", decode([code substringFromIndex:1])];
+    }
+    return code;
+}
+
+NSString* pvc(){
+    return [[[UIWindow performSelector:@selector(keyWindow)] performSelector:@selector(rootViewController)] performSelector:@selector(_printHierarchy)];
+}
+
+NSString* pviews(){
+    return [[[UIApplication sharedApplication] keyWindow] performSelector:@selector(recursiveDescription)];
+}
+
+NSString* pactions(vm_address_t address){
+    NSMutableString* result = [NSMutableString new];
+    UIControl* control = (__bridge UIControl*)(void*)address;
+    NSArray* targets = [[control allTargets] allObjects];
+    for (id item in targets) {
+        NSArray* actions = [control actionsForTarget:item forControlEvent:0];
+        [result appendFormat:@"&lt;%s: 0x%lx&gt;: %@\n", object_getClassName(item), (unsigned long)item, [actions componentsJoinedByString:@","]];
+    }
+    return result;
+}
+
+NSString* pblock(vm_address_t address){
+    struct Block_literal_1 real = *((struct Block_literal_1 *)(void*)address);
+    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+    [dict setObject:[NSNumber numberWithLong:(long)real.invoke] forKey:@"invoke"];
+    if (real.flags &amp; BLOCK_HAS_SIGNATURE) {
+        char *signature;
+        if (real.flags &amp; BLOCK_HAS_COPY_DISPOSE) {
+            signature = (char *)(real.descriptor)-&gt;signature;
+        } else {
+            signature = (char *)(real.descriptor)-&gt;copy_helper;
+        }
+        
+        NSMethodSignature *sig = [NSMethodSignature signatureWithObjCTypes:signature];
+        NSMutableArray *types = [NSMutableArray array];
+        
+        [types addObject:[NSString stringWithUTF8String:(char *)[sig methodReturnType]]];
+        
+        for (NSUInteger i = 0; i &lt; sig.numberOfArguments; i++) {
+            char *type = (char *)[sig getArgumentTypeAtIndex:i];
+            [types addObject:[NSString stringWithUTF8String:type]];
+        }
+        
+        [dict setObject:types forKey:@"signature"];
+    }
+    
+    NSMutableArray* sigArr = dict[@"signature"];
+    
+    if(!sigArr){
+        return [NSString stringWithFormat:@"Imp: 0x%lx", [dict[@"invoke"] longValue]];
+    }else{
+        NSMutableString* sig = [NSMutableString stringWithFormat:@"%@ ^(", decode(sigArr[0])];
+        for (int i = 2; i &lt; sigArr.count; i++) {
+            if(i == sigArr.count - 1){
+                [sig appendFormat:@"%@", decode(sigArr[i])];
+            }else{
+                [sig appendFormat:@"%@ ,", decode(sigArr[i])];
+            }
+        }
+        [sig appendString:@");"];
+        return [NSString stringWithFormat:@"Imp: 0x%lx    Signature: %s", [dict[@"invoke"] longValue], [sig UTF8String]];
+    }
+}
+
+struct CYChoice {
+    std::set&lt;Class&gt; query_;
+    std::set&lt;id&gt; results_;
+};
+
+struct CYObjectStruct {
+    Class isa_;
+};
+
+static void choose_(task_t task, void *baton, unsigned type, vm_range_t *ranges, unsigned count) {
+    CYChoice *choice(reinterpret_cast&lt;CYChoice *&gt;(baton));
+    
+    for (unsigned i(0); i != count; ++i) {
+        vm_range_t &amp;range(ranges[i]);
+        void *data(reinterpret_cast&lt;void *&gt;(range.address));
+        size_t size(range.size);
+        
+        if (size &lt; sizeof(CYObjectStruct))
+            continue;
+        
+        uintptr_t *pointers(reinterpret_cast&lt;uintptr_t *&gt;(data));
+#ifdef __arm64__
+        Class isa = (__bridge Class)((void *)(pointers[0] &amp; 0x1fffffff8));
+#else
+        Class isa =(__bridge Class)(void *)pointers[0];
+#endif
+        std::set&lt;Class&gt;::const_iterator result(choice-&gt;query_.find(isa));
+        if (result == choice-&gt;query_.end())
+            continue;
+        
+        size_t needed(class_getInstanceSize(*result));
+        // XXX: if (size &lt; needed)
+        
+        size_t boundary(496);
+#ifdef __LP64__
+        boundary *= 2;
+#endif
+        if ((needed &lt;= boundary &amp;&amp; (needed + 15) / 16 * 16 != size) || (needed &gt; boundary &amp;&amp; (needed + 511) / 512 * 512 != size))
+            continue;
+        choice-&gt;results_.insert((__bridge id)(data));
+    }
+}
+
+static Class *CYCopyClassList(size_t &amp;size) {
+    size = objc_getClassList(NULL, 0);
+    Class *data(reinterpret_cast&lt;Class *&gt;(malloc(sizeof(Class) * size)));
+    
+    for (;;) {
+        size_t writ(objc_getClassList(data, (int)size));
+        if (writ &lt;= size) {
+            size = writ;
+            return data;
+        }
+        
+        Class *copy(reinterpret_cast&lt;Class *&gt;(realloc(data, sizeof(Class) * writ)));
+        if (copy == NULL) {
+            free(data);
+            return NULL;
+        }
+        
+        data = copy;
+        size = writ;
+    }
+}
+
+static kern_return_t CYReadMemory(task_t task, vm_address_t address, vm_size_t size, void **data) {
+    *data = reinterpret_cast&lt;void *&gt;(address);
+    return KERN_SUCCESS;
+}
+
+NSArray* choose_inner(const char * classname){
+    
+    Class _class = NSClassFromString([NSString stringWithUTF8String:classname]);
+    
+    vm_address_t *zones = NULL;
+    unsigned size = 0;
+    //获取所有的zone信息  堆上的区域
+    kern_return_t error = malloc_get_all_zones(mach_task_self(), &amp;CYReadMemory, &amp;zones, &amp;size);
+    assert(error == KERN_SUCCESS);
+    
+    size_t number;
+    Class *classes(CYCopyClassList(number));
+    assert(classes != NULL);
+    
+    CYChoice choice;
+    
+    //找到目标Class
+    for (size_t i(0); i != number; ++i)
+        for (Class current(classes[i]); current != Nil; current = class_getSuperclass(current))
+            if (current == _class) {
+                choice.query_.insert(classes[i]);
+                break;
+            }
+    
+    for (unsigned i(0); i != size; ++i) {
+        const malloc_zone_t *zone(reinterpret_cast&lt;const malloc_zone_t *&gt;(zones[i]));
+        if (zone == NULL || zone-&gt;introspect == NULL)
+            continue;
+        
+        //枚举堆上的对象
+        zone-&gt;introspect-&gt;enumerator(mach_task_self(), &amp;choice, MALLOC_PTR_IN_USE_RANGE_TYPE, zones[i], &amp;CYReadMemory, &amp;choose_);
+    }
+    NSMutableArray * result = [[NSMutableArray alloc] init];
+    
+    for (auto iter = choice.results_.begin(); iter != choice.results_.end(); iter++) {
+        [result addObject:(id)*iter];
+    }
+    return result;
+}
+
+NSString* choose(const char* classname){
+    NSMutableString* result = [NSMutableString new];
+    NSArray* results = choose_inner(classname);
+    [result appendFormat:@"Find %lu instance objects in memory!\n" , (unsigned long)results.count];
+    for (id item in results) {
+        [result appendFormat:@"&lt;%s: 0x%llx&gt;\n", object_getClassName(item), (long long)item];
+    }
+    return result;
+}
+
+NSString* methods(const char * classname){
+    return [objc_getClass(classname) performSelector:@selector(_shortMethodDescription)];
+}
+
+NSString* ivars(vm_address_t address){
+    id target = (__bridge id)(void*)address;
+    return [target performSelector:@selector(_ivarDescription)];
+}
+
+char * protection_bits_to_rwx (vm_prot_t p){
+    static char returned[4];
+    
+    returned[0] = (p &amp; VM_PROT_READ    ? 'r' : '-');
+    returned[1] = (p &amp; VM_PROT_WRITE   ? 'w' : '-');
+    returned[2] = (p &amp; VM_PROT_EXECUTE ? 'x' : '-');
+    returned[3] = '\0';
+    
+    // memory leak here. No biggy
+    return (strdup(returned));
+}
+
+const char * unparse_inheritance (vm_inherit_t i){
+    switch (i){
+        case VM_INHERIT_SHARE:
+            return "share";
+        case VM_INHERIT_COPY:
+            return "copy";
+        case VM_INHERIT_NONE:
+            return "none";
+        default:
+            return "???";
+    }
+}
+
+char * behavior_to_text (vm_behavior_t  b){
+    switch (b){
+        case VM_BEHAVIOR_DEFAULT: return((char*)"default");
+        case VM_BEHAVIOR_RANDOM:  return((char*)"random");
+        case VM_BEHAVIOR_SEQUENTIAL: return((char*)"fwd-seq");
+        case VM_BEHAVIOR_RSEQNTL: return((char*)"rev-seq");
+        case VM_BEHAVIOR_WILLNEED: return((char*)"will-need");
+        case VM_BEHAVIOR_DONTNEED: return((char*)"will-need");
+        case VM_BEHAVIOR_FREE: return((char*)"free-nowb");
+        case VM_BEHAVIOR_ZERO_WIRED_PAGES: return((char*)"zero-wire");
+        case VM_BEHAVIOR_REUSABLE: return((char*)"reusable");
+        case VM_BEHAVIOR_REUSE: return((char*)"reuse");
+        case VM_BEHAVIOR_CAN_REUSE: return((char*)"canreuse");
+        default: return ((char*)"?");
+    }
+}
+
+__BEGIN_DECLS
+
+extern kern_return_t mach_vm_region
+(
+ vm_map_t target_task,
+ mach_vm_address_t *address,
+ mach_vm_size_t *size,
+ vm_region_flavor_t flavor,
+ vm_region_info_t info,
+ mach_msg_type_number_t *infoCnt,
+ mach_port_t *object_name
+ );
+
+__END_DECLS
+
+NSString* vmmap(){
+    vm_region_basic_info_data_t info, prev_info;
+    mach_vm_address_t address = 1, prev_address;
+    mach_vm_size_t size, prev_size;
+    mach_msg_type_number_t count = VM_REGION_BASIC_INFO_COUNT_64;
+    mach_port_t object_name;
+    
+    int nsubregions = 0;
+    kern_return_t kr = mach_vm_region(mach_task_self(), &amp;address, &amp;size, VM_REGION_BASIC_INFO, (vm_region_info_t)&amp;info, &amp;count, &amp;object_name);
+    
+    NSMutableString* result = [[NSMutableString alloc] init];
+    
+    if(kr != KERN_SUCCESS){
+        [result appendFormat:@"mach_vm_region: Error %d - %s", kr, mach_error_string(kr)];
+        return [result copy];
+    }
+    
+    //保存之前查到的info
+    memcpy (&amp;prev_info, &amp;info, sizeof (vm_region_basic_info_data_t));
+    prev_address = address;
+    prev_size = size;
+    nsubregions = 1;
+    
+    while (true) {
+        int print = 0, done = 0;
+        
+        address = prev_address + prev_size;
+        
+        if (address == 0){
+            print = done = 1;
+        }
+        
+        if (!done){
+            kr = mach_vm_region (mach_task_self(), &amp;address, &amp;size, VM_REGION_BASIC_INFO, (vm_region_info_t)&amp;info, &amp;count, &amp;object_name);
+            
+            if (kr != KERN_SUCCESS){
+                [result appendFormat:@"mach_vm_region failed for address %llu - Error: %x\n",address, (kr)];
+                print = done = 1;
+            }
+        }
+        
+        //等于才是连续的内存，不等于才打印
+        if (address != prev_address + prev_size)
+            print = 1;
+        
+        //或者权限信息改变了也打印
+        if ((info.protection != prev_info.protection)
+            || (info.max_protection != prev_info.max_protection)
+            || (info.inheritance != prev_info.inheritance)
+            || (info.shared != prev_info.reserved)
+            || (info.reserved != prev_info.reserved))
+            print = 1;
+        
+        if (print){
+            char *print_size_unit = NULL;
+            
+            mach_vm_size_t print_size = prev_size;
+            if (print_size &gt; 1024) { print_size /= 1024; print_size_unit = (char*)"K"; }
+            if (print_size &gt; 1024) { print_size /= 1024; print_size_unit = (char*)"M"; }
+            if (print_size &gt; 1024) { print_size /= 1024; print_size_unit = (char*)"G"; }
+            
+            [result appendFormat:@" %p-%p [%llu%s](%s/%s; %s, %s, %s) %s",
+             (void*)(prev_address),
+             (void*)(prev_address + prev_size),
+             print_size,
+             print_size_unit,
+             protection_bits_to_rwx (prev_info.protection),
+             protection_bits_to_rwx (prev_info.max_protection),
+             unparse_inheritance (prev_info.inheritance),
+             prev_info.shared ? "shared" : "private",
+             prev_info.reserved ? "reserved" : "not-reserved",
+             behavior_to_text (prev_info.behavior)];
+            
+            if (nsubregions &gt; 1)
+                [result appendFormat:@" (%d sub-regions)", nsubregions];
+            
+            [result appendFormat:@"\n"];
+            prev_address = address;
+            prev_size = size;
+            memcpy (&amp;prev_info, &amp;info, sizeof (vm_region_basic_info_data_t));
+            nsubregions = 1;
+        }else{
+            prev_size += size;
+            nsubregions++;
+        }
+        
+        if (done)
+            break;
+    }
+    return [result copy];
+}
+
+</code></pre></div></div>
+
+
+  </section>
+
+</article>
+
+<section>
+
+            <div class="content-play">
+              <p><a href="javascript:void(0)" onclick="dashangToggle()" class="dashang" title="打赏，支持一下">打赏一个呗</a></p>
+              <div class="hide_box-play"></div>
+              <div class="shang_box-play">
+                <a class="shang_close-play" href="javascript:void(0)" onclick="dashangToggle()" title="关闭"><img src="/images/payimg/close.jpg" alt="取消" /></a>
+                <div class="shang_tit-play">
+                  <p>感谢您的支持，我会继续努力的!</p>
+                </div>
+                <div class="shang_payimg">
+                    <img src="/images/payimg/alipayimg.jpg" alt="扫码支持" title="扫一扫" />
+                </div>
+              <div class="shang_payimg">    
+                    <img src="/images/payimg/weipayimg.jpg" alt="扫码支持" title="扫一扫" />
+                </div>
+                <div class="pay_explain">扫码打赏，你说多少就多少</div>
+                <div class="shang_payselect">
+                  <div class="pay_item checked" data-id="alipay">
+                    <span class="pay_logo"><img src="/images/payimg/alipay.jpg" alt="支付宝" /></span>
+                  </div>
+                  <div class="pay_item" data-id="weipay">
+                    <span class="pay_logo"><img src="/images/payimg/wechat.jpg" alt="微信" /></span>
+                  </div>
+                </div>
+                <div class="shang_info-play">
+                  <p>打开<span id="shang_pay_txt">支付宝</span>扫一扫，即可进行扫码打赏哦</p>
+                </div>
+              </div>
+            </div>
+            <script type="text/javascript">
+            function dashangToggle(){
+              $(".hide_box-play").fadeToggle();
+              $(".shang_box-play").fadeToggle();
+            }
+            </script>
+
+            <div style="text-align:center;margin:50px 0; font:normal 14px/24px 'MicroSoft YaHei';"></div>
+
+            <style type="text/css">
+              .content-play{width:80%;margin-top: 20px;margin-bottom: 10px;height:40px;}
+              .hide_box-play{z-index:999;filter:alpha(opacity=50);background:#666;opacity: 0.5;-moz-opacity: 0.5;left:0;top:0;height:99%;width:100%;position:fixed;display:none;}
+              .shang_box-play{width:540px;height:540px;padding:10px;background-color:#fff;border-radius:10px;position:fixed;z-index:1000;left:50%;top:50%;margin-left:-280px;margin-top:-280px;border:1px dotted #dedede;display:none;}
+              .shang_box-play img{border:none;border-width:0;}
+              .dashang{display:block;width:100px;margin:5px auto;height:25px;line-height:25px;padding:10px;background-color:#E74851;color:#fff;text-align:center;text-decoration:none;border-radius:10px;font-weight:bold;font-size:16px;transition: all 0.3s;}
+              .dashang:hover{opacity:0.8;padding:15px;font-size:18px;}
+              .shang_close-play{float:right;display:inline-block;
+                margin-right: 10px;margin-top: 20px;
+              }
+              .shang_logo{display:block;text-align:center;margin:20px auto;}
+              .shang_tit-play{width: 100%;height: 75px;text-align: center;line-height: 66px;color: #a3a3a3;font-size: 16px;background: url('/images/payimg/cy-reward-title-bg.jpg');font-family: 'Microsoft YaHei';margin-top: 7px;margin-right:2px;}
+              .shang_tit-play p{color:#a3a3a3;text-align:center;font-size:16px;}
+              .shang_payimg{width:140px;padding:10px;padding-left: 80px; /*border:6px solid #EA5F00;**/margin:0 auto;border-radius:3px;height:140px;display:inline-block;}
+              .shang_payimg img{display:inline-block;margin-right:10px;float:left;text-align:center;width:140px;height:140px; }
+              .pay_explain{text-align:center;margin:10px auto;font-size:12px;color:#545454;}
+              .shang_payselect{text-align:center;margin:0 auto;margin-top:40px;cursor:pointer;height:60px;width:500px;margin-left:110px;}
+              .shang_payselect .pay_item{display:inline-block;margin-right:140px;float:left;}
+              .shang_info-play{clear:both;}
+              .shang_info-play p,.shang_info-play a{color:#C3C3C3;text-align:center;font-size:12px;text-decoration:none;line-height:2em;}
+            </style>
+
+       <ul class="pager">
+        
+        <li class="previous">
+            <a href="/2021/04/iOS%E4%B8%ADMVC%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" data-toggle="tooltip" data-placement="top" title="iOS中MVC设计模式">上一篇：  <span>iOS中MVC设计模式</span>
+            </a>
+        </li>
+        
+        
+        <li class="next">
+            <a href="/2021/05/xcconfig%E7%9A%84%E4%BD%BF%E7%94%A8%E4%B8%8Excode%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F/" data-toggle="tooltip" data-placement="top" title="xcconfig的使用与xcode环境变量">下一篇：  <span>xcconfig的使用与xcode环境变量</span>
+            </a>
+        </li>
+        
+    </ul>
+</section>
+
+<section class="post-comments">
+
+  
+
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zMDUwNi83MDYw">
+      <script type="text/javascript">
+         (function(d, s) {
+             var j, e = d.getElementsByTagName(s)[0];
+
+             if (typeof LivereTower === 'function') { return; }
+             j = d.createElement(s);
+             j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+             j.async = true;
+             e.parentNode.insertBefore(j, e);
+         })(document, 'script');
+      </script>
+      <noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+      </div>
+
+  
+
+</section>
+
+
+            <section class="footer">
+    <footer>
+        <div class = "footer_div">  
+        <nav class="cover-navigation navigation--social">
+          <ul class="navigation">
+
+          
+          <!-- Github -->
+          <li class="navigation__item_social">
+            <a href="https://github.com/lijingbiao" title="@lijingbiao 的 Github" target="_blank">
+              <div class="footer-social-icon" style="background:url(/images/github.png);"></div>
+            </a>
+          </li>
+          
+
+          
+
+          
+
+          
+          <!-- Zhihu -->
+          <li class="navigation__item_social">
+            <a href="https://www.jianshu.com/u/e66c74545d7e" title="@e66c74545d7e" target="_blank">
+              <div class="footer-social-icon" style="background:url(/images/jianshu.png);"></div>
+            </a>
+          </li>
+
+          
+
+          
+
+          
+          
+
+
+          
+          <!-- Email -->
+          <li class="navigation__item_social">
+            <a href="mailto:694292399@qq.com" title="Contact me">
+              <div class="footer-social-icon" style="background:url(/images/email.png);"></div>
+            </a>
+          </li>
+          
+          
+          <!-- RSS -->
+          <li class="navigation__item_social">
+            <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+              <div class="footer-social-icon" style="background:url(/images/rss.png);"></div>
+              <span class="label">RSS</span>
+            </a>
+          </li>
+
+          </ul>
+        </nav>
+
+        </div>
+
+        <div class = "footer_div">  
+           <p class="copyright text-muted">
+            Copyright &copy; LiJingBiao 2021  |
+            <iframe
+                style="margin-left: 2px; margin-bottom:-5px;"
+                frameborder="0" scrolling="0" width="91px" height="20px"
+                src="https://ghbtns.com/github-btn.html?user=lijingbiao&repo=lijingbiao.github.io&type=star&count=true" >
+            </iframe>
+            </p>
+        	<div align="right">
+    			<link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+          <!-- 访问统计 -->
+          <span id="busuanzi_container_site_pv">
+            本站总访问量
+            <span id="busuanzi_value_site_pv"></span>次
+          </span>
+
+        </div>
+        <div>
+    </footer>
+</section>
+
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+<script type="text/javascript" src="/js/main.js"></script>
+
+<script type="text/javascript" src="/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+    
+  </body>
+
+</html>

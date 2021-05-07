@@ -5,9 +5,553 @@
     <description>欢迎来到我的个人博客~</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Fri, 30 Apr 2021 13:51:56 +0800</pubDate>
-    <lastBuildDate>Fri, 30 Apr 2021 13:51:56 +0800</lastBuildDate>
+    <pubDate>Fri, 07 May 2021 18:05:49 +0800</pubDate>
+    <lastBuildDate>Fri, 07 May 2021 18:05:49 +0800</lastBuildDate>
     <generator>Jekyll v3.8.5</generator>
+    
+      <item>
+        <title>xcconfig的使用与xcode环境变量</title>
+        <description>&lt;h1 id=&quot;xcconfig的使用与xcode环境变量&quot;&gt;xcconfig的使用与xcode环境变量&lt;/h1&gt;
+
+&lt;p&gt;在正式使用xcconfig之前，还是得先把这几个概念给区分一下。什么是workspace，什么是project，什么是target。下面一张图简单说明：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/posts/iOS/xcconfig/1293297-1a55808c63b6d254.webp&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;workspace，顾名思义就是我们的工作区。一个workspace可以包含多个project以及一些其它文件。workspace也可以把多可以project组织起来。&lt;/li&gt;
+  &lt;li&gt;一个project会包含属于这个项目的所有文件，资源，以及生成一个或者多个软件产品的信息。&lt;/li&gt;
+  &lt;li&gt;一个project会包含一个或者多个 target，而每一个 target都对应一个products，也就是最终产生的.app。&lt;/li&gt;
+  &lt;li&gt;一个targets可以有多个configuration（如我们平常用到的debug和release，当然我们还可以自己添加），每个configuration就会有对应的build settings。每次build都是在一个configuration下build的。&lt;/li&gt;
+  &lt;li&gt;build setting 中包含了 product 生成过程中所需的参数信息。project的build settings会对于整个project 中的所有targets生效，而target的build settings是重写了project的build settings，重写的配置以target为准。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;那么，什么又是scheme呢？scheme就相当于一个组织者。在build的时候，schema会指定一个target和configuration，这样就能保证在build的时候configuration的唯一性，就能产生一个特定的product。&lt;/p&gt;
+
+&lt;p&gt;OK。理清了这些环境变量后，就可以来介绍一下xcconfig了。&lt;br /&gt;
+在项目中使用了cocoapods的都会发现，在pod项目中有.xcconfig这样的文件，一般有多少个configuration就会有多少个.xcconfig这样的文件。一般工程中就分为debug和release两个。这里的.xcconfig文件就是通过文本方式指定build settings的一种形式。&lt;/p&gt;
+
+&lt;p&gt;所以我们也可以在工程中通过创建xcconfig来指定build settings。这样能够更加方面管理和修改。&lt;/p&gt;
+
+&lt;p&gt;下面我在一个demo工程中创建了几个xcconfig。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/posts/iOS/xcconfig/1293297-90b863682f33401e.webp&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;其中common为通用configuration。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/posts/iOS/xcconfig/1293297-d0fc013b5a6e9730.webp&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;所有环境相同的settings可以写在这里。然后你就可以在里面去添加任意键值对了。下面是&lt;code class=&quot;highlighter-rouge&quot;&gt;settings.release.xcconfig&lt;/code&gt;的一个示例。&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;// settings.release.xcconfig
+#include &quot;settings.common.xcconfig&quot;
+#include &quot;Pods/Target Support Files/Pods-TTLivenessDetection_Example/Pods-TTLivenessDetection_Example.release.xcconfig&quot;
+ONLY_ACTIVE_ARCH = NO
+ENABLE_BITCODE = YES
+test = 123
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;然后在project-&amp;gt;info中去设置。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/posts/iOS/xcconfig/1293297-cf1ac2fc9ef5e5f5.webp&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;这里有个坑就是自定义配置后会导致cocoapods无法使用，这里需要在相应的xcconfig里面导入相应的pod的xcconfig&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;#include &quot;Pods/Target Support Files/Pods-TTLivenessDetection_Example/Pods-
+TTLivenessDetection_Example.release.xcconfig&quot;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;如果还报这种错&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;[!] The `TTLivenessDetection_Example [Debug]` target overrides the 
+`HEADER_SEARCH_PATHS` build setting defined in `Pods/Target Support 
+Files/Pods-TTLivenessDetection_Example/Pods-
+TTLivenessDetection_Example.debug.xcconfig'. This can lead to problems with the CocoaPods installation
+    - Use the `$(inherited)` flag, or
+    - Remove the build settings from the target.
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;按照它说的把&lt;code class=&quot;highlighter-rouge&quot;&gt;HEADER_SEARCH_PATHS&lt;/code&gt;改为&lt;code class=&quot;highlighter-rouge&quot;&gt;$(inherited)&lt;/code&gt;就可以了。&lt;/p&gt;
+
+&lt;p&gt;另外就是这里有个继承关系，打开levels可以查看&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/posts/iOS/xcconfig/1293297-c3f3005ab8c0d992.webp&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;其中继承关系如下：&lt;br /&gt;
+Target configuration-&amp;gt;Target xcconfig-&amp;gt;Project configuration-&amp;gt;Project xcconfig。&lt;/p&gt;
+
+&lt;p&gt;也就是说如果是单一的配置，继承级低的会覆盖继承等级高的，而像$()这样的会进行叠加。&lt;/p&gt;
+
+</description>
+        <pubDate>Fri, 07 May 2021 00:00:00 +0800</pubDate>
+        <link>http://localhost:4000/2021/05/xcconfig%E7%9A%84%E4%BD%BF%E7%94%A8%E4%B8%8Excode%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F/</link>
+        <guid isPermaLink="true">http://localhost:4000/2021/05/xcconfig%E7%9A%84%E4%BD%BF%E7%94%A8%E4%B8%8Excode%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F/</guid>
+        
+        <category>iOS</category>
+        
+        
+      </item>
+    
+      <item>
+        <title>iOS添加调试命令</title>
+        <description>&lt;p&gt;MonkeyDev里面的添加lldb命令&lt;/p&gt;
+
+&lt;p&gt;LLDBTools.h文件&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; #import &amp;lt;UIKit/UIKit.h&amp;gt;
+ #import &amp;lt;mach/vm_types.h&amp;gt;
+
+ //(lldb) po pviews()
+
+ NSString* pvc(void);
+
+ NSString* pviews(void);
+
+ NSString* pactions(vm_address_t address);
+
+ NSString* pblock(vm_address_t address);
+
+ NSString* methods(const char * classname);
+
+ NSString* ivars(vm_address_t address);
+
+ NSString* choose(const char* classname);
+
+ NSString* vmmap();
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;LLDBTools.mm文件&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;#pragma GCC diagnostic ignored &quot;-Wundeclared-selector&quot;
+
+#import &quot;LLDBTools.h&quot;
+#import &amp;lt;set&amp;gt;
+#import &amp;lt;mach/mach_types.h&amp;gt;
+#import &amp;lt;malloc/malloc.h&amp;gt;
+#import &amp;lt;objc/runtime.h&amp;gt;
+#import &amp;lt;mach/mach_init.h&amp;gt;
+#import &amp;lt;mach/mach_error.h&amp;gt;
+
+enum {
+    BLOCK_HAS_COPY_DISPOSE =  (1 &amp;lt;&amp;lt; 25),
+    BLOCK_HAS_CTOR =          (1 &amp;lt;&amp;lt; 26), // helpers have C++ code
+    BLOCK_IS_GLOBAL =         (1 &amp;lt;&amp;lt; 28),
+    BLOCK_HAS_STRET =         (1 &amp;lt;&amp;lt; 29), // IFF BLOCK_HAS_SIGNATURE
+    BLOCK_HAS_SIGNATURE =     (1 &amp;lt;&amp;lt; 30),
+};
+
+struct Block_literal_1 {
+    void *isa; // initialized to &amp;amp;_NSConcreteStackBlock or &amp;amp;_NSConcreteGlobalBlock
+    int flags;
+    int reserved;
+    void (*invoke)(void *, ...);
+    struct Block_descriptor_1 {
+        unsigned long int reserved; // NULL
+        unsigned long int size;         // sizeof(struct Block_literal_1)
+        // optional helper functions
+        void (*copy_helper)(void *dst, void *src);     // IFF (1&amp;lt;&amp;lt;25)
+        void (*dispose_helper)(void *src);             // IFF (1&amp;lt;&amp;lt;25)
+        // required ABI.2010.3.16
+        const char *signature;                         // IFF (1&amp;lt;&amp;lt;30)
+    } *descriptor;
+    // imported variables
+};
+
+NSString* decode(NSString* code);
+NSArray* choose_inner(const char * classname);
+char * protection_bits_to_rwx (vm_prot_t p);
+const char * unparse_inheritance (vm_inherit_t i);
+char * behavior_to_text (vm_behavior_t  b);
+
+NSString* decode(NSString* code){
+    NSDictionary * encodeMap = @{
+                                 @&quot;c&quot;: @&quot;char&quot;,
+                                 @&quot;i&quot;: @&quot;int&quot;,
+                                 @&quot;s&quot;: @&quot;short&quot;,
+                                 @&quot;l&quot;: @&quot;long&quot;,
+                                 @&quot;q&quot;: @&quot;long long&quot;,
+                                 
+                                 @&quot;C&quot;: @&quot;unsigned char&quot;,
+                                 @&quot;I&quot;: @&quot;unsigned int&quot;,
+                                 @&quot;S&quot;: @&quot;unsigned short&quot;,
+                                 @&quot;L&quot;: @&quot;unsigned long&quot;,
+                                 @&quot;Q&quot;: @&quot;unsigned long long&quot;,
+                                 
+                                 @&quot;f&quot;: @&quot;float&quot;,
+                                 @&quot;d&quot;: @&quot;double&quot;,
+                                 @&quot;B&quot;: @&quot;bool&quot;,
+                                 @&quot;v&quot;: @&quot;void&quot;,
+                                 @&quot;*&quot;: @&quot;char *&quot;,
+                                 @&quot;@&quot;: @&quot;id&quot;,
+                                 @&quot;#&quot;: @&quot;Class&quot;,
+                                 @&quot;:&quot;: @&quot;SEL&quot;
+                                 };
+    
+    if(encodeMap[code]){
+        return encodeMap[code];
+    }else if([code characterAtIndex:0] == '@'){
+        if([code characterAtIndex:1] == '?'){
+            return code;
+        }else if([code characterAtIndex:2] == '&amp;lt;'){
+            return [NSString stringWithFormat:@&quot;id%@&quot;, [[code substringWithRange:NSMakeRange(2, code.length-3)] stringByReplacingOccurrencesOfString:@&quot;&amp;gt;&amp;lt;&quot; withString:@&quot;, &quot;]];
+        }else{
+            return [NSString stringWithFormat:@&quot;%@ *&quot;, [code substringWithRange:NSMakeRange(2, code.length-3)]];
+        }
+    }else if([code characterAtIndex:0] == '^'){
+        return [NSString stringWithFormat:@&quot;%@ *&quot;, decode([code substringFromIndex:1])];
+    }
+    return code;
+}
+
+NSString* pvc(){
+    return [[[UIWindow performSelector:@selector(keyWindow)] performSelector:@selector(rootViewController)] performSelector:@selector(_printHierarchy)];
+}
+
+NSString* pviews(){
+    return [[[UIApplication sharedApplication] keyWindow] performSelector:@selector(recursiveDescription)];
+}
+
+NSString* pactions(vm_address_t address){
+    NSMutableString* result = [NSMutableString new];
+    UIControl* control = (__bridge UIControl*)(void*)address;
+    NSArray* targets = [[control allTargets] allObjects];
+    for (id item in targets) {
+        NSArray* actions = [control actionsForTarget:item forControlEvent:0];
+        [result appendFormat:@&quot;&amp;lt;%s: 0x%lx&amp;gt;: %@\n&quot;, object_getClassName(item), (unsigned long)item, [actions componentsJoinedByString:@&quot;,&quot;]];
+    }
+    return result;
+}
+
+NSString* pblock(vm_address_t address){
+    struct Block_literal_1 real = *((struct Block_literal_1 *)(void*)address);
+    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+    [dict setObject:[NSNumber numberWithLong:(long)real.invoke] forKey:@&quot;invoke&quot;];
+    if (real.flags &amp;amp; BLOCK_HAS_SIGNATURE) {
+        char *signature;
+        if (real.flags &amp;amp; BLOCK_HAS_COPY_DISPOSE) {
+            signature = (char *)(real.descriptor)-&amp;gt;signature;
+        } else {
+            signature = (char *)(real.descriptor)-&amp;gt;copy_helper;
+        }
+        
+        NSMethodSignature *sig = [NSMethodSignature signatureWithObjCTypes:signature];
+        NSMutableArray *types = [NSMutableArray array];
+        
+        [types addObject:[NSString stringWithUTF8String:(char *)[sig methodReturnType]]];
+        
+        for (NSUInteger i = 0; i &amp;lt; sig.numberOfArguments; i++) {
+            char *type = (char *)[sig getArgumentTypeAtIndex:i];
+            [types addObject:[NSString stringWithUTF8String:type]];
+        }
+        
+        [dict setObject:types forKey:@&quot;signature&quot;];
+    }
+    
+    NSMutableArray* sigArr = dict[@&quot;signature&quot;];
+    
+    if(!sigArr){
+        return [NSString stringWithFormat:@&quot;Imp: 0x%lx&quot;, [dict[@&quot;invoke&quot;] longValue]];
+    }else{
+        NSMutableString* sig = [NSMutableString stringWithFormat:@&quot;%@ ^(&quot;, decode(sigArr[0])];
+        for (int i = 2; i &amp;lt; sigArr.count; i++) {
+            if(i == sigArr.count - 1){
+                [sig appendFormat:@&quot;%@&quot;, decode(sigArr[i])];
+            }else{
+                [sig appendFormat:@&quot;%@ ,&quot;, decode(sigArr[i])];
+            }
+        }
+        [sig appendString:@&quot;);&quot;];
+        return [NSString stringWithFormat:@&quot;Imp: 0x%lx    Signature: %s&quot;, [dict[@&quot;invoke&quot;] longValue], [sig UTF8String]];
+    }
+}
+
+struct CYChoice {
+    std::set&amp;lt;Class&amp;gt; query_;
+    std::set&amp;lt;id&amp;gt; results_;
+};
+
+struct CYObjectStruct {
+    Class isa_;
+};
+
+static void choose_(task_t task, void *baton, unsigned type, vm_range_t *ranges, unsigned count) {
+    CYChoice *choice(reinterpret_cast&amp;lt;CYChoice *&amp;gt;(baton));
+    
+    for (unsigned i(0); i != count; ++i) {
+        vm_range_t &amp;amp;range(ranges[i]);
+        void *data(reinterpret_cast&amp;lt;void *&amp;gt;(range.address));
+        size_t size(range.size);
+        
+        if (size &amp;lt; sizeof(CYObjectStruct))
+            continue;
+        
+        uintptr_t *pointers(reinterpret_cast&amp;lt;uintptr_t *&amp;gt;(data));
+#ifdef __arm64__
+        Class isa = (__bridge Class)((void *)(pointers[0] &amp;amp; 0x1fffffff8));
+#else
+        Class isa =(__bridge Class)(void *)pointers[0];
+#endif
+        std::set&amp;lt;Class&amp;gt;::const_iterator result(choice-&amp;gt;query_.find(isa));
+        if (result == choice-&amp;gt;query_.end())
+            continue;
+        
+        size_t needed(class_getInstanceSize(*result));
+        // XXX: if (size &amp;lt; needed)
+        
+        size_t boundary(496);
+#ifdef __LP64__
+        boundary *= 2;
+#endif
+        if ((needed &amp;lt;= boundary &amp;amp;&amp;amp; (needed + 15) / 16 * 16 != size) || (needed &amp;gt; boundary &amp;amp;&amp;amp; (needed + 511) / 512 * 512 != size))
+            continue;
+        choice-&amp;gt;results_.insert((__bridge id)(data));
+    }
+}
+
+static Class *CYCopyClassList(size_t &amp;amp;size) {
+    size = objc_getClassList(NULL, 0);
+    Class *data(reinterpret_cast&amp;lt;Class *&amp;gt;(malloc(sizeof(Class) * size)));
+    
+    for (;;) {
+        size_t writ(objc_getClassList(data, (int)size));
+        if (writ &amp;lt;= size) {
+            size = writ;
+            return data;
+        }
+        
+        Class *copy(reinterpret_cast&amp;lt;Class *&amp;gt;(realloc(data, sizeof(Class) * writ)));
+        if (copy == NULL) {
+            free(data);
+            return NULL;
+        }
+        
+        data = copy;
+        size = writ;
+    }
+}
+
+static kern_return_t CYReadMemory(task_t task, vm_address_t address, vm_size_t size, void **data) {
+    *data = reinterpret_cast&amp;lt;void *&amp;gt;(address);
+    return KERN_SUCCESS;
+}
+
+NSArray* choose_inner(const char * classname){
+    
+    Class _class = NSClassFromString([NSString stringWithUTF8String:classname]);
+    
+    vm_address_t *zones = NULL;
+    unsigned size = 0;
+    //获取所有的zone信息  堆上的区域
+    kern_return_t error = malloc_get_all_zones(mach_task_self(), &amp;amp;CYReadMemory, &amp;amp;zones, &amp;amp;size);
+    assert(error == KERN_SUCCESS);
+    
+    size_t number;
+    Class *classes(CYCopyClassList(number));
+    assert(classes != NULL);
+    
+    CYChoice choice;
+    
+    //找到目标Class
+    for (size_t i(0); i != number; ++i)
+        for (Class current(classes[i]); current != Nil; current = class_getSuperclass(current))
+            if (current == _class) {
+                choice.query_.insert(classes[i]);
+                break;
+            }
+    
+    for (unsigned i(0); i != size; ++i) {
+        const malloc_zone_t *zone(reinterpret_cast&amp;lt;const malloc_zone_t *&amp;gt;(zones[i]));
+        if (zone == NULL || zone-&amp;gt;introspect == NULL)
+            continue;
+        
+        //枚举堆上的对象
+        zone-&amp;gt;introspect-&amp;gt;enumerator(mach_task_self(), &amp;amp;choice, MALLOC_PTR_IN_USE_RANGE_TYPE, zones[i], &amp;amp;CYReadMemory, &amp;amp;choose_);
+    }
+    NSMutableArray * result = [[NSMutableArray alloc] init];
+    
+    for (auto iter = choice.results_.begin(); iter != choice.results_.end(); iter++) {
+        [result addObject:(id)*iter];
+    }
+    return result;
+}
+
+NSString* choose(const char* classname){
+    NSMutableString* result = [NSMutableString new];
+    NSArray* results = choose_inner(classname);
+    [result appendFormat:@&quot;Find %lu instance objects in memory!\n&quot; , (unsigned long)results.count];
+    for (id item in results) {
+        [result appendFormat:@&quot;&amp;lt;%s: 0x%llx&amp;gt;\n&quot;, object_getClassName(item), (long long)item];
+    }
+    return result;
+}
+
+NSString* methods(const char * classname){
+    return [objc_getClass(classname) performSelector:@selector(_shortMethodDescription)];
+}
+
+NSString* ivars(vm_address_t address){
+    id target = (__bridge id)(void*)address;
+    return [target performSelector:@selector(_ivarDescription)];
+}
+
+char * protection_bits_to_rwx (vm_prot_t p){
+    static char returned[4];
+    
+    returned[0] = (p &amp;amp; VM_PROT_READ    ? 'r' : '-');
+    returned[1] = (p &amp;amp; VM_PROT_WRITE   ? 'w' : '-');
+    returned[2] = (p &amp;amp; VM_PROT_EXECUTE ? 'x' : '-');
+    returned[3] = '\0';
+    
+    // memory leak here. No biggy
+    return (strdup(returned));
+}
+
+const char * unparse_inheritance (vm_inherit_t i){
+    switch (i){
+        case VM_INHERIT_SHARE:
+            return &quot;share&quot;;
+        case VM_INHERIT_COPY:
+            return &quot;copy&quot;;
+        case VM_INHERIT_NONE:
+            return &quot;none&quot;;
+        default:
+            return &quot;???&quot;;
+    }
+}
+
+char * behavior_to_text (vm_behavior_t  b){
+    switch (b){
+        case VM_BEHAVIOR_DEFAULT: return((char*)&quot;default&quot;);
+        case VM_BEHAVIOR_RANDOM:  return((char*)&quot;random&quot;);
+        case VM_BEHAVIOR_SEQUENTIAL: return((char*)&quot;fwd-seq&quot;);
+        case VM_BEHAVIOR_RSEQNTL: return((char*)&quot;rev-seq&quot;);
+        case VM_BEHAVIOR_WILLNEED: return((char*)&quot;will-need&quot;);
+        case VM_BEHAVIOR_DONTNEED: return((char*)&quot;will-need&quot;);
+        case VM_BEHAVIOR_FREE: return((char*)&quot;free-nowb&quot;);
+        case VM_BEHAVIOR_ZERO_WIRED_PAGES: return((char*)&quot;zero-wire&quot;);
+        case VM_BEHAVIOR_REUSABLE: return((char*)&quot;reusable&quot;);
+        case VM_BEHAVIOR_REUSE: return((char*)&quot;reuse&quot;);
+        case VM_BEHAVIOR_CAN_REUSE: return((char*)&quot;canreuse&quot;);
+        default: return ((char*)&quot;?&quot;);
+    }
+}
+
+__BEGIN_DECLS
+
+extern kern_return_t mach_vm_region
+(
+ vm_map_t target_task,
+ mach_vm_address_t *address,
+ mach_vm_size_t *size,
+ vm_region_flavor_t flavor,
+ vm_region_info_t info,
+ mach_msg_type_number_t *infoCnt,
+ mach_port_t *object_name
+ );
+
+__END_DECLS
+
+NSString* vmmap(){
+    vm_region_basic_info_data_t info, prev_info;
+    mach_vm_address_t address = 1, prev_address;
+    mach_vm_size_t size, prev_size;
+    mach_msg_type_number_t count = VM_REGION_BASIC_INFO_COUNT_64;
+    mach_port_t object_name;
+    
+    int nsubregions = 0;
+    kern_return_t kr = mach_vm_region(mach_task_self(), &amp;amp;address, &amp;amp;size, VM_REGION_BASIC_INFO, (vm_region_info_t)&amp;amp;info, &amp;amp;count, &amp;amp;object_name);
+    
+    NSMutableString* result = [[NSMutableString alloc] init];
+    
+    if(kr != KERN_SUCCESS){
+        [result appendFormat:@&quot;mach_vm_region: Error %d - %s&quot;, kr, mach_error_string(kr)];
+        return [result copy];
+    }
+    
+    //保存之前查到的info
+    memcpy (&amp;amp;prev_info, &amp;amp;info, sizeof (vm_region_basic_info_data_t));
+    prev_address = address;
+    prev_size = size;
+    nsubregions = 1;
+    
+    while (true) {
+        int print = 0, done = 0;
+        
+        address = prev_address + prev_size;
+        
+        if (address == 0){
+            print = done = 1;
+        }
+        
+        if (!done){
+            kr = mach_vm_region (mach_task_self(), &amp;amp;address, &amp;amp;size, VM_REGION_BASIC_INFO, (vm_region_info_t)&amp;amp;info, &amp;amp;count, &amp;amp;object_name);
+            
+            if (kr != KERN_SUCCESS){
+                [result appendFormat:@&quot;mach_vm_region failed for address %llu - Error: %x\n&quot;,address, (kr)];
+                print = done = 1;
+            }
+        }
+        
+        //等于才是连续的内存，不等于才打印
+        if (address != prev_address + prev_size)
+            print = 1;
+        
+        //或者权限信息改变了也打印
+        if ((info.protection != prev_info.protection)
+            || (info.max_protection != prev_info.max_protection)
+            || (info.inheritance != prev_info.inheritance)
+            || (info.shared != prev_info.reserved)
+            || (info.reserved != prev_info.reserved))
+            print = 1;
+        
+        if (print){
+            char *print_size_unit = NULL;
+            
+            mach_vm_size_t print_size = prev_size;
+            if (print_size &amp;gt; 1024) { print_size /= 1024; print_size_unit = (char*)&quot;K&quot;; }
+            if (print_size &amp;gt; 1024) { print_size /= 1024; print_size_unit = (char*)&quot;M&quot;; }
+            if (print_size &amp;gt; 1024) { print_size /= 1024; print_size_unit = (char*)&quot;G&quot;; }
+            
+            [result appendFormat:@&quot; %p-%p [%llu%s](%s/%s; %s, %s, %s) %s&quot;,
+             (void*)(prev_address),
+             (void*)(prev_address + prev_size),
+             print_size,
+             print_size_unit,
+             protection_bits_to_rwx (prev_info.protection),
+             protection_bits_to_rwx (prev_info.max_protection),
+             unparse_inheritance (prev_info.inheritance),
+             prev_info.shared ? &quot;shared&quot; : &quot;private&quot;,
+             prev_info.reserved ? &quot;reserved&quot; : &quot;not-reserved&quot;,
+             behavior_to_text (prev_info.behavior)];
+            
+            if (nsubregions &amp;gt; 1)
+                [result appendFormat:@&quot; (%d sub-regions)&quot;, nsubregions];
+            
+            [result appendFormat:@&quot;\n&quot;];
+            prev_address = address;
+            prev_size = size;
+            memcpy (&amp;amp;prev_info, &amp;amp;info, sizeof (vm_region_basic_info_data_t));
+            nsubregions = 1;
+        }else{
+            prev_size += size;
+            nsubregions++;
+        }
+        
+        if (done)
+            break;
+    }
+    return [result copy];
+}
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+</description>
+        <pubDate>Fri, 30 Apr 2021 00:00:00 +0800</pubDate>
+        <link>http://localhost:4000/2021/04/iOS%E6%B7%BB%E5%8A%A0%E8%B0%83%E8%AF%95%E5%91%BD%E4%BB%A4/</link>
+        <guid isPermaLink="true">http://localhost:4000/2021/04/iOS%E6%B7%BB%E5%8A%A0%E8%B0%83%E8%AF%95%E5%91%BD%E4%BB%A4/</guid>
+        
+        <category>iOS</category>
+        
+        
+      </item>
     
       <item>
         <title>iOS中MVC设计模式</title>
@@ -629,1900 +1173,6 @@ name=$($PlistBuddy -c &quot;print :name&quot; info.plist)
         <pubDate>Fri, 23 Apr 2021 00:00:00 +0800</pubDate>
         <link>http://localhost:4000/2021/04/PlistBuddy/</link>
         <guid isPermaLink="true">http://localhost:4000/2021/04/PlistBuddy/</guid>
-        
-        <category>iOS</category>
-        
-        
-      </item>
-    
-      <item>
-        <title>CocoaPods私有库常见问题拾遗</title>
-        <description>&lt;h1 id=&quot;cocoapods-私有库常见问题&quot;&gt;CocoaPods 私有库常见问题&lt;/h1&gt;
-
-&lt;h2 id=&quot;执行-pod-install-命令&quot;&gt;执行 &lt;code class=&quot;highlighter-rouge&quot;&gt;pod install&lt;/code&gt; 命令&lt;/h2&gt;
-
-&lt;h3 id=&quot;-unable-to-find-a-specification-for-mclib&quot;&gt;[!] Unable to find a specification for MCLib&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;原因：本地没有 &lt;code class=&quot;highlighter-rouge&quot;&gt;MCLib&lt;/code&gt; 的索引 &lt;code class=&quot;highlighter-rouge&quot;&gt;spec&lt;/code&gt;。&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;操作：更新 &lt;code class=&quot;highlighter-rouge&quot;&gt;MCLib&lt;/code&gt; 对应的本地 &lt;code class=&quot;highlighter-rouge&quot;&gt;repos&lt;/code&gt;。&lt;/p&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# 更新本地 repo 
-pod repo udpate
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;备注：本地 &lt;code class=&quot;highlighter-rouge&quot;&gt;repos&lt;/code&gt; 仓库缓存目录：&lt;code class=&quot;highlighter-rouge&quot;&gt;~/.cocoapods/repos/&lt;/code&gt;。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr /&gt;
-
-&lt;h3 id=&quot;-unable-to-find-a-specification-for-fmdb-depended-upon-by-mclib&quot;&gt;[!] Unable to find a specification for &lt;code class=&quot;highlighter-rouge&quot;&gt;FMDB&lt;/code&gt; depended upon by &lt;code class=&quot;highlighter-rouge&quot;&gt;MCLib&lt;/code&gt;&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;原因：&lt;code class=&quot;highlighter-rouge&quot;&gt;Podfile&lt;/code&gt; 在私有库后面配置了 &lt;code class=&quot;highlighter-rouge&quot;&gt;source&lt;/code&gt;，没有考虑到私有库 &lt;code class=&quot;highlighter-rouge&quot;&gt;A&lt;/code&gt; 依赖的私有库 &lt;code class=&quot;highlighter-rouge&quot;&gt;B&lt;/code&gt;，而私有库 &lt;code class=&quot;highlighter-rouge&quot;&gt;B&lt;/code&gt; 依赖 &lt;code class=&quot;highlighter-rouge&quot;&gt;FMDB&lt;/code&gt;， 在设置的 &lt;code class=&quot;highlighter-rouge&quot;&gt;source&lt;/code&gt; 中找不到 &lt;code class=&quot;highlighter-rouge&quot;&gt;FMDB&lt;/code&gt;。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# Podfile 
- pod 'A' , '0.0.1' , :source =&amp;gt; 'git@10.2.250.21:MCLib/specRepo_iOS.git'
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;操作：正确做法是在 &lt;code class=&quot;highlighter-rouge&quot;&gt;Podfile&lt;/code&gt; 头部配置多个 &lt;code class=&quot;highlighter-rouge&quot;&gt;source&lt;/code&gt;。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;source 'git@10.2.250.21:MCLib/specRepo_iOS.git'
-source 'https://github.com/CocoaPods/Specs.git'
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;hr /&gt;
-
-&lt;h3 id=&quot;-cocoapods-could-not-find-compatible-versions-for-pod-mcstatistics&quot;&gt;[!] CocoaPods could not find compatible versions for pod “MCStatistics”&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;描述：&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;MacBook-Pro:$ pod install
-Analyzing dependencies
-Pre-downloading: `MCStatistics` from `https://gitlab.com/xxx/MCStatistics_framework.git`
-[!] CocoaPods could not find compatible versions for pod &quot;MCStatistics&quot;:
- In Podfile:
- MCStatistics (from `https://gitlab.com/xxxx/MCStatistics_framework.git`)
-
-Specs satisfying the `MCStatistics (from `https://gitlab.com/xxxxxxx/MCStatistics_framework.git`)` dependency were found, but they required a higher minimum deployment target.
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;原因：&lt;code class=&quot;highlighter-rouge&quot;&gt;Podfile&lt;/code&gt; 配置的最低支持平台低于 &lt;code class=&quot;highlighter-rouge&quot;&gt;spec&lt;/code&gt; 配置的最低平台 &lt;code class=&quot;highlighter-rouge&quot;&gt;8.0&lt;/code&gt;。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Podfile&lt;/code&gt; 配置最低平台支持 &lt;code class=&quot;highlighter-rouge&quot;&gt;7.0&lt;/code&gt; 。&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;platform :ios, '7.0'
-pod 'MCPrivateNetworking', :git =&amp;gt; 'https://gitlab.com/xxxxx/framwwork.git'
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;spec&lt;/code&gt; 配置最低平台支持 &lt;code class=&quot;highlighter-rouge&quot;&gt;8.0&lt;/code&gt;。&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;s.platform = :ios, '8.0' # 平台及支持的最低版本
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;hr /&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;执行-pod-repo-push-命令&quot;&gt;执行 &lt;code class=&quot;highlighter-rouge&quot;&gt;pod repo push&lt;/code&gt; 命令&lt;/h2&gt;
-
-&lt;p&gt;推送 &lt;code class=&quot;highlighter-rouge&quot;&gt;spec&lt;/code&gt; 文件时。&lt;/p&gt;
-
-&lt;h3 id=&quot;cocoapods-私有库静态-framework-验证失败&quot;&gt;CocoaPods 私有库，静态 Framework 验证失败&lt;/h3&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;The following build commands failed:
- CompileC /Users/mengyueping/Library/Developer/Xcode/DerivedData/App-fbdglhmiocesdxeuqlwfuuhbmtht/Build/Intermediates.noindex/Pods.build/Release-iphonesimulator/MCLib.build/Objects-normal/i386/openssl_wrapper.o MCLib/MCLib/Lib/Util/openssl_wrapper.m normal i386 objective-c com.apple.compilers.llvm.clang.1_0.compiler
- (1 failure)
- Testing with `xcodebuild`. 
- -&amp;gt; MCLib (0.0.1)
- - ERROR | [iOS] xcodebuild: Returned an unsuccessful exit code.
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;指定私有库的源，验证 &lt;code class=&quot;highlighter-rouge&quot;&gt;.podspec&lt;/code&gt; 文件时，出现私有库找不到。&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;h3 id=&quot;fatal-error-could-not-build-module-xxxxx&quot;&gt;fatal error: could not build module ‘xxxxx’&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;或者： Include of non-modular header inside framework module&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;原因：私有库的 &lt;code class=&quot;highlighter-rouge&quot;&gt;.h&lt;/code&gt; 文件中引入了依赖的源码库的 &lt;code class=&quot;highlighter-rouge&quot;&gt;.h&lt;/code&gt; 文件，导致根据的私有库的 &lt;code class=&quot;highlighter-rouge&quot;&gt;module.modulemap&lt;/code&gt; 找不到该头文件，导致错误。（比如：&lt;code class=&quot;highlighter-rouge&quot;&gt;MCFoundtion&lt;/code&gt; 库某个公开的头文件中引用了 &lt;code class=&quot;highlighter-rouge&quot;&gt;AFNetworking&lt;/code&gt; 类的头文件。分装库代码的时候应该尽量避免公开的头文件中，引入第三方依赖开源库的头文件。）&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;解决：设置 &lt;code class=&quot;highlighter-rouge&quot;&gt;BuildSetting&lt;/code&gt; 的 &lt;code class=&quot;highlighter-rouge&quot;&gt;Allow Non-modular Includes In Framework Modules&lt;/code&gt; 为 &lt;code class=&quot;highlighter-rouge&quot;&gt;YES&lt;/code&gt;&lt;/p&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;spec.user_target_xcconfig = { 'CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES' =&amp;gt; 'YES' }。
-
-# lint 命令只剩下 warning。
-
-# user_target_xcconfig 和 pod_target_xcconfig 的区别:
-# user_target_xcconfig 是对于编译工程中所有 pod 的设置，
-# 而 pod_target_xcconfig 只是针对当前 pod 的。
-# 所以如果多个 pod 的 podspec 中对 user_target_xcconfig 同一个值进行了设置，那么就可能存在冲突问题。
-# 但因为 CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES 在 pod_target_xcconfig 不起作用，只能按现在的配置来处理。
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Cloning into ‘/var/folders/rg/f1ycrs553dq2z2dq7mt0mbh80000gn/T/d20160921-12602-1bx4f8v’… remote: Not Found fatal: repository ‘http://192.168.110.114/xxxxxx.git/’ not found&lt;/code&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;原因：&lt;code class=&quot;highlighter-rouge&quot;&gt;pod spec lint&lt;/code&gt; 命令，校验 &lt;code class=&quot;highlighter-rouge&quot;&gt;pod&lt;/code&gt; 的代码和配置时是从 &lt;code class=&quot;highlighter-rouge&quot;&gt;git&lt;/code&gt; 上拉取响应版本（&lt;code class=&quot;highlighter-rouge&quot;&gt;Tag&lt;/code&gt;）的代码进行编译；没有创建 &lt;code class=&quot;highlighter-rouge&quot;&gt;git&lt;/code&gt; 代码仓库，报错。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;gt; Cloning into ‘/var/folders/rg/f1ycrs553dq2z2dq7mt0mbh80000gn/T/d20160921-12686-1o6vj1q’… fatal: Remote branch 0.1.0 not found in upstream origin&lt;/code&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;原因：没有在 &lt;code class=&quot;highlighter-rouge&quot;&gt;git&lt;/code&gt; 上增加对应的 &lt;code class=&quot;highlighter-rouge&quot;&gt;tag&lt;/code&gt; 值，报错。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr /&gt;
-
-&lt;h3 id=&quot;-found-multiple-specifications&quot;&gt;[!] Found multiple specifications&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;原因：将私有仓库拉到本地时可能会存在两个。&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;解释：因为 &lt;code class=&quot;highlighter-rouge&quot;&gt;git&lt;/code&gt; 存在两个地址，分别是 &lt;code class=&quot;highlighter-rouge&quot;&gt;git@&lt;/code&gt; 和 &lt;code class=&quot;highlighter-rouge&quot;&gt;http/https&lt;/code&gt;，所以有时候可能会在本地 &lt;code class=&quot;highlighter-rouge&quot;&gt;repos&lt;/code&gt; 下出现两个基于同一个 &lt;code class=&quot;highlighter-rouge&quot;&gt;git&lt;/code&gt; 的仓库，仓库名字不同。因为一开始 &lt;code class=&quot;highlighter-rouge&quot;&gt;lint&lt;/code&gt; 的时候是指定了仓库名的，所以能通过，但 &lt;code class=&quot;highlighter-rouge&quot;&gt;pod repo push&lt;/code&gt; 的时候虽然指定了 &lt;code class=&quot;highlighter-rouge&quot;&gt;push&lt;/code&gt; 的仓库名，但因为没有指定校验的仓库名，一旦你的 &lt;code class=&quot;highlighter-rouge&quot;&gt;pod&lt;/code&gt; 依赖了私有仓库中的某个 &lt;code class=&quot;highlighter-rouge&quot;&gt;pod&lt;/code&gt;，校验时会出现类似 &lt;code class=&quot;highlighter-rouge&quot;&gt;[!] Found multiple specifications xxxxLibrary&lt;/code&gt; 的错误。此时需要删除掉一个私有仓库，然后重新 &lt;code class=&quot;highlighter-rouge&quot;&gt;push&lt;/code&gt; 才行。&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;备注：这里需要明白 &lt;code class=&quot;highlighter-rouge&quot;&gt;pod spec lint&lt;/code&gt; 的时候，可以配置 &lt;code class=&quot;highlighter-rouge&quot;&gt;--sources&lt;/code&gt;。而 &lt;code class=&quot;highlighter-rouge&quot;&gt;pod repo push&lt;/code&gt; 的时候，是直接使用的本地仓库名。有可能 &lt;code class=&quot;highlighter-rouge&quot;&gt;--sources&lt;/code&gt; 指定的是 &lt;code class=&quot;highlighter-rouge&quot;&gt;http/https&lt;/code&gt; ，而本地 &lt;code class=&quot;highlighter-rouge&quot;&gt;repo&lt;/code&gt; 仓库是使用的 &lt;code class=&quot;highlighter-rouge&quot;&gt;git@&lt;/code&gt; 拉取的。&lt;/p&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;pod spec lint --verbose --use-libraries --allow-warnings --sources='私有仓库repo地址,https://github.com/CocoaPods/Specs'
-
-pod repo push MCRepo MCAppKit.podspec --verbose --use-libraries --allow-warnings
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;hr /&gt;
-
-&lt;h3 id=&quot;pod-libraries-should-not-include-the-extension&quot;&gt;pod Libraries should not include the extension&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;原因：工程中导入了第三方 &lt;code class=&quot;highlighter-rouge&quot;&gt;SDK&lt;/code&gt; ，包含有二进制文件，没有在 &lt;code class=&quot;highlighter-rouge&quot;&gt;spec&lt;/code&gt; 文件中配置。&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;解决：需要配置一下路径，保证 &lt;code class=&quot;highlighter-rouge&quot;&gt;push repo&lt;/code&gt; 的时候，不丢失二进制文件：&lt;/p&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;s.vendored_libraries = ['Class/SobotSDK/SobotLib/libSobotLib.a']
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;hr /&gt;
-
-&lt;h3 id=&quot;编译时找不到宏定义&quot;&gt;编译时，找不到宏定义&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;原因：宏定义可能和环境有关。根据 &lt;code class=&quot;highlighter-rouge&quot;&gt;DEBUG&lt;/code&gt; 和 &lt;code class=&quot;highlighter-rouge&quot;&gt;RELEASE&lt;/code&gt; 定义了不同的宏。eg：&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;#ifdef DEBUG
- #define kAppKey @“123456789”
-#endif
-#ifdef RELEASE
- #define kAppKey @“987654321”
-#endif
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;解决：&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;编译时，找不到宏定义 &lt;code class=&quot;highlighter-rouge&quot;&gt;kAppKey&lt;/code&gt; ，需要设置查看：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Project -&amp;gt; Build Settings -&amp;gt; Preprocessor Macros -&amp;gt; 
-Debug DEBUG=1
-Release RELEASE
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;对应 Spec 文件设置：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;s.xcconfig = {
-&quot;GCC_PREPROCESSOR_DEFINITIONS&quot; =&amp;gt; &quot;RELEASE COCOAPODS=1&quot;
- }
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;hr /&gt;
-
-&lt;h3 id=&quot;shell-script-invocation-error-group&quot;&gt;Shell Script Invocation Error Group&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;错误信息：&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Shell Script Invocation Error Group
-
-sent 31754831 bytes received 54674 bytes 21206336.67 bytes/sec
-total size is 36763600 speedup is 1.16
-/* com.apple.actool.errors */
-: error: There are multiple stickers icon set or app icon set instances named &quot;AppIcon&quot;.
-/* com.apple.actool.compilation-results */
-/Users/mengyueping/Library/Developer/Xcode/DerivedData/Example-fdeuhzzwrdwyjrfsdeusamwbippd/Build/Products/Debug-iphonesimulator/Example.app/Assets.car
-/Users/mengyueping/Library/Developer/Xcode/DerivedData/Example-fdeuhzzwrdwyjrfsdeusamwbippd/Build/Intermediates.noindex/Example.build/Debug-iphonesimulator/Example.build/assetcatalog_generated_info_cocoapods.plist
-
-Command /bin/sh failed with exit code 1
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;原因：&lt;code class=&quot;highlighter-rouge&quot;&gt;Pod&lt;/code&gt; 资源拷贝脚本运行错误。不同 &lt;code class=&quot;highlighter-rouge&quot;&gt;Bundle&lt;/code&gt; 有同名资源。有多个 &lt;code class=&quot;highlighter-rouge&quot;&gt;AppIcon&lt;/code&gt; 。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;在自己工程 &lt;code class=&quot;highlighter-rouge&quot;&gt;Build Phases -&amp;gt; Copy Pods Resources&lt;/code&gt; 中，可以看到配置的资源拷贝脚本：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&quot;${SRCROOT}/Pods/Target Support Files/Pods-Example/Pods-Example-resources.sh&quot;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;这个脚本是 &lt;code class=&quot;highlighter-rouge&quot;&gt;pod&lt;/code&gt; 自己生成的，咱们也可以在物理文件夹下找到该脚本。&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;解决：可以通过去除这个脚本来解决冲突，但是这样会丢失资源文件。所以最终解决方法是，应该去除重名的资源文件 &lt;code class=&quot;highlighter-rouge&quot;&gt;AppIcon&lt;/code&gt; 。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;duplicate-symbol&quot;&gt;duplicate symbol&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;错误信息：&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;duplicate symbol _OBJC_IVAR_$_ViewController._lastIndex in:
- /Users/mengyueping/Library/Developer/Xcode/DerivedData/Example-fdeuhzzwrdwyjrfsdeusamwbippd/Build/Products/Debug-iphonesimulator/libMain.a(ViewController.o)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;原因：&lt;code class=&quot;highlighter-rouge&quot;&gt;duplicate symbol&lt;/code&gt; 重复符号。原因一，有可能是重复类。原因二，也有可能是在某个文件中引入了 &lt;code class=&quot;highlighter-rouge&quot;&gt;.m&lt;/code&gt; 文件。 eg：&lt;code class=&quot;highlighter-rouge&quot;&gt;#import &quot;ViewController.m&quot;&lt;/code&gt; 。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr /&gt;
-
-&lt;h3 id=&quot;unable-to-run-command-stripnib-tableviewlistcellnib---this-target-might-include-its-own-product&quot;&gt;Unable to run command ‘StripNIB TableViewListCell.nib’ - this target might include its own product.&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;原因：&lt;code class=&quot;highlighter-rouge&quot;&gt;xib&lt;/code&gt; 文件没有指定路径，&lt;code class=&quot;highlighter-rouge&quot;&gt;pod&lt;/code&gt; 的时候不会下载 &lt;code class=&quot;highlighter-rouge&quot;&gt;xib&lt;/code&gt;。&lt;code class=&quot;highlighter-rouge&quot;&gt;xib&lt;/code&gt; 文件算是资源文件的，需要另外添加 &lt;code class=&quot;highlighter-rouge&quot;&gt;s.resource&lt;/code&gt; 引入。&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;解决：&lt;/p&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;s.source_files = &quot;pod/classes/**/*.{h,m}&quot;
-s.resource = &quot;pod/classes/TestViewController.xib&quot;
-
-# 或者把 xib 拷贝到 bundle 中，直接指定资源文件路径为 bundle 。
-
-s.resources = ['*.bundle', '*.strings']
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;hr /&gt;
-
-&lt;h3 id=&quot;-unable-to-find-a-specification-for-basesdk--102-depended-upon-by-myproject&quot;&gt;[!] Unable to find a specification for &lt;code class=&quot;highlighter-rouge&quot;&gt;BaseSDK (= 1.0.2)&lt;/code&gt; depended upon by &lt;code class=&quot;highlighter-rouge&quot;&gt;MyProject&lt;/code&gt;&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;描述：&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Analyzing dependencies
-Fetching podspec for `MyProject` from `../`
-[!] Unable to find a specification for `BaseSDK (= 1.0.2)` depended upon by `MyProject`
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;原因：没有配置私有库的索引库地址。&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;解决：&lt;/p&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;source 'git@10.2.24.2:MengCode/Specs.git'
-source 'https://github.com/CocoaPods/Specs.git'
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;hr /&gt;
-
-&lt;h3 id=&quot;liblwapisdkalwapirequesto-does-not-contain-bitcode&quot;&gt;libLWApiSDK.a(LWApiRequest.o)’ does not contain bitcode.&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;描述：&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;ld: '/Users/mengyueping/MCModule/MCUIKit/MCUIKitCode/Example/Pods/UMengUShare/UShareSDK/SocialLibraries/LaiWang/libLWApiSDK.a(LWApiRequest.o)' does not contain bitcode. You must rebuild it with bitcode enabled (Xcode setting ENABLE_BITCODE), obtain an updated library from the vendor, or disable bitcode for this target. file '/Users/mengyueping/MCModule/MCUIKit/MCUIKitCode/Example/Pods/UMengUShare/UShareSDK/SocialLibraries/LaiWang/libLWApiSDK.a' for architecture arm64
-clang: error: linker command failed with exit code 1 (use -v to see invocation)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;解决：&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Build Settings -&amp;gt; Enable Bitcode -&amp;gt; NO
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;could-not-build-module-mcfoundation&quot;&gt;Could not build module ‘MCFoundation’&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;描述：&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Could not build module 'MCFoundation'
-
-- ERROR | xcodebuild: MCFoundationLib/MCFoundation/MCFoundation.framework/Headers/MCRefreshBackNormalFooter.h:9:9: error: include of non-modular header inside framework module 'MCFoundation.MCRefreshBackNormalFooter': 'Headers/Public/MJRefresh/MJRefreshBackNormalFooter.h' [-Werror,-Wnon-modular-include-in-framework-module]
-
-- NOTE | xcodebuild: Headers/Public/MCKit/MCSavaDataManager.h:11:9: fatal error: could not build module 'MCFoundation'
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;原因：在头文件中，引入了第三方 &lt;code class=&quot;highlighter-rouge&quot;&gt;pod&lt;/code&gt; 管理的库的头文件。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;s.user_target_xcconfig = { 
-&quot;CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES&quot; =&amp;gt; &quot;YES&quot;
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;设置后，&lt;code class=&quot;highlighter-rouge&quot;&gt;push spec&lt;/code&gt; 会出现：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;[!] Smart quotes were detected and ignored in your Podfile. To avoid issues in the future, you should not use TextEdit for editing it. If you are not using TextEdit, you should turn off smart quotes in your editor of choice.
-
-[!] The `MC [Debug]` target overrides the `CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES` build setting defined in `Pods/Target Support Files/Pods-MC/Pods-MC.debug.xcconfig'. This can lead to problems with the CocoaPods installation
- - Use the `$(inherited)` flag, or
- - Remove the build settings from the target.
-
-[!] The `MC [Gamma]` target overrides the `CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES` build setting defined in `Pods/Target Support Files/Pods-MC/Pods-MC.gamma.xcconfig'. This can lead to problems with the CocoaPods installation
- - Use the `$(inherited)` flag, or
- - Remove the build settings from the target.
-
-[!] The `MC [PreRelease]` target overrides the `CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES` build setting defined in `Pods/Target Support Files/Pods-MC/Pods-MC.prerelease.xcconfig'. This can lead to problems with the CocoaPods installation
- - Use the `$(inherited)` flag, or
- - Remove the build settings from the target.
-
-[!] The `MC [Release]` target overrides the `CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES` build setting defined in `Pods/Target Support Files/Pods-MC/Pods-MC.release.xcconfig'. This can lead to problems with the CocoaPods installation
- - Use the `$(inherited)` flag, or
- - Remove the build settings from the target.
-
-[!] The `MC-Test [Debug]` target overrides the `CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES` build setting defined in `Pods/Target Support Files/Pods-MC-Test/Pods-MC-Test.debug.xcconfig'. This can lead to problems with the CocoaPods installation
- - Use the `$(inherited)` flag, or
- - Remove the build settings from the target.
-
-[!] The `MC-Test [Gamma]` target overrides the `CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES` build setting defined in `Pods/Target Support Files/Pods-MC-Test/Pods-MC-Test.gamma.xcconfig'. This can lead to problems with the CocoaPods installation
- - Use the `$(inherited)` flag, or
- - Remove the build settings from the target.
-
-[!] The `MC-Test [PreRelease]` target overrides the `CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES` build setting defined in `Pods/Target Support Files/Pods-MC-Test/Pods-MC-Test.prerelease.xcconfig'. This can lead to problems with the CocoaPods installation
- - Use the `$(inherited)` flag, or
- - Remove the build settings from the target.
-
-[!] The `MC-Test [Release]` target overrides the `CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES` build setting defined in `Pods/Target Support Files/Pods-MC-Test/Pods-MC-Test.release.xcconfig'. This can lead to problems with the CocoaPods installation
- - Use the `$(inherited)` flag, or
- - Remove the build settings from the target.
-
-[!] The `MC-Release [Debug]` target overrides the `CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES` build setting defined in `Pods/Target Support Files/Pods-MC-Release/Pods-MC-Release.debug.xcconfig'. This can lead to problems with the CocoaPods installation
- - Use the `$(inherited)` flag, or
- - Remove the build settings from the target.
-
-[!] The `MC-Release [Gamma]` target overrides the `CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES` build setting defined in `Pods/Target Support Files/Pods-MC-Release/Pods-MC-Release.gamma.xcconfig'. This can lead to problems with the CocoaPods installation
- - Use the `$(inherited)` flag, or
- - Remove the build settings from the target.
-
-[!] The `MC-Release [PreRelease]` target overrides the `CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES` build setting defined in `Pods/Target Support Files/Pods-MC-Release/Pods-MC-Release.prerelease.xcconfig'. This can lead to problems with the CocoaPods installation
- - Use the `$(inherited)` flag, or
- - Remove the build settings from the target.
-
-[!] The `MC-Release [Release]` target overrides the `CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES` build setting defined in `Pods/Target Support Files/Pods-MC-Release/Pods-MC-Release.release.xcconfig'. This can lead to problems with the CocoaPods installation
- - Use the `$(inherited)` flag, or
- - Remove the build settings from the target.
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;hr /&gt;
-
-&lt;h3 id=&quot;the-pods-target-has-transitive-dependencies&quot;&gt;The ‘Pods’ target has transitive dependencies&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;原因：如果私有库添加了静态库或者 &lt;code class=&quot;highlighter-rouge&quot;&gt;dependency&lt;/code&gt; 用了静态库。&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;解决：那么执行 &lt;code class=&quot;highlighter-rouge&quot;&gt;pod spec lint&lt;/code&gt; 或者 &lt;code class=&quot;highlighter-rouge&quot;&gt;pod repo push&lt;/code&gt; 时候需要加上 &lt;code class=&quot;highlighter-rouge&quot;&gt;—user-libraries&lt;/code&gt; 选项。否则会出现 &lt;code class=&quot;highlighter-rouge&quot;&gt;The 'Pods' target has transitive dependencies&lt;/code&gt; 错误。&lt;/p&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr /&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;执行-pod-spec-lint-命令&quot;&gt;执行 &lt;code class=&quot;highlighter-rouge&quot;&gt;pod spec lint&lt;/code&gt; 命令&lt;/h2&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;pod lib lint&lt;/code&gt; 是只从本地验证你的 &lt;code class=&quot;highlighter-rouge&quot;&gt;pod&lt;/code&gt; 能否通过验证。&lt;/p&gt;
-
-  &lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;pod spec lint&lt;/code&gt; 是从本地和远程验证你的 &lt;code class=&quot;highlighter-rouge&quot;&gt;pod&lt;/code&gt; 能否通过验证。&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;在私有库引用了私有库的情况下，在验证和推送私有库的情况下都要加上所有的资源地址，不然 &lt;code class=&quot;highlighter-rouge&quot;&gt;pod&lt;/code&gt; 会默认从官方 &lt;code class=&quot;highlighter-rouge&quot;&gt;repo&lt;/code&gt; 查询。&lt;br /&gt;
-使用 &lt;code class=&quot;highlighter-rouge&quot;&gt;pod spec lint&lt;/code&gt; 去验证私有库能否通过验证时，应该要添加 &lt;code class=&quot;highlighter-rouge&quot;&gt;--sources&lt;/code&gt; 选项，不然会出现找不到 &lt;code class=&quot;highlighter-rouge&quot;&gt;repo&lt;/code&gt; 的错误。&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# 配置 `--sources` 下载源。
-
-pod spec lint --sources='私有仓库repo地址,https://github.com/CocoaPods/Specs'
-pod repo push 本地repo名 podspec名 --sources='私有仓库repo地址,https://github.com/CocoaPods/Specs'
-
-pod lib lint MCCommon.podspec --sources='http://10.2.250.21/MC/MCPrivateSourceCodeSpecRepo.git,https://github.com/CocoaPods/Specs.git' 
-
-pod spec lint MCCommon.podspec --sources='http://10.2.222.22/MC/MCPrivateSourceCodeSpecRepo.git,https://github.com/CocoaPods/Specs.git'
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;hr /&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;podfile-文件&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Podfile&lt;/code&gt; 文件&lt;/h2&gt;
-
-&lt;h3 id=&quot;inhibit_all_warnings&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;inhibit_all_warnings!&lt;/code&gt;&lt;/h3&gt;
-
-&lt;p&gt;屏蔽 &lt;code class=&quot;highlighter-rouge&quot;&gt;cocoapods&lt;/code&gt; 库里面的所有警告。这个特性也能在子 &lt;code class=&quot;highlighter-rouge&quot;&gt;target&lt;/code&gt; 里面定义。&lt;/p&gt;
-
-&lt;p&gt;如果你想屏蔽某 &lt;code class=&quot;highlighter-rouge&quot;&gt;pod&lt;/code&gt; 库里面的警告也是可以的:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;pod 'SSZipArchive', :inhibit_warnings =&amp;gt; true
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;hr /&gt;
-
-&lt;h3 id=&quot;引用本地库&quot;&gt;引用本地库&lt;/h3&gt;
-
-&lt;p&gt;在 &lt;code class=&quot;highlighter-rouge&quot;&gt;Podfile&lt;/code&gt; 中配置引用本地库文件：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;pod '库名', :path =&amp;gt; '本地路径'
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;这样在通常的修改代码中是不需要执行 &lt;code class=&quot;highlighter-rouge&quot;&gt;pod update&lt;/code&gt; 的。但是对于如果修改了目录结构（添加、删除或者移动文件文件）或者是修改了 &lt;code class=&quot;highlighter-rouge&quot;&gt;Podspec&lt;/code&gt; 文件的配置的话，最好是运行一下 &lt;code class=&quot;highlighter-rouge&quot;&gt;pod update&lt;/code&gt; 的命令。普通修改代码的情况下就不需要运行 &lt;code class=&quot;highlighter-rouge&quot;&gt;pod update&lt;/code&gt; 命令。&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;pod 'iOS-Test', :path =&amp;gt; '../iOS-Test’
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;hr /&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;spec-文件&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;spec&lt;/code&gt; 文件&lt;/h2&gt;
-
-&lt;h3 id=&quot;包含有-mrc-文件类&quot;&gt;包含有 &lt;code class=&quot;highlighter-rouge&quot;&gt;MRC&lt;/code&gt; 文件类&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;方法一：&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;s.requires_arc = false
-s.source_files = &quot;MCFoundation/**/*.{h,m}&quot;
-s.requires_arc = &quot;MCFoundation/CommonComponent/**/*.{h,m}&quot;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;方法二：&lt;code class=&quot;highlighter-rouge&quot;&gt;subspec&lt;/code&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Pod::Spec.new do |s|
-
-s.name = &quot;MCFoundation&quot;
-s.version =&quot;0.1.3.3&quot;
-s.summary = &quot;源码仓库.&quot;
-s.description = &amp;lt;&amp;lt;-DESC
-封装了一些基础的工具
-DESC
-s.homepage = &quot;http://10.2.222.22/MC&quot;
-s.license = { :type =&amp;gt; &quot;MIT&quot;, :file =&amp;gt; &quot;LICENSE&quot; }
-s.author = { &quot;xxx&quot; =&amp;gt; &quot;xxx@xxx.com&quot; }
-s.ios.deployment_target = &quot;8.0&quot;
-s.source = { :git =&amp;gt; 'git@10.2.22.22:MCModuleiOS/MCFoundationCode.git', :tag =&amp;gt; s.version}
-
-s.default_subspec = 'MCFoundationARC'
-
-non_arc_files = 'MCFoundation/MRC/*.{h,m}'
-
-s.subspec 'MCFoundationARC' do |arc|
- arc.requires_arc = true
- arc.source_files = &quot;MCFoundation/CommonComponent/**/*.{h,m}&quot;
- arc.exclude_files = non_arc_files 
-end
-
-s.subspec 'MCFoundationNonARC' do |non_arc|
- non_arc.requires_arc = false
- non_arc.source_files = non_arc_files
- non_arc.dependency 'MCFoundation/MCFoundationARC'
-end
-
-s.dependency 'FMDB'
-s.dependency 'MJRefresh'
-
-end
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;hr /&gt;
-
-&lt;h3 id=&quot;引用自己或第三方的-framework-或-a-文件时&quot;&gt;引用自己或第三方的 &lt;code class=&quot;highlighter-rouge&quot;&gt;framework&lt;/code&gt; 或 &lt;code class=&quot;highlighter-rouge&quot;&gt;.a&lt;/code&gt; 文件时&lt;/h3&gt;
-
-&lt;p&gt;在 &lt;code class=&quot;highlighter-rouge&quot;&gt;podsepc&lt;/code&gt; 中应该这样写:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;s.ios.vendored_frameworks = &quot;xxx/**/*.framework&quot;
-s.ios.vendored_libraries = &quot;xxx/**/*.a”
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;hr /&gt;
-
-&lt;h3 id=&quot;资源文件&quot;&gt;资源文件&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;把资源文件放在 &lt;code class=&quot;highlighter-rouge&quot;&gt;bundle&lt;/code&gt; 中，&lt;code class=&quot;highlighter-rouge&quot;&gt;spec&lt;/code&gt; 文件需要配置：&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;spec.resource = &quot;Resources/MYLibrary.bundle&quot;
-
-spec.resource_bundles = {
-'MyLibrary' =&amp;gt; ['Resources/*.png'],
-'OtherResources' =&amp;gt; ['OtherResources/*.png']
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;也可以这样写，但是这些资源会在打包的时候直接拷贝的 &lt;code class=&quot;highlighter-rouge&quot;&gt;app&lt;/code&gt; 中，这样说不定会和其它资源产生命名冲突：&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;spec.resources = [&quot;Images/*.png&quot;, &quot;Sounds/*&quot;]
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;hr /&gt;
-
-&lt;h3 id=&quot;配置执行脚本&quot;&gt;配置执行脚本&lt;/h3&gt;
-
-&lt;p&gt;可以在编译的某个时机，来配置要运行的脚本。&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# :execution_position 选项有 [:before_compile, :after_compile, :any]
-
-s.script_phase = { :name =&amp;gt; &quot;Script Name&quot;, :script =&amp;gt; &quot;echo 'Hello World'&quot;, :execution_position =&amp;gt; :any , :shell_path =&amp;gt; &quot;/bin/sh&quot;}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;hr /&gt;
-
-&lt;h3 id=&quot;subspec&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;subspec&lt;/code&gt;&lt;/h3&gt;
-
-&lt;p&gt;为了让自己的 &lt;code class=&quot;highlighter-rouge&quot;&gt;Pod&lt;/code&gt; 被导入时显示出良好的文件层划分，&lt;code class=&quot;highlighter-rouge&quot;&gt;subspec&lt;/code&gt; 是必须的。&lt;br /&gt;
-若 &lt;code class=&quot;highlighter-rouge&quot;&gt;subspec&lt;/code&gt; 要依赖其它的 &lt;code class=&quot;highlighter-rouge&quot;&gt;subspec&lt;/code&gt; ，则 &lt;code class=&quot;highlighter-rouge&quot;&gt;subspec&lt;/code&gt; 的 &lt;code class=&quot;highlighter-rouge&quot;&gt;dependency&lt;/code&gt; 后面接的不是目录路径，而是 &lt;code class=&quot;highlighter-rouge&quot;&gt;specA/specB&lt;/code&gt; 这种 &lt;code class=&quot;highlighter-rouge&quot;&gt;spec&lt;/code&gt; 关系。&lt;/p&gt;
-
-&lt;h1 id=&quot;本文转自httpwwwmengyuepingcom20180816ios_cocoapods_03&quot;&gt;本文转自:http://www.mengyueping.com/2018/08/16/iOS_CocoaPods_03/&lt;/h1&gt;
-
-</description>
-        <pubDate>Fri, 23 Apr 2021 00:00:00 +0800</pubDate>
-        <link>http://localhost:4000/2021/04/CocoaPods%E7%A7%81%E6%9C%89%E5%BA%93%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E6%8B%BE%E9%81%97/</link>
-        <guid isPermaLink="true">http://localhost:4000/2021/04/CocoaPods%E7%A7%81%E6%9C%89%E5%BA%93%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E6%8B%BE%E9%81%97/</guid>
-        
-        <category>iOS</category>
-        
-        
-      </item>
-    
-      <item>
-        <title>iOS 多线程：GCD详尽总结</title>
-        <description>&lt;p&gt;iOS 多线程：『GCD』详尽总结&lt;/p&gt;
-
-&lt;p&gt;本文用来介绍 iOS 多线程中 GCD 的相关知识以及使用方法。这大概是史上最详细、清晰的关于 &lt;strong&gt;GCD 的详细讲解 + 总结&lt;/strong&gt; 的文章了。通过本文，您将了解到：&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;1. GCD 简介&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;2. GCD 任务和队列&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;3. GCD 的使用步骤&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;4. GCD 的基本使用&lt;/strong&gt;（六种组合不同区别，队列嵌套情况区别，相互关系形象理解）&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;5. GCD 线程间的通信&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;6. GCD 的其他方法&lt;/strong&gt;（栅栏方法：dispatch_barrier_async、延时执行方法：dispatch_after、一次性代码（只执行一次）：dispatch_once、快速迭代方法：dispatch_apply、队列组：dispatch_group、信号量：dispatch_semaphore）&lt;/p&gt;
-
-&lt;p&gt;文中 Demo 我已放在了 Github 上，Demo 链接：&lt;a href=&quot;https://links.jianshu.com/go?to=https%3A%2F%2Fgithub.com%2Fbujige%2FYSC-GCD-demo&quot;&gt;传送门&lt;/a&gt;&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;h1 id=&quot;一gcd-简介&quot;&gt;一、GCD 简介&lt;/h1&gt;
-
-&lt;h2 id=&quot;什么是-gcd-我们先来看看百度百科的解释简单了解下相关概念&quot;&gt;什么是 &lt;strong&gt;GCD&lt;/strong&gt; ？我们先来看看百度百科的解释简单了解下相关概念。&lt;/h2&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;引自 &lt;a href=&quot;https://links.jianshu.com/go?to=http%3A%2F%2Fbaike.baidu.com%2Fitem%2FGCD&quot;&gt;百度百科&lt;/a&gt;
-&lt;strong&gt;Grand Central Dispatch（GCD）&lt;/strong&gt; 是 Apple 开发的一个多核编程的较新的解决方法。它主要用于优化应用程序以支持多核处理器以及其他对称多处理系统。它是一个在线程池模式的基础上执行的并发任务。在 Mac OS X 10.6 雪豹中首次推出，也可在 iOS 4 及以上版本使用。&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;h2 id=&quot;那为什么我们要使用-gcd-呢&quot;&gt;那为什么我们要使用 GCD 呢?&lt;/h2&gt;
-
-&lt;p&gt;因为使用 GCD 有很多好处啊，具体如下：&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;GCD 可用于多核的并行运算；&lt;/li&gt;
-  &lt;li&gt;GCD 会自动利用更多的 CPU 内核（比如双核、四核）；&lt;/li&gt;
-  &lt;li&gt;GCD 会自动管理线程的生命周期（创建线程、调度任务、销毁线程）；&lt;/li&gt;
-  &lt;li&gt;程序员只需要告诉 GCD 想要执行什么任务，不需要编写任何线程管理代码。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;GCD 拥有以上这么多的好处，而且在多线程中处于举足轻重的地位。那么我们就很有必要系统地学习一下 GCD 的使用方法。&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;h1 id=&quot;二gcd-任务和队列&quot;&gt;二、GCD 任务和队列&lt;/h1&gt;
-
-&lt;p&gt;学习 GCD 之前，先来了解 GCD 中两个核心概念：&lt;strong&gt;『任务』&lt;/strong&gt; 和 &lt;strong&gt;『队列』&lt;/strong&gt;。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;任务&lt;/strong&gt;：就是执行操作的意思，换句话说就是你在线程中执行的那段代码。在 GCD 中是放在 block 中的。执行任务有两种方式：&lt;strong&gt;『同步执行』&lt;/strong&gt; 和 &lt;strong&gt;『异步执行』&lt;/strong&gt;。两者的主要区别是：&lt;strong&gt;是否等待队列的任务执行结束，以及是否具备开启新线程的能力。&lt;/strong&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;strong&gt;同步执行（sync）&lt;/strong&gt;：
-    &lt;ul&gt;
-      &lt;li&gt;同步添加任务到指定的队列中，在添加的任务执行结束之前，会一直等待，直到队列里面的任务完成之后再继续执行。&lt;/li&gt;
-      &lt;li&gt;只能在当前线程中执行任务，不具备开启新线程的能力。&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;异步执行（async）&lt;/strong&gt;：
-    &lt;ul&gt;
-      &lt;li&gt;异步添加任务到指定的队列中，它不会做任何等待，可以继续执行任务。&lt;/li&gt;
-      &lt;li&gt;可以在新的线程中执行任务，具备开启新线程的能力。&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;举个简单例子：你要打电话给小明和小白。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;『同步执行』&lt;/strong&gt; 就是：你打电话给小明的时候，不能同时打给小白。只有等到给小明打完了，才能打给小白（等待任务执行结束）。而且只能用当前的电话（不具备开启新线程的能力）。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;『异步执行』&lt;/strong&gt; 就是：你打电话给小明的时候，不用等着和小明通话结束（不用等待任务执行结束），还能同时给小白打电话。而且除了当前电话，你还可以使用其他一个或多个电话（具备开启新线程的能力）。&lt;/p&gt;
-
-&lt;p&gt;注意：&lt;strong&gt;异步执行（async）&lt;/strong&gt;虽然具有开启新线程的能力，但是并不一定开启新线程。这跟任务所指定的队列类型有关（下面会讲）。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;队列（Dispatch Queue）&lt;/strong&gt;：这里的队列指执行任务的等待队列，即用来存放任务的队列。队列是一种特殊的线性表，采用 FIFO（先进先出）的原则，即新任务总是被插入到队列的末尾，而读取任务的时候总是从队列的头部开始读取。每读取一个任务，则从队列中释放一个任务。队列的结构可参考下图：&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/posts/iOS/1877784-01267bd211719167.webp&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;在 GCD 中有两种队列：&lt;strong&gt;『串行队列』&lt;/strong&gt; 和 &lt;strong&gt;『并发队列』&lt;/strong&gt;。两者都符合 FIFO（先进先出）的原则。两者的主要区别是：&lt;strong&gt;执行顺序不同，以及开启线程数不同。&lt;/strong&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;strong&gt;串行队列（Serial Dispatch Queue）&lt;/strong&gt;：
-    &lt;ul&gt;
-      &lt;li&gt;每次只有一个任务被执行。让任务一个接着一个地执行。（只开启一个线程，一个任务执行完毕后，再执行下一个任务）&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;并发队列（Concurrent Dispatch Queue）&lt;/strong&gt;：
-    &lt;ul&gt;
-      &lt;li&gt;可以让多个任务并发（同时）执行。（可以开启多个线程，并且同时执行任务）&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;注意：&lt;strong&gt;并发队列&lt;/strong&gt; 的并发功能只有在异步（dispatch_async）方法下才有效。&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;两者具体区别如下两图所示：&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/posts/iOS/1877784-4faca27116209f35.webp&quot; alt=&quot;&quot; /&gt;
-&lt;img src=&quot;/images/posts/iOS/1877784-97f3931d1b187b11.webp&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;h1 id=&quot;三gcd-的使用步骤&quot;&gt;三、GCD 的使用步骤&lt;/h1&gt;
-
-&lt;p&gt;GCD 的使用步骤其实很简单，只有两步：&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;创建一个队列（串行队列或并发队列）；&lt;/li&gt;
-  &lt;li&gt;将任务追加到任务的等待队列中，然后系统就会根据任务类型执行任务（同步执行或异步执行）。&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;下边来看看队列的创建方法 / 获取方法，以及任务的创建方法。&lt;/p&gt;
-
-&lt;h2 id=&quot;1-队列的创建方法--获取方法&quot;&gt;1. 队列的创建方法 / 获取方法&lt;/h2&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;可以使用&lt;code class=&quot;highlighter-rouge&quot;&gt;dispatch_queue_create&lt;/code&gt;方法来创建队列。该方法需要传入两个参数：
-    &lt;ul&gt;
-      &lt;li&gt;第一个参数表示队列的唯一标识符，用于 DEBUG，可为空。队列的名称推荐使用应用程序 ID 这种逆序全程域名。&lt;/li&gt;
-      &lt;li&gt;第二个参数用来识别是串行队列还是并发队列。&lt;code class=&quot;highlighter-rouge&quot;&gt;DISPATCH_QUEUE_SERIAL&lt;/code&gt;表示串行队列，&lt;code class=&quot;highlighter-rouge&quot;&gt;DISPATCH_QUEUE_CONCURRENT&lt;/code&gt;表示并发队列。&lt;/li&gt;
-    &lt;/ul&gt;
-
-    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;// 串行队列的创建方法
-dispatch_queue_t queue = dispatch_queue_create(&quot;net.bujige.testQueue&quot;, DISPATCH_QUEUE_SERIAL);
-// 并发队列的创建方法
-dispatch_queue_t queue = dispatch_queue_create(&quot;net.bujige.testQueue&quot;, DISPATCH_QUEUE_CONCURRENT);
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
-  &lt;/li&gt;
-  &lt;li&gt;对于串行队列，GCD 默认提供了：&lt;strong&gt;『主队列（Main Dispatch Queue）』&lt;/strong&gt;。
-    &lt;ul&gt;
-      &lt;li&gt;所有放在主队列中的任务，都会放到主线程中执行。&lt;/li&gt;
-      &lt;li&gt;可使用 &lt;code class=&quot;highlighter-rouge&quot;&gt;dispatch_get_main_queue()&lt;/code&gt;方法获得主队列。&lt;/li&gt;
-    &lt;/ul&gt;
-
-    &lt;blockquote&gt;
-      &lt;p&gt;注意：&lt;strong&gt;主队列其实并不特殊。&lt;/strong&gt; 主队列的实质上就是一个普通的串行队列，只是因为默认情况下，当前代码是放在主队列中的，然后主队列中的代码，有都会放到主线程中去执行，所以才造成了主队列特殊的现象。&lt;/p&gt;
-    &lt;/blockquote&gt;
-
-    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;// 主队列的获取方法
-dispatch_queue_t queue = dispatch_get_main_queue();
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
-  &lt;/li&gt;
-  &lt;li&gt;对于并发队列，GCD 默认提供了 &lt;strong&gt;『全局并发队列（Global Dispatch Queue）』&lt;/strong&gt;。
-    &lt;ul&gt;
-      &lt;li&gt;可以使用 dispatch_get_global_queue方法来获取全局并发队列。需要传入两个参数。第一个参数表示队列优先级，一般用 DISPATCH_QUEUE_PRIORITY_DEFAULT。第二个参数暂时没用，用 0即可。&lt;/li&gt;
-    &lt;/ul&gt;
-
-    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;// 全局并发队列的获取方法
-dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;2-任务的创建方法&quot;&gt;2. 任务的创建方法&lt;/h2&gt;
-
-&lt;p&gt;GCD 提供了同步执行任务的创建方法 &lt;code class=&quot;highlighter-rouge&quot;&gt;dispatch_sync&lt;/code&gt; 和异步执行任务创建方法 &lt;code class=&quot;highlighter-rouge&quot;&gt;dispatch_async&lt;/code&gt;。&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;// 同步执行任务创建方法 
-dispatch_sync(queue, ^{ 
-  // 这里放同步执行任务代码 
-  }); 
-// 异步执行任务创建方法 
-dispatch_async(queue, ^{ 
-  // 这里放异步执行任务代码 
-  });
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;虽然使用 GCD 只需两步，但是既然我们有两种队列（串行队列 / 并发队列），两种任务执行方式（同步执行 / 异步执行），那么我们就有了四种不同的组合方式。这四种不同的组合方式是：&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;同步执行 + 并发队列&lt;/li&gt;
-  &lt;li&gt;异步执行 + 并发队列&lt;/li&gt;
-  &lt;li&gt;同步执行 + 串行队列&lt;/li&gt;
-  &lt;li&gt;异步执行 + 串行队列&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;实际上，刚才还说了两种默认队列：全局并发队列、主队列。全局并发队列可以作为普通并发队列来使用。但是当前代码默认放在主队列中，所以主队列很有必要专门来研究一下，所以我们就又多了两种组合方式。这样就有六种不同的组合方式了。&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;同步执行 + 主队列&lt;/li&gt;
-  &lt;li&gt;异步执行 + 主队列&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;&lt;strong&gt;那么这几种不同组合方式各有什么区别呢？&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;这里我们先上结论，后面再来详细讲解。你可以直接查看 &lt;strong&gt;3 任务和队列不同组合方式的区别&lt;/strong&gt; 中的表格结果，然后跳过 &lt;strong&gt;4. GCD的基本使用&lt;/strong&gt; 继续往后看。&lt;/p&gt;
-
-&lt;h2 id=&quot;3-任务和队列不同组合方式的区别&quot;&gt;3. 任务和队列不同组合方式的区别&lt;/h2&gt;
-
-&lt;p&gt;我们先来考虑最基本的使用，也就是当前线程为 &lt;strong&gt;『主线程』&lt;/strong&gt; 的环境下，&lt;strong&gt;『不同队列』+『不同任务』&lt;/strong&gt; 简单组合使用的不同区别。暂时不考虑 &lt;strong&gt;『队列中嵌套队列』&lt;/strong&gt; 的这种复杂情况。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;『主线程』&lt;/strong&gt;中，&lt;strong&gt;『不同队列』&lt;/strong&gt;+&lt;strong&gt;『不同任务』&lt;/strong&gt;简单组合的区别：&lt;/p&gt;
-
-&lt;table&gt;&lt;tr&gt;&lt;th&gt;区别&lt;/th&gt;&lt;th&gt;并发队列&lt;/th&gt;&lt;th&gt;串行队列&lt;/th&gt;&lt;th&gt;主队列&lt;/th&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;同步（sync）&lt;/td&gt;&lt;td&gt;没有开启新线程，串行执行任务&lt;/td&gt;&lt;td&gt;没有开启新线程，串行执行任务&lt;/td&gt;&lt;td&gt;死锁卡住不执行&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;异步（async）&lt;/td&gt;&lt;td&gt;有开启新线程，并发执行任务&lt;/td&gt;&lt;td&gt;有开启新线程（1条），串行执行任务&lt;/td&gt;&lt;td&gt;没有开启新线程，串行执行任务&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;注意：从上边可看出： &lt;strong&gt;『主线程』&lt;/strong&gt; 中调用 &lt;strong&gt;『主队列』+『同步执行』&lt;/strong&gt; 会导致死锁问题。这是因为 &lt;strong&gt;主队列中追加的同步任务&lt;/strong&gt; 和 &lt;strong&gt;主线程本身的任务&lt;/strong&gt; 两者之间相互等待，阻塞了 &lt;strong&gt;『主队列』&lt;/strong&gt;，最终造成了主队列所在的线程（主线程）死锁问题。而如果我们在 &lt;strong&gt;『其他线程』&lt;/strong&gt; 调用 &lt;strong&gt;『主队列』+『同步执行』&lt;/strong&gt;，则不会阻塞 &lt;strong&gt;『主队列』&lt;/strong&gt;，自然也不会造成死锁问题。最终的结果是：&lt;strong&gt;不会开启新线程，串行执行任务&lt;/strong&gt;。&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;h2 id=&quot;4-队列嵌套情况下不同组合方式区别&quot;&gt;4. 队列嵌套情况下，不同组合方式区别&lt;/h2&gt;
-
-&lt;p&gt;除了上边提到的『主线程』中调用『主队列』+『同步执行』会导致死锁问题。实际在使用『串行队列』的时候，也可能出现阻塞『串行队列』所在线程的情况发生，从而造成死锁问题。这种情况多见于同一个串行队列的嵌套使用。&lt;/p&gt;
-
-&lt;p&gt;比如下面代码这样：在『异步执行』+『串行队列』的任务中，又嵌套了『当前的串行队列』，然后进行『同步执行』。&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  dispatch_queue_t queue = dispatch_queue_create(&quot;test.queue&quot;, DISPATCH_QUEUE_SERIAL); 
-  dispatch_async(queue, ^{ // 异步执行 + 串行队列 
-    dispatch_sync(queue, ^{ // 同步执行 + 当前串行队列 
-      // 追加任务 1 
-      [NSThread sleepForTimeInterval:2]; // 模拟耗时操作 
-      NSLog(@&quot;1---%@&quot;,[NSThread currentThread]); // 打印当前线程 
-      }); 
-  });
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;执行上面的代码会导致 &lt;strong&gt;串行队列中追加的任务&lt;/strong&gt; 和 &lt;strong&gt;串行队列中原有的任务&lt;/strong&gt; 两者之间相互等待，阻塞了『串行队列』，最终造成了串行队列所在的线程（子线程）死锁问题。
-主队列造成死锁也是基于这个原因，所以，这也进一步说明了主队列其实并不特殊。&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;关于 『队列中嵌套队列』这种复杂情况，这里也简单做一个总结。不过这里只考虑同一个队列的嵌套情况，关于多个队列的相互嵌套情况还请自行研究，或者等我最新的文章发布。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;『不同队列』+『不同任务』&lt;/strong&gt; 组合，以及 &lt;strong&gt;『队列中嵌套队列』&lt;/strong&gt; 使用的区别：&lt;/p&gt;
-
-&lt;table&gt;&lt;tr&gt;&lt;th&gt;区别&lt;/th&gt;&lt;th&gt;『异步执行+并发队列』嵌套『同一个并发队列』&lt;/th&gt;&lt;th&gt;『同步执行+并发队列』嵌套『同一个并发队列』&lt;/th&gt;&lt;th&gt;『异步执行+串行队列』嵌套『同一个串行队列』&lt;/th&gt;&lt;th&gt;『同步执行+串行队列』嵌套『同一个串行队列』&lt;/th&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;同步（sync）&lt;/td&gt;&lt;td&gt;没有开启新的线程，串行执行任务&lt;/td&gt;&lt;td&gt;没有开启新线程，串行执行任务&lt;/td&gt;&lt;td&gt;死锁卡住不执行&lt;/td&gt;&lt;td&gt;死锁卡住不执行&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;异步（async）&lt;/td&gt;&lt;td&gt;有开启新线程，并发执行任务&lt;/td&gt;&lt;td&gt;有开启新线程，并发执行任务&lt;/td&gt;&lt;td&gt;有开启新线程（1 条），串行执行任务&lt;/td&gt;&lt;td&gt;有开启新线程（1 条），串行执行任务&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-
-&lt;p&gt;好了，关于『不同队列』+『不同任务』 组合不同区别总结就到这里。&lt;/p&gt;
-
-&lt;h2 id=&quot;5-关于不同队列和不同任务的形象理解&quot;&gt;5. 关于不同队列和不同任务的形象理解&lt;/h2&gt;
-
-&lt;p&gt;因为前一段时间看到了有朋友留言说对 &lt;code class=&quot;highlighter-rouge&quot;&gt;异步执行&lt;/code&gt; 和 &lt;code class=&quot;highlighter-rouge&quot;&gt;并发队列&lt;/code&gt; 中创建线程能力有所不理解，我觉得这个问题的确很容易造成困惑，所以很值得拿来专门分析一下。&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;他的问题：
-在 异步 + 并发 中的解释：
-异步执行具备开启新线程的能力。且并发队列可开启多个线程，同时执行多个任务）
-以及 同步 + 并发 中的解释：
-（虽然并发队列可以开启多个线程，并且同时执行多个任务。但是因为本身不能创建新线程，只有当前线程这一个线程（同步任务不具备开启新线程的能力）
-这个地方看起来有点疑惑，你两个地方分别提到：异步执行开启新线程，并发队列也可以开启新线程，想请教下，你的意思是只有任务才拥有创建新线程的能力，而队列只有开启线程的能力，并不能创建线程 ？这二者是这样的关联吗？&lt;/p&gt;
-
-&lt;/blockquote&gt;
-
-&lt;p&gt;关于这个问题，我想做一个很形象的类比，来帮助大家对 &lt;strong&gt;队列&lt;/strong&gt;、&lt;strong&gt;任务&lt;/strong&gt; 以及 &lt;strong&gt;线程&lt;/strong&gt; 之间关系的理解。&lt;/p&gt;
-
-&lt;p&gt;假设现在有 5 个人要穿过一道门禁，这道门禁总共有 10 个入口，管理员可以决定同一时间打开几个入口，可以决定同一时间让一个人单独通过还是多个人一起通过。不过默认情况下，管理员只开启一个入口，且一个通道一次只能通过一个人。&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;这个故事里，人好比是 &lt;strong&gt;任务&lt;/strong&gt;，管理员好比是 &lt;strong&gt;系统&lt;/strong&gt;，入口则代表 &lt;strong&gt;线程&lt;/strong&gt;。
-    &lt;ul&gt;
-      &lt;li&gt;5 个人表示有 5 个任务，10 个入口代表 10 条线程。&lt;/li&gt;
-      &lt;li&gt;&lt;strong&gt;串行队列&lt;/strong&gt;好比是 5 个人排成一支长队。&lt;/li&gt;
-      &lt;li&gt;&lt;strong&gt;并发队列&lt;/strong&gt;好比是 5 个人排成多支队伍，比如 2 队，或者 3 队。&lt;/li&gt;
-      &lt;li&gt;&lt;strong&gt;同步任务&lt;/strong&gt;好比是管理员只开启了一个入口（当前线程）。&lt;/li&gt;
-      &lt;li&gt;&lt;strong&gt;异步任务&lt;/strong&gt;好比是管理员同时开启了多个入口（当前线程 + 新开的线程）。&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;『异步执行 + 并发队列』&lt;/strong&gt;可以理解为：现在管理员开启了多个入口（比如 3 个入口），5 个人排成了多支队伍（比如 3 支队伍），这样这 5 个人就可以 3 个人同时一起穿过门禁了。&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;『同步执行 + 并发队列』&lt;/strong&gt;可以理解为：现在管理员只开启了 1 个入口，5 个人排成了多支队伍。虽然这 5 个人排成了多支队伍，但是只开了 1 个入口啊，这 5 个人虽然都想快点过去，但是 1 个入口一次只能过 1 个人，所以大家就只好一个接一个走过去了，表现的结果就是：顺次通过入口。&lt;/li&gt;
-  &lt;li&gt;换成 GCD 里的语言就是说：
-    &lt;ul&gt;
-      &lt;li&gt;『异步执行 + 并发队列』就是：系统开启了多个线程（主线程+其他子线程），任务可以多个同时运行。&lt;/li&gt;
-      &lt;li&gt;『同步执行 + 并发队列』就是：系统只默认开启了一个主线程，没有开启子线程，虽然任务处于并发队列中，但也只能一个接一个执行了。&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;下边我们来研究一下上边提到的六种简单组合方式的使用方法。&lt;/p&gt;
-
-&lt;h1 id=&quot;四gcd-的基本使用&quot;&gt;四、GCD 的基本使用&lt;/h1&gt;
-
-&lt;p&gt;&lt;strong&gt;先来讲讲并发队列的两种执行方式。&lt;/strong&gt;&lt;/p&gt;
-
-&lt;h2 id=&quot;1-同步执行--并发队列&quot;&gt;1. 同步执行 + 并发队列&lt;/h2&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;在当前线程中执行任务，不会开启新线程，执行完一个任务，再执行下一个任务。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/**
- * 同步执行 + 并发队列
- * 特点：在当前线程中执行任务，不会开启新线程，执行完一个任务，再执行下一个任务。
- */
-- (void)syncConcurrent {
-    NSLog(@&quot;currentThread---%@&quot;,[NSThread currentThread]);  // 打印当前线程
-    NSLog(@&quot;syncConcurrent---begin&quot;);
-    
-    dispatch_queue_t queue = dispatch_queue_create(&quot;net.bujige.testQueue&quot;, DISPATCH_QUEUE_CONCURRENT);
-    
-    dispatch_sync(queue, ^{
-        // 追加任务 1
-        [NSThread sleepForTimeInterval:2];              // 模拟耗时操作
-        NSLog(@&quot;1---%@&quot;,[NSThread currentThread]);      // 打印当前线程
-    });
-    
-    dispatch_sync(queue, ^{
-        // 追加任务 2
-        [NSThread sleepForTimeInterval:2];              // 模拟耗时操作
-        NSLog(@&quot;2---%@&quot;,[NSThread currentThread]);      // 打印当前线程
-    });
-    
-    dispatch_sync(queue, ^{
-        // 追加任务 3
-        [NSThread sleepForTimeInterval:2];              // 模拟耗时操作
-        NSLog(@&quot;3---%@&quot;,[NSThread currentThread]);      // 打印当前线程
-    });
-    
-    NSLog(@&quot;syncConcurrent---end&quot;);
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;输出结果：&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; 2019-08-08 14:32:53.542816+0800 YSC-GCD-demo[16332:4171500] currentThread---{number = 1, name = main}
-   
- 2019-08-08 14:32:53.542964+0800 YSC-GCD-demo[16332:4171500] syncConcurrent---begin
-   
- 2019-08-08 14:32:55.544329+0800 YSC-GCD-demo[16332:4171500] 1---{number = 1, name = main}
-   
- 2019-08-08 14:32:57.545779+0800 YSC-GCD-demo[16332:4171500] 2---{number = 1, name = main}
-   
- 2019-08-08 14:32:59.547154+0800 YSC-GCD-demo[16332:4171500] 3---{number = 1, name = main}
-   
- 2019-08-08 14:32:59.547365+0800 YSC-GCD-demo[16332:4171500] syncConcurrent---end
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;从 &lt;code class=&quot;highlighter-rouge&quot;&gt;同步执行 + 并发队列&lt;/code&gt; 中可看到：&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;所有任务都是在当前线程（主线程）中执行的，没有开启新的线程（&lt;code class=&quot;highlighter-rouge&quot;&gt;同步执行&lt;/code&gt;不具备开启新线程的能力）。&lt;/li&gt;
-  &lt;li&gt;所有任务都在打印的 &lt;code class=&quot;highlighter-rouge&quot;&gt;syncConcurrent---begin&lt;/code&gt;和 &lt;code class=&quot;highlighter-rouge&quot;&gt;syncConcurrent---end&lt;/code&gt;之间执行的（&lt;code class=&quot;highlighter-rouge&quot;&gt;同步任务&lt;/code&gt;需要等待队列的任务执行结束）。&lt;/li&gt;
-  &lt;li&gt;任务按顺序执行的。按顺序执行的原因：虽然 &lt;code class=&quot;highlighter-rouge&quot;&gt;并发队列&lt;/code&gt;可以开启多个线程，并且同时执行多个任务。但是因为本身不能创建新线程，只有当前线程这一个线程（&lt;code class=&quot;highlighter-rouge&quot;&gt;同步任务&lt;/code&gt;不具备开启新线程的能力），所以也就不存在并发。而且当前线程只有等待当前队列中正在执行的任务执行完毕之后，才能继续接着执行下面的操作（&lt;code class=&quot;highlighter-rouge&quot;&gt;同步任务&lt;/code&gt;需要等待队列的任务执行结束）。所以任务只能一个接一个按顺序执行，不能同时被执行。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;2-异步执行--并发队列&quot;&gt;2. 异步执行 + 并发队列&lt;/h2&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;可以开启多个线程，任务交替（同时）执行。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/**
- * 异步执行 + 并发队列
- * 特点：可以开启多个线程，任务交替（同时）执行。
- */
-- (void)asyncConcurrent {
-    NSLog(@&quot;currentThread---%@&quot;,[NSThread currentThread]);  // 打印当前线程
-    NSLog(@&quot;asyncConcurrent---begin&quot;);
-    
-    dispatch_queue_t queue = dispatch_queue_create(&quot;net.bujige.testQueue&quot;, DISPATCH_QUEUE_CONCURRENT);
-    
-    dispatch_async(queue, ^{
-        // 追加任务 1
-        [NSThread sleepForTimeInterval:2];              // 模拟耗时操作
-        NSLog(@&quot;1---%@&quot;,[NSThread currentThread]);      // 打印当前线程
-    });
-    
-    dispatch_async(queue, ^{
-        // 追加任务 2
-        [NSThread sleepForTimeInterval:2];              // 模拟耗时操作
-        NSLog(@&quot;2---%@&quot;,[NSThread currentThread]);      // 打印当前线程
-    });
-    
-    dispatch_async(queue, ^{
-        // 追加任务 3
-        [NSThread sleepForTimeInterval:2];              // 模拟耗时操作
-        NSLog(@&quot;3---%@&quot;,[NSThread currentThread]);      // 打印当前线程
-    });
-    
-    NSLog(@&quot;asyncConcurrent---end&quot;);
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;输出结果：&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; 2019-08-08 14:36:37.747966+0800 YSC-GCD-demo[17232:4187114] currentThread---{number = 1, name = main}
-   
- 2019-08-08 14:36:37.748150+0800 YSC-GCD-demo[17232:4187114] asyncConcurrent---begin
-   
- 2019-08-08 14:36:37.748279+0800 YSC-GCD-demo[17232:4187114] asyncConcurrent---end
-   
- 2019-08-08 14:36:39.752523+0800 YSC-GCD-demo[17232:4187204] 2---{number = 3, name = (null)}
-   
- 2019-08-08 14:36:39.752527+0800 YSC-GCD-demo[17232:4187202] 3---{number = 5, name = (null)}
-   
- 2019-08-08 14:36:39.752527+0800 YSC-GCD-demo[17232:4187203] 1---{number = 4, name = (null)}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;在 &lt;code class=&quot;highlighter-rouge&quot;&gt;异步执行&lt;/code&gt; + &lt;code class=&quot;highlighter-rouge&quot;&gt;并发队列&lt;/code&gt; 中可以看出：&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;除了当前线程（主线程），系统又开启了 3 个线程，并且任务是交替/同时执行的。（异步执行具备开启新线程的能力。且 并发队列可开启多个线程，同时执行多个任务）。&lt;/li&gt;
-  &lt;li&gt;所有任务是在打印的 syncConcurrent—begin和 syncConcurrent—end之后才执行的。说明当前线程没有等待，而是直接开启了新线程，在新线程中执行任务（异步执行不做等待，可以继续执行任务）。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;strong&gt;接下来再来讲讲串行队列的两种执行方式。&lt;/strong&gt;&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;3-同步执行--串行队列&quot;&gt;3. 同步执行 + 串行队列&lt;/h2&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;不会开启新线程，在当前线程执行任务。任务是串行的，执行完一个任务，再执行下一个任务。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/**
- * 同步执行 + 串行队列
- * 特点：不会开启新线程，在当前线程执行任务。任务是串行的，执行完一个任务，再执行下一个任务。
- */
-- (void)syncSerial {
-    NSLog(@&quot;currentThread---%@&quot;,[NSThread currentThread]);  // 打印当前线程
-    NSLog(@&quot;syncSerial---begin&quot;);
-    
-    dispatch_queue_t queue = dispatch_queue_create(&quot;net.bujige.testQueue&quot;, DISPATCH_QUEUE_SERIAL);
-    
-    dispatch_sync(queue, ^{
-        // 追加任务 1
-        [NSThread sleepForTimeInterval:2];              // 模拟耗时操作
-        NSLog(@&quot;1---%@&quot;,[NSThread currentThread]);      // 打印当前线程
-    });
-    dispatch_sync(queue, ^{
-        // 追加任务 2
-        [NSThread sleepForTimeInterval:2];              // 模拟耗时操作
-        NSLog(@&quot;2---%@&quot;,[NSThread currentThread]);      // 打印当前线程
-    });
-    dispatch_sync(queue, ^{
-        // 追加任务 3
-        [NSThread sleepForTimeInterval:2];              // 模拟耗时操作
-        NSLog(@&quot;3---%@&quot;,[NSThread currentThread]);      // 打印当前线程
-    });
-    
-    NSLog(@&quot;syncSerial---end&quot;);
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;输出结果为：&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; 2019-08-08 14:39:31.366815+0800 YSC-GCD-demo[17285:4197645] currentThread---{number = 1, name = main}
-   
- 2019-08-08 14:39:31.366952+0800 YSC-GCD-demo[17285:4197645] syncSerial---begin
-   
- 2019-08-08 14:39:33.368256+0800 YSC-GCD-demo[17285:4197645] 1---{number = 1, name = main}
-   
- 2019-08-08 14:39:35.369661+0800 YSC-GCD-demo[17285:4197645] 2---{number = 1, name = main}
-   
- 2019-08-08 14:39:37.370991+0800 YSC-GCD-demo[17285:4197645] 3---{number = 1, name = main}
-   
- 2019-08-08 14:39:37.371192+0800 YSC-GCD-demo[17285:4197645] syncSerial---end
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;在 同步执行 + 串行队列 可以看到：&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;所有任务都是在当前线程（主线程）中执行的，并没有开启新的线程（同步执行不具备开启新线程的能力）。&lt;/li&gt;
-  &lt;li&gt;所有任务都在打印的 syncConcurrent—begin和 syncConcurrent—end之间执行（同步任务需要等待队列的任务执行结束）。&lt;/li&gt;
-  &lt;li&gt;任务是按顺序执行的（串行队列每次只有一个任务被执行，任务一个接一个按顺序执行）。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;4-异步执行--串行队列&quot;&gt;4. 异步执行 + 串行队列&lt;/h2&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;会开启新线程，但是因为任务是串行的，执行完一个任务，再执行下一个任务&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/**
- * 同步执行 + 串行队列
- * 特点：不会开启新线程，在当前线程执行任务。任务是串行的，执行完一个任务，再执行下一个任务。
- */
-- (void)syncSerial {
-    NSLog(@&quot;currentThread---%@&quot;,[NSThread currentThread]);  // 打印当前线程
-    NSLog(@&quot;syncSerial---begin&quot;);
-    
-    dispatch_queue_t queue = dispatch_queue_create(&quot;net.bujige.testQueue&quot;, DISPATCH_QUEUE_SERIAL);
-    
-    dispatch_sync(queue, ^{
-        // 追加任务 1
-        [NSThread sleepForTimeInterval:2];              // 模拟耗时操作
-        NSLog(@&quot;1---%@&quot;,[NSThread currentThread]);      // 打印当前线程
-    });
-    dispatch_sync(queue, ^{
-        // 追加任务 2
-        [NSThread sleepForTimeInterval:2];              // 模拟耗时操作
-        NSLog(@&quot;2---%@&quot;,[NSThread currentThread]);      // 打印当前线程
-    });
-    dispatch_sync(queue, ^{
-        // 追加任务 3
-        [NSThread sleepForTimeInterval:2];              // 模拟耗时操作
-        NSLog(@&quot;3---%@&quot;,[NSThread currentThread]);      // 打印当前线程
-    });
-    
-    NSLog(@&quot;syncSerial---end&quot;);
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;输出结果为：&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; 2019-08-08 14:40:53.944502+0800 YSC-GCD-demo[17313:4203018] currentThread---{number = 1, name = main}
-   
- 2019-08-08 14:40:53.944615+0800 YSC-GCD-demo[17313:4203018] asyncSerial---begin
-   
- 2019-08-08 14:40:53.944710+0800 YSC-GCD-demo[17313:4203018] asyncSerial---end
-   
- 2019-08-08 14:40:55.947709+0800 YSC-GCD-demo[17313:4203079] 1---{number = 3, name = (null)}
-   
- 2019-08-08 14:40:57.952453+0800 YSC-GCD-demo[17313:4203079] 2---{number = 3, name = (null)}
-   
- 2019-08-08 14:40:59.952943+0800 YSC-GCD-demo[17313:4203079] 3---{number = 3, name = (null)}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;在 异步执行 + 串行队列 可以看到：&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;开启了一条新线程（异步执行具备开启新线程的能力，串行队列只开启一个线程）。&lt;/li&gt;
-  &lt;li&gt;所有任务是在打印的 syncConcurrent—begin和 syncConcurrent—end之后才开始执行的（异步执行不会做任何等待，可以继续执行任务）。&lt;/li&gt;
-  &lt;li&gt;任务是按顺序执行的（串行队列每次只有一个任务被执行，任务一个接一个按顺序执行）。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;下边讲讲刚才我们提到过的：&lt;strong&gt;主队列&lt;/strong&gt;。&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;主队列：GCD 默认提供的 &lt;strong&gt;串行队列&lt;/strong&gt;。
-    &lt;ul&gt;
-      &lt;li&gt;默认情况下，平常所写代码是直接放在主队列中的。&lt;/li&gt;
-      &lt;li&gt;所有放在主队列中的任务，都会放到主线程中执行。&lt;/li&gt;
-      &lt;li&gt;可使用 dispatch_get_main_queue()获得主队列。&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;strong&gt;我们再来看看主队列的两种组合方式。&lt;/strong&gt;&lt;/p&gt;
-
-&lt;h2 id=&quot;5-同步执行--主队列&quot;&gt;5. 同步执行 + 主队列&lt;/h2&gt;
-
-&lt;p&gt;同步执行 + 主队列 在不同线程中调用结果也是不一样，在主线程中调用会发生死锁问题，而在其他线程中调用则不会。&lt;/p&gt;
-
-&lt;h3 id=&quot;-在主线程中调用-同步执行--主队列&quot;&gt;㈠ 在主线程中调用 『同步执行 + 主队列』&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;互相等待卡住不可行&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/**
- * 同步执行 + 主队列
- * 特点(主线程调用)：互等卡主不执行。
- * 特点(其他线程调用)：不会开启新线程，执行完一个任务，再执行下一个任务。
- */
-- (void)syncMain {
-    
-    NSLog(@&quot;currentThread---%@&quot;,[NSThread currentThread]);  // 打印当前线程
-    NSLog(@&quot;syncMain---begin&quot;);
-    
-    dispatch_queue_t queue = dispatch_get_main_queue();
-    
-    dispatch_sync(queue, ^{
-        // 追加任务 1
-        [NSThread sleepForTimeInterval:2];              // 模拟耗时操作
-        NSLog(@&quot;1---%@&quot;,[NSThread currentThread]);      // 打印当前线程
-    });
-    
-    dispatch_sync(queue, ^{
-        // 追加任务 2
-        [NSThread sleepForTimeInterval:2];              // 模拟耗时操作
-        NSLog(@&quot;2---%@&quot;,[NSThread currentThread]);      // 打印当前线程
-    });
-    
-    dispatch_sync(queue, ^{
-        // 追加任务 3
-        [NSThread sleepForTimeInterval:2];              // 模拟耗时操作
-        NSLog(@&quot;3---%@&quot;,[NSThread currentThread]);      // 打印当前线程
-    });
-    
-    NSLog(@&quot;syncMain---end&quot;);
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;输出结果&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; 2019-08-08 14:43:58.062376+0800 YSC-GCD-demo[17371:4213562] currentThread---{number = 1, name = main}
-   
- 2019-08-08 14:43:58.062518+0800 YSC-GCD-demo[17371:4213562] syncMain---begin
-   
- (lldb)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;在主线程中使用 同步执行 + 主队列 可以惊奇的发现：&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;追加到主线程的任务 1、任务 2、任务 3 都不再执行了，而且 syncMain—end也没有打印，在 XCode 9 及以上版本上还会直接报崩溃。这是为什么呢？&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;这是因为我们在主线程中执行 syncMain 方法，相当于把 syncMain 任务放到了主线程的队列中。而 同步执行 会等待当前队列中的任务执行完毕，才会接着执行。那么当我们把 任务 1 追加到主队列中，任务 1 就在等待主线程处理完 syncMain 任务。而syncMain 任务需要等待 任务 1 执行完毕，才能接着执行。&lt;/p&gt;
-
-&lt;p&gt;那么，现在的情况就是 syncMain 任务和 任务 1 都在等对方执行完毕。这样大家互相等待，所以就卡住了，所以我们的任务执行不了，而且 syncMain—end 也没有打印。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;要是如果不在主线程中调用，而在其他线程中调用会如何呢？&lt;/strong&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;-在其他线程中调用同步执行--主队列&quot;&gt;㈡ 在其他线程中调用『同步执行 + 主队列』&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;不会开启新线程，执行完一个任务，再执行下一个任务&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;// 使用 NSThread 的 detachNewThreadSelector 方法会创建线程，并自动启动线程执行 selector 任务
-[NSThread detachNewThreadSelector:@selector(syncMain) toTarget:self withObject:nil];
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;输出结果：&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; 2019-08-08 14:51:38.137978+0800 YSC-GCD-demo[17482:4237818] currentThread---{number = 3, name = (null)}
-   
- 2019-08-08 14:51:38.138159+0800 YSC-GCD-demo[17482:4237818] syncMain---begin
-   
- 2019-08-08 14:51:40.149065+0800 YSC-GCD-demo[17482:4237594] 1---{number = 1, name = main}
-   
- 2019-08-08 14:51:42.151104+0800 YSC-GCD-demo[17482:4237594] 2---{number = 1, name = main}
-   
- 2019-08-08 14:51:44.152583+0800 YSC-GCD-demo[17482:4237594] 3---{number = 1, name = main}
-   
- 2019-08-08 14:51:44.152767+0800 YSC-GCD-demo[17482:4237818] syncMain---end
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;在其他线程中使用 同步执行 + 主队列 可看到：&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;所有任务都是在主线程（非当前线程）中执行的，没有开启新的线程（所有放在主队列中的任务，都会放到主线程中执行）。&lt;/li&gt;
-  &lt;li&gt;所有任务都在打印的 syncConcurrent—begin和 syncConcurrent—end之间执行（同步任务需要等待队列的任务执行结束）。&lt;/li&gt;
-  &lt;li&gt;任务是按顺序执行的（主队列是 串行队列，每次只有一个任务被执行，任务一个接一个按顺序执行）。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;为什么现在就不会卡住了呢？&lt;/p&gt;
-
-&lt;p&gt;因为syncMain 任务 放到了其他线程里，而 任务 1、任务 2、任务3 都在追加到主队列中，这三个任务都会在主线程中执行。syncMain 任务 在其他线程中执行到追加 任务 1 到主队列中，因为主队列现在没有正在执行的任务，所以，会直接执行主队列的 任务1，等 任务1 执行完毕，再接着执行 任务 2、任务 3。所以这里不会卡住线程，也就不会造成死锁问题。&lt;/p&gt;
-
-&lt;h2 id=&quot;6-异步执行--主队列&quot;&gt;6. 异步执行 + 主队列&lt;/h2&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;只在主线程中执行任务，执行完一个任务，再执行下一个任务。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/**
- * 异步执行 + 主队列
- * 特点：只在主线程中执行任务，执行完一个任务，再执行下一个任务
- */
-- (void)asyncMain {
-    NSLog(@&quot;currentThread---%@&quot;,[NSThread currentThread]);  // 打印当前线程
-    NSLog(@&quot;asyncMain---begin&quot;);
-    
-    dispatch_queue_t queue = dispatch_get_main_queue();
-    
-    dispatch_async(queue, ^{
-        // 追加任务 1
-        [NSThread sleepForTimeInterval:2];              // 模拟耗时操作
-        NSLog(@&quot;1---%@&quot;,[NSThread currentThread]);      // 打印当前线程
-    });
-    
-    dispatch_async(queue, ^{
-        // 追加任务 2
-        [NSThread sleepForTimeInterval:2];              // 模拟耗时操作
-        NSLog(@&quot;2---%@&quot;,[NSThread currentThread]);      // 打印当前线程
-    });
-    
-    dispatch_async(queue, ^{
-        // 追加任务 3
-        [NSThread sleepForTimeInterval:2];              // 模拟耗时操作
-        NSLog(@&quot;3---%@&quot;,[NSThread currentThread]);      // 打印当前线程
-    });
-    
-    NSLog(@&quot;asyncMain---end&quot;);
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;输出结果：&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; 2019-08-08 14:53:27.023091+0800 YSC-GCD-demo[17521:4243690] currentThread---{number = 1, name = main}
-   
- 2019-08-08 14:53:27.023247+0800 YSC-GCD-demo[17521:4243690] asyncMain---begin
-   
- 2019-08-08 14:53:27.023399+0800 YSC-GCD-demo[17521:4243690] asyncMain---end
-   
- 2019-08-08 14:53:29.035565+0800 YSC-GCD-demo[17521:4243690] 1---{number = 1, name = main}
-   
- 2019-08-08 14:53:31.036565+0800 YSC-GCD-demo[17521:4243690] 2---{number = 1, name = main}
-   
- 2019-08-08 14:53:33.037092+0800 YSC-GCD-demo[17521:4243690] 3---{number = 1, name = main}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;在 异步执行 + 主队列 可以看到：&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;所有任务都是在当前线程（主线程）中执行的，并没有开启新的线程（虽然 异步执行具备开启线程的能力，但因为是主队列，所以所有任务都在主线程中）。&lt;/li&gt;
-  &lt;li&gt;所有任务是在打印的 syncConcurrent—begin和 syncConcurrent—end之后才开始执行的（异步执行不会做任何等待，可以继续执行任务）。&lt;/li&gt;
-  &lt;li&gt;任务是按顺序执行的（因为主队列是 串行队列，每次只有一个任务被执行，任务一个接一个按顺序执行）。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;弄懂了难理解、绕来绕去的&lt;strong&gt;『不同队列』+『不同任务』&lt;/strong&gt;使用区别之后，我们来学习一个简单的东西：&lt;strong&gt;5. GCD 线程间的通信&lt;/strong&gt;。&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;h1 id=&quot;五gcd-线程间的通信&quot;&gt;五、GCD 线程间的通信&lt;/h1&gt;
-
-&lt;p&gt;在 iOS 开发过程中，我们一般在主线程里边进行 UI 刷新，例如：点击、滚动、拖拽等事件。我们通常把一些耗时的操作放在其他线程，比如说图片下载、文件上传等耗时操作。而当我们有时候在其他线程完成了耗时操作时，需要回到主线程，那么就用到了线程之间的通讯。&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/**
- * 线程间通信
- */
-- (void)communication {
-    // 获取全局并发队列
-    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
-    // 获取主队列
-    dispatch_queue_t mainQueue = dispatch_get_main_queue();
-    
-    dispatch_async(queue, ^{
-        // 异步追加任务 1
-        [NSThread sleepForTimeInterval:2];              // 模拟耗时操作
-        NSLog(@&quot;1---%@&quot;,[NSThread currentThread]);      // 打印当前线程
-        
-        // 回到主线程
-        dispatch_async(mainQueue, ^{
-            // 追加在主线程中执行的任务
-            [NSThread sleepForTimeInterval:2];              // 模拟耗时操作
-            NSLog(@&quot;2---%@&quot;,[NSThread currentThread]);      // 打印当前线程
-        });
-    });
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;输出结果：&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; 2019-08-08 14:56:22.973318+0800 YSC-GCD-demo[17573:4253201] 1---{number = 3, name = (null)}
-   
- 2019-08-08 14:56:24.973902+0800 YSC-GCD-demo[17573:4253108] 2---{number = 1, name = main}
-
-  - 可以看到在其他线程中先执行任务，执行完了之后回到主线程执行主线程的相应操作。
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h1 id=&quot;六gcd-的其他方法&quot;&gt;六、GCD 的其他方法&lt;/h1&gt;
-
-&lt;h2 id=&quot;1-gcd-栅栏方法dispatch_barrier_async&quot;&gt;1. GCD 栅栏方法：dispatch_barrier_async&lt;/h2&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;我们有时需要异步执行两组操作，而且第一组操作执行完之后，才能开始执行第二组操作。这样我们就需要一个相当于 栅栏一样的一个方法将两组异步执行的操作组给分割起来，当然这里的操作组里可以包含一个或多个任务。这就需要用到dispatch_barrier_async方法在两个操作组间形成栅栏。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;dispatch_barrier_async方法会等待前边追加到并发队列中的任务全部执行完毕之后，再将指定的任务追加到该异步队列中。然后在 dispatch_barrier_async方法追加的任务执行完毕之后，异步队列才恢复为一般动作，接着追加任务到该异步队列并开始执行。具体如下图所示：&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/posts/iOS/1877784-4d6d77fafd3ad007.webp&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/**
- * 栅栏方法 dispatch_barrier_async
- */
-- (void)barrier {
-    dispatch_queue_t queue = dispatch_queue_create(&quot;net.bujige.testQueue&quot;, DISPATCH_QUEUE_CONCURRENT);
-    
-    dispatch_async(queue, ^{
-        // 追加任务 1
-        [NSThread sleepForTimeInterval:2];              // 模拟耗时操作
-        NSLog(@&quot;1---%@&quot;,[NSThread currentThread]);      // 打印当前线程
-    });
-    dispatch_async(queue, ^{
-        // 追加任务 2
-        [NSThread sleepForTimeInterval:2];              // 模拟耗时操作
-        NSLog(@&quot;2---%@&quot;,[NSThread currentThread]);      // 打印当前线程
-    });
-    
-    dispatch_barrier_async(queue, ^{
-        // 追加任务 barrier
-        [NSThread sleepForTimeInterval:2];              // 模拟耗时操作
-        NSLog(@&quot;barrier---%@&quot;,[NSThread currentThread]);// 打印当前线程
-    });
-    
-    dispatch_async(queue, ^{
-        // 追加任务 3
-        [NSThread sleepForTimeInterval:2];              // 模拟耗时操作
-        NSLog(@&quot;3---%@&quot;,[NSThread currentThread]);      // 打印当前线程
-    });
-    dispatch_async(queue, ^{
-        // 追加任务 4
-        [NSThread sleepForTimeInterval:2];              // 模拟耗时操作
-        NSLog(@&quot;4---%@&quot;,[NSThread currentThread]);      // 打印当前线程
-    });
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;输出结果：&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; 2019-08-08 14:59:02.540868+0800 YSC-GCD-demo[17648:4262933] 1---{number = 3, name = (null)}
-   
- 2019-08-08 14:59:02.540868+0800 YSC-GCD-demo[17648:4262932] 2---{number = 4, name = (null)}
-   
- 2019-08-08 14:59:04.542346+0800 YSC-GCD-demo[17648:4262933] barrier---{number = 3, name = (null)}
-   
- 2019-08-08 14:59:06.542772+0800 YSC-GCD-demo[17648:4262932] 4---{number = 4, name = (null)}
-   
- 2019-08-08 14:59:06.542773+0800 YSC-GCD-demo[17648:4262933] 3---{number = 3, name = (null)}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;在 dispatch_barrier_async 执行结果中可以看出：&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;在执行完栅栏前面的操作之后，才执行栅栏操作，最后再执行栅栏后边的操作。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;2-gcd-延时执行方法dispatch_after&quot;&gt;2. GCD 延时执行方法：dispatch_after&lt;/h2&gt;
-&lt;hr /&gt;
-
-&lt;p&gt;我们经常会遇到这样的需求：在指定时间（例如 3 秒）之后执行某个任务。可以用 GCD 的dispatch_after 方法来实现。&lt;/p&gt;
-
-&lt;p&gt;需要注意的是：dispatch_after 方法并不是在指定时间之后才开始执行处理，而是在指定时间之后将任务追加到主队列中。严格来说，这个时间并不是绝对准确的，但想要大致延迟执行任务，dispatch_after 方法是很有效的。&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/**
- * 延时执行方法 dispatch_after
- */
-- (void)after {
-    NSLog(@&quot;currentThread---%@&quot;,[NSThread currentThread]);  // 打印当前线程
-    NSLog(@&quot;asyncMain---begin&quot;);
-    
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        // 2.0 秒后异步追加任务代码到主队列，并开始执行
-        NSLog(@&quot;after---%@&quot;,[NSThread currentThread]);  // 打印当前线程
-    });
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;输出结果：&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; 2019-08-08 15:01:33.569710+0800 YSC-GCD-demo[17702:4272430] currentThread---{number = 1, name = main}
-   
- 2019-08-08 15:01:33.569838+0800 YSC-GCD-demo[17702:4272430] asyncMain---begin
-   
- 2019-08-08 15:01:35.570146+0800 YSC-GCD-demo[17702:4272430] after---{number = 1, name = main}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;可以看出：在打印 &lt;code class=&quot;highlighter-rouge&quot;&gt;asyncMain---begin&lt;/code&gt; 之后大约 2.0 秒的时间，打印了 &lt;code class=&quot;highlighter-rouge&quot;&gt;after---{number = 1, name = main}&lt;/code&gt;&lt;/p&gt;
-
-&lt;h2 id=&quot;3-gcd-一次性代码只执行一次dispatch_once&quot;&gt;3. GCD 一次性代码（只执行一次）：dispatch_once&lt;/h2&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;我们在创建单例、或者有整个程序运行过程中只执行一次的代码时，我们就用到了 GCD 的 dispatch_once方法。使用 dispatch_once方法能保证某段代码在程序运行过程中只被执行 1 次，并且即使在多线程的环境下，dispatch_once也可以保证线程安全。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/**
- * 一次性代码（只执行一次）dispatch_once
- */
-- (void)once {
-    static dispatch_once_t onceToken;
-    dispatch_once(&amp;amp;onceToken, ^{
-        // 只执行 1 次的代码（这里面默认是线程安全的）
-    });
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h2 id=&quot;4-gcd-快速迭代方法dispatch_apply&quot;&gt;4. GCD 快速迭代方法：dispatch_apply&lt;/h2&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;通常我们会用 for 循环遍历，但是 GCD 给我们提供了快速迭代的方法 dispatch_apply。dispatch_apply按照指定的次数将指定的任务追加到指定的队列中，并等待全部队列执行结束。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;如果是在串行队列中使用 dispatch_apply，那么就和 for 循环一样，按顺序同步执行。但是这样就体现不出快速迭代的意义了。&lt;/p&gt;
-
-&lt;p&gt;我们可以利用并发队列进行异步执行。比如说遍历 0~5 这 6 个数字，for 循环的做法是每次取出一个元素，逐个遍历。dispatch_apply 可以 在多个线程中同时（异步）遍历多个数字。&lt;/p&gt;
-
-&lt;p&gt;还有一点，无论是在串行队列，还是并发队列中，dispatch_apply 都会等待全部任务执行完毕，这点就像是同步操作，也像是队列组中的 dispatch_group_wait方法。&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/**
- * 快速迭代方法 dispatch_apply
- */
-- (void)apply {
-    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
-    
-    NSLog(@&quot;apply---begin&quot;);
-    dispatch_apply(6, queue, ^(size_t index) {
-        NSLog(@&quot;%zd---%@&quot;,index, [NSThread currentThread]);
-    });
-    NSLog(@&quot;apply---end&quot;);
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;输出结果：&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; 2019-08-08 15:05:04.715266+0800 YSC-GCD-demo[17771:4285619] apply---begin
-   
- 2019-08-08 15:05:04.715492+0800 YSC-GCD-demo[17771:4285619] 0---{number = 1, name = main}
-   
- 2019-08-08 15:05:04.715516+0800 YSC-GCD-demo[17771:4285722] 1---{number = 3, name = (null)}
-   
- 2019-08-08 15:05:04.715526+0800 YSC-GCD-demo[17771:4285720] 3---{number = 5, name = (null)}
-   
- 2019-08-08 15:05:04.715564+0800 YSC-GCD-demo[17771:4285721] 2---{number = 7, name = (null)}
-   
- 2019-08-08 15:05:04.715555+0800 YSC-GCD-demo[17771:4285719] 4---{number = 6, name = (null)}
-   
- 2019-08-08 15:05:04.715578+0800 YSC-GCD-demo[17771:4285728] 5---{number = 4, name = (null)}
-   
- 2019-08-08 15:05:04.715677+0800 YSC-GCD-demo[17771:4285619] apply---end
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;因为是在并发队列中异步执行任务，所以各个任务的执行时间长短不定，最后结束顺序也不定。但是 apply—end 一定在最后执行。这是因为 dispatch_apply 方法会等待全部任务执行完毕。&lt;/p&gt;
-
-&lt;h2 id=&quot;5-gcd-队列组dispatch_group&quot;&gt;5. GCD 队列组：dispatch_group&lt;/h2&gt;
-
-&lt;p&gt;有时候我们会有这样的需求：分别异步执行2个耗时任务，然后当2个耗时任务都执行完毕后再回到主线程执行任务。这时候我们可以用到 GCD 的队列组。&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;调用队列组的 dispatch_group_async先把任务放到队列中，然后将队列放入队列组中。或者使用队列组的 dispatch_group_enter、dispatch_group_leave组合来实现 dispatch_group_async。&lt;/li&gt;
-  &lt;li&gt;调用队列组的 dispatch_group_notify回到指定线程执行任务。或者使用 dispatch_group_wait回到当前线程继续向下执行（会阻塞当前线程）。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;1-dispatch_group_notify&quot;&gt;1) dispatch_group_notify&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;监听 group 中任务的完成状态，当所有的任务都执行完成后，追加任务到 group 中，并执行任务。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/**
- * 队列组 dispatch_group_notify
- */
-- (void)groupNotify {
-    NSLog(@&quot;currentThread---%@&quot;,[NSThread currentThread]);  // 打印当前线程
-    NSLog(@&quot;group---begin&quot;);
-    
-    dispatch_group_t group =  dispatch_group_create();
-    
-    dispatch_group_async(group, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        // 追加任务 1
-        [NSThread sleepForTimeInterval:2];              // 模拟耗时操作
-        NSLog(@&quot;1---%@&quot;,[NSThread currentThread]);      // 打印当前线程
-    });
-    
-    dispatch_group_async(group, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        // 追加任务 2
-        [NSThread sleepForTimeInterval:2];              // 模拟耗时操作
-        NSLog(@&quot;2---%@&quot;,[NSThread currentThread]);      // 打印当前线程
-    });
-    
-    dispatch_group_notify(group, dispatch_get_main_queue(), ^{
-        // 等前面的异步任务 1、任务 2 都执行完毕后，回到主线程执行下边任务
-        [NSThread sleepForTimeInterval:2];              // 模拟耗时操作
-        NSLog(@&quot;3---%@&quot;,[NSThread currentThread]);      // 打印当前线程
-
-        NSLog(@&quot;group---end&quot;);
-    });
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;输出结果：&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; 2019-08-08 15:07:21.601734+0800 YSC-GCD-demo[17813:4293874] currentThread---{number = 1, name = main}
-   
- 2019-08-08 15:07:21.601871+0800 YSC-GCD-demo[17813:4293874] group---begin
-   
- 2019-08-08 15:07:23.604854+0800 YSC-GCD-demo[17813:4294048] 2---{number = 4, name = (null)}
-   
- 2019-08-08 15:07:23.604852+0800 YSC-GCD-demo[17813:4294053] 1---{number = 3, name = (null)}
-   
- 2019-08-08 15:07:25.606067+0800 YSC-GCD-demo[17813:4293874] 3---{number = 1, name = main}
-   
- 2019-08-08 15:07:25.606255+0800 YSC-GCD-demo[17813:4293874] group---end
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;从 dispatch_group_notify 相关代码运行输出结果可以看出：&lt;/p&gt;
-
-&lt;p&gt;当所有任务都执行完成之后，才执行 dispatch_group_notify 相关 block 中的任务。&lt;/p&gt;
-
-&lt;h3 id=&quot;2-dispatch_group_wait&quot;&gt;2) dispatch_group_wait&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;暂停当前线程（阻塞当前线程），等待指定的 group 中的任务执行完成后，才会往下继续执行。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/**
- * 队列组 dispatch_group_wait
- */
-- (void)groupWait {
-    NSLog(@&quot;currentThread---%@&quot;,[NSThread currentThread]);  // 打印当前线程
-    NSLog(@&quot;group---begin&quot;);
-    
-    dispatch_group_t group =  dispatch_group_create();
-    
-    dispatch_group_async(group, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        // 追加任务 1
-        [NSThread sleepForTimeInterval:2];              // 模拟耗时操作
-        NSLog(@&quot;1---%@&quot;,[NSThread currentThread]);      // 打印当前线程
-    });
-    
-    dispatch_group_async(group, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        // 追加任务 2
-        [NSThread sleepForTimeInterval:2];              // 模拟耗时操作
-        NSLog(@&quot;2---%@&quot;,[NSThread currentThread]);      // 打印当前线程
-    });
-    
-    // 等待上面的任务全部完成后，会往下继续执行（会阻塞当前线程）
-    dispatch_group_wait(group, DISPATCH_TIME_FOREVER);
-    
-    NSLog(@&quot;group---end&quot;);
-    
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;输出结果：&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; 2019-08-08 15:09:12.441729+0800 YSC-GCD-demo[17844:4299926] currentThread---{number = 1, name = main}
-   
- 2019-08-08 15:09:12.441870+0800 YSC-GCD-demo[17844:4299926] group---begin
-   
- 2019-08-08 15:09:14.445790+0800 YSC-GCD-demo[17844:4300046] 2---{number = 4, name = (null)}
-   
- 2019-08-08 15:09:14.445760+0800 YSC-GCD-demo[17844:4300043] 1---{number = 3, name = (null)}
-   
- 2019-08-08 15:09:14.446039+0800 YSC-GCD-demo[17844:4299926] group---end
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;从 dispatch_group_wait 相关代码运行输出结果可以看出：&lt;/p&gt;
-
-&lt;p&gt;当所有任务执行完成之后，才执行 dispatch_group_wait 之后的操作。但是，使用dispatch_group_wait 会阻塞当前线程。&lt;/p&gt;
-
-&lt;h3 id=&quot;3-dispatch_group_enterdispatch_group_leave&quot;&gt;3) dispatch_group_enter、dispatch_group_leave&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;dispatch_group_enter标志着一个任务追加到 group，执行一次，相当于 group 中未执行完毕任务数 +1&lt;/li&gt;
-  &lt;li&gt;dispatch_group_leave标志着一个任务离开了 group，执行一次，相当于 group 中未执行完毕任务数 -1。&lt;/li&gt;
-  &lt;li&gt;当 group 中未执行完毕任务数为0的时候，才会使 dispatch_group_wait解除阻塞，以及执行追加到 dispatch_group_notify中的任务。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/**
- * 队列组 dispatch_group_enter、dispatch_group_leave
- */
-- (void)groupEnterAndLeave {
-    NSLog(@&quot;currentThread---%@&quot;,[NSThread currentThread]);  // 打印当前线程
-    NSLog(@&quot;group---begin&quot;);
-    
-    dispatch_group_t group = dispatch_group_create();
-    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
-    dispatch_group_enter(group);
-    dispatch_async(queue, ^{
-        // 追加任务 1
-        [NSThread sleepForTimeInterval:2];              // 模拟耗时操作
-        NSLog(@&quot;1---%@&quot;,[NSThread currentThread]);      // 打印当前线程
-
-        dispatch_group_leave(group);
-    });
-    
-    dispatch_group_enter(group);
-    dispatch_async(queue, ^{
-        // 追加任务 2
-        [NSThread sleepForTimeInterval:2];              // 模拟耗时操作
-        NSLog(@&quot;2---%@&quot;,[NSThread currentThread]);      // 打印当前线程
-        
-        dispatch_group_leave(group);
-    });
-    
-    dispatch_group_notify(group, dispatch_get_main_queue(), ^{
-        // 等前面的异步操作都执行完毕后，回到主线程.
-        [NSThread sleepForTimeInterval:2];              // 模拟耗时操作
-        NSLog(@&quot;3---%@&quot;,[NSThread currentThread]);      // 打印当前线程
-    
-        NSLog(@&quot;group---end&quot;);
-    });
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;输出结果：&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; 2019-08-08 15:13:17.983283+0800 YSC-GCD-demo[17924:4314716] currentThread---{number = 1, name = main}
-   
- 2019-08-08 15:13:17.983429+0800 YSC-GCD-demo[17924:4314716] group---begin
-   
- 2019-08-08 15:13:19.988898+0800 YSC-GCD-demo[17924:4314816] 2---{number = 3, name = (null)}
-   
- 2019-08-08 15:13:19.988888+0800 YSC-GCD-demo[17924:4314808] 1---{number = 4, name = (null)}
-   
- 2019-08-08 15:13:21.990450+0800 YSC-GCD-demo[17924:4314716] 3---{number = 1, name = main}
-   
- 2019-08-08 15:13:21.990711+0800 YSC-GCD-demo[17924:4314716] group---end
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;从 dispatch_group_enter、dispatch_group_leave 相关代码运行结果中可以看出：当所有任务执行完成之后，才执行 dispatch_group_notify 中的任务。这里的dispatch_group_enter、dispatch_group_leave 组合，其实等同于dispatch_group_async。&lt;/p&gt;
-
-&lt;h2 id=&quot;gcd-信号量dispatch_semaphore&quot;&gt;GCD 信号量：dispatch_semaphore&lt;/h2&gt;
-
-&lt;p&gt;GCD 中的信号量是指 &lt;strong&gt;Dispatch Semaphore&lt;/strong&gt;，是持有计数的信号。类似于过高速路收费站的栏杆。可以通过时，打开栏杆，不可以通过时，关闭栏杆。在 &lt;strong&gt;Dispatch Semaphore&lt;/strong&gt; 中，使用计数来完成这个功能，计数小于 0 时等待，不可通过。计数为 0 或大于 0 时，计数减 1 且不等待，可通过。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Dispatch Semaphore&lt;/strong&gt; 提供了三个方法：&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;dispatch_semaphore_create：创建一个 Semaphore 并初始化信号的总量&lt;/li&gt;
-  &lt;li&gt;dispatch_semaphore_signal：发送一个信号，让信号总量加 1&lt;/li&gt;
-  &lt;li&gt;dispatch_semaphore_wait：可以使总信号量减 1，信号总量小于 0 时就会一直等待（阻塞所在线程），否则就可以正常执行。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;注意：信号量的使用前提是：想清楚你需要处理哪个线程等待（阻塞），又要哪个线程继续执行，然后使用信号量。&lt;/p&gt;
-
-&lt;p&gt;Dispatch Semaphore 在实际开发中主要用于：&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;保持线程同步，将异步执行任务转换为同步执行任务&lt;/li&gt;
-  &lt;li&gt;保证线程安全，为线程加锁&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;1-dispatch-semaphore-线程同步&quot;&gt;1) Dispatch Semaphore 线程同步&lt;/h3&gt;
-
-&lt;p&gt;我们在开发中，会遇到这样的需求��异步执行耗时任务，并使用异步执行的结果进行一些额外的操作。换句话说，相当于，将将异步执行任务转换为同步执行任务。比如说：AFNetworking 中 AFURLSessionManager.m 里面的 tasksForKeyPath: 方法。通过引入信号量的方式，等待异步执行任务结果，获取到 tasks，然后再返回该 tasks。&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;- (NSArray *)tasksForKeyPath:(NSString *)keyPath {
-    __block NSArray *tasks = nil;
-    dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
-    [self.session getTasksWithCompletionHandler:^(NSArray *dataTasks, NSArray *uploadTasks, NSArray *downloadTasks) {
-        if ([keyPath isEqualToString:NSStringFromSelector(@selector(dataTasks))]) {
-            tasks = dataTasks;
-        } else if ([keyPath isEqualToString:NSStringFromSelector(@selector(uploadTasks))]) {
-            tasks = uploadTasks;
-        } else if ([keyPath isEqualToString:NSStringFromSelector(@selector(downloadTasks))]) {
-            tasks = downloadTasks;
-        } else if ([keyPath isEqualToString:NSStringFromSelector(@selector(tasks))]) {
-            tasks = [@[dataTasks, uploadTasks, downloadTasks] valueForKeyPath:@&quot;@unionOfArrays.self&quot;];
-        }
-
-        dispatch_semaphore_signal(semaphore);
-    }];
-
-    dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
-
-    return tasks;
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;下面，我们来利用 Dispatch Semaphore 实现线程同步，将异步执行任务转换为同步执行任务。&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/**
- * semaphore 线程同步
- */
-- (void)semaphoreSync {
-    
-    NSLog(@&quot;currentThread---%@&quot;,[NSThread currentThread]);  // 打印当前线程
-    NSLog(@&quot;semaphore---begin&quot;);
-    
-    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
-    dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
-    
-    __block int number = 0;
-    dispatch_async(queue, ^{
-        // 追加任务 1
-        [NSThread sleepForTimeInterval:2];              // 模拟耗时操作
-        NSLog(@&quot;1---%@&quot;,[NSThread currentThread]);      // 打印当前线程
-        
-        number = 100;
-        
-        dispatch_semaphore_signal(semaphore);
-    });
-    
-    dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
-    NSLog(@&quot;semaphore---end,number = %zd&quot;,number);
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;输出结果：&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; 2019-08-08 15:16:56.781543+0800 YSC-GCD-demo[17988:4325744] currentThread---{number = 1, name = main}
-   
- 2019-08-08 15:16:56.781698+0800 YSC-GCD-demo[17988:4325744] semaphore---begin
-   
- 2019-08-08 15:16:58.785232+0800 YSC-GCD-demo[17988:4325867] 1---{number = 3, name = (null)}
-   
- 2019-08-08 15:16:58.785432+0800 YSC-GCD-demo[17988:4325744] semaphore---end,number = 100
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;从 Dispatch Semaphore 实现线程同步的代码可以看到：&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;semaphore—end是在执行完 number = 100;之后才打印的。而且输出结果 number 为 100。这是因为 异步执行不会做任何等待，可以继续执行任务。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;执行顺如下：
-    1. semaphore 初始创建时计数为 0。
-    2. 异步执行将 任务 1追加到队列之后，不做等待，接着执行 dispatch_semaphore_wait方法，semaphore 减 1，此时 semaphore == -1，当前线程进入等待状态。
-    3. 然后，异步任务 1 开始执行。任务 1 执行到 dispatch_semaphore_signal之后，总信号量加 1，此时 semaphore == 0，正在被阻塞的线程（主线程）恢复继续执行。
-    4. 最后打印 semaphore—end,number = 100。&lt;/p&gt;
-
-&lt;p&gt;这样就实现了线程同步，将异步执行任务转换为同步执行任务。&lt;/p&gt;
-
-&lt;h3 id=&quot;2-dispatch-semaphore-线程安全和线程同步为线程加锁&quot;&gt;2) Dispatch Semaphore 线程安全和线程同步（为线程加锁）&lt;/h3&gt;
-
-&lt;p&gt;&lt;strong&gt;线程安全&lt;/strong&gt;：如果你的代码所在的进程中有多个线程在同时运行，而这些线程可能会同时运行这段代码。如果每次运行结果和单线程运行的结果是一样的，而且其他的变量的值也和预期的是一样的，就是线程安全的。&lt;/p&gt;
-
-&lt;p&gt;若每个线程中对全局变量、静态变量只有读操作，而无写操作，一般来说，这个全局变量是线程安全的；若有多个线程同时执行写操作（更改变量），一般都需要考虑线程同步，否则的话就可能影响线程安全。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;线程同步&lt;/strong&gt;：可理解为线程 A 和 线程 B 一块配合，A 执行到一定程度时要依靠线程 B 的某个结果，于是停下来，示意 B 运行；B 依言执行，再将结果给 A；A 再继续操作。&lt;/p&gt;
-
-&lt;p&gt;举个简单例子就是：两个人在一起聊天。两个人不能同时说话，避免听不清(操作冲突)。等一个人说完(一个线程结束操作)，另一个再说(另一个线程再开始操作)。&lt;/p&gt;
-
-&lt;p&gt;下面，我们模拟火车票售卖的方式，实现 NSThread 线程安全和解决线程同步问题。&lt;/p&gt;
-
-&lt;p&gt;场景：总共有 50 张火车票，有两个售卖火车票的窗口，一个是北京火车票售卖窗口，另一个是上海火车票售卖窗口。两个窗口同时售卖火车票，卖完为止。&lt;/p&gt;
-
-&lt;h4 id=&quot;非线程安全不使用-semaphore先来看看不考虑线程安全的代码&quot;&gt;非线程安全（不使用 semaphore）先来看看不考虑线程安全的代码：&lt;/h4&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/**
- * 非线程安全：不使用 semaphore
- * 初始化火车票数量、卖票窗口（非线程安全）、并开始卖票
- */
-- (void)initTicketStatusNotSave {
-    NSLog(@&quot;currentThread---%@&quot;,[NSThread currentThread]);  // 打印当前线程
-    NSLog(@&quot;semaphore---begin&quot;);
-    
-    self.ticketSurplusCount = 50;
-    
-    // queue1 代表北京火车票售卖窗口
-    dispatch_queue_t queue1 = dispatch_queue_create(&quot;net.bujige.testQueue1&quot;, DISPATCH_QUEUE_SERIAL);
-    // queue2 代表上海火车票售卖窗口
-    dispatch_queue_t queue2 = dispatch_queue_create(&quot;net.bujige.testQueue2&quot;, DISPATCH_QUEUE_SERIAL);
-    
-    __weak typeof(self) weakSelf = self;
-    dispatch_async(queue1, ^{
-        [weakSelf saleTicketNotSafe];
-    });
-    
-    dispatch_async(queue2, ^{
-        [weakSelf saleTicketNotSafe];
-    });
-}
-
-/**
- * 售卖火车票（非线程安全）
- */
-- (void)saleTicketNotSafe {
-    while (1) {
-        
-        if (self.ticketSurplusCount &amp;gt; 0) {  // 如果还有票，继续售卖
-            self.ticketSurplusCount--;
-            NSLog(@&quot;%@&quot;, [NSString stringWithFormat:@&quot;剩余票数：%d 窗口：%@&quot;, self.ticketSurplusCount, [NSThread currentThread]]);
-            [NSThread sleepForTimeInterval:0.2];
-        } else { // 如果已卖完，关闭售票窗口
-            NSLog(@&quot;所有火车票均已售完&quot;);
-            break;
-        }
-        
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;输出结果（部分）：&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; 2019-08-08 15:21:39.772655+0800 YSC-GCD-demo[18071:4340555] currentThread---{number = 1, name = main}
-   
- 2019-08-08 15:21:39.772790+0800 YSC-GCD-demo[18071:4340555] semaphore---begin
-   
- 2019-08-08 15:21:39.773101+0800 YSC-GCD-demo[18071:4340604] 剩余票数：48 窗口：{number = 4, name = (null)}
-   
- 2019-08-08 15:21:39.773115+0800 YSC-GCD-demo[18071:4340605] 剩余票数：49 窗口：{number = 3, name = (null)}
-   
- 2019-08-08 15:21:39.975041+0800 YSC-GCD-demo[18071:4340605] 剩余票数：47 窗口：{number = 3, name = (null)}
-   
- 2019-08-08 15:21:39.975037+0800 YSC-GCD-demo[18071:4340604] 剩余票数：47 窗口：{number = 4, name = (null)}
-   
- 2019-08-08 15:21:40.176567+0800 YSC-GCD-demo[18071:4340604] 剩余票数：46 窗口：{number = 4, name = (null)}
-   
- ...
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;可以看到在不考虑线程安全，不使用 semaphore 的情况下，得到票数是错乱的，这样显然不符合我们的需求，所以我们需要考虑线程安全问题。&lt;/p&gt;
-
-&lt;h4 id=&quot;线程安全使用-semaphore-加锁考虑线程安全的代码&quot;&gt;线程安全（使用 semaphore 加锁）考虑线程安全的代码：&lt;/h4&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/**
- * 线程安全：使用 semaphore 加锁
- * 初始化火车票数量、卖票窗口（线程安全）、并开始卖票
- */
-- (void)initTicketStatusSave {
-    NSLog(@&quot;currentThread---%@&quot;,[NSThread currentThread]);  // 打印当前线程
-    NSLog(@&quot;semaphore---begin&quot;);
-    
-    semaphoreLock = dispatch_semaphore_create(1);
-    
-    self.ticketSurplusCount = 50;
-    
-    // queue1 代表北京火车票售卖窗口
-    dispatch_queue_t queue1 = dispatch_queue_create(&quot;net.bujige.testQueue1&quot;, DISPATCH_QUEUE_SERIAL);
-    // queue2 代表上海火车票售卖窗口
-    dispatch_queue_t queue2 = dispatch_queue_create(&quot;net.bujige.testQueue2&quot;, DISPATCH_QUEUE_SERIAL);
-    
-    __weak typeof(self) weakSelf = self;
-    dispatch_async(queue1, ^{
-        [weakSelf saleTicketSafe];
-    });
-    
-    dispatch_async(queue2, ^{
-        [weakSelf saleTicketSafe];
-    });
-}
-
-/**
- * 售卖火车票（线程安全）
- */
-- (void)saleTicketSafe {
-    while (1) {
-        // 相当于加锁
-        dispatch_semaphore_wait(semaphoreLock, DISPATCH_TIME_FOREVER);
-        
-        if (self.ticketSurplusCount &amp;gt; 0) {  // 如果还有票，继续售卖
-            self.ticketSurplusCount--;
-            NSLog(@&quot;%@&quot;, [NSString stringWithFormat:@&quot;剩余票数：%d 窗口：%@&quot;, self.ticketSurplusCount, [NSThread currentThread]]);
-            [NSThread sleepForTimeInterval:0.2];
-        } else { // 如果已卖完，关闭售票窗口
-            NSLog(@&quot;所有火车票均已售完&quot;);
-            
-            // 相当于解锁
-            dispatch_semaphore_signal(semaphoreLock);
-            break;
-        }
-        
-        // 相当于解锁
-        dispatch_semaphore_signal(semaphoreLock);
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;输出结果为：&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; 2019-08-08 15:23:58.819891+0800 YSC-GCD-demo[18116:4348091] currentThread---{number = 1, name = main}
-   
- 2019-08-08 15:23:58.820041+0800 YSC-GCD-demo[18116:4348091] semaphore---begin
-   
- 2019-08-08 15:23:58.820305+0800 YSC-GCD-demo[18116:4348159] 剩余票数：49 窗口：{number = 3, name = (null)}
-   
- 2019-08-08 15:23:59.022165+0800 YSC-GCD-demo[18116:4348157] 剩余票数：48 窗口：{number = 4, name = (null)}
-   
- 2019-08-08 15:23:59.225299+0800 YSC-GCD-demo[18116:4348159] 剩余票数：47 窗口：{number = 3, name = (null)}
-   
- ...
-   
- 2019-08-08 15:24:08.355977+0800 YSC-GCD-demo[18116:4348157] 剩余票数：2 窗口：{number = 4, name = (null)}
-   
- 2019-08-08 15:24:08.559201+0800 YSC-GCD-demo[18116:4348159] 剩余票数：1 窗口：{number = 3, name = (null)}
-   
- 2019-08-08 15:24:08.759630+0800 YSC-GCD-demo[18116:4348157] 剩余票数：0 窗口：{number = 4, name = (null)}
-   
- 2019-08-08 15:24:08.965100+0800 YSC-GCD-demo[18116:4348159] 所有火车票均已售完
-   
- 2019-08-08 15:24:08.965440+0800 YSC-GCD-demo[18116:4348157] 所有火车票均已售完
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;可以看出，在考虑了线程安全的情况下，使用 dispatch_semaphore&lt;/p&gt;
-
-&lt;p&gt;机制之后，得到的票数是正确的，没有出现混乱的情况。我们也就解决了多个线程同步的问题。&lt;/p&gt;
-
-</description>
-        <pubDate>Tue, 20 Apr 2021 00:00:00 +0800</pubDate>
-        <link>http://localhost:4000/2021/04/iOS_GCD/</link>
-        <guid isPermaLink="true">http://localhost:4000/2021/04/iOS_GCD/</guid>
         
         <category>iOS</category>
         
