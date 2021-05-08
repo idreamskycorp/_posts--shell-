@@ -6,17 +6,17 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <title>xcconfig的使用与xcode环境变量</title>
-  <meta name="description" content="xcconfig的使用与xcode环境变量">
+  <title>iOS查找汉字字符串</title>
+  <meta name="description" content="iOS查找汉字字符串@"[^"]*[\u4E00-\u9FA5]+[^"\n]*?"">
   <meta name="author" content="leopardpan">
 
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="xcconfig的使用与xcode环境变量">
-  <meta name="twitter:description" content="xcconfig的使用与xcode环境变量">
+  <meta name="twitter:title" content="iOS查找汉字字符串">
+  <meta name="twitter:description" content="iOS查找汉字字符串@"[^"]*[\u4E00-\u9FA5]+[^"\n]*?"">
   
   <meta property="og:type" content="article">
-  <meta property="og:title" content="xcconfig的使用与xcode环境变量">
-  <meta property="og:description" content="xcconfig的使用与xcode环境变量">
+  <meta property="og:title" content="iOS查找汉字字符串">
+  <meta property="og:description" content="iOS查找汉字字符串@"[^"]*[\u4E00-\u9FA5]+[^"\n]*?"">
   
   <link rel="icon" type="image/png" href="/images/favicon.png" />
   <link href="/images/favicon.png" rel="shortcut icon" type="image/png">
@@ -24,7 +24,7 @@
   <link rel="stylesheet" href="/css/main.css">
   <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 
-  <link rel="canonical" href="http://localhost:4000/2021/05/xcconfig%E7%9A%84%E4%BD%BF%E7%94%A8%E4%B8%8Excode%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F/">
+  <link rel="canonical" href="http://localhost:4000/2021/05/iOS%E6%9F%A5%E6%89%BE%E6%B1%89%E5%AD%97%E5%AD%97%E7%AC%A6%E4%B8%B2/">
   <link rel="alternate" type="application/rss+xml" title="LiJingBiao" href="http://localhost:4000/feed.xml">
   
   <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
@@ -179,10 +179,10 @@
 
 <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
   <header class="post-header">
-    <h1 class="post-title">xcconfig的使用与xcode环境变量</h1>
+    <h1 class="post-title">iOS查找汉字字符串</h1>
     <div class="post-meta">
       <img src="/images/calendar.png" width="20px"/> 
-      <time datetime="2021-05-07 00:00:00 +0800" itemprop="datePublished" class="post-meta__date date">2021-05-07</time>  
+      <time datetime="2021-05-08 00:00:00 +0800" itemprop="datePublished" class="post-meta__date date">2021-05-08</time>  
 
       <span id="busuanzi_container_page_pv"> | 阅读：<span id="busuanzi_value_page_pv"></span>次</span>
     </p>
@@ -192,82 +192,15 @@
   
     <h2 class="post-title">目录</h2>
     <ul>
-  <li><a href="#xcconfig的使用与xcode环境变量">xcconfig的使用与xcode环境变量</a></li>
+  <li><a href="#ios查找汉字字符串">iOS查找汉字字符串</a></li>
 </ul>
 
   
 
   <section class="post">
-    <h1 id="xcconfig的使用与xcode环境变量">xcconfig的使用与xcode环境变量</h1>
-
-<p>在正式使用xcconfig之前，还是得先把这几个概念给区分一下。什么是workspace，什么是project，什么是target。下面一张图简单说明：</p>
-
-<p><img src="/images/posts/iOS/xcconfig/1293297-1a55808c63b6d254.webp" alt="" /></p>
-
-<ul>
-  <li>workspace，顾名思义就是我们的工作区。一个workspace可以包含多个project以及一些其它文件。workspace也可以把多可以project组织起来。</li>
-  <li>一个project会包含属于这个项目的所有文件，资源，以及生成一个或者多个软件产品的信息。</li>
-  <li>一个project会包含一个或者多个 target，而每一个 target都对应一个products，也就是最终产生的.app。</li>
-  <li>一个targets可以有多个configuration（如我们平常用到的debug和release，当然我们还可以自己添加），每个configuration就会有对应的build settings。每次build都是在一个configuration下build的。</li>
-  <li>build setting 中包含了 product 生成过程中所需的参数信息。project的build settings会对于整个project 中的所有targets生效，而target的build settings是重写了project的build settings，重写的配置以target为准。</li>
-</ul>
-
-<p>那么，什么又是scheme呢？scheme就相当于一个组织者。在build的时候，schema会指定一个target和configuration，这样就能保证在build的时候configuration的唯一性，就能产生一个特定的product。</p>
-
-<p>OK。理清了这些环境变量后，就可以来介绍一下xcconfig了。<br />
-在项目中使用了cocoapods的都会发现，在pod项目中有.xcconfig这样的文件，一般有多少个configuration就会有多少个.xcconfig这样的文件。一般工程中就分为debug和release两个。这里的.xcconfig文件就是通过文本方式指定build settings的一种形式。</p>
-
-<p>所以我们也可以在工程中通过创建xcconfig来指定build settings。这样能够更加方面管理和修改。</p>
-
-<p>下面我在一个demo工程中创建了几个xcconfig。</p>
-
-<p><img src="/images/posts/iOS/xcconfig/1293297-90b863682f33401e.webp" alt="" /></p>
-
-<p>其中common为通用configuration。</p>
-
-<p><img src="/images/posts/iOS/xcconfig/1293297-d0fc013b5a6e9730.webp" alt="" /></p>
-
-<p>所有环境相同的settings可以写在这里。然后你就可以在里面去添加任意键值对了。下面是<code class="highlighter-rouge">settings.release.xcconfig</code>的一个示例。</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>// settings.release.xcconfig
-#include "settings.common.xcconfig"
-#include "Pods/Target Support Files/Pods-TTLivenessDetection_Example/Pods-TTLivenessDetection_Example.release.xcconfig"
-ONLY_ACTIVE_ARCH = NO
-ENABLE_BITCODE = YES
-test = 123
+    <h1 id="ios查找汉字字符串">iOS查找汉字字符串</h1>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>@"[^"]*[\u4E00-\u9FA5]+[^"\n]*?"
 </code></pre></div></div>
-
-<p>然后在project-&gt;info中去设置。</p>
-
-<p><img src="/images/posts/iOS/xcconfig/1293297-cf1ac2fc9ef5e5f5.webp" alt="" /></p>
-
-<p>这里有个坑就是自定义配置后会导致cocoapods无法使用，这里需要在相应的xcconfig里面导入相应的pod的xcconfig</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#include "Pods/Target Support Files/Pods-TTLivenessDetection_Example/Pods-
-TTLivenessDetection_Example.release.xcconfig"
-</code></pre></div></div>
-
-<p>如果还报这种错</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[!] The `TTLivenessDetection_Example [Debug]` target overrides the 
-`HEADER_SEARCH_PATHS` build setting defined in `Pods/Target Support 
-Files/Pods-TTLivenessDetection_Example/Pods-
-TTLivenessDetection_Example.debug.xcconfig'. This can lead to problems with the CocoaPods installation
-    - Use the `$(inherited)` flag, or
-    - Remove the build settings from the target.
-</code></pre></div></div>
-
-<p>按照它说的把<code class="highlighter-rouge">HEADER_SEARCH_PATHS</code>改为<code class="highlighter-rouge">$(inherited)</code>就可以了。</p>
-
-<p>另外就是这里有个继承关系，打开levels可以查看</p>
-
-<p><img src="/images/posts/iOS/xcconfig/1293297-c3f3005ab8c0d992.webp" alt="" /></p>
-
-<p>其中继承关系如下：<br />
-Target configuration-&gt;Target xcconfig-&gt;Project configuration-&gt;Project xcconfig。</p>
-
-<p>也就是说如果是单一的配置，继承级低的会覆盖继承等级高的，而像$()这样的会进行叠加。</p>
-
 
   </section>
 
@@ -337,15 +270,10 @@ Target configuration-&gt;Target xcconfig-&gt;Project configuration-&gt;Project x
        <ul class="pager">
         
         <li class="previous">
-            <a href="/2021/04/iOS%E6%B7%BB%E5%8A%A0%E8%B0%83%E8%AF%95%E5%91%BD%E4%BB%A4/" data-toggle="tooltip" data-placement="top" title="iOS添加调试命令">上一篇：  <span>iOS添加调试命令</span>
+            <a href="/2021/05/xcconfig%E7%9A%84%E4%BD%BF%E7%94%A8%E4%B8%8Excode%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F/" data-toggle="tooltip" data-placement="top" title="xcconfig的使用与xcode环境变量">上一篇：  <span>xcconfig的使用与xcode环境变量</span>
             </a>
         </li>
         
-        
-        <li class="next">
-            <a href="/2021/05/iOS%E6%9F%A5%E6%89%BE%E6%B1%89%E5%AD%97%E5%AD%97%E7%AC%A6%E4%B8%B2/" data-toggle="tooltip" data-placement="top" title="iOS查找汉字字符串">下一篇：  <span>iOS查找汉字字符串</span>
-            </a>
-        </li>
         
     </ul>
 </section>

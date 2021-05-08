@@ -5,9 +5,24 @@
     <description>欢迎来到我的个人博客~</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Fri, 07 May 2021 18:05:49 +0800</pubDate>
-    <lastBuildDate>Fri, 07 May 2021 18:05:49 +0800</lastBuildDate>
+    <pubDate>Sat, 08 May 2021 10:28:28 +0800</pubDate>
+    <lastBuildDate>Sat, 08 May 2021 10:28:28 +0800</lastBuildDate>
     <generator>Jekyll v3.8.5</generator>
+    
+      <item>
+        <title>iOS查找汉字字符串</title>
+        <description>&lt;h1 id=&quot;ios查找汉字字符串&quot;&gt;iOS查找汉字字符串&lt;/h1&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;@&quot;[^&quot;]*[\u4E00-\u9FA5]+[^&quot;\n]*?&quot;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+</description>
+        <pubDate>Sat, 08 May 2021 00:00:00 +0800</pubDate>
+        <link>http://localhost:4000/2021/05/iOS%E6%9F%A5%E6%89%BE%E6%B1%89%E5%AD%97%E5%AD%97%E7%AC%A6%E4%B8%B2/</link>
+        <guid isPermaLink="true">http://localhost:4000/2021/05/iOS%E6%9F%A5%E6%89%BE%E6%B1%89%E5%AD%97%E5%AD%97%E7%AC%A6%E4%B8%B2/</guid>
+        
+        <category>iOS</category>
+        
+        
+      </item>
     
       <item>
         <title>xcconfig的使用与xcode环境变量</title>
@@ -1013,168 +1028,6 @@ fi
         <guid isPermaLink="true">http://localhost:4000/2021/04/Shell%E8%87%AA%E5%8A%A8%E6%8F%90%E4%BA%A4Git%E8%84%9A%E6%9C%AC/</guid>
         
         <category>Shell</category>
-        
-        
-      </item>
-    
-      <item>
-        <title>PlistBuddy</title>
-        <description>&lt;h1 id=&quot;plistbuddy&quot;&gt;PlistBuddy&lt;/h1&gt;
-
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;PlistBuddy&lt;/code&gt; 是 &lt;code class=&quot;highlighter-rouge&quot;&gt;Mac&lt;/code&gt; 系统中一个用于命令行下读写 &lt;code class=&quot;highlighter-rouge&quot;&gt;plist&lt;/code&gt; 文件的工具。可以用来读取或修改 &lt;code class=&quot;highlighter-rouge&quot;&gt;plist&lt;/code&gt; 文件的内容。&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;PlistBuddy&lt;/code&gt; 工具路径&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/usr/libexec/PlistBuddy
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;可以在 &lt;code class=&quot;highlighter-rouge&quot;&gt;/usr/local/bin/&lt;/code&gt; 目录下建立软连接，就可以直接使用 PlistBuddy 命令了&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# 不能直接使用 PlistBuddy 命令
-ln -s /usr/libexec/PlistBuddy /usr/local/bin/PlistBuddy
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;ul&gt;
-  &lt;li&gt;查看帮助&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/usr/libexec/PlistBuddy --help
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h1 id=&quot;操作-plist-文件&quot;&gt;操作 &lt;code class=&quot;highlighter-rouge&quot;&gt;plist&lt;/code&gt; 文件&lt;/h1&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;打印 &lt;code class=&quot;highlighter-rouge&quot;&gt;info.plist&lt;/code&gt; 文件&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/usr/libexec/PlistBuddy -c &quot;Print&quot; info.plist
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;ul&gt;
-  &lt;li&gt;打印字段相应的值&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# 打印 info.plist 中字段 name 值
-/usr/libexec/PlistBuddy -c 'Print :name' info.plist
-
-# 脚本中获取 plist 文件中字段 name 值，并赋值给变量
-name=$($PlistBuddy -c &quot;print :name&quot; info.plist)
-
-# 打印数组字段 testArr 第 0 项
-/usr/libexec/PlistBuddy -c 'Print :testArr:0' info.plist
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;添加字段&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;table&gt;
-  &lt;thead&gt;
-    &lt;tr&gt;
-      &lt;th&gt;字段类型&lt;/th&gt;
-      &lt;th&gt; &lt;/th&gt;
-    &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;string&lt;/td&gt;
-      &lt;td&gt; &lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;array&lt;/td&gt;
-      &lt;td&gt; &lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;dict&lt;/td&gt;
-      &lt;td&gt; &lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;bool&lt;/td&gt;
-      &lt;td&gt; &lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;real&lt;/td&gt;
-      &lt;td&gt; &lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;integer&lt;/td&gt;
-      &lt;td&gt; &lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;date&lt;/td&gt;
-      &lt;td&gt; &lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;data&lt;/td&gt;
-      &lt;td&gt; &lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# string 类型：给 test.plist 文件添加字段 Version 值为 1.0.0
-/usr/libexec/PlistBuddy -c 'Add :Version string 1.0.0' test.plist
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# Array 类型：给 test.plist 文件添加数组字段 AppArr
-
-# 1. 添加 key 值
-/usr/libexec/PlistBuddy -c 'Add :AppArr array' test.plist
-
-# 注意：key之间用 : 隔开，且不能有空格：
-
-# 2. 添加 value 值 app1 、app2
-/usr/libexec/PlistBuddy -c 'Add :AppArr: string app1' test.plist
-/usr/libexec/PlistBuddy -c 'Add :AppArr: string app2' test.plist
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# Dictionary 类型： 给 test.plist 文件添加数组字段 AppDic
-
-# 1. 添加 key 值
-/usr/libexec/PlistBuddy -c 'Add :AppDic dict' test.plist
-
-# 2. 添加 value 值 name 、age
-/usr/libexec/PlistBuddy -c 'Add :AppDic:name string Tom' test.plist
-/usr/libexec/PlistBuddy -c 'Add :AppDic:age string 100' test.plist
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;删除字段&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# 删除 test.plist 中的字段 Version
-/usr/libexec/PlistBuddy -c 'Delete :Version' test.plist
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;修改字段值&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# 修改 string 类型
-/usr/libexec/PlistBuddy -c 'Set :version &quot;1.1.1&quot;' test.plist
-
-# 修改 array 类型. 修改 AppArr 字段中数组的第0个值.
-/usr/libexec/PlistBuddy -c 'Set :AppArr:0 &quot;this is app1&quot;' test.plist
-
-# 修改 dict 类型. 修改 AppDic 字段中 name 的值
-/usr/libexec/PlistBuddy -c 'Set :AppDic:name &quot;Jim&quot;' test.plist
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;合并两个 plist&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# 把 A.plist 合并到 B.plist. 有相同字段，会发生覆盖。
-/usr/libexec/PlistBuddy -c 'Merge A.plist' B.plist
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-</description>
-        <pubDate>Fri, 23 Apr 2021 00:00:00 +0800</pubDate>
-        <link>http://localhost:4000/2021/04/PlistBuddy/</link>
-        <guid isPermaLink="true">http://localhost:4000/2021/04/PlistBuddy/</guid>
-        
-        <category>iOS</category>
         
         
       </item>
