@@ -178,6 +178,27 @@
   <ol class="post-list">
     
     <li>
+      <h2 class="post-list__post-title post-title"><a href="/2021/04/Ruby_note/" title="访问 Ruby笔记">Ruby笔记</a></h2>
+      <p class="excerpt">学习Ruby过程中的一些笔记1、Invalid byte sequence in UTF-8 (ArgumentError)if ! file_content.valid_encoding?  s = file_content.encode("UTF-16be", :invalid=&gt;:replace, :replace=&gt;"?").encode('UTF-8')  s.gsub(/dr/i,'med')end2、Ruby 里的 %Q, %q, %W, %w, %x, %r, ...&hellip;</p>
+      <div class="post-list__meta">        
+        <time datetime="2021-04-19 00:00:00 +0800" class="post-list__meta--date date">
+          <img src="/images/calendar.png" width="20px" /> 
+          2021-04-19</time> 
+        <div class = "tag-img-icon">
+          <img src="/images/tag-icon.svg" width="20px" /> 
+        </div>
+        <a href="/tags">
+          <div class = "post-list-icon-mate">
+            <span class="post-list__meta--tags-right">ruby</span>
+          </div>
+          <div class = "post-list-small-mate">
+          <a class="btn-border-small" href=/2021/04/Ruby_note/>阅读全文 » </a>
+          </div>
+      </div>
+      <hr class="post-list__divider" />
+    </li>
+    
+    <li>
       <h2 class="post-list__post-title post-title"><a href="/2021/04/Shell_rename/" title="访问 Shell批量重命名">Shell批量重命名</a></h2>
       <p class="excerpt">第一种方法CURRENT_DIR=`pwd`for dir in *do    if [ -d $dir ];then        for file in $dir/*        do            NEW_FILE=${file/XXXXXXX/}            if [ "$NEW_FILE" != "$file" ] ;then                mv "${CURRENT_DIR}/$file" "${CURRENT_DIR}/${NEW_FILE...&hellip;</p>
       <div class="post-list__meta">        
@@ -576,27 +597,6 @@
       <hr class="post-list__divider" />
     </li>
     
-    <li>
-      <h2 class="post-list__post-title post-title"><a href="/2015/12/iOS_net_state/" title="访问 iOS获取设备的网络状态(已适配iOS13,iOS14无变化)">iOS获取设备的网络状态(已适配iOS13,iOS14无变化)</a></h2>
-      <p class="excerpt">登录注册写文章首页下载APPiOS获取设备的网络状态(已适配iOS13,iOS14无变化)神SKY关注赞赏支持iOS获取设备的网络状态(已适配iOS13,iOS14无变化)前言小编最近在项目中遇到了一个问题，除刘海屏以外的iOS设备可以正常的搜索到硬件设备，但是刘海屏就不行。因此，小编花了一点时间研究了一下iOS设备获取当前设备的网络状态。实现因为iOS的系统是封闭的，所以是没有直接的APi去获取当前的网络状态。但是道高一尺，魔高一尺。开发者总会有办法获取自己想要的东西。1.网络状态获取获...&hellip;</p>
-      <div class="post-list__meta">        
-        <time datetime="2015-12-22 00:00:00 +0800" class="post-list__meta--date date">
-          <img src="/images/calendar.png" width="20px" /> 
-          2015-12-22</time> 
-        <div class = "tag-img-icon">
-          <img src="/images/tag-icon.svg" width="20px" /> 
-        </div>
-        <a href="/tags">
-          <div class = "post-list-icon-mate">
-            <span class="post-list__meta--tags-right">iOS</span>
-          </div>
-          <div class = "post-list-small-mate">
-          <a class="btn-border-small" href=/2015/12/iOS_net_state/>阅读全文 » </a>
-          </div>
-      </div>
-      <hr class="post-list__divider" />
-    </li>
-    
   </ol>
 
   <hr class="post-list__divider " />
@@ -610,7 +610,9 @@
     
         <a class="newer-posts pagination__newer btn btn-small btn-tertiary" href="/#blog">&larr; 最近</a>
     
-    <span class="pagination__page-number">2 / 2</span>
+    <span class="pagination__page-number">2 / 3</span>
+    
+        <a class="older-posts pagination__older btn btn-small btn-tertiary" href="/page/3/#blog">更早 &rarr;</a>
     
 </nav>
 

@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>2021-05-27 Vim使用教程</title>
+  <meta name="description" content="2021-05-27 Vim使用教程">
+  <meta name="author" content="leopardpan">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="2021-05-27 Vim使用教程">
+  <meta name="twitter:description" content="2021-05-27 Vim使用教程">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="2021-05-27 Vim使用教程">
+  <meta property="og:description" content="2021-05-27 Vim使用教程">
+  
+  <link rel="icon" type="image/png" href="/images/favicon.png" />
+  <link href="/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://localhost:4000/2021/05/2021-05-27-Vim%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/">
+  <link rel="alternate" type="application/rss+xml" title="LiJingBiao" href="http://localhost:4000/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+
+<!-- 站点统计 -->
+  <script 
+  async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js">
+  </script>  
+
+<!-- 百度统计 -->
+  
+  <script>
+      var _hmt = _hmt || [];
+      (function() {
+        var hm = document.createElement("script");
+        hm.src = "//hm.baidu.com/hm.js?e75b13a108d5f088539c03b796edf58e";
+        var s = document.getElementsByTagName("script")[0]; 
+        s.parentNode.insertBefore(hm, s);
+      })();
+  </script>
+  
+
+<!-- google 统计 -->
+  
+  <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+      ga('create', 'G-4VB3MXZ8T0', 'auto');
+      ga('send', 'pageview');
+  </script>
+  
+
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-9005224472374751",
+    enable_page_level_ads: true
+  });
+</script>
+
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">        
+      <div class="nav_container">
+         <nav class="nav-menu-item" style = "float:right">
+            <i class="nav-menu-item">
+              <a href="/#blog" title="" class="blog-button">  博客主页
+              </a>
+            </i>
+            
+                <i class="nav-menu-item">
+
+                  <a href="/archive" title="archive" class="btn-mobile-menu__icon">
+                      所有文章
+                  </a>
+                </i>
+            
+                <i class="nav-menu-item">
+
+                  <a href="/tags" title="tags" class="btn-mobile-menu__icon">
+                      标签
+                  </a>
+                </i>
+            
+                <i class="nav-menu-item">
+
+                  <a href="/about" title="about" class="btn-mobile-menu__icon">
+                      关于我
+                  </a>
+                </i>
+            
+          </nav>
+      </div>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+        <!-- 头像效果-start -->
+        <div class="ih-item circle effect right_to_left">            
+            <a href="/#blog" title="前往 LiJingBiao 的主页" class="blog-button">
+                <div class="img"><img src="/images/avatar.jpg" alt="img"></div>
+                <div class="info">
+                    <div class="info-back">
+                        <h2> 
+                            
+                                天道酬勤
+                            
+                        </h2>
+                        <p>
+                           
+                                iOS / Ruby /Shell
+                            
+                        </p>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <!-- 头像效果-end -->
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for LiJingBiao" class="blog-button">LiJingBiao</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">个人网站</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">欢迎来到我的个人博客~</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        
+
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="" class="blog-button">博客主页</a></li>
+                
+                  <li class="navigation__item"><a href="/archive" title="archive">所有文章</a></li>
+                
+                  <li class="navigation__item"><a href="/tags" title="tags">标签</a></li>
+                
+                  <li class="navigation__item"><a href="/about" title="about">关于我</a></li>
+                
+              </ul>
+            </nav>
+          </div>          
+        </div>
+
+
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-clear"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <head>
+  <link rel="stylesheet" href="/css/post.css">
+</head>
+
+<article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <h1 class="post-title">2021-05-27 Vim使用教程</h1>
+    <div class="post-meta">
+      <img src="/images/calendar.png" width="20px"/> 
+      <time datetime="2021-05-27 00:00:00 +0800" itemprop="datePublished" class="post-meta__date date">2021-05-27</time>  
+
+      <span id="busuanzi_container_page_pv"> | 阅读：<span id="busuanzi_value_page_pv"></span>次</span>
+    </p>
+    </div>
+  </header>
+
+  
+    <h2 class="post-title">目录</h2>
+    <ul>
+  <li><a href="#2021-05-27-vim使用教程">2021-05-27 Vim使用教程</a>
+    <ul>
+      <li><a href="#vim">Vim</a>
+        <ul>
+          <li><a href="#vivim-的使用">vi/vim 的使用</a></li>
+          <li><a href="#命令模式">命令模式：</a></li>
+          <li><a href="#输入模式">输入模式</a></li>
+          <li><a href="#底线命令模式">底线命令模式</a>
+            <ul>
+              <li><a href="#一打开文件保存关闭文件vi命令模式下使用">一、打开文件、保存、关闭文件(vi命令模式下使用)</a></li>
+              <li><a href="#二插入文本或行vi命令模式下使用执行下面命令后将进入插入模式按esc键可退出插入模式">二、插入文本或行(vi命令模式下使用，执行下面命令后将进入插入模式，按ESC键可退出插入模式)</a></li>
+              <li><a href="#三键位操作">三、键位操作</a>
+                <ul>
+                  <li><a href="#1移动光标vi命令模式下使用">1)移动光标(vi命令模式下使用)</a></li>
+                  <li><a href="#2翻页">2)翻页</a></li>
+                  <li><a href="#3行首行尾">3)行首行尾</a></li>
+                  <li><a href="#4页头页尾">4)页头页尾</a></li>
+                </ul>
+              </li>
+              <li><a href="#四删除恢复字符或行vi命令模式下使用">四、删除、恢复字符或行(vi命令模式下使用)</a></li>
+              <li><a href="#五搜索vi命令模式下使用">五、搜索(vi命令模式下使用)</a>
+                <ul>
+                  <li><a href="#1行内查找">1)行内查找</a></li>
+                  <li><a href="#2全文查找">2)全文查找</a></li>
+                  <li><a href="#3替换">3)替换</a></li>
+                  <li><a href="#4全文替换">4)全文替换</a></li>
+                </ul>
+              </li>
+              <li><a href="#六跳至指定行vi命令模式下使用">六、跳至指定行(vi命令模式下使用)</a></li>
+              <li><a href="#七设置行号vi命令模式下使用">七、设置行号(vi命令模式下使用)</a></li>
+              <li><a href="#八复制粘贴vi命令模式下使用">八、复制、粘贴(vi命令模式下使用)</a></li>
+              <li><a href="#九替换vi命令模式下使用">九、替换(vi命令模式下使用)</a></li>
+              <li><a href="#十编辑其他文件">十、编辑其他文件</a></li>
+              <li><a href="#十一修改文件格式">十一、修改文件格式</a></li>
+              <li><a href="#十二vim-键位整理">十二、Vim 键位整理</a>
+                <ul>
+                  <li><a href="#1写入保存退出">1)写入、保存、退出</a></li>
+                  <li><a href="#2光标移动">2)光标移动</a></li>
+                  <li><a href="#3翻页">3)翻页</a></li>
+                  <li><a href="#4查找与替换">4)查找与替换</a></li>
+                  <li><a href="#5复制粘贴删除">5)复制、粘贴、删除</a></li>
+                  <li><a href="#6插入">6)插入</a></li>
+                  <li><a href="#7撤销重做">7)撤销重做</a></li>
+                  <li><a href="#8替换">8)替换</a></li>
+                  <li><a href="#9大小写">9)大小写</a></li>
+                  <li><a href="#10多窗口操作">10)多窗口操作</a></li>
+                  <li><a href="#11多文件编辑">11)多文件编辑</a></li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+  
+
+  <section class="post">
+    <h1 id="2021-05-27-vim使用教程">2021-05-27 Vim使用教程</h1>
+
+<h2 id="vim">Vim</h2>
+
+<p>最近学习所以记录下</p>
+
+<p><img src="/images/posts/vi/1429599-b7c061ff85281d7a.png" alt="" />
+<img src="/images/posts/vi/vim-cheat-sheet-en.png" alt="" />
+<img src="/images/posts/vi/preview.png" alt="" />
+<img src="/images/posts/vi/vim_cheat_sheet_for_programmers_screen.png" alt="" /></p>
+
+<h3 id="vivim-的使用">vi/vim 的使用</h3>
+
+<p>基本上 vi/vim 共分为三种模式，分别是</p>
+
+<ul>
+  <li><strong>命令模式（Command mode）</strong></li>
+  <li><strong>输入模式（Insert mode）</strong></li>
+  <li><strong>底线命令模式（Last line mode）</strong></li>
+</ul>
+
+<p>这三种模式的作用分别是：</p>
+
+<hr />
+
+<h3 id="命令模式">命令模式：</h3>
+
+<p>用户刚刚启动 vi/vim，便进入了命令模式。</p>
+
+<p>此状态下敲击键盘动作会被Vim识别为命令，而非输入字符。比如我们此时按下i，并不会输入一个字符，i被当作了一个命令。</p>
+
+<p>以下是常用的几个命令：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>i 切换到输入模式，以输入字符。
+x 删除当前光标所在处的字符。
+: 切换到底线命令模式，以在最底一行输入命令。
+</code></pre></div></div>
+
+<p>若想要编辑文本：启动Vim，进入了命令模式，按下i，切换到输入模式。</p>
+
+<p>命令模式只有一些最基本的命令，因此仍要依靠底线命令模式输入更多命令。</p>
+
+<hr />
+
+<h3 id="输入模式">输入模式</h3>
+
+<p>在命令模式下按下i就进入了输入模式。</p>
+
+<p>在输入模式中，可以使用以下按键：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>字符按键以及Shift组合，输入字符
+ENTER，回车键，换行
+BACK SPACE，退格键，删除光标前一个字符
+DEL，删除键，删除光标后一个字符
+方向键，在文本中移动光标
+HOME/END，移动光标到行首/行尾
+Page Up/Page Down，上/下翻页
+Insert，切换光标为输入/替换模式，光标将变成竖线/下划线
+ESC，退出输入模式，切换到命令模式
+</code></pre></div></div>
+
+<hr />
+
+<h3 id="底线命令模式">底线命令模式</h3>
+
+<p>在命令模式下按下:（英文冒号）就进入了底线命令模式。</p>
+
+<p>底线命令模式可以输入单个或多个字符的命令，可用的命令非常多。</p>
+
+<p>在底线命令模式中，基本的命令有（已经省略了冒号）：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>q 退出程序
+w 保存文件
+</code></pre></div></div>
+
+<p>按ESC键可随时退出底线命令模式。</p>
+
+<hr />
+
+<h4 id="一打开文件保存关闭文件vi命令模式下使用">一、打开文件、保存、关闭文件(vi命令模式下使用)</h4>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>vi filename //打开filename文件
+:w //保存文件
+:w vpser.net //保存至vpser.net文件
+:q //退出编辑器，如果文件已修改请使用下面的命令
+:q! //退出编辑器，且不保存
+:wq //退出编辑器，且保存文件
+</code></pre></div></div>
+
+<h4 id="二插入文本或行vi命令模式下使用执行下面命令后将进入插入模式按esc键可退出插入模式">二、插入文本或行(vi命令模式下使用，执行下面命令后将进入插入模式，按ESC键可退出插入模式)</h4>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>i   " 在光标前进入 insert 模式
+I   " 在当前行左边第一个非空字符前进入 insert 模式，类似其他编辑器的 &lt;c-a&gt; 快捷键
+a   " 在光标后进入 insert 模式
+A   " 在当前行右边第一个非空字符前进入 insert 模式，类似其他编辑器的 &lt;c-e&gt; 快捷键
+o   " 在光标的下一行插入
+O   " 在光标的上一行插入
+s   " 删除当前字符，并进入 insert 模式"
+S   " 删除当前行，并进入插入模式
+cc  " 删除当前行，并进入插入模式
+R //替换(覆盖)当前光标位置及后面的若干文本
+J //合并光标所在行及下一行为一行(依然在命令模式)
+</code></pre></div></div>
+
+<h4 id="三键位操作">三、键位操作</h4>
+
+<h5 id="1移动光标vi命令模式下使用">1)移动光标(vi命令模式下使用)</h5>
+
+<p>1、使用上下左右方向键</p>
+
+<p>2、命令模式下：h 向左、j 向下 、k 向上、l 向右。<br />
+空格键 向右、Backspace 向左、Enter 移动到下一行首、- 移动到上一行首。</p>
+
+<p>3、借助数字键可以更快的做到光标跳转，5l 表示向右移动 5 个字符，5j 表示向下移动 5 行，其他依次类推</p>
+
+<h5 id="2翻页">2)翻页</h5>
+
+<p><code class="highlighter-rouge">&lt;ctrl&gt; + f </code>的组合键可以向下翻一页，这类的组合键以后我会用<code class="highlighter-rouge">&lt;c-f&gt;</code>形式表示。</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;c-f&gt;   //向下移动一页
+&lt;c-d&gt;   //向下移动半页
+&lt;c-b&gt;   //向上移动一页
+&lt;c-u&gt;   //向上移动半页
+</code></pre></div></div>
+
+<h5 id="3行首行尾">3)行首行尾</h5>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>0   " 快速跳到行首
+$   " 快速跳到行尾
+g_  " 快速跳到行尾最后一个非空字符（后面讨论它跟 $ 的区别）
+</code></pre></div></div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>跳到指定行
+方法1：
+输入:n，代表跳转到第n行，如:79，就跳转到第79行。
+方法2：
+输入nG，代表跳转到第n行，如79G，就跳转到第79行。
+</code></pre></div></div>
+
+<h5 id="4页头页尾">4)页头页尾</h5>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gg  " 快速跳到第一行
+G   " 快速跳到最后一行
+</code></pre></div></div>
+
+<h4 id="四删除恢复字符或行vi命令模式下使用">四、删除、恢复字符或行(vi命令模式下使用)</h4>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>x //删除当前字符
+nx //删除从光标开始的n个字符
+dd //删除当前行
+ndd //向下删除当前行在内的n行
+u //撤销上一步操作
+U //撤销对当前行的所有操作
+</code></pre></div></div>
+
+<h4 id="五搜索vi命令模式下使用">五、搜索(vi命令模式下使用)</h4>
+
+<h5 id="1行内查找">1)行内查找</h5>
+
+<p>在目标行内按下功能键 f，此时界面无变化，但是右下角会出现字母 f 表示等待下一步操作，然后按下 n，光标便会移动到 native 的首字母上</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>fx      " 从当前光标开始向右查找字符 x，x 为目标字符
+nfx     " 从当前广告开始向右查找第 n 个字符 x，n 为数字
+Fx      " 从当前光标开始向左查找字符 x，x 为目标字符
+nfx     " 从当前广告开始向左查找第 n 个字符 x，n 为数字
+</code></pre></div></div>
+<p>同样的，在这里我建议大家开始只使用向右查找即可，这样也比较符合我们由左到右的阅读习惯，顶多每次先按一下 0 跳到行首就可以了。</p>
+
+<h5 id="2全文查找">2)全文查找</h5>
+
+<p>如果你想要把全文的 native 都找到，可以按下 / 进入 command 模式，随后输入 native 然后回车，此时光标会定位在第一个目标上，并高亮所有找到的目标单词。</p>
+
+<p>此时按下 n 光标就会向下在高亮的单词上依次跳转，N 则会反方向跳转。值得注意的地方时，Native 也会被找到，说明默认情况下查找对小写是不敏感的，在以后的章节我们会来讨论怎么处理，但是它对大写是敏感的，你可以用 Native 查找试试。</p>
+
+<p>最后一点，现在所有的目标区域都是高亮的，怎么取消呢？输入 :nohls 即可，为什么，我们以后再讲。</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/word   " 输入 / 会进入 command 模式，再输入先要搜索的单词并回车进行搜索
+?word   " / 是向光标以后搜索，? 是向前搜索
+n       " 英文字母 n，根据 / 或 ? 搜索的方向定位到下一个匹配目标
+N       " 与 n 相反，定位匹配目标
+</code></pre></div></div>
+<h5 id="3替换">3)替换</h5>
+
+<p>替换一般都是和查找绑定在一起的操作，Vim 中提供了两种替换方式</p>
+
+<p>将 4 到 10 行内的 code 替换为 name</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>:4,10s/code/name/g
+</code></pre></div></div>
+<h5 id="4全文替换">4)全文替换</h5>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>:1,$s/code/name/g
+</code></pre></div></div>
+<p>不难理解，其实全文替换你也可以理解为替换 1 行到 $ 最后一行，唯一需要注意的是，第二个数字后面要记得跟上 s</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>:n1,n2s/word1/word2/g   " n1, n2 表示数字，替换 n1 行到 n2 行的单词
+:1,$s/word1/word2/g     " 全文替换，也可以写成 :%s/word1/word2/g
+:1,$s/word1/word2/gc    " 全文替换，并出现确认提示
+</code></pre></div></div>
+<p>替换光标所在的行</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>:s/word1/word2/g        " 替换光标当前所在行的内容，不需要输入行号
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/vpser //向光标下搜索vpser字符串
+?vpser //向光标上搜索vpser字符串
+n //向下搜索前一个搜素动作
+N //向上搜索前一个搜索动作
+</code></pre></div></div>
+
+<h4 id="六跳至指定行vi命令模式下使用">六、跳至指定行(vi命令模式下使用)</h4>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>n+ //向下跳n行
+n- //向上跳n行
+nG //跳到行号为n的行
+G //跳至文件的底部
+</code></pre></div></div>
+
+<h4 id="七设置行号vi命令模式下使用">七、设置行号(vi命令模式下使用)</h4>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>:set nu //显示行号
+:set nonu //取消显示行号
+</code></pre></div></div>
+
+<h4 id="八复制粘贴vi命令模式下使用">八、复制、粘贴(vi命令模式下使用)</h4>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>yy //将当前行复制到缓存区，也可以用 "ayy 复制，"a 为缓冲区，a也可以替换为a到z的任意字母，可以完成多个复制任务。
+nyy //将当前行向下n行复制到缓冲区，也可以用 "anyy 复制，"a 为缓冲区，a也可以替换为a到z的任意字母，可以完成多个复制任务。
+yw //复制从光标开始到词尾的字符。
+nyw //复制从光标开始的n个单词。
+y^ //复制从光标到行首的内容。 VPS侦探
+y$ //复制从光标到行尾的内容。
+p //粘贴剪切板里的内容在光标后，如果使用了前面的自定义缓冲区，建议使用"ap 进行粘贴。
+P //粘贴剪切板里的内容在光标前，如果使用了前面的自定义缓冲区，建议使用"aP 进行粘贴。
+dd          " 删除当前行
+ndd         " 向下删除 n 行
+d1G / dgg   " 删除第一行到当前行的数据
+dG          " 删除当前行到最后一行的数据
+d$          " 删除当前字符到行尾
+d0          " 从行首删除到当前字符
+yy          " 复制当前行
+nyy         " 从当前行开始复制 n 行
+y1G / ygg   " 从第一行复制到当前行
+yG          " 从当前行复制到最后一行
+y0          " 从行首复制到当前字符
+y$          " 从当前字符复制到行尾
+p, P        " 黏贴，p 黏贴到光标下一行，P 黏贴到光标上一行
+
+</code></pre></div></div>
+
+<h4 id="九替换vi命令模式下使用">九、替换(vi命令模式下使用)</h4>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>:s/old/new //用new替换行中首次出现的old
+:s/old/new/g //用new替换行中所有的old
+:n,m s/old/new/g //用new替换从n到m行里所有的old
+:%s/old/new/g //用new替换当前文件里所有的old
+</code></pre></div></div>
+
+<h4 id="十编辑其他文件">十、编辑其他文件</h4>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>:e otherfilename //编辑文件名为otherfilename的文件。
+</code></pre></div></div>
+
+<h4 id="十一修改文件格式">十一、修改文件格式</h4>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>:set fileformat=unix //将文件修改为unix格式，如win下面的文本文件在linux下会出现^M。
+</code></pre></div></div>
+
+<h4 id="十二vim-键位整理">十二、Vim 键位整理</h4>
+
+<h5 id="1写入保存退出">1)写入、保存、退出</h5>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>:q[uit]                 " 退出
+:q!                     " 强制退出
+:w[rite]                " 保存
+:w!                     " 强制保存，能不能保存成功取决于用户对文件的权限
+:w ! sudo tee %         " 如果没有权限保存，试试这个命令
+ZZ                      " 两个大写的 Z，没有修改直接退出，有修改保存后退出
+
+:w newfilename          " 另存为新文件
+:1, 10 w newfilename    " 将 1 到 10 行的内容另存为新文件
+:1, 10 w &gt;&gt; filename    " 将 1 到 10 行的内容另存为新文件
+:r filename             " 将目标文件的内容追加到当前光标下一行
+:3 r filename           " 将目标文件的内容追加到第 3 行一下
+
+:! ls                   " 暂时离开 Vim 查看当前目录的文件，回车后返回 Vim
+</code></pre></div></div>
+<h5 id="2光标移动">2)光标移动</h5>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>h           " 方向键 ←
+j           " 方向键 ↓
+k           " 方向键 ↑
+l           " 方向键 →
+
+0           " 移动到行首
+$           " 移动到行尾的回车符
+g_          " 移动到行尾最后一个非空字符
+gg          " 移动到第一行
+G           " 移动到最后一行"
+
+w           " 移动到下一个单词开头
+e           " 移动到单词的结尾
+b           " 移动到单词的开头
+
+" 不常用
+nh          " 向左移动 n 格，n 为数字
+nl          " 向右移动 n 格
+nj          " 向下移动 n 行
+nk          " 向上移动 n 行
+n&lt;space&gt;    " 向右移动 n 格，同 nl
+
+H            " 移动到当前屏幕第一行的第一个字符
+M            " 移动到当前屏幕中间行的第一个字符
+L            " 移动到当前屏幕最后一行的第一个字符
++            " 移动到非空白字符的下一行
+-            " 移动到非空白字符的上一行
+
+:n&lt;cr&gt;      " 跳转到第 n 行
+</code></pre></div></div>
+<h5 id="3翻页">3)翻页</h5>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;c-f&gt;   " 向下移动一页
+&lt;c-d&gt;   " 向下移动半页
+&lt;c-b&gt;   " 向上移动一页
+&lt;c-u&gt;   " 向上移动半页
+</code></pre></div></div>
+<h5 id="4查找与替换">4)查找与替换</h5>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/word   " 从光标位置向下搜索 word 单词
+?word   " 从光标位置向上搜索 word 单词
+n       " 英文字母 n，根据 / 或 ? 搜索的方向定位到下一个匹配目标
+N       " 与 n 相反，定位匹配目标
+
+:n1,n2s/word1/word2/g   " n1, n2 表示数字，替换 n1 行到 n2 行的单词
+:1,$s/word1/word2/g     " 全文替换，也可以写成 :%s/word1/word2/g
+:1,$s/word1/word2/gc    " 全文替换，并出现确认提示
+</code></pre></div></div>
+<h5 id="5复制粘贴删除">5)复制、粘贴、删除</h5>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>x           " 向后删除一个字符
+nx          " 向后删除 n 个字符
+X           " 向前删除一个字符
+nX          " 向前删除 n 个字符
+
+dd          " 删除当前行
+ndd         " 向下删除 n 行
+d1G / dgg   " 删除第一行到当前行的数据
+dG          " 删除当前行到最后一行的数据
+d$          " 删除当前字符到行尾
+D           " 删除当前字符到行尾
+d0          " 从行首删除到当前字符
+
+yy          " 复制当前行
+Y           " 复制当前行
+nyy         " 从当前行开始复制 n 行
+y1G / ygg   " 从第一行复制到当前行
+yG          " 从当前行复制到最后一行
+y0          " 从行首复制到当前字符
+y$          " 从当前字符复制到行尾
+
+p, P        " 黏贴，p 黏贴到光标下一行，P 黏贴到光标上一行
+yyp         " 复制并粘贴
+ddp         " 删除并粘贴，相当于下移当前行
+
+
+"+y         " 复制本文到系统剪切板
+"+p         " 粘贴系统剪切板到 Vim（不会影响文本格式）
+</code></pre></div></div>
+<h5 id="6插入">6)插入</h5>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>i   " 在光标前进入 insert 模式
+I   " 在当前行左边第一个非空字符前进入 insert 模式，类似其他编辑器的 &lt;c-a&gt; 快捷键
+a   " 在光标后进入 insert 模式
+A   " 在当前行右边第一个非空字符前进入 insert 模式，类似其他编辑器的 &lt;c-e&gt; 快捷键
+o   " 在光标的下一行插入
+O   " 在光标的上一行插入
+s   " 删除当前字符，并进入 insert 模式
+S   " 删除当前行，并进入插入模式
+
+vc  " 删除当前字符，并进入 insert 模式
+cc  " 删除当前行，并进入插入模式
+c0  " 删除光标位置到行首，并进入 insert 模式
+cg_ " 删除光标位置到行尾最后一个非空字符，并进入 insert 模式
+ce  " 删除光标位置到单词末尾，并进入 insert 模式
+cw  " 删除光标位置到单词末尾，并进入 insert 模式
+ciw " 删除当前单词，并进入 insert 模式
+cip " 删除整个段落，并进入 insert 模式
+ci( " 删除当前括号内的内容，并进入 insert 模式 适用于 ([{&lt;'` 等所有成对的标签
+</code></pre></div></div>
+<h5 id="7撤销重做">7)撤销重做</h5>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>u       " 撤销
+&lt;c-r&gt;   " 重做
+.       " 重复完成操作
+</code></pre></div></div>
+<h5 id="8替换">8)替换</h5>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>r   " 替换单个字符，自动返回 normal 模式
+R   " 连续替换多个字符，手动 &lt;esc&gt; 返回 normal 模式
+</code></pre></div></div>
+<h5 id="9大小写">9)大小写</h5>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>~       " 当前字符大小写反转
+g~~     " 正行字符大小写反转
+vu      " 当前字符小写
+vU      " 当前字符大写
+vU      " 当前字符大写
+viwu    " 当前字符小写
+viwU    " 当前字符大写
+ggguG   " 文本所有字符小写
+gggUG   " 文本所有字符大写
+
+:%s/\&lt;./\u&amp;/g       " 将所有单词首字母大写（需要使用 :nohls 去掉高亮）
+:%s/\&lt;./\l&amp;/g       " 将所有单词首字母小写
+:%s/.*/\u&amp;          " 将每行第一个字母大写
+:%s/.*/\l&amp;          " 将每行第一个字母小写
+</code></pre></div></div>
+<h5 id="10多窗口操作">10)多窗口操作</h5>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>:sp filename        " 上下分割窗口
+:vs[p] filename     " 左右分割窗口
+
+&lt;c-w&gt;h[j[k[l]]]     " 根据方向键移动光标到该方向的窗口上
+
+&lt;c-w&gt;[N]&gt;           " N 位数字，可选，增加当前窗口 N 列宽"
+&lt;c-w&gt;[N]&lt;           " N 位数字，可选，减少当前窗口 N 列宽"
+&lt;c-w&gt;[N]+           " N 位数字，可选，增加当前窗口 N 行高"
+&lt;c-w&gt;[N]-           " N 位数字，可选，减少当前窗口 N 行高"
+&lt;c-w&gt;=              " 将所有窗口设置等宽高
+
+&lt;c-w&gt;[N]n           " N 位数字，可选，打开一个新窗口 N 行高，默认为整个窗口的一半"
+&lt;c-w&gt;[N]s           " N 位数字，可选，将当前窗口垂直分割为上下两个窗口展示"
+                    " 新窗口可以为 N 行高，默认为整个窗口的一半"
+                    " 类似于 :sp current_file"
+&lt;c-w&gt;[N]v           " N 位数字，可选，将当前窗口水平分割为左右两个窗口展示"
+                    " 新窗口可以为 N 列宽，默认为整个窗口的一半"
+                    " 类似于 :vs current_file"
+
+
+&lt;c-w&gt;o              " 关闭除当前窗口外的所有窗口
+
+&lt;c-w&gt;r              " 顺时针转动窗口
+&lt;c-w&gt;R              " 逆时针转动窗口
+&lt;c-w&gt;x              " 对调左右或上下两个对应的窗口
+
+&lt;c-w&gt;q              " 退出窗口
+:q                  " 退出窗口
+</code></pre></div></div>
+<h5 id="11多文件编辑">11)多文件编辑</h5>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>vim file1 file2     " 同时打开两个文件
+
+:files              " 查看现在编辑的文件列表，%a 代表正在操作哪个文件
+  1 %a   "file1"                        line 1
+  2      "file2"                        line 0
+
+:n                  " 跳到下一个文件，这里的 n 就是字母
+:N                  " 跳到上一个文件
+</code></pre></div></div>
+<p>参考<a href="http://vim.wxnacy.com/">Vim 练级手册</a></p>
+
+  </section>
+
+</article>
+
+<section>
+
+            <div class="content-play">
+              <p><a href="javascript:void(0)" onclick="dashangToggle()" class="dashang" title="打赏，支持一下">打赏一个呗</a></p>
+              <div class="hide_box-play"></div>
+              <div class="shang_box-play">
+                <a class="shang_close-play" href="javascript:void(0)" onclick="dashangToggle()" title="关闭"><img src="/images/payimg/close.jpg" alt="取消" /></a>
+                <div class="shang_tit-play">
+                  <p>感谢您的支持，我会继续努力的!</p>
+                </div>
+                <div class="shang_payimg">
+                    <img src="/images/payimg/alipayimg.jpg" alt="扫码支持" title="扫一扫" />
+                </div>
+              <div class="shang_payimg">    
+                    <img src="/images/payimg/weipayimg.jpg" alt="扫码支持" title="扫一扫" />
+                </div>
+                <div class="pay_explain">扫码打赏，你说多少就多少</div>
+                <div class="shang_payselect">
+                  <div class="pay_item checked" data-id="alipay">
+                    <span class="pay_logo"><img src="/images/payimg/alipay.jpg" alt="支付宝" /></span>
+                  </div>
+                  <div class="pay_item" data-id="weipay">
+                    <span class="pay_logo"><img src="/images/payimg/wechat.jpg" alt="微信" /></span>
+                  </div>
+                </div>
+                <div class="shang_info-play">
+                  <p>打开<span id="shang_pay_txt">支付宝</span>扫一扫，即可进行扫码打赏哦</p>
+                </div>
+              </div>
+            </div>
+            <script type="text/javascript">
+            function dashangToggle(){
+              $(".hide_box-play").fadeToggle();
+              $(".shang_box-play").fadeToggle();
+            }
+            </script>
+
+            <div style="text-align:center;margin:50px 0; font:normal 14px/24px 'MicroSoft YaHei';"></div>
+
+            <style type="text/css">
+              .content-play{width:80%;margin-top: 20px;margin-bottom: 10px;height:40px;}
+              .hide_box-play{z-index:999;filter:alpha(opacity=50);background:#666;opacity: 0.5;-moz-opacity: 0.5;left:0;top:0;height:99%;width:100%;position:fixed;display:none;}
+              .shang_box-play{width:540px;height:540px;padding:10px;background-color:#fff;border-radius:10px;position:fixed;z-index:1000;left:50%;top:50%;margin-left:-280px;margin-top:-280px;border:1px dotted #dedede;display:none;}
+              .shang_box-play img{border:none;border-width:0;}
+              .dashang{display:block;width:100px;margin:5px auto;height:25px;line-height:25px;padding:10px;background-color:#E74851;color:#fff;text-align:center;text-decoration:none;border-radius:10px;font-weight:bold;font-size:16px;transition: all 0.3s;}
+              .dashang:hover{opacity:0.8;padding:15px;font-size:18px;}
+              .shang_close-play{float:right;display:inline-block;
+                margin-right: 10px;margin-top: 20px;
+              }
+              .shang_logo{display:block;text-align:center;margin:20px auto;}
+              .shang_tit-play{width: 100%;height: 75px;text-align: center;line-height: 66px;color: #a3a3a3;font-size: 16px;background: url('/images/payimg/cy-reward-title-bg.jpg');font-family: 'Microsoft YaHei';margin-top: 7px;margin-right:2px;}
+              .shang_tit-play p{color:#a3a3a3;text-align:center;font-size:16px;}
+              .shang_payimg{width:140px;padding:10px;padding-left: 80px; /*border:6px solid #EA5F00;**/margin:0 auto;border-radius:3px;height:140px;display:inline-block;}
+              .shang_payimg img{display:inline-block;margin-right:10px;float:left;text-align:center;width:140px;height:140px; }
+              .pay_explain{text-align:center;margin:10px auto;font-size:12px;color:#545454;}
+              .shang_payselect{text-align:center;margin:0 auto;margin-top:40px;cursor:pointer;height:60px;width:500px;margin-left:110px;}
+              .shang_payselect .pay_item{display:inline-block;margin-right:140px;float:left;}
+              .shang_info-play{clear:both;}
+              .shang_info-play p,.shang_info-play a{color:#C3C3C3;text-align:center;font-size:12px;text-decoration:none;line-height:2em;}
+            </style>
+
+       <ul class="pager">
+        
+        <li class="previous">
+            <a href="/2021/05/iOS%E6%9F%A5%E6%89%BE%E6%B1%89%E5%AD%97%E5%AD%97%E7%AC%A6%E4%B8%B2/" data-toggle="tooltip" data-placement="top" title="iOS查找汉字字符串">上一篇：  <span>iOS查找汉字字符串</span>
+            </a>
+        </li>
+        
+        
+        <li class="next">
+            <a href="/2021/05/iOS%E9%87%8D%E7%AD%BE%E5%90%8D%E8%84%9A%E6%9C%AC/" data-toggle="tooltip" data-placement="top" title="iOS重签名脚本">下一篇：  <span>iOS重签名脚本</span>
+            </a>
+        </li>
+        
+    </ul>
+</section>
+
+<section class="post-comments">
+
+  
+
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zMDUwNi83MDYw">
+      <script type="text/javascript">
+         (function(d, s) {
+             var j, e = d.getElementsByTagName(s)[0];
+
+             if (typeof LivereTower === 'function') { return; }
+             j = d.createElement(s);
+             j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+             j.async = true;
+             e.parentNode.insertBefore(j, e);
+         })(document, 'script');
+      </script>
+      <noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+      </div>
+
+  
+
+</section>
+
+
+            <section class="footer">
+    <footer>
+        <div class = "footer_div">  
+        <nav class="cover-navigation navigation--social">
+          <ul class="navigation">
+
+          
+          <!-- Github -->
+          <li class="navigation__item_social">
+            <a href="https://github.com/lijingbiao" title="@lijingbiao 的 Github" target="_blank">
+              <div class="footer-social-icon" style="background:url(/images/github.png);"></div>
+            </a>
+          </li>
+          
+
+          
+
+          
+
+          
+          <!-- Zhihu -->
+          <li class="navigation__item_social">
+            <a href="https://www.jianshu.com/u/e66c74545d7e" title="@e66c74545d7e" target="_blank">
+              <div class="footer-social-icon" style="background:url(/images/jianshu.png);"></div>
+            </a>
+          </li>
+
+          
+
+          
+
+          
+          
+
+
+          
+          <!-- Email -->
+          <li class="navigation__item_social">
+            <a href="mailto:694292399@qq.com" title="Contact me">
+              <div class="footer-social-icon" style="background:url(/images/email.png);"></div>
+            </a>
+          </li>
+          
+          
+          <!-- RSS -->
+          <li class="navigation__item_social">
+            <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+              <div class="footer-social-icon" style="background:url(/images/rss.png);"></div>
+              <span class="label">RSS</span>
+            </a>
+          </li>
+
+          </ul>
+        </nav>
+
+        </div>
+
+        <div class = "footer_div">  
+           <p class="copyright text-muted">
+            Copyright &copy; LiJingBiao 2021  |
+            <iframe
+                style="margin-left: 2px; margin-bottom:-5px;"
+                frameborder="0" scrolling="0" width="91px" height="20px"
+                src="https://ghbtns.com/github-btn.html?user=lijingbiao&repo=lijingbiao.github.io&type=star&count=true" >
+            </iframe>
+            </p>
+        	<div align="right">
+    			<link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+          <!-- 访问统计 -->
+          <span id="busuanzi_container_site_pv">
+            本站总访问量
+            <span id="busuanzi_value_site_pv"></span>次
+          </span>
+
+        </div>
+        <div>
+    </footer>
+</section>
+
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+<script type="text/javascript" src="/js/main.js"></script>
+
+<script type="text/javascript" src="/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+    
+  </body>
+
+</html>
