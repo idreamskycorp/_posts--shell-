@@ -5,9 +5,211 @@
     <description>欢迎来到我的个人博客~</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sat, 08 May 2021 15:40:50 +0800</pubDate>
-    <lastBuildDate>Sat, 08 May 2021 15:40:50 +0800</lastBuildDate>
+    <pubDate>Thu, 27 May 2021 10:26:50 +0800</pubDate>
+    <lastBuildDate>Thu, 27 May 2021 10:26:50 +0800</lastBuildDate>
     <generator>Jekyll v3.8.5</generator>
+    
+      <item>
+        <title>iOS重签名脚本</title>
+        <description>&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;#!/bin/sh&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#说明：需要修改的参数&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# 1. APP_NAME，如：APP_NAME=MiHome.app&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# 2. KEYCHAIN_ID，即证书对应的SHA256, 如 KEYCHAIN_ID=&quot;B69D7658D231BD17F335B67E07BA333685C1F290&quot;&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# 3. BUNDLE_IDENTIFIER，授权文件对应的BundleID，如BUNDLE_IDENTIFIER=&quot;com.dahuatech.lecheng&quot;&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# 4. 授权文件，修改为embeded.mobileprovision后放入目录中，如PROVISION_IOS=&quot;${TEMP}/embeded.mobileprovision&quot;&lt;/span&gt;
+
+
+&lt;span class=&quot;c&quot;&gt;############################################################&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#通用函数定义&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;#打印命令&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;function &lt;/span&gt;echoCommand&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$1&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
+    &lt;span class=&quot;nv&quot;&gt;$1&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;#打印xcode、编译环境信息&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;function &lt;/span&gt;printXcodeInfo&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    xcode-select &lt;span class=&quot;nt&quot;&gt;--version&lt;/span&gt;
+    xcode-select &lt;span class=&quot;nt&quot;&gt;--print-path&lt;/span&gt;
+    security find-identity &lt;span class=&quot;nt&quot;&gt;-v&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-p&lt;/span&gt; codesigning
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;# 打印电脑中安装的授权文件&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;function &lt;/span&gt;printProvisionFiles&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;nb&quot;&gt;ls&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-l&lt;/span&gt; ~/Library/MobileDevice/Provisioning&lt;span class=&quot;se&quot;&gt;\ &lt;/span&gt;Profiles/
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;# Generate entitlements&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# 通过Profile文件生成签名用的entitlements.plist文件&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#参数1：Profile文件，保存至ENTITLEMENTS_PLIST中&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#返回值：plist文件路径&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;function &lt;/span&gt;generateEntitlementPlistFile&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[[&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-z&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;]]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;then
+        &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Error: No profiles input...&quot;&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;fi
+
+    &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;provisionvalue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;cat&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;
+    &lt;span class=&quot;nv&quot;&gt;parseEntitlement&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;provisionvalue&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;#*&amp;lt;key&amp;gt;Entitlements&amp;lt;/key&amp;gt;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;nv&quot;&gt;entitlementFromMPP&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;parseEntitlement&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;%%&amp;lt;/dict&amp;gt;*&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;nv&quot;&gt;entitlementFromMPP&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;entitlementFromMPP&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;/&amp;lt;string&amp;gt;\*&amp;lt;\/string&amp;gt;/&amp;lt;array&amp;gt;&amp;lt;string&amp;gt;applinks&lt;/span&gt;:funcshop.imoulife.com&lt;span class=&quot;p&quot;&gt;&amp;lt;/string&amp;gt;&amp;lt;string&amp;gt;applinks&lt;/span&gt;:dvl.lechange.cn&lt;span class=&quot;p&quot;&gt;&amp;lt;/string&amp;gt;&amp;lt;string&amp;gt;applinks&lt;/span&gt;:dx.lechange.cn&lt;span class=&quot;p&quot;&gt;&amp;lt;/string&amp;gt;&amp;lt;string&amp;gt;applinks&lt;/span&gt;:func.lechange.cn&lt;span class=&quot;p&quot;&gt;&amp;lt;/string&amp;gt;&amp;lt;string&amp;gt;applinks&lt;/span&gt;:u5c.cn&lt;span class=&quot;p&quot;&gt;&amp;lt;/string&amp;gt;&amp;lt;/array&amp;gt;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
+    &lt;span class=&quot;nv&quot;&gt;entitlementHeader1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'&amp;lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&amp;gt;'&lt;/span&gt;
+    &lt;span class=&quot;nv&quot;&gt;entitlementHeader2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'&amp;lt;!DOCTYPE plist PUBLIC &quot;-//Apple//DTD PLIST 1.0//EN&quot; &quot;http://www.apple.com/DTDs/PropertyList-1.0.dtd&quot;&amp;gt;'&lt;/span&gt;
+    &lt;span class=&quot;nv&quot;&gt;entitlementHeader3&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'&amp;lt;plist version=&quot;1.0&quot;&amp;gt;'&lt;/span&gt;
+    &lt;span class=&quot;nv&quot;&gt;fullEntitlement&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$entitlementHeader1$entitlementHeader2$entitlementHeader3&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;entitlementFromMPP&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;lt;/dict&amp;gt;&amp;lt;/plist&amp;gt;&quot;&lt;/span&gt;
+    &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;fullEntitlement&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;$(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;pwd&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;/entitlements.plist&quot;&lt;/span&gt;
+
+    &lt;span class=&quot;c&quot;&gt;#echo &quot;------------ Entitlements file used --------------&quot;&lt;/span&gt;
+    &lt;span class=&quot;c&quot;&gt;#echo &quot;${fullEntitlement}&quot;&lt;/span&gt;
+    &lt;span class=&quot;c&quot;&gt;#echo &quot;--------------------------------------------------&quot;&lt;/span&gt;
+
+    &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;$(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;pwd&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;/entitlements.plist&quot;&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;#对可执行文件进行签名&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#参数1：授权文件路径&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#参数2：证书KeychainId&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#参数3：可执行文件路径&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;function &lt;/span&gt;resignFile&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Resign File: &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$1&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;, &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$2&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;, &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$3&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
+    &lt;span class=&quot;nv&quot;&gt;entitlementsPlist&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;generateEntitlementPlistFile &lt;span class=&quot;nv&quot;&gt;$1&lt;/span&gt;&lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;
+
+    &lt;span class=&quot;c&quot;&gt;#去除旧的签名&lt;/span&gt;
+    &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Remove _CodeSignature...&quot;&lt;/span&gt;
+    &lt;span class=&quot;nb&quot;&gt;rm&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-rf&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$3&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;/_CodeSignature&quot;&lt;/span&gt;
+
+    &lt;span class=&quot;c&quot;&gt;#拷贝描述文件&lt;/span&gt;
+    &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Copy provisioning file to ... &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$3&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;/embedded.mobileprovision&quot;&lt;/span&gt;
+    &lt;span class=&quot;nb&quot;&gt;cp&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-rf&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$1&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$3&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;/embedded.mobileprovision&quot;&lt;/span&gt;
+
+    &lt;span class=&quot;c&quot;&gt;#目录下有Frameworks文件夹，则需要对所有动态库进行重签名&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-d&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$3&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;/Frameworks&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;then&lt;/span&gt;
+        &lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;codesign &lt;span class=&quot;nt&quot;&gt;-v&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-f&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-s&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$2&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$3&lt;/span&gt;/Frameworks/&lt;span class=&quot;k&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;fi&lt;/span&gt;
+
+    &lt;span class=&quot;c&quot;&gt;#对可执行文件进行签名&lt;/span&gt;
+    &lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;codesign &lt;span class=&quot;nt&quot;&gt;-v&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-f&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-s&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$2&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;--entitlements&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;entitlementsPlist&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$3&lt;/span&gt;&lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;############################################################&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# main loop&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;[******************** *. List Xcode &amp;amp; codesign info... ********************]&quot;&lt;/span&gt;
+printXcodeInfo
+
+&lt;span class=&quot;c&quot;&gt;#echo &quot;[******************** *. List Provisionfiles ... ********************]&quot;&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#printProvisionFiles&lt;/span&gt;
+
+&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;[******************** 0. Check build path ... ********************]&quot;&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#文件夹路径&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;TEMP&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;pwd&lt;/span&gt;&lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;cd&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$TEMP&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;#将xx.app拷贝到Payload目录下，自动读取App名称&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#APP_NAME=$(ls &quot;$TEMP/Payload&quot;)&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;#将xxx.app拷贝到Resign目录下&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;APP_NAME&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;MiHome.app
+&lt;span class=&quot;nv&quot;&gt;APP_BINARY_NAME&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;APP_NAME&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;%.*&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Check Path TEMP:&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;TEMP&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;AppName: &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$APP_NAME&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;#临时处理，只是保证每次动态注入的二进制是原始的&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;rm&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-rf&lt;/span&gt; ./Payload/&lt;span class=&quot;k&quot;&gt;*&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;cp&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-rf&lt;/span&gt; MiHome.app ./Payload/
+
+&lt;span class=&quot;c&quot;&gt;#检测二进制文件是否脱壳&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;[*** Check crypt: otool -l Payload/&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;APP_NAME&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;APP_BINARY_NAME&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt; | grep crypt... ***] &quot;&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;APP_CRYPT_INFO&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;otool &lt;span class=&quot;nt&quot;&gt;-l&lt;/span&gt; Payload/&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;APP_NAME&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;/&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;APP_BINARY_NAME&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt; | &lt;span class=&quot;nb&quot;&gt;grep &lt;/span&gt;crypt&lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$APP_CRYPT_INFO&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[[&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$APP_CRYPT_INFO&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;~ &lt;span class=&quot;s2&quot;&gt;&quot;cryptid 1&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;]]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;then
+    &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;[******************** Fatal error, binary is encrypted... ********************]&quot;&lt;/span&gt;
+    &lt;span class=&quot;nb&quot;&gt;exit
+&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;else
+    &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;[*** Check crypt succeed... ***] &quot;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;fi
+
+
+&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;[******************** 1. Set resign parameters ... ********************]&quot;&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;#证书签名变量【p12文件修改后需要更新】&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;KEYCHAIN_ID&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;B69D7658D231BD17F335B67E07BA333685C1F290&quot;&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;BUNDLE_IDENTIFIER&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;com.dahuatech.lecheng&quot;&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;PROVISION_IOS&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;TEMP&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;/embeded.mobileprovision&quot;&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;#libCommonCrack.dylib，注入的动态库，不能加上路径，否则App在启动时执行路径会变成 dylib path @executable_path//Users/&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;LIB_COMMON_CRACK&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;libCommonCrack.dylib&quot;&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;LIB_REVEAL&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;libReveal.dylib&quot;&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#DISPLAY_NAME=&quot;&quot;    #eg.xxx&lt;/span&gt;
+
+&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;[******************** 2. Resigning for &lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;APP_NAME&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt; ... ********************]&quot;&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;#为方便签名，去除watch和插件文件夹&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;rm&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-rf&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$TEMP&lt;/span&gt;/Payload/&lt;span class=&quot;nv&quot;&gt;$APP_NAME&lt;/span&gt;/Watch
+&lt;span class=&quot;nb&quot;&gt;rm&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-rf&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$TEMP&lt;/span&gt;/Payload/&lt;span class=&quot;nv&quot;&gt;$APP_NAME&lt;/span&gt;/PlugIns
+
+&lt;span class=&quot;c&quot;&gt;#修改BundleID&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[[&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$BUNDLE_IDENTIFIER&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;]]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;then
+    &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;change bundle ID: &lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;BUNDLE_IDENTIFIER&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
+    &lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;/usr/libexec/PlistBuddy &lt;span class=&quot;nt&quot;&gt;-c&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Set :CFBundleIdentifier &lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;BUNDLE_IDENTIFIER&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$TEMP&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;/Payload/&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$APP_NAME&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;/Info.plist&quot;&lt;/span&gt;&lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;fi&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;#修改App名称&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[[&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$DISPLAY_NAME&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;]]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;then
+    &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;change display name: &lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;DISPLAY_NAME&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
+    &lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;/usr/libexec/PlistBuddy &lt;span class=&quot;nt&quot;&gt;-c&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Set :CFBundleDisplayName &lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;DISPLAY_NAME&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$TEMP&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;/Payload/&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$APP_NAME&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;/Info.plist&quot;&lt;/span&gt;&lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;fi&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;#删除UISupportedDevices&lt;/span&gt;
+&lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;/usr/libexec/PlistBuddy &lt;span class=&quot;nt&quot;&gt;-c&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Delete :UISupportedDevices&quot;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$TEMP&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;/Payload/&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$APP_NAME&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;/Info.plist&quot;&lt;/span&gt;&lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;#设置为可以通过iTunes进行共享&lt;/span&gt;
+&lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;/usr/libexec/PlistBuddy &lt;span class=&quot;nt&quot;&gt;-c&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Delete :UIFileSharingEnabled&quot;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$TEMP&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;/Payload/&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$APP_NAME&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;/Info.plist&quot;&lt;/span&gt;&lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;
+&lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;/usr/libexec/PlistBuddy &lt;span class=&quot;nt&quot;&gt;-c&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Add :UIFileSharingEnabled bool 1&quot;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$TEMP&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;/Payload/&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$APP_NAME&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;/Info.plist&quot;&lt;/span&gt;&lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;#注入动态库&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;yololib dynamic framework/lib: &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$LIB_COMMON_CRACK&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
+./yololib &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$TEMP&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;/Payload/&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;APP_NAME&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;APP_BINARY_NAME&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$LIB_COMMON_CRACK&lt;/span&gt;
+./yololib &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$TEMP&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;/Payload/&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;APP_NAME&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;APP_BINARY_NAME&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$LIB_REVEAL&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;#copy 动态库：将需要加载的动态库，拷贝到App主目录下&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;copy dynamic framework/lib&quot;&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;cp&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-rf&lt;/span&gt; ./&lt;span class=&quot;nv&quot;&gt;$LIB_COMMON_CRACK&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;TEMP&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;/Payload/&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;APP_NAME&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;cp&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-rf&lt;/span&gt; ./&lt;span class=&quot;nv&quot;&gt;$LIB_REVEAL&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;TEMP&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;/Payload/&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;APP_NAME&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;# Resign file&lt;/span&gt;
+resignFile &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;PROVISION_IOS&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;KEYCHAIN_ID&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$TEMP&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;/Payload/&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;APP_NAME&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$LIB_COMMON_CRACK&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
+resignFile &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;PROVISION_IOS&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;KEYCHAIN_ID&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$TEMP&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;/Payload/&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;APP_NAME&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$LIB_REVEAL&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
+resignFile &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;PROVISION_IOS&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;KEYCHAIN_ID&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$TEMP&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;/Payload/&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;APP_NAME&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
+
+&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;===============================================&quot;&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Resign result&quot;&lt;/span&gt;
+codesign &lt;span class=&quot;nt&quot;&gt;-dvvv&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$TEMP&lt;/span&gt;/Payload/&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;APP_NAME&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;#清理临时文件&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;rm&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-rf&lt;/span&gt; entitlements.plist
+
+&lt;span class=&quot;c&quot;&gt;# Zip file generate new ipa file&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;zip file generate new ipa file&quot;&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;rm&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-rf&lt;/span&gt; resign.ipa
+echoCommand &lt;span class=&quot;s2&quot;&gt;&quot;zip -qr resign.ipa Payload &quot;&lt;/span&gt;
+
+
+&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;[******************** End resigning ... ********************]&quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+</description>
+        <pubDate>Thu, 27 May 2021 00:00:00 +0800</pubDate>
+        <link>http://localhost:4000/2021/05/iOS%E9%87%8D%E7%AD%BE%E5%90%8D%E8%84%9A%E6%9C%AC/</link>
+        <guid isPermaLink="true">http://localhost:4000/2021/05/iOS%E9%87%8D%E7%AD%BE%E5%90%8D%E8%84%9A%E6%9C%AC/</guid>
+        
+        <category>iOS</category>
+        
+        
+      </item>
     
       <item>
         <title>iOS查找汉字字符串</title>
@@ -18,6 +220,76 @@
         <pubDate>Sat, 08 May 2021 00:00:00 +0800</pubDate>
         <link>http://localhost:4000/2021/05/iOS%E6%9F%A5%E6%89%BE%E6%B1%89%E5%AD%97%E5%AD%97%E7%AC%A6%E4%B8%B2/</link>
         <guid isPermaLink="true">http://localhost:4000/2021/05/iOS%E6%9F%A5%E6%89%BE%E6%B1%89%E5%AD%97%E5%AD%97%E7%AC%A6%E4%B8%B2/</guid>
+        
+        <category>iOS</category>
+        
+        
+      </item>
+    
+      <item>
+        <title>git切换到某个tag</title>
+        <description>&lt;h1 id=&quot;git切换到某个tag&quot;&gt;git切换到某个tag&lt;/h1&gt;
+&lt;p&gt;git clone 整个仓库后使用，以下命令就可以取得该tag 对应的代码了。 &lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;git checkout tag_name
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;但是，这时候 git 可能会提示你当前处于一个&lt;code class=&quot;highlighter-rouge&quot;&gt;detached HEAD&lt;/code&gt; 状态。&lt;/p&gt;
+
+&lt;p&gt;因为 tag 相当于是一个快照，是不能更改它的代码的。&lt;/p&gt;
+
+&lt;p&gt;如果要在 tag 代码的基础上做修改，你需要一个分支： &lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;git checkout -b branch_name tag_name
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;这样会从 tag 创建一个分支，然后就和普通的 git 操作一样了。&lt;/p&gt;
+
+&lt;p&gt;如果项目上有一个后来新建的分支test，并且使用&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;git branch -a
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;看不到该远程分支：&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;* develop
+  remotes/composer/develop
+  remotes/composer/feature/194
+  remotes/composer/feature/198
+  remotes/composer/feature/199
+  remotes/composer/feature/200
+  remotes/composer/master
+  remotes/origin/HEAD -&amp;gt; origin/develop
+  remotes/origin/develop
+  remotes/origin/feature/194
+  remotes/origin/feature/198
+  remotes/origin/feature/199
+  remotes/origin/feature/200
+  remotes/origin/master
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;直接使用命令&lt;code class=&quot;highlighter-rouge&quot;&gt;git checkout test&lt;/code&gt;，出现以下错误&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;error: pathspec 'origin/XXX' did not match any file(s) known to git.
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;项目上有一个分支test，使用&lt;code class=&quot;highlighter-rouge&quot;&gt;git branch -a&lt;/code&gt;看不到该远程分支，直接使用命令
+&lt;code class=&quot;highlighter-rouge&quot;&gt;git checkout test&lt;/code&gt;报错如下：
+解决方法是：&lt;/p&gt;
+
+&lt;p&gt;1、执行命令git fetch取回所有分支的更新&lt;/p&gt;
+
+&lt;p&gt;2、执行git branch -a可以看到test分支（已经更新分支信息）&lt;/p&gt;
+
+&lt;p&gt;3、切换分支git checkout test&lt;/p&gt;
+
+&lt;h1 id=&quot;git切换到某个commit-id&quot;&gt;git切换到某个commit Id&lt;/h1&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;//1.找到你的日志commit号为22dfbf1f907764c5ae70381b8191104f9af21d8c 
+git log
+//2.切换到这个commit下
+git checkout 22dfbf1f907764c5ae70381b8191104f9af21d8c
+//3.在本地新建一个dev_2.0分支
+git checkout -b dev_2.0 22dfbf1f907764c5ae70381b8191104f9af21d8c
+//4.查看分支
+git branch
+//5.将本地dev_2.0分支推到远程
+git push --set-upstream origin dev_2.0
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+</description>
+        <pubDate>Sat, 08 May 2021 00:00:00 +0800</pubDate>
+        <link>http://localhost:4000/2021/05/git%E5%88%87%E6%8D%A2%E5%88%B0%E6%9F%90%E4%B8%AAtag/</link>
+        <guid isPermaLink="true">http://localhost:4000/2021/05/git%E5%88%87%E6%8D%A2%E5%88%B0%E6%9F%90%E4%B8%AAtag/</guid>
         
         <category>iOS</category>
         
@@ -831,201 +1103,6 @@ fi
         <pubDate>Sun, 25 Apr 2021 00:00:00 +0800</pubDate>
         <link>http://localhost:4000/2021/04/iOS%E4%BD%BF%E7%94%A8Shell%E8%87%AA%E5%8A%A8%E5%88%87%E6%8D%A2%E7%8E%AF%E5%A2%83/</link>
         <guid isPermaLink="true">http://localhost:4000/2021/04/iOS%E4%BD%BF%E7%94%A8Shell%E8%87%AA%E5%8A%A8%E5%88%87%E6%8D%A2%E7%8E%AF%E5%A2%83/</guid>
-        
-        <category>Shell</category>
-        
-        
-      </item>
-    
-      <item>
-        <title>iOS使用Shell脚本签名</title>
-        <description>&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# ${SRCROOT} 它是工程文件所在的目录
-TEMP_PATH=&quot;${SRCROOT}/Temp&quot;
-#资源文件夹，我们提前在工程目录下新建一个APP文件夹，里面放ipa包
-ASSETS_PATH=&quot;${SRCROOT}/APP&quot;
-#目标ipa包路径
-TARGET_IPA_PATH=&quot;${ASSETS_PATH}/*.ipa&quot;
-#清空Temp文件夹
-rm -rf &quot;${SRCROOT}/Temp&quot;
-mkdir -p &quot;${SRCROOT}/Temp&quot;
-
-
-
-#----------------------------------------
-# 1. 解压IPA到Temp下
-unzip -oqq &quot;$TARGET_IPA_PATH&quot; -d &quot;$TEMP_PATH&quot;
-# 拿到解压的临时的APP的路径
-TEMP_APP_PATH=$(set -- &quot;$TEMP_PATH/Payload/&quot;*.app;echo &quot;$1&quot;)
-# echo &quot;路径是:$TEMP_APP_PATH&quot;
-
-
-#----------------------------------------
-# 2. 将解压出来的.app拷贝进入工程下
-# BUILT_PRODUCTS_DIR 工程生成的APP包的路径
-# TARGET_NAME target名称
-TARGET_APP_PATH=&quot;$BUILT_PRODUCTS_DIR/$TARGET_NAME.app&quot;
-echo &quot;app路径:$TARGET_APP_PATH&quot;
-
-rm -rf &quot;$TARGET_APP_PATH&quot;
-mkdir -p &quot;$TARGET_APP_PATH&quot;
-cp -rf &quot;$TEMP_APP_PATH/&quot; &quot;$TARGET_APP_PATH&quot;
-
-
-
-#----------------------------------------
-# 3. 删除extension和WatchAPP.个人证书没法签名Extention
-rm -rf &quot;$TARGET_APP_PATH/PlugIns&quot;
-rm -rf &quot;$TARGET_APP_PATH/Watch&quot;
-
-
-
-#----------------------------------------
-# 4. 更新info.plist文件 CFBundleIdentifier
-#  设置:&quot;Set : KEY Value&quot; &quot;目标文件路径&quot;
-/usr/libexec/PlistBuddy -c &quot;Set :CFBundleIdentifier $PRODUCT_BUNDLE_IDENTIFIER&quot; &quot;$TARGET_APP_PATH/Info.plist&quot;
-
-
-#----------------------------------------
-# 5. 给MachO文件上执行权限
-# 拿到MachO文件的路径
-APP_BINARY=`plutil -convert xml1 -o - $TARGET_APP_PATH/Info.plist|grep -A1 Exec|tail -n1|cut -f2 -d\&amp;gt;|cut -f1 -d\&amp;lt;`
-#上可执行权限
-chmod +x &quot;$TARGET_APP_PATH/$APP_BINARY&quot;
-
-
-
-#----------------------------------------
-# 6. 重签名第三方 FrameWorks
-TARGET_APP_FRAMEWORKS_PATH=&quot;$TARGET_APP_PATH/Frameworks&quot;
-if [ -d &quot;$TARGET_APP_FRAMEWORKS_PATH&quot; ];
-then
-for FRAMEWORK in &quot;$TARGET_APP_FRAMEWORKS_PATH/&quot;*
-do
-
-#签名
-/usr/bin/codesign --force --sign &quot;$EXPANDED_CODE_SIGN_IDENTITY&quot; &quot;$FRAMEWORK&quot;
-done
-fi
-
-
-#注入
-#yololib &quot;$TARGET_APP_PATH/$APP_BINARY&quot; &quot;Frameworks/HankHook.framework/HankHook&quot;
-
-
-
-
-
-
-
-
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-</description>
-        <pubDate>Sun, 25 Apr 2021 00:00:00 +0800</pubDate>
-        <link>http://localhost:4000/2021/04/iOS%E4%BD%BF%E7%94%A8Shell%E8%84%9A%E6%9C%AC%E7%AD%BE%E5%90%8D/</link>
-        <guid isPermaLink="true">http://localhost:4000/2021/04/iOS%E4%BD%BF%E7%94%A8Shell%E8%84%9A%E6%9C%AC%E7%AD%BE%E5%90%8D/</guid>
-        
-        <category>Shell</category>
-        
-        
-      </item>
-    
-      <item>
-        <title>Shell自动提交Git脚本</title>
-        <description>&lt;h1 id=&quot;网上自动提交的脚本&quot;&gt;网上自动提交的脚本&lt;/h1&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;单次提交&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;#!/bin/bash&lt;/span&gt;
-git status
- 
-&lt;span class=&quot;nb&quot;&gt;read&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-r&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-p&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;是否继续提交? [Y/n] &quot;&lt;/span&gt; input
- 
-&lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$input&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;in&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;yY][eE][sS]|[yY]&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-        &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;继续提交&quot;&lt;/span&gt;
-        git add &lt;span class=&quot;nt&quot;&gt;-A&lt;/span&gt;
-        git commit &lt;span class=&quot;nt&quot;&gt;-m&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$1&lt;/span&gt;
-        git push origin &lt;span class=&quot;nv&quot;&gt;$2&lt;/span&gt;
-                    &lt;span class=&quot;nb&quot;&gt;exit &lt;/span&gt;1
-        &lt;span class=&quot;p&quot;&gt;;;&lt;/span&gt;
-
-    &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;nN][oO]|[nN]&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-        &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;中断提交&quot;&lt;/span&gt;
-        &lt;span class=&quot;nb&quot;&gt;exit &lt;/span&gt;1
-            &lt;span class=&quot;p&quot;&gt;;;&lt;/span&gt;
-
-    &lt;span class=&quot;k&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;输入错误，请重新输入&quot;&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;;;&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;esac&lt;/span&gt;
-
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;循环提交&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;#!/bin/bash&lt;/span&gt;
-git status
- 
-&lt;span class=&quot;k&quot;&gt;while &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;do
-    &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;read&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-r&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-p&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;是否继续提交? [Y/n] &quot;&lt;/span&gt; input
- 
-    &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$input&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;in&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;yY][eE][sS]|[yY]&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-            &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;继续提交&quot;&lt;/span&gt;
-            git add &lt;span class=&quot;nt&quot;&gt;-A&lt;/span&gt;
-            git commit &lt;span class=&quot;nt&quot;&gt;-m&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$1&lt;/span&gt;
-            git push origin &lt;span class=&quot;nv&quot;&gt;$2&lt;/span&gt;
-                        &lt;span class=&quot;nb&quot;&gt;exit &lt;/span&gt;1
-            &lt;span class=&quot;p&quot;&gt;;;&lt;/span&gt;
- 
-        &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;nN][oO]|[nN]&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-            &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;中断提交&quot;&lt;/span&gt;
-            &lt;span class=&quot;nb&quot;&gt;exit &lt;/span&gt;1
-                   &lt;span class=&quot;p&quot;&gt;;;&lt;/span&gt;
- 
-        &lt;span class=&quot;k&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-        &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;输入错误，请重新输入&quot;&lt;/span&gt;
-        &lt;span class=&quot;p&quot;&gt;;;&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;esac&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;done&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h1 id=&quot;自己编写的定制化的脚本&quot;&gt;自己编写的定制化的脚本&lt;/h1&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;dirname=`dirname $0`
-files=`ls -t ./_posts`
-files=($files)
-if [[ ${#files[@]} &amp;gt; 1 ]]; then
-    lastModifyFile=${files[0]}
-fi
-if [ ! -z $lastModifyFile ]; then
-     lastModifyFile=&quot;${dirname}/_posts/${lastModifyFile}&quot;
-     echo $lastModifyFile
-fi
-if [ -e $lastModifyFile ]; then
-    title=`awk '/^title:/{gsub(/[[:blank:]]*/,&quot;&quot;,$0);print $0}' &quot;&quot;$lastModifyFile&quot;&quot;`
-    title=${title#*:}
-fi
-
-if [ ! -z $title ]; then
-     git add -A
-     git commit -m &quot;更新${title}&quot;
-     git push
-     echo &quot;提交${title}成功&quot;
-else
-     echo &quot;提交失败&quot;
-fi
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-</description>
-        <pubDate>Sun, 25 Apr 2021 00:00:00 +0800</pubDate>
-        <link>http://localhost:4000/2021/04/Shell%E8%87%AA%E5%8A%A8%E6%8F%90%E4%BA%A4Git%E8%84%9A%E6%9C%AC/</link>
-        <guid isPermaLink="true">http://localhost:4000/2021/04/Shell%E8%87%AA%E5%8A%A8%E6%8F%90%E4%BA%A4Git%E8%84%9A%E6%9C%AC/</guid>
         
         <category>Shell</category>
         

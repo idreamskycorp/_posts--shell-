@@ -6,17 +6,17 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <title>iOS查找汉字字符串</title>
-  <meta name="description" content="iOS查找汉字字符串@"[^"]*[\u4E00-\u9FA5]+[^"\n]*?"">
+  <title>git切换到某个tag</title>
+  <meta name="description" content="git切换到某个taggit clone 整个仓库后使用，以下命令就可以取得该tag 对应的代码了。 git checkout tag_name但是，这时候 git 可能会提示你当前处于一个detached HEAD 状态。">
   <meta name="author" content="leopardpan">
 
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="iOS查找汉字字符串">
-  <meta name="twitter:description" content="iOS查找汉字字符串@"[^"]*[\u4E00-\u9FA5]+[^"\n]*?"">
+  <meta name="twitter:title" content="git切换到某个tag">
+  <meta name="twitter:description" content="git切换到某个taggit clone 整个仓库后使用，以下命令就可以取得该tag 对应的代码了。 git checkout tag_name但是，这时候 git 可能会提示你当前处于一个detached HEAD 状态。">
   
   <meta property="og:type" content="article">
-  <meta property="og:title" content="iOS查找汉字字符串">
-  <meta property="og:description" content="iOS查找汉字字符串@"[^"]*[\u4E00-\u9FA5]+[^"\n]*?"">
+  <meta property="og:title" content="git切换到某个tag">
+  <meta property="og:description" content="git切换到某个taggit clone 整个仓库后使用，以下命令就可以取得该tag 对应的代码了。 git checkout tag_name但是，这时候 git 可能会提示你当前处于一个detached HEAD 状态。">
   
   <link rel="icon" type="image/png" href="/images/favicon.png" />
   <link href="/images/favicon.png" rel="shortcut icon" type="image/png">
@@ -24,7 +24,7 @@
   <link rel="stylesheet" href="/css/main.css">
   <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 
-  <link rel="canonical" href="http://localhost:4000/2021/05/iOS%E6%9F%A5%E6%89%BE%E6%B1%89%E5%AD%97%E5%AD%97%E7%AC%A6%E4%B8%B2/">
+  <link rel="canonical" href="http://localhost:4000/2021/05/git%E5%88%87%E6%8D%A2%E5%88%B0%E6%9F%90%E4%B8%AAtag/">
   <link rel="alternate" type="application/rss+xml" title="LiJingBiao" href="http://localhost:4000/feed.xml">
   
   <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
@@ -179,7 +179,7 @@
 
 <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
   <header class="post-header">
-    <h1 class="post-title">iOS查找汉字字符串</h1>
+    <h1 class="post-title">git切换到某个tag</h1>
     <div class="post-meta">
       <img src="/images/calendar.png" width="20px"/> 
       <time datetime="2021-05-08 00:00:00 +0800" itemprop="datePublished" class="post-meta__date date">2021-05-08</time>  
@@ -192,14 +192,70 @@
   
     <h2 class="post-title">目录</h2>
     <ul>
-  <li><a href="#ios查找汉字字符串">iOS查找汉字字符串</a></li>
+  <li><a href="#git切换到某个tag">git切换到某个tag</a></li>
+  <li><a href="#git切换到某个commit-id">git切换到某个commit Id</a></li>
 </ul>
 
   
 
   <section class="post">
-    <h1 id="ios查找汉字字符串">iOS查找汉字字符串</h1>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>@"[^"]*[\u4E00-\u9FA5]+[^"\n]*?"
+    <h1 id="git切换到某个tag">git切换到某个tag</h1>
+<p>git clone 整个仓库后使用，以下命令就可以取得该tag 对应的代码了。 </p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git checkout tag_name
+</code></pre></div></div>
+<p>但是，这时候 git 可能会提示你当前处于一个<code class="highlighter-rouge">detached HEAD</code> 状态。</p>
+
+<p>因为 tag 相当于是一个快照，是不能更改它的代码的。</p>
+
+<p>如果要在 tag 代码的基础上做修改，你需要一个分支： </p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git checkout -b branch_name tag_name
+</code></pre></div></div>
+<p>这样会从 tag 创建一个分支，然后就和普通的 git 操作一样了。</p>
+
+<p>如果项目上有一个后来新建的分支test，并且使用</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git branch -a
+</code></pre></div></div>
+<p>看不到该远程分支：</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>* develop
+  remotes/composer/develop
+  remotes/composer/feature/194
+  remotes/composer/feature/198
+  remotes/composer/feature/199
+  remotes/composer/feature/200
+  remotes/composer/master
+  remotes/origin/HEAD -&gt; origin/develop
+  remotes/origin/develop
+  remotes/origin/feature/194
+  remotes/origin/feature/198
+  remotes/origin/feature/199
+  remotes/origin/feature/200
+  remotes/origin/master
+</code></pre></div></div>
+<p>直接使用命令<code class="highlighter-rouge">git checkout test</code>，出现以下错误</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>error: pathspec 'origin/XXX' did not match any file(s) known to git.
+</code></pre></div></div>
+<p>项目上有一个分支test，使用<code class="highlighter-rouge">git branch -a</code>看不到该远程分支，直接使用命令
+<code class="highlighter-rouge">git checkout test</code>报错如下：
+解决方法是：</p>
+
+<p>1、执行命令git fetch取回所有分支的更新</p>
+
+<p>2、执行git branch -a可以看到test分支（已经更新分支信息）</p>
+
+<p>3、切换分支git checkout test</p>
+
+<h1 id="git切换到某个commit-id">git切换到某个commit Id</h1>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>//1.找到你的日志commit号为22dfbf1f907764c5ae70381b8191104f9af21d8c 
+git log
+//2.切换到这个commit下
+git checkout 22dfbf1f907764c5ae70381b8191104f9af21d8c
+//3.在本地新建一个dev_2.0分支
+git checkout -b dev_2.0 22dfbf1f907764c5ae70381b8191104f9af21d8c
+//4.查看分支
+git branch
+//5.将本地dev_2.0分支推到远程
+git push --set-upstream origin dev_2.0
 </code></pre></div></div>
 
   </section>
@@ -270,13 +326,13 @@
        <ul class="pager">
         
         <li class="previous">
-            <a href="/2021/05/git%E5%88%87%E6%8D%A2%E5%88%B0%E6%9F%90%E4%B8%AAtag/" data-toggle="tooltip" data-placement="top" title="git切换到某个tag">上一篇：  <span>git切换到某个tag</span>
+            <a href="/2021/05/xcconfig%E7%9A%84%E4%BD%BF%E7%94%A8%E4%B8%8Excode%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F/" data-toggle="tooltip" data-placement="top" title="xcconfig的使用与xcode环境变量">上一篇：  <span>xcconfig的使用与xcode环境变量</span>
             </a>
         </li>
         
         
         <li class="next">
-            <a href="/2021/05/iOS%E9%87%8D%E7%AD%BE%E5%90%8D%E8%84%9A%E6%9C%AC/" data-toggle="tooltip" data-placement="top" title="iOS重签名脚本">下一篇：  <span>iOS重签名脚本</span>
+            <a href="/2021/05/iOS%E6%9F%A5%E6%89%BE%E6%B1%89%E5%AD%97%E5%AD%97%E7%AC%A6%E4%B8%B2/" data-toggle="tooltip" data-placement="top" title="iOS查找汉字字符串">下一篇：  <span>iOS查找汉字字符串</span>
             </a>
         </li>
         
