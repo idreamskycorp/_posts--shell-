@@ -5,8 +5,8 @@
     <description>欢迎来到我的个人博客~</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Thu, 27 May 2021 16:12:34 +0800</pubDate>
-    <lastBuildDate>Thu, 27 May 2021 16:12:34 +0800</lastBuildDate>
+    <pubDate>Thu, 27 May 2021 16:21:05 +0800</pubDate>
+    <lastBuildDate>Thu, 27 May 2021 16:21:05 +0800</lastBuildDate>
     <generator>Jekyll v3.8.5</generator>
     
       <item>
@@ -207,6 +207,138 @@ echoCommand &lt;span class=&quot;s2&quot;&gt;&quot;zip -qr resign.ipa Payload &q
         <guid isPermaLink="true">http://localhost:4000/2021/05/iOS%E9%87%8D%E7%AD%BE%E5%90%8D%E8%84%9A%E6%9C%AC/</guid>
         
         <category>iOS</category>
+        
+        
+      </item>
+    
+      <item>
+        <title>git回滚</title>
+        <description>&lt;p&gt;&lt;a href=&quot;https://www.zybuluo.com/qidiandasheng/note/889366&quot;&gt;转自git的使用&lt;/a&gt;&lt;/p&gt;
+&lt;h1 id=&quot;取消修改恢复版本&quot;&gt;取消修改，恢复版本&lt;/h1&gt;
+&lt;h2 id=&quot;取消对单个文件的修改&quot;&gt;取消对单个文件的修改&lt;/h2&gt;
+&lt;p&gt;这里指未commit的文件&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;git checkout -- &amp;lt;file&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h2 id=&quot;取消所有未提交的修改&quot;&gt;取消所有未提交的修改&lt;/h2&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;git clean -xdf   
+or
+git checkout .
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h2 id=&quot;撤销git-commit未push&quot;&gt;撤销git commit(未push)&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;找到上次git commit的 id
+git log
+找到你想撤销的commit_id
+比如下面就是我git log输出的最近两次commit，test是已经push到远程仓库的，test1是最新commit但没push的。如果我们想撤销test1这次的提交，则我需要的就是test这次的commit_id。
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;commit a5febeebf141dbd9a022dfe96a46cad9d474a5ad
+Author: zhengqidian &amp;lt;zhengqidian@dasheng.com&amp;gt;
+Date:   Mon Sep 18 23:07:04 2017 +0800
+  test1
+commit 3a2a9a3f3fd56ec0ebe2ada274d127b3ec9dcb17
+Author: zhengqidian &amp;lt;zhengqidian@dasheng.com&amp;gt;
+Date:   Mon Sep 18 22:57:47 2017 +0800
+  test
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;git reset –hard commit_id
+完成撤销,同时将代码恢复到commit_id 对应的版本。
+如上一个例子中就是:
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; git reset --hard 3a2a9a3f3fd56ec0ebe2ada274d127b3ec9dcb17  
+git reset commit_id
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;完成Commit命令的撤销，但是不对代码修改进行撤销，可以直接通过git commit 重新提交对本地代码的修改。
+如上一个例子中就是:
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; git reset 3a2a9a3f3fd56ec0ebe2ada274d127b3ec9dcb17  
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+    &lt;h2 id=&quot;暂存到stash&quot;&gt;暂存到stash&lt;/h2&gt;
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;git stash
+//恢复
+git stash pop
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+    &lt;h2 id=&quot;回滚&quot;&gt;回滚&lt;/h2&gt;
+    &lt;p&gt;Revert 撤销一个提交的同时会创建一个新的提交。这是一个安全的方法，因为它不会重写提交历史。&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;比如下面的这个例子的提交，如果我们不想要test1的这次提交了，上面我说过用&lt;code class=&quot;highlighter-rouge&quot;&gt;git reset --hard test_commit_id&lt;/code&gt;，但这是在&lt;code class=&quot;highlighter-rouge&quot;&gt;test1&lt;/code&gt;这次提交未push的情况下。
+如果&lt;code class=&quot;highlighter-rouge&quot;&gt;test1&lt;/code&gt;这次提交已经push的话就应该使用&lt;code class=&quot;highlighter-rouge&quot;&gt;git revert test1_commit_id&lt;/code&gt;，这样的话代码就会把test1这次的代码修改进行撤销并重新生成一次commit，这样的话&lt;code class=&quot;highlighter-rouge&quot;&gt;test1&lt;/code&gt;的这次&lt;code class=&quot;highlighter-rouge&quot;&gt;commit&lt;/code&gt;还是存在于工作树上的，保持了工作树的干净。&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;commit a5febeebf141dbd9a022dfe96a46cad9d474a5ad
+Author: zhengqidian &amp;lt;zhengqidian@dasheng.com&amp;gt;
+Date:   Mon Sep 18 23:07:04 2017 +0800
+    test1
+commit 3a2a9a3f3fd56ec0ebe2ada274d127b3ec9dcb17
+Author: zhengqidian &amp;lt;zhengqidian@dasheng.com&amp;gt;
+Date:   Mon Sep 18 22:57:47 2017 +0800
+    test
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;git revert a5febeebf141dbd9a022dfe96a46cad9d474a5ad&lt;/code&gt;
+回滚之后git log如下面所示：&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;commit b80d6e00853f386159aa4a17ab40d9d375ad71d0
+Author: zhengqidian &amp;lt;zhengqidian@dasheng.com&amp;gt;
+Date:   Mon Sep 18 23:37:00 2017 +0800
+    Revert &quot;test1&quot;
+    This reverts commit a5febeebf141dbd9a022dfe96a46cad9d474a5ad.
+commit a5febeebf141dbd9a022dfe96a46cad9d474a5ad
+Author: zhengqidian &amp;lt;zhengqidian@dasheng.com&amp;gt;
+Date:   Mon Sep 18 23:07:04 2017 +0800
+    test1
+commit 3a2a9a3f3fd56ec0ebe2ada274d127b3ec9dcb17
+Author: zhengqidian &amp;lt;zhengqidian@dasheng.com&amp;gt;
+Date:   Mon Sep 18 22:57:47 2017 +0800
+    test
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;回滚中间很大一部分commit其中有merge-commit&quot;&gt;回滚中间很大一部分commit，其中有merge commit&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://www.v2ex.com/t/296286&quot;&gt;回滚&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;git reset –hard 4
+git reset –soft 8
+git commit -m ‘Reverted 5 6 7 8’&lt;/p&gt;
+
+&lt;p&gt;其实楼主怕的是丢失提交记录，而不是使用 reset rebase 命令&lt;/p&gt;
+
+&lt;h2 id=&quot;查看当前分支是基于哪个分支创建的&quot;&gt;查看当前分支是基于哪个分支创建的&lt;/h2&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; git reflog show &amp;lt;branchName&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h2 id=&quot;检查本地的代码修改情况&quot;&gt;检查本地的代码修改情况&lt;/h2&gt;
+
+&lt;p&gt;git diff 可以查看当前没有add 的内容修改（不在缓冲区的文件变化）&lt;/p&gt;
+
+&lt;p&gt;git diff –cached查看已经add但没有commit 的改动（在缓冲区的文件变化）&lt;/p&gt;
+
+&lt;p&gt;git diff HEAD 是上面两条命令的合并&lt;/p&gt;
+
+&lt;h2 id=&quot;查看未git-push到远程代码库的git-commit&quot;&gt;查看未git push到远程代码库的git commit&lt;/h2&gt;
+
+&lt;p&gt;git status 只能查看未传送提交的次数&lt;/p&gt;
+
+&lt;p&gt;git cherry -v 只能查看未传送提交的描述/说明&lt;/p&gt;
+
+&lt;p&gt;git log master ^origin/master 则可以查看未传送提交的详细信息&lt;/p&gt;
+
+&lt;h2 id=&quot;输入用户名和密码&quot;&gt;输入用户名和密码&lt;/h2&gt;
+
+&lt;p&gt;https协议push的时候需要输入用户名和密码问题:&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;git config --global credential.helper store
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;然后你会在你本地生成一个文本，上边记录你的账号和密码。&lt;/p&gt;
+
+&lt;h2 id=&quot;pull-或者-push-一个大项目时报错&quot;&gt;pull 或者 push 一个大项目时报错&lt;/h2&gt;
+
+&lt;p&gt;errno 56，那么应该是有大文件或者提交缓存方面的问题。而 errno 54 则不是这个问题。对于 56 错误的解决方式与网络上大部分文章的一致。都是增大缓存配置，比如下面就是配置提交缓存为 500M。&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;git config http.postBuffer 524288000
+git config https.postBuffer 524288000
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+</description>
+        <pubDate>Thu, 27 May 2021 00:00:00 +0800</pubDate>
+        <link>http://localhost:4000/2021/05/git%E5%9B%9E%E6%BB%9A/</link>
+        <guid isPermaLink="true">http://localhost:4000/2021/05/git%E5%9B%9E%E6%BB%9A/</guid>
+        
+        <category>git</category>
         
         
       </item>
@@ -1471,41 +1603,6 @@ $ wc testfile testfile_1 testfile_2  #统计三个文件的信息
         <guid isPermaLink="true">http://localhost:4000/2021/04/shell%E7%BC%96%E7%A8%8B%E4%B9%8Bwc%E5%91%BD%E4%BB%A4/</guid>
         
         <category>shell</category>
-        
-        
-      </item>
-    
-      <item>
-        <title>iOS判断密码是否合法</title>
-        <description>&lt;h1 id=&quot;ios判断密码是否合法&quot;&gt;iOS判断密码是否合法&lt;/h1&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
-- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
-    
-    NSCharacterSet *cs = [[NSCharacterSet characterSetWithCharactersInString:@&quot;qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890-/:;()$&amp;amp;@\&quot;.,?!'[]{}#%^*+=_'\'|~&amp;lt;&amp;gt;£¥.,?!'&quot;] invertedSet];
-    NSString *filtered = [[string componentsSeparatedByCharactersInSet:cs] componentsJoinedByString:@&quot;&quot;];
-    if (![string isEqualToString:filtered]) {
-        return NO;
-    }
-    
-    NSString * inputString = [textField.text stringByReplacingCharactersInRange:range withString:string];
-    
-    //输入密码超过16位 不让其再输入,密码8~16位
-    if (inputString.length &amp;gt; KPasswordMaxLength) {
-        textField.text = [inputString substringToIndex:KPasswordMaxLength];
-    }else{
-        textField.text = inputString;
-    }
-    return NO;
-}
-
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-</description>
-        <pubDate>Sun, 25 Apr 2021 00:00:00 +0800</pubDate>
-        <link>http://localhost:4000/2021/04/iOS%E5%88%A4%E6%96%AD%E5%AF%86%E7%A0%81%E6%98%AF%E5%90%A6%E5%90%88%E6%B3%95/</link>
-        <guid isPermaLink="true">http://localhost:4000/2021/04/iOS%E5%88%A4%E6%96%AD%E5%AF%86%E7%A0%81%E6%98%AF%E5%90%A6%E5%90%88%E6%B3%95/</guid>
-        
-        <category>iOS</category>
         
         
       </item>
