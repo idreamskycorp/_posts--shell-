@@ -178,6 +178,69 @@
   <ol class="post-list">
     
     <li>
+      <h2 class="post-list__post-title post-title"><a href="/2021/06/Shell%E8%84%9A%E6%9C%AC%E4%B8%AD%E5%88%A4%E6%96%AD%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%98%AF%E5%90%A6%E8%A2%AB%E5%8C%85%E5%90%AB%E5%9C%A8%E5%86%85/" title="访问 Shell脚本中判断字符串是否被包含在内">Shell脚本中判断字符串是否被包含在内</a></h2>
+      <p class="excerpt">Shell脚本中判断字符串是否被包含在内1、字段 grep：案例：str1="abcdefgh"str2="def"result=$(echo $str1 | grep "${str2}")if [[ "$result" != "" ]];then    echo "包含"else    echo "不包含"fi2、 字符串运算符 =~:案例：str1="abcdefgh"str2="def"if [[ $str1 =~ $str2 ]];then    echo "包含"else    ...&hellip;</p>
+      <div class="post-list__meta">        
+        <time datetime="2021-06-02 00:00:00 +0800" class="post-list__meta--date date">
+          <img src="/images/calendar.png" width="20px" /> 
+          2021-06-02</time> 
+        <div class = "tag-img-icon">
+          <img src="/images/tag-icon.svg" width="20px" /> 
+        </div>
+        <a href="/tags">
+          <div class = "post-list-icon-mate">
+            <span class="post-list__meta--tags-right">Shell</span>
+          </div>
+          <div class = "post-list-small-mate">
+          <a class="btn-border-small" href=/2021/06/Shell%E8%84%9A%E6%9C%AC%E4%B8%AD%E5%88%A4%E6%96%AD%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%98%AF%E5%90%A6%E8%A2%AB%E5%8C%85%E5%90%AB%E5%9C%A8%E5%86%85/>阅读全文 » </a>
+          </div>
+      </div>
+      <hr class="post-list__divider" />
+    </li>
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/2021/06/Mac%E4%B8%8A%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8Sed/" title="访问 Mac 上简单使用 Sed">Mac 上简单使用 Sed</a></h2>
+      <p class="excerpt">Mac 上简单使用 Sed  有时我们需要通过脚本简单修改某个文件中的某个值时，可以用到 Sed 命令的。一、安装如果已安装请忽略，没有安装需要 install 下brew install gnu-sed二、简单使用注意： Linux Mac 下使用是略有不同的，此处以 Mac 使用的。  举例子，直接替换$ cat test.txt12345aaaCCC$ sed -i "" "s/12345/Hello/" test.txt$ cat test.txtHelloaaa分析命令 sed ...&hellip;</p>
+      <div class="post-list__meta">        
+        <time datetime="2021-06-02 00:00:00 +0800" class="post-list__meta--date date">
+          <img src="/images/calendar.png" width="20px" /> 
+          2021-06-02</time> 
+        <div class = "tag-img-icon">
+          <img src="/images/tag-icon.svg" width="20px" /> 
+        </div>
+        <a href="/tags">
+          <div class = "post-list-icon-mate">
+            <span class="post-list__meta--tags-right">shell</span>
+          </div>
+          <div class = "post-list-small-mate">
+          <a class="btn-border-small" href=/2021/06/Mac%E4%B8%8A%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8Sed/>阅读全文 » </a>
+          </div>
+      </div>
+      <hr class="post-list__divider" />
+    </li>
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/2021/05/iOS%E5%9B%BD%E9%99%85%E5%8C%96%E6%9F%A5%E6%89%BE%E4%B8%AD%E6%96%87%E6%9B%BF%E6%8D%A2/" title="访问 iOS国际化查找中文替换">iOS国际化查找中文替换</a></h2>
+      <p class="excerpt"># coding=utf-8import osimport reimport sysreload(sys)sys.setdefaultencoding('utf-8')DESPATH = os.getcwd()AllText = []WDESPATH = os.getcwd()+"/unlocalized.strings"BLACKDIRLIST = [    DESPATH + '/Frameworks',    DESPATH + '/Example',    '_Pods.xcode...&hellip;</p>
+      <div class="post-list__meta">        
+        <time datetime="2021-05-31 00:00:00 +0800" class="post-list__meta--date date">
+          <img src="/images/calendar.png" width="20px" /> 
+          2021-05-31</time> 
+        <div class = "tag-img-icon">
+          <img src="/images/tag-icon.svg" width="20px" /> 
+        </div>
+        <a href="/tags">
+          <div class = "post-list-icon-mate">
+            <span class="post-list__meta--tags-right">iOS</span>
+          </div>
+          <div class = "post-list-small-mate">
+          <a class="btn-border-small" href=/2021/05/iOS%E5%9B%BD%E9%99%85%E5%8C%96%E6%9F%A5%E6%89%BE%E4%B8%AD%E6%96%87%E6%9B%BF%E6%8D%A2/>阅读全文 » </a>
+          </div>
+      </div>
+      <hr class="post-list__divider" />
+    </li>
+    
+    <li>
       <h2 class="post-list__post-title post-title"><a href="/2021/05/iOS%E9%87%8D%E7%AD%BE%E5%90%8D%E8%84%9A%E6%9C%AC/" title="访问 iOS重签名脚本">iOS重签名脚本</a></h2>
       <p class="excerpt">#!/bin/sh#说明：需要修改的参数# 1. APP_NAME，如：APP_NAME=MiHome.app# 2. KEYCHAIN_ID，即证书对应的SHA256, 如 KEYCHAIN_ID="B69D7658D231BD17F335B67E07BA333685C1F290"# 3. BUNDLE_IDENTIFIER，授权文件对应的BundleID，如BUNDLE_IDENTIFIER="com.dahuatech.lecheng"# 4. 授权文件，修改为embeded.mob...&hellip;</p>
       <div class="post-list__meta">        
@@ -529,69 +592,6 @@
           </div>
           <div class = "post-list-small-mate">
           <a class="btn-border-small" href=/2021/04/iOS_GCD/>阅读全文 » </a>
-          </div>
-      </div>
-      <hr class="post-list__divider" />
-    </li>
-    
-    <li>
-      <h2 class="post-list__post-title post-title"><a href="/2021/04/%E7%AB%AF%E5%8F%A3%E5%8D%A0%E7%94%A8/" title="访问 MAC 端口被占用 address already in use">MAC 端口被占用 address already in use</a></h2>
-      <p class="excerpt">Error: listen EADDRINUSE: address already in use :::8700sudo lsof -i:8700显示如下ruby    91953 syswin    9u  IPv4 0x601da28cc087d05f      0t0  TCP localhost:terabase (LISTEN)// 杀死进程sudo kill -9 8700 &hellip;</p>
-      <div class="post-list__meta">        
-        <time datetime="2021-04-19 00:00:00 +0800" class="post-list__meta--date date">
-          <img src="/images/calendar.png" width="20px" /> 
-          2021-04-19</time> 
-        <div class = "tag-img-icon">
-          <img src="/images/tag-icon.svg" width="20px" /> 
-        </div>
-        <a href="/tags">
-          <div class = "post-list-icon-mate">
-            <span class="post-list__meta--tags-right">mark</span>
-          </div>
-          <div class = "post-list-small-mate">
-          <a class="btn-border-small" href=/2021/04/%E7%AB%AF%E5%8F%A3%E5%8D%A0%E7%94%A8/>阅读全文 » </a>
-          </div>
-      </div>
-      <hr class="post-list__divider" />
-    </li>
-    
-    <li>
-      <h2 class="post-list__post-title post-title"><a href="/2021/04/run_jekyll_error/" title="访问 Shell 批量实现iOS的懒加载">Shell 批量实现iOS的懒加载</a></h2>
-      <p class="excerpt">#!/bin/bashiosBatchLazyCode(){        if test $1 = "UIButton" ; then           str="[$1 buttonWithType:UIButtonTypeCustom];"       else           str="[[$1 alloc]init];"    fi  echo -e "- ($1 *)$2{    if (_$2 == nil) {        _$2 = $str    }    re...&hellip;</p>
-      <div class="post-list__meta">        
-        <time datetime="2021-04-19 00:00:00 +0800" class="post-list__meta--date date">
-          <img src="/images/calendar.png" width="20px" /> 
-          2021-04-19</time> 
-        <div class = "tag-img-icon">
-          <img src="/images/tag-icon.svg" width="20px" /> 
-        </div>
-        <a href="/tags">
-          <div class = "post-list-icon-mate">
-            <span class="post-list__meta--tags-right">shell</span>
-          </div>
-          <div class = "post-list-small-mate">
-          <a class="btn-border-small" href=/2021/04/run_jekyll_error/>阅读全文 » </a>
-          </div>
-      </div>
-      <hr class="post-list__divider" />
-    </li>
-    
-    <li>
-      <h2 class="post-list__post-title post-title"><a href="/2021/04/ruby%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%A0%BC%E5%BC%8F%E5%8C%96-%E8%BF%9B%E5%88%B6%E8%BD%AC%E6%8D%A2-%E5%B0%8F%E6%95%B0%E4%BD%8D%E6%95%B0%E6%8E%A7%E5%88%B6/" title="访问 ruby字符串格式化、进制转换、小数位数控制">ruby字符串格式化、进制转换、小数位数控制</a></h2>
-      <p class="excerpt">ruby 字符串格式化和进制转换"%05d" % 123 结果是 "00123""%02X" % 10 结果是 "0A""%03x" % 10 结果是 "00a""%010x" % 10 结果是 "000000000a" (前缀9个0)"%10x" %10 结果是 "         a"  （前缀9个空格）'ff'.to_i(16)ruby实现ip转数字#数字转ip=》先将数字转换为16进制，然后拆分转十进制def conver_ip(data)    @str="%x" % data ...&hellip;</p>
-      <div class="post-list__meta">        
-        <time datetime="2021-04-19 00:00:00 +0800" class="post-list__meta--date date">
-          <img src="/images/calendar.png" width="20px" /> 
-          2021-04-19</time> 
-        <div class = "tag-img-icon">
-          <img src="/images/tag-icon.svg" width="20px" /> 
-        </div>
-        <a href="/tags">
-          <div class = "post-list-icon-mate">
-            <span class="post-list__meta--tags-right">ruby</span>
-          </div>
-          <div class = "post-list-small-mate">
-          <a class="btn-border-small" href=/2021/04/ruby%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%A0%BC%E5%BC%8F%E5%8C%96-%E8%BF%9B%E5%88%B6%E8%BD%AC%E6%8D%A2-%E5%B0%8F%E6%95%B0%E4%BD%8D%E6%95%B0%E6%8E%A7%E5%88%B6/>阅读全文 » </a>
           </div>
       </div>
       <hr class="post-list__divider" />

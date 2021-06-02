@@ -5,9 +5,324 @@
     <description>欢迎来到我的个人博客~</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Thu, 27 May 2021 16:21:05 +0800</pubDate>
-    <lastBuildDate>Thu, 27 May 2021 16:21:05 +0800</lastBuildDate>
+    <pubDate>Wed, 02 Jun 2021 15:21:15 +0800</pubDate>
+    <lastBuildDate>Wed, 02 Jun 2021 15:21:15 +0800</lastBuildDate>
     <generator>Jekyll v3.8.5</generator>
+    
+      <item>
+        <title>Shell脚本中判断字符串是否被包含在内</title>
+        <description>&lt;h1 id=&quot;shell脚本中判断字符串是否被包含在内&quot;&gt;Shell脚本中判断字符串是否被包含在内&lt;/h1&gt;
+
+&lt;h1 id=&quot;1字段-grep&quot;&gt;1、字段 grep：&lt;/h1&gt;
+&lt;p&gt;案例：&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;str1=&quot;abcdefgh&quot;
+str2=&quot;def&quot;
+result=$(echo $str1 | grep &quot;${str2}&quot;)
+if [[ &quot;$result&quot; != &quot;&quot; ]];then
+    echo &quot;包含&quot;
+else
+    echo &quot;不包含&quot;
+fi
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h1 id=&quot;2-字符串运算符-&quot;&gt;2、 字符串运算符 =~:&lt;/h1&gt;
+&lt;p&gt;案例：&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;str1=&quot;abcdefgh&quot;
+str2=&quot;def&quot;
+if [[ $str1 =~ $str2 ]];then
+    echo &quot;包含&quot;
+else
+    echo &quot;不包含&quot;
+fi
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h1 id=&quot;3-正则表达式中的通配符-&quot;&gt;3、 正则表达式中的通配符 *:&lt;/h1&gt;
+&lt;p&gt;案例：&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;str1=&quot;abcdefgh&quot;
+str2=&quot;def&quot;
+if [[ $str1 == *$str2* ]];then
+    echo &quot;包含&quot;
+else
+    echo &quot;不包含&quot;
+fi
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+</description>
+        <pubDate>Wed, 02 Jun 2021 00:00:00 +0800</pubDate>
+        <link>http://localhost:4000/2021/06/Shell%E8%84%9A%E6%9C%AC%E4%B8%AD%E5%88%A4%E6%96%AD%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%98%AF%E5%90%A6%E8%A2%AB%E5%8C%85%E5%90%AB%E5%9C%A8%E5%86%85/</link>
+        <guid isPermaLink="true">http://localhost:4000/2021/06/Shell%E8%84%9A%E6%9C%AC%E4%B8%AD%E5%88%A4%E6%96%AD%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%98%AF%E5%90%A6%E8%A2%AB%E5%8C%85%E5%90%AB%E5%9C%A8%E5%86%85/</guid>
+        
+        <category>Shell</category>
+        
+        
+      </item>
+    
+      <item>
+        <title>Mac 上简单使用 Sed</title>
+        <description>&lt;h1 id=&quot;mac-上简单使用-sed&quot;&gt;Mac 上简单使用 Sed&lt;/h1&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;有时我们需要通过脚本简单修改某个文件中的某个值时，可以用到 Sed 命令的。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h2 id=&quot;一安装&quot;&gt;一、安装&lt;/h2&gt;
+
+&lt;p&gt;如果已安装请忽略，没有安装需要 install 下&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;brew install gnu-sed
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;二简单使用&quot;&gt;二、简单使用&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;注意： Linux Mac 下使用是略有不同的，此处以 Mac 使用的。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;举例子，直接替换&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ cat test.txt
+12345
+aaa
+CCC
+$ sed -i &quot;&quot; &quot;s/12345/Hello/&quot; test.txt
+$ cat test.txt
+Hello
+aaa
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;分析命令 &lt;code class=&quot;highlighter-rouge&quot;&gt;sed -i &quot;&quot; &quot;s/12345/Hello/&quot; test.txt&lt;/code&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;-i&lt;/code&gt; 直接操作文件并不需要备份文件，如果需要备分则使用 -i “benfen”&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;s&lt;/code&gt; 代表 &lt;code class=&quot;highlighter-rouge&quot;&gt;substitue&lt;/code&gt; 即替换&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;12345&lt;/code&gt; 要被代替的文字&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Hello&lt;/code&gt; 要代替的文字&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;test.txt&lt;/code&gt; 对应修改的文件&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;sed 全名为 stream editor，流编辑器，用程序的方式来编辑文本，功能相当的强大，此处简单记录下&lt;/p&gt;
+
+&lt;h3 id=&quot;修改文件要用-i-另外基本操作码如下以及熟悉简单的正则表达式就ok&quot;&gt;修改文件要用-i， 另外基本操作码如下，以及熟悉简单的正则表达式就OK&lt;/h3&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;s 替换
+c change line
+d 删除line
+i 插入line
+a 追加line
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;2-1删-d&quot;&gt;2-1、删 d&lt;/h3&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ `sed -i &quot;&quot; &quot;2d&quot; test.txt` 删除
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;删除第二行&lt;br /&gt;
+&lt;code class=&quot;highlighter-rouge&quot;&gt;sed -i &quot;&quot; &quot;2d&quot; test.txt&lt;/code&gt; 2 代表第二行&lt;/li&gt;
+  &lt;li&gt;删除以什么开头的某行&lt;br /&gt;
+&lt;code class=&quot;highlighter-rouge&quot;&gt;sed -i &quot;&quot; &quot;/^C.*/d&quot; test.txt&lt;/code&gt; /C.* 代表 以C 开头的行数，.* 是通配符&lt;/li&gt;
+  &lt;li&gt;删除包含什么的行&lt;br /&gt;
+&lt;code class=&quot;highlighter-rouge&quot;&gt;sed -i &quot;&quot; &quot;/2/d&quot; test.txt&lt;/code&gt; 2 代表包含 2 的行&lt;/li&gt;
+  &lt;li&gt;删除空行&lt;br /&gt;
+&lt;code class=&quot;highlighter-rouge&quot;&gt;sed -i &quot;&quot; &quot;/^$/d&quot; test.txt&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;2-2增-a-i&quot;&gt;2-2、增 a i&lt;/h3&gt;
+
+&lt;p&gt;在 Mac 系统是原生于bsd系, 所以此处添加 和 插入有点奇怪的（a 添加下一行，i 插入上一行）&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sed &quot;$line a\ (注意此处有空格,要在下一行添加文本)
+$value(如果想换行要把&quot;写到下一行)
+&quot; $file
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sed -i &quot;&quot; &quot;2 a\   
+aaa
+&quot; test.txt
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sed -i &quot;&quot; &quot;2 i\   
+xxx
+&quot; test.txt
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;其他规则如删除差不多，就是要注意 \ 要换行的，好麻烦&lt;/p&gt;
+
+&lt;h3 id=&quot;2-3查-p&quot;&gt;2-3、查 p&lt;/h3&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ sed -n &quot;p&quot; test.txt // 输出
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;输出所有&lt;br /&gt;
+&lt;code class=&quot;highlighter-rouge&quot;&gt;sed -n 'p' test.txt&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;输出第二行&lt;br /&gt;
+&lt;code class=&quot;highlighter-rouge&quot;&gt;sed -n '2p' test.txt&lt;/code&gt; 2 代表所有&lt;/li&gt;
+  &lt;li&gt;输出前缀为 1 的行&lt;br /&gt;
+&lt;code class=&quot;highlighter-rouge&quot;&gt;sed -n '/^1.*/p' test.txt&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;2-4改-s&quot;&gt;2-4、改 s&lt;/h3&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ sed -i &quot;&quot; &quot;s/pattern/replace/&quot; test.txt 
+$ sed -i &quot;&quot; &quot;n,ms/pattern/replace/g&quot; test.txt //指定行
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;修改某个字符串&lt;br /&gt;
+&lt;code class=&quot;highlighter-rouge&quot;&gt;sed -i &quot;&quot; &quot;s/Hello/xxxx/&quot; test.txt&lt;/code&gt; Hello 表示要修改的文字，xxx 表示替代的&lt;/li&gt;
+  &lt;li&gt;修改某行的指定&lt;br /&gt;
+&lt;code class=&quot;highlighter-rouge&quot;&gt;sed -i &quot;&quot; &quot;4s/xxxx/aaa/&quot; test.txt&lt;/code&gt; 4 代表第四行&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;以上我们修改一些简单的文件，暂时是没问题啦的，再配合正则表达式 多尝试下，基本OK&lt;br /&gt;
+只是要注意下 Mac 和 Linux Sed 命令规则很不同的。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;参考： &lt;a href=&quot;https://links.jianshu.com/go?to=https%3A%2F%2Fahuigo.github.io%2Fb%2Fc%2Fops-sed%23%2F&quot;&gt;SED 简记&lt;/a&gt;, &lt;a href=&quot;https://links.jianshu.com/go?to=https%3A%2F%2Fwww.cnblogs.com%2Fliwei0526vip%2Fp%2F5644163.html&quot;&gt;sed入门详解教程&lt;/a&gt;&lt;/p&gt;
+
+</description>
+        <pubDate>Wed, 02 Jun 2021 00:00:00 +0800</pubDate>
+        <link>http://localhost:4000/2021/06/Mac%E4%B8%8A%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8Sed/</link>
+        <guid isPermaLink="true">http://localhost:4000/2021/06/Mac%E4%B8%8A%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8Sed/</guid>
+        
+        <category>shell</category>
+        
+        
+      </item>
+    
+      <item>
+        <title>iOS国际化查找中文替换</title>
+        <description>&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# coding=utf-8
+
+import os
+import re
+
+import sys
+reload(sys)
+sys.setdefaultencoding('utf-8')
+
+DESPATH = os.getcwd()
+
+AllText = []
+
+WDESPATH = os.getcwd()+&quot;/unlocalized.strings&quot;
+
+BLACKDIRLIST = [
+    DESPATH + '/Frameworks',
+    DESPATH + '/Example',
+    '_Pods.xcodeproj',
+    'README.md',
+    'LICENSE',
+    '*.podspec'
+    'ci.rb',
+]
+
+SEPREATE = ' &amp;lt;=&amp;gt; '
+
+def isInBlackList(filePath):
+    if os.path.isfile(filePath):
+        return fileNameAtPath(filePath) in BLACKDIRLIST
+    if filePath:
+        return filePath in BLACKDIRLIST
+    return False
+
+def fileNameAtPath(filePath):
+    return os.path.split(filePath)[1]
+
+def isSignalNote(str):
+    if '//' in str:
+        return True
+    if str.startswith('#pragma'):
+        return True
+    return False
+
+def isLogMsg(str):
+    if str.startswith('NSLog') or str.startswith('FLOG') or str.startswith('TLOG_INFO') or str.startswith('TLOG') or str.startswith('TLOG_WARNING') or str.startswith('TLOG_DEBUG'):
+        return True
+    return False
+
+def unlocalizedStrs(filePath):
+    f = open(filePath)
+    fileName = fileNameAtPath(filePath)
+    isMutliNote = False
+    isImportHeader = False
+    isHaveWriteFileName = False
+    file_data = []
+    importHeaderLineNum = 0
+    isNeedImport = False
+    for index, line in enumerate(f):
+        if 'TeIntenational' in line: isImportHeader = True
+        if '#import' in line: importHeaderLineNum = index
+        newLine = line
+        line = line.strip()
+        if '/*' in line:
+            isMutliNote = True
+        if '*/' in line:
+            isMutliNote = False
+        if isMutliNote:
+            file_data.append(newLine)
+            continue
+
+        if isSignalNote(line):
+            file_data.append(newLine)
+            continue
+
+        if isLogMsg(line):
+            file_data.append(newLine)
+            continue
+        tmpLine = re.sub(u'(?&amp;lt;!TStringWithKeyFromTable\()(@&quot;[^&quot;%]*[\u4E00-\u9FA5]+[^&quot;%\n]*?&quot;)', 'TStringWithKeyFromTable(\\1, @&quot;TJTranslateApp&quot;)', newLine.decode('utf-8'))
+        if tmpLine != newLine and not 'NSAssert' in tmpLine:
+            print tmpLine
+            newLine = tmpLine
+            isNeedImport = True
+        file_data.append(newLine)
+        matchList = re.findall(u'@&quot;[^&quot;%]*[\u4E00-\u9FA5]+[^&quot;%\n]*?&quot;', line.decode('utf-8'))
+        if matchList:
+            if not isHaveWriteFileName:
+                wf.write('\n//' + fileName + '\n')
+                isHaveWriteFileName = True
+   
+            for item in matchList:
+                if not item in AllText and not 'NSAssert' in item:
+                    wf.write('\&quot;' + item[2 : len(item)] + ' = \&quot;' + item[2 : len(item)] + ';\n')
+                    AllText.append(item)
+    if not isImportHeader and isNeedImport:
+        file_data.insert(importHeaderLineNum+1, '#import &amp;lt;TJString/TJIntenational.h&amp;gt;\n')
+        with open(filePath,&quot;w&quot;) as f:
+            f.write(''.join(file_data))
+    elif isImportHeader:
+        with open(filePath,&quot;w&quot;) as f:
+            f.write(''.join(file_data))
+        
+def findFromFile(path):
+    paths = os.listdir(path)
+    for aCompent in paths:
+        aPath = os.path.join(path, aCompent)
+        if isInBlackList(aPath):
+            print('在黑名单中，被自动忽略' + aPath)
+            continue
+        if os.path.isdir(aPath):
+            findFromFile(aPath)
+        elif os.path.isfile(aPath) and os.path.splitext(aPath)[1]=='.m':
+            unlocalizedStrs(aPath)
+
+if __name__ == '__main__':
+    wf = open(WDESPATH, 'w')
+    findFromFile(DESPATH)
+    wf.close()
+    print &quot;执行完毕，共检索到&quot; + str(len(AllText)) + &quot;条&quot;
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+</description>
+        <pubDate>Mon, 31 May 2021 00:00:00 +0800</pubDate>
+        <link>http://localhost:4000/2021/05/iOS%E5%9B%BD%E9%99%85%E5%8C%96%E6%9F%A5%E6%89%BE%E4%B8%AD%E6%96%87%E6%9B%BF%E6%8D%A2/</link>
+        <guid isPermaLink="true">http://localhost:4000/2021/05/iOS%E5%9B%BD%E9%99%85%E5%8C%96%E6%9F%A5%E6%89%BE%E4%B8%AD%E6%96%87%E6%9B%BF%E6%8D%A2/</guid>
+        
+        <category>iOS</category>
+        
+        
+      </item>
     
       <item>
         <title>iOS重签名脚本</title>
@@ -1424,185 +1739,6 @@ NSString* vmmap(){
         <guid isPermaLink="true">http://localhost:4000/2021/04/iOS%E6%B7%BB%E5%8A%A0%E8%B0%83%E8%AF%95%E5%91%BD%E4%BB%A4/</guid>
         
         <category>iOS</category>
-        
-        
-      </item>
-    
-      <item>
-        <title>iOS中MVC设计模式</title>
-        <description>&lt;p&gt;在组织大型项目的代码文件时，我们常用MVC的思想。MVC的概念讲起来非常简单，就和对象（object）一样。但是理解和应用起来却非常困难。今天我们就简单总结一下MVC设计理念。&lt;/p&gt;
-
-&lt;p&gt;MVC(Model View Controller)模型(model)－视图(view)－控制器(controller)：&lt;br /&gt;
-MVC本来是存在于Desktop程序中的，M是指数据模型，V是指用户界面，C则是控制器。使用MVC是将M和V的实现代码分离，从而使同一个程序可以使用不同的表现形式。比如一批统计数据你可以分别用柱状图、饼图来表示。C存在的目的则是确保M和V的同步，一旦M改变，V应该同步更新，从例子可以看出MVC就是Observer设计模式的一个特例。&lt;/p&gt;
-
-&lt;p&gt;MVC是一个设计模式，它强制性的使&lt;a href=&quot;http://baike.baidu.com/view/330120.htm&quot;&gt;应用程序&lt;/a&gt;的输入、处理和输出分开。使用MVC应用程序被分成三个核心部件：模型、视图、控制器。它们各自处理自己的任务。分层概念&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;（一）模型对象&lt;/strong&gt;&lt;br /&gt;
-模型对象封装了应用程序的数据，并定义操控和处理该数据的逻辑和运算。例如，模型对象可能是表示游戏中的角色或地址簿中的联系人。用户在视图层中所进行的创建或修改数据的操作，通过控制器对象传达出去，最终会创建或更新模型对象。模型对象更改时（例如通过网络连接接收到新数据），它通知控制器对象，控制器对象更新相应的视图对象。在MVC的三个部件中，模型拥有最多的处理任务。例如它可能用象EJBs和ColdFusion Components这样的构件对象来处理数据库。被模型返回的数据是中立的，就是说模型与数据格式无关，这样一个模型能为多个视图提供数据。由于应用于模型的代码只需写一次就可以被多个视图重用，所以减少了代码的重复性。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;（二）视图对象&lt;/strong&gt;&lt;br /&gt;
-视图对象是应用程序中用户可以看见的对象。视图对象知道如何将自己绘制出来，并可能对用户的操作作出响应。视图对象的主要目的，就是显示来自应用程序模型对象的数据，并使该数据可被编辑。尽管如此，在 MVC 应用程序中，视图对象通常与模型对象分离。在iOS应用程序开发中，所有的控件、窗口等都继承自UIView，对应MVC中的V。UIView及其子类主要负责UI的实现，而UIView所产生的事件都可以采用委托的方式，交给UIViewController实现。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;（三）控制器对象&lt;/strong&gt;&lt;br /&gt;
-在应用程序的一个或多个视图对象和一个或多个模型对象之间，控制器对象充当媒介。控制器对象因此是同步管道程序，通过它，视图对象了解模型对象的更改，反之亦然。控制器对象还可以为应用程序执行设置和协调任务，并管理其他对象的生命周期。&lt;/p&gt;
-
-&lt;p&gt;控制器对象解释在视图对象中进行的用户操作，并将新的或更改过的数据传达给模型对象。模型对象更改时，一个控制器对象会将新的模型数据传达给视图对象，以便视图对象可以显示它。&lt;/p&gt;
-
-&lt;p&gt;为什么要使用 MVC&lt;br /&gt;
-　首先，最重要的一点是多个视图能共享一个模型，现在需要用越来越多的方式来访问你的应用程序。对此，其中一个解决之道是使用MVC，无论你的用户想要Flash界面或是 WAP 界面；用一个模型就能处理它们。由于你已经将数据和业务规则从表示层分开，所以你可以最大化的重用你的代码了。&lt;br /&gt;
-　　由于模型返回的数据没有进行格式化，所以同样的构件能被不同界面使用。例如，很多数据可能用HTML来表示，但是它们也有可能要用Adobe Flash和WAP来表示。模型也有状态管理和数据持久性处理的功能，例如，基于会话的购物车和电子商务过程也能被Flash网站或者无线联网的应用程序所重用。&lt;br /&gt;
-　　因为模型是自包含的，并且与控制器和视图相分离，所以很容易改变你的应用程序的数据层和业务规则。如果你想把你的数据库从MySQL移植到Oracle，或者改变你的基于RDBMS数据源到LDAP，只需改变你的模型即可。一旦你正确的实现了模型，不管你的数据来自数据库或是LDAP服务器，视图将会正确的显示它们。由于运用MVC的应用程序的三个部件是相互独立，改变其中一个不会影响其它两个，所以依据这种设计思想你能构造良好的松耦合的构件。&lt;br /&gt;
-　　对我来说，控制器也提供了一个好处，就是可以使用控制器来联接不同的模型和视图去完成用户的需求，这样控制器可以为构造应用程序提供强有力的手段。给定一些可重用的模型和视图，控制器可以根据用户的需求选择模型进行处理，然后选择视图将处理结果显示给用户。&lt;br /&gt;
-&lt;strong&gt;MVC的优点&lt;/strong&gt;&lt;br /&gt;
-&lt;strong&gt;（一）、低耦合性&lt;/strong&gt;&lt;br /&gt;
-　　视图层和业务层分离，这样就允许更改视图层代码而不用重新编译模型和控制器代码，同样，一个应用的业务流程或者业务规则的改变只需要改动MVC的模型层即可。因为模型与控制器和视图相分离，所以很容易改变应用程序的数据层和业务规则。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;（二）、高重用性和可适用性&lt;/strong&gt;&lt;br /&gt;
-　　随着技术的不断进步，现在需要用越来越多的方式来访问应用程序。MVC模式允许你使用各种不同样式的视图来访问同一个服务器端的代码。它包括任何WEB（HTTP）浏览器或者无线浏览器（wap），比如，用户可以通过电脑也可通过手机来订购某样产品，虽然订购的方式不一样，但处理订购产品的方式是一样的。由于模型返回的数据没有进行格式化，所以同样的构件能被不同的界面使用。例如，很多数据可能用HTML来表示，但是也有可能用WAP来表示，而这些表示所需要的命令是改变视图层的实现方式，而控制层和模型层无需做任何改变。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;（三）、较低的生命周期成本&lt;/strong&gt;&lt;br /&gt;
-　　MVC使开发和维护用户接口的技术含量降低。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;（四）、可维护性&lt;/strong&gt;&lt;br /&gt;
-　　分离视图层和业务逻辑层也使得应用更易于维护和修改。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;（五）、有利于软件工程化管理&lt;/strong&gt;&lt;br /&gt;
-　　由于不同的层各司其职，每一层不同的应用具有某些相同的特征，有利于通过工程化、工具化管理程序代码。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;MVC的缺点：&lt;/strong&gt;&lt;br /&gt;
-　　MVC的缺点是由于它没有明确的定义，所以完全理解MVC并不是很容易。使用MVC需要精心的计划，由于它的内部原理比较复杂，所以需要花费一些时间去思考。&lt;br /&gt;
-　　你将不得不花费相当可观的时间去考虑如何将MVC运用到你的应用程序，同时由于模型和视图要严格的分离，这样也给调试应用程序带来了一定的困难。每个构件在使用之前都需要经过彻底的测试。一旦你的构件经过了测试，你就可以毫无顾忌的重用它们了。&lt;br /&gt;
-　　根据开发者经验，由于开发者将一个应用程序分成了三个部件，所以使用MVC同时也意味着你将要管理比以前更多的文件，这一点是显而易见的。这样好像我们的工作量增加了，但是请记住这比起它所能带给我们的好处是不值一提。&lt;br /&gt;
-　　MVC并不适合小型甚至中等规模的应用程序，花费大量时间将MVC应用到规模并不是很大的应用程序通常会得不偿失。&lt;br /&gt;
-　　MVC设计模式是一个很好创建软件的途径，它所提倡的一些原则，像内容和显示互相分离可能比较好理解。但是如果你要隔离模型、视图和控制器的构件，你可能需要重新思考你的应用程序，尤其是应用程序的构架方面。如果你肯接受MVC，并且有能力应付它所带来的额外的工作和复杂性，MVC将会使你的软件在健壮性，代码重用和结构方面上一个新的台阶。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;IOS MVC设计模式：&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/posts/iOS/MVC/011901561465049.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;图中有几条线把这三部分划分开，有黄线，虚线，和白色的实线。我们把它们想象成路标。你可以看到，在M和V之间有两条黄线，这表示什么呢？它意味着你不能 穿越这黄线，任何一个方向都不行，即M和V完全分离。在图的上部，你可以看到白色的虚线，它意味着你可以自由的穿越它，只要是安全的。那白色的实线呢？它代表你可以穿越，但你必须要买票，或者交点过路费。&lt;/p&gt;
-
-&lt;p&gt;首先， 我们来看C和M之间的绿色箭头，这箭头的方向就代表着“发起对话”的方向，也就是说，发起对话的是C，而做出回答的是M。C可以问M各种各样的问题，但M 只是回答C的问题或要求，它不可以主动的向C要求什么。还记得虚线是畅通无阻的意思吧，所以，C知道M的所有的事情,如果用代码来说明这件事情，就是 说，C可以导入M的头文件或是M的接口（API）。因为C可以通过M的API，所以它就可以肆无忌惮的向M要求这要求那了。&lt;/p&gt;
-
-&lt;p&gt;我们再来看看另外的一个绿色箭头，它是在C和V之间，和前一个绿色箭头的意义一样，它代表C可以直接地向V进行交流。你可以想想，C要把V放到屏幕 上，并设置V的属性，告诉它们什么时候从屏幕上消失，把它们分成组等等。如果C不能自由的向V发号施令的话，程序的显示将会多么的困难,所以，C可以毫无 限制地向V说话。&lt;/p&gt;
-
-&lt;p&gt;可能你已经注意到了，这个箭头上还有outlet(输出口)，outlet可以看作是从C指向V的指针，它在C中被定义。outlet给我们提供了很大的 方便，它使我们在C的内部就可以轻松准确地向V施令。C可以拥有很多的outlet，可以不止一个，这也使它可以更高效的和V进行交流。&lt;/p&gt;
-
-&lt;p&gt;那M和V之间可以交流么？还记得黄线的意思么？完全不可以通过，所以我们是不允许M和V进行交流的。这是因为我们不希望这三部分之间有过多的交流，你想想，假如V在显示时出现了问题，比如有一个图形没有显示出来，我们就要去查找错误，因为C可以和V交流，M也可以和V交流的话，我们就要去检查两个部分。 相反的，只有C可以和V交流的话，在出错时，我们就只需要去C那里查找原因，这样查找错误不就很是简单了么？所以，我们不允许M和V之间有直接的联系，这 也是在它们两之间有两根黄线的原因。 总结下来也就是以下三点：&lt;/p&gt;
-
-&lt;p&gt;（1）、Model和View永远不能相互通信，只能通过Controller传递。&lt;/p&gt;
-
-&lt;p&gt;（2）、Controller可以直接与Model对话（读写调用Model），Model通过Notification和KVO机制与Controller间接通信。&lt;/p&gt;
-
-&lt;p&gt;（3）、Controller可以直接与View对话，通过outlet,直接操作View,outlet直接对应到View中的控件,View通过action向Controller报告事件的发生(如用户Touch我了)。Controller是View的直接数据源（数据很可能是Controller从Model中取得并经过加工了）。Controller是View的代理（delegate),以同步View与Controller。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;我们接下来讨论V是如何向C发送信息的。V对C的交流有三种不同的方式：&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;第一种我们称为目标操作(target-action)。&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;它是这样工作的，C会在自己的内部“悬挂”一个目标(target)，如图中的红白相间的 靶子，对应的，它还会分发一个操作(action，如图中的黄色箭头)给将要和它交流的视图对象(可能是屏幕上的一个按钮)，当按钮被按时，action 就会被发送给与之对应的target，这样V就可以和C交流了。但是在这种情况下，V只是知道发送action给对应的target,它并不知道C中的 类，也不知道它到底发送了什么。target-action是我们经常使用的方法。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;第二种方式我们叫做委托(delegate)。&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;有时候，V需要和C进行同步，你知道，用户交互不仅仅是什么按按钮，划滑块，还有很多种形式。好了， 让我们来看看图中的delegate黄色箭头，你发现箭头上又分出了四个小箭头：should，did，will，还有一个没标注的。绝大部分的 delegate信息都是should，will，did这三种形式。和英文意思相对应，should代表视图对象将询问C中的某个对象“我应该这么做 么？”，举个例子，有一个web视图，有人点击了一个链接，web视图就要问“我应该打开这个链接么？这样做安全么？”。这就是should信息。那 will和did呢？will就是“我将要做这件事了”，did就是“我已经做了这件事”。C把自己设置为V的委托(delegate),它让V知道：如 果V想知道更多的关于将如何显示的信息的话，就向C发送delegate信息。通过接受V发过来的delegate信息，C就会做出相应的协调和处理。还 有一点，每个V只能有一个delegate。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;第三种方式就是数据源(datasource)，&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;V不能拥有它所要显示的数据，记住这点非常重要。V希望别人帮助它管理将要显示的数据，当 它需要数据时，它就会请求别人的帮助,把需要的数据给它。再者，iphone的屏幕很小，它不能显示包含大量信息的视图。看图中的datasource箭 头，和delegate类似，V会发送cout，data at信息给C来请求数据。&lt;/p&gt;
-
-&lt;p&gt;对于不同的UIView，有相应的UIViewController，对应MVC中的C。例如在iOS上常用的UITableView，它所对应的Controller就是UITableViewController。&lt;/p&gt;
-
-</description>
-        <pubDate>Fri, 30 Apr 2021 00:00:00 +0800</pubDate>
-        <link>http://localhost:4000/2021/04/iOS%E4%B8%ADMVC%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/</link>
-        <guid isPermaLink="true">http://localhost:4000/2021/04/iOS%E4%B8%ADMVC%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/</guid>
-        
-        <category>iOS</category>
-        
-        
-      </item>
-    
-      <item>
-        <title>高级Bash脚本编程指南</title>
-        <description>&lt;p&gt;《高级Bash脚本编程指南》Revision 10中文版&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;http://www.linuxplus.org/kb/&quot;&gt;在线阅读链接&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://tldp.org/LDP/abs/html/&quot;&gt;英文版&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://linuxstory.gitbook.io/advanced-bash-scripting-guide-in-chinese/&quot;&gt;gitbook地址&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;http://www.tutorialspoint.com/unix/unix-shell.htm&quot;&gt;Unix Shell Programming&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://bash.cyberciti.biz/guide/Main_Page&quot;&gt;Linux Shell Scripting Tutorial - A Beginner’s handbook&lt;/a&gt;&lt;/p&gt;
-</description>
-        <pubDate>Mon, 26 Apr 2021 00:00:00 +0800</pubDate>
-        <link>http://localhost:4000/2021/04/%E9%AB%98%E7%BA%A7Bash%E8%84%9A%E6%9C%AC%E7%BC%96%E7%A8%8B%E6%8C%87%E5%8D%97/</link>
-        <guid isPermaLink="true">http://localhost:4000/2021/04/%E9%AB%98%E7%BA%A7Bash%E8%84%9A%E6%9C%AC%E7%BC%96%E7%A8%8B%E6%8C%87%E5%8D%97/</guid>
-        
-        <category>shell</category>
-        
-        
-      </item>
-    
-      <item>
-        <title>shell编程之wc命令</title>
-        <description>&lt;p&gt;Linux wc命令用于计算字数。&lt;/p&gt;
-
-&lt;p&gt;利用wc指令我们可以计算文件的Byte数、字数、或是列数，若不指定文件名称、或是所给予的文件名为”-“，则wc指令会从标准输入设备读取数据。&lt;/p&gt;
-
-&lt;h1 id=&quot;语法&quot;&gt;语法&lt;/h1&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;wc [-clw][--help][--version][文件...]
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;h2 id=&quot;参数&quot;&gt;参数：&lt;/h2&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;-c或–bytes或–chars 只显示Bytes数。&lt;/li&gt;
-  &lt;li&gt;-l或–lines 显示行数。&lt;/li&gt;
-  &lt;li&gt;-w或–words 只显示字数。&lt;/li&gt;
-  &lt;li&gt;–help 在线帮助。&lt;/li&gt;
-  &lt;li&gt;–version 显示版本信息。
-    &lt;h2 id=&quot;实例&quot;&gt;实例&lt;/h2&gt;
-    &lt;p&gt;在默认的情况下，wc将计算指定文件的行数、字数，以及字节数。使用的命令为：&lt;/p&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;wc testfile 
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;先查看testfile文件的内容，可以看到：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ cat testfile  
-Linux networks are becoming more and more common, but scurity is often an overlooked  
-issue. Unfortunately, in today’s environment all networks are potential hacker targets,  
-fro0m tp-secret military research networks to small home LANs.  
-Linux Network Securty focuses on securing Linux in a networked environment, where the  
-security of the entire network needs to be considered rather than just isolated machines.  
-It uses a mix of theory and practicl techniques to teach administrators how to install and  
-use security applications, as well as how the applcations work and why they are necesary. 
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;使用 wc统计，结果如下：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ wc testfile           # testfile文件的统计信息  
-3 92 598 testfile       # testfile文件的行数为3、单词数92、字节数598 
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;其中，3 个数字分别表示testfile文件的行数、单词数，以及该文件的字节数。
-如果想同时统计多个文件的信息，例如同时统计testfile、testfile_1、testfile_2，可使用如下命令：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;wc testfile testfile_1 testfile_2   #统计三个文件的信息 
-输出结果如下：
-
-$ wc testfile testfile_1 testfile_2  #统计三个文件的信息  
-3 92 598 testfile                    #第一个文件行数为3、单词数92、字节数598  
-9 18 78 testfile_1                   #第二个文件的行数为9、单词数18、字节数78  
-3 6 32 testfile_2                    #第三个文件的行数为3、单词数6、字节数32  
-15 116 708 总用量                    #三个文件总共的行数为15、单词数116、字节数708 
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-</description>
-        <pubDate>Mon, 26 Apr 2021 00:00:00 +0800</pubDate>
-        <link>http://localhost:4000/2021/04/shell%E7%BC%96%E7%A8%8B%E4%B9%8Bwc%E5%91%BD%E4%BB%A4/</link>
-        <guid isPermaLink="true">http://localhost:4000/2021/04/shell%E7%BC%96%E7%A8%8B%E4%B9%8Bwc%E5%91%BD%E4%BB%A4/</guid>
-        
-        <category>shell</category>
         
         
       </item>
