@@ -5,8 +5,8 @@
     <description>欢迎来到我的个人博客~</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Fri, 04 Jun 2021 11:40:06 +0800</pubDate>
-    <lastBuildDate>Fri, 04 Jun 2021 11:40:06 +0800</lastBuildDate>
+    <pubDate>Fri, 04 Jun 2021 15:44:49 +0800</pubDate>
+    <lastBuildDate>Fri, 04 Jun 2021 15:44:49 +0800</lastBuildDate>
     <generator>Jekyll v3.8.5</generator>
     
       <item>
@@ -254,6 +254,36 @@ fi
         <guid isPermaLink="true">http://localhost:4000/2021/06/%E5%88%A9%E7%94%A8shell%E8%AF%BB%E5%8F%96README.MD%E9%85%8D%E7%BD%AE%E4%BF%AE%E6%94%B9%E9%85%8D%E7%BD%AE%E7%8E%AF%E5%A2%83/</guid>
         
         <category>shell</category>
+        
+        
+      </item>
+    
+      <item>
+        <title>rebase使用</title>
+        <description>&lt;h1 id=&quot;1当前分支为feature基于master合并&quot;&gt;1、当前分支为feature，基于master合并&lt;/h1&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;git rebase -i master 
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h1 id=&quot;2出现冲突&quot;&gt;2、出现冲突&lt;/h1&gt;
+&lt;ul&gt;
+  &lt;li&gt;1、解决冲突&lt;/li&gt;
+  &lt;li&gt;2、&lt;code class=&quot;highlighter-rouge&quot;&gt;git add .&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;3、&lt;code class=&quot;highlighter-rouge&quot;&gt;git rebase --continue&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id=&quot;3出现冲突&quot;&gt;3、出现冲突&lt;/h1&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;git rebase --abort
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h1 id=&quot;4合并提交信息&quot;&gt;4、合并提交信息&lt;/h1&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;git rebase -i &amp;lt;first commit id&amp;gt; &amp;lt;last commit id&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+</description>
+        <pubDate>Fri, 04 Jun 2021 00:00:00 +0800</pubDate>
+        <link>http://localhost:4000/2021/06/rebase%E4%BD%BF%E7%94%A8/</link>
+        <guid isPermaLink="true">http://localhost:4000/2021/06/rebase%E4%BD%BF%E7%94%A8/</guid>
+        
+        <category>git</category>
         
         
       </item>
@@ -1372,76 +1402,6 @@ gggUG   &quot; 文本所有字符大写
         <pubDate>Sat, 08 May 2021 00:00:00 +0800</pubDate>
         <link>http://localhost:4000/2021/05/iOS%E6%9F%A5%E6%89%BE%E6%B1%89%E5%AD%97%E5%AD%97%E7%AC%A6%E4%B8%B2/</link>
         <guid isPermaLink="true">http://localhost:4000/2021/05/iOS%E6%9F%A5%E6%89%BE%E6%B1%89%E5%AD%97%E5%AD%97%E7%AC%A6%E4%B8%B2/</guid>
-        
-        <category>iOS</category>
-        
-        
-      </item>
-    
-      <item>
-        <title>git切换到某个tag</title>
-        <description>&lt;h1 id=&quot;git切换到某个tag&quot;&gt;git切换到某个tag&lt;/h1&gt;
-&lt;p&gt;git clone 整个仓库后使用，以下命令就可以取得该tag 对应的代码了。 &lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;git checkout tag_name
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;但是，这时候 git 可能会提示你当前处于一个&lt;code class=&quot;highlighter-rouge&quot;&gt;detached HEAD&lt;/code&gt; 状态。&lt;/p&gt;
-
-&lt;p&gt;因为 tag 相当于是一个快照，是不能更改它的代码的。&lt;/p&gt;
-
-&lt;p&gt;如果要在 tag 代码的基础上做修改，你需要一个分支： &lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;git checkout -b branch_name tag_name
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;这样会从 tag 创建一个分支，然后就和普通的 git 操作一样了。&lt;/p&gt;
-
-&lt;p&gt;如果项目上有一个后来新建的分支test，并且使用&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;git branch -a
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;看不到该远程分支：&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;* develop
-  remotes/composer/develop
-  remotes/composer/feature/194
-  remotes/composer/feature/198
-  remotes/composer/feature/199
-  remotes/composer/feature/200
-  remotes/composer/master
-  remotes/origin/HEAD -&amp;gt; origin/develop
-  remotes/origin/develop
-  remotes/origin/feature/194
-  remotes/origin/feature/198
-  remotes/origin/feature/199
-  remotes/origin/feature/200
-  remotes/origin/master
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;直接使用命令&lt;code class=&quot;highlighter-rouge&quot;&gt;git checkout test&lt;/code&gt;，出现以下错误&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;error: pathspec 'origin/XXX' did not match any file(s) known to git.
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;项目上有一个分支test，使用&lt;code class=&quot;highlighter-rouge&quot;&gt;git branch -a&lt;/code&gt;看不到该远程分支，直接使用命令
-&lt;code class=&quot;highlighter-rouge&quot;&gt;git checkout test&lt;/code&gt;报错如下：
-解决方法是：&lt;/p&gt;
-
-&lt;p&gt;1、执行命令git fetch取回所有分支的更新&lt;/p&gt;
-
-&lt;p&gt;2、执行git branch -a可以看到test分支（已经更新分支信息）&lt;/p&gt;
-
-&lt;p&gt;3、切换分支git checkout test&lt;/p&gt;
-
-&lt;h1 id=&quot;git切换到某个commit-id&quot;&gt;git切换到某个commit Id&lt;/h1&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;//1.找到你的日志commit号为22dfbf1f907764c5ae70381b8191104f9af21d8c 
-git log
-//2.切换到这个commit下
-git checkout 22dfbf1f907764c5ae70381b8191104f9af21d8c
-//3.在本地新建一个dev_2.0分支
-git checkout -b dev_2.0 22dfbf1f907764c5ae70381b8191104f9af21d8c
-//4.查看分支
-git branch
-//5.将本地dev_2.0分支推到远程
-git push --set-upstream origin dev_2.0
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-</description>
-        <pubDate>Sat, 08 May 2021 00:00:00 +0800</pubDate>
-        <link>http://localhost:4000/2021/05/git%E5%88%87%E6%8D%A2%E5%88%B0%E6%9F%90%E4%B8%AAtag/</link>
-        <guid isPermaLink="true">http://localhost:4000/2021/05/git%E5%88%87%E6%8D%A2%E5%88%B0%E6%9F%90%E4%B8%AAtag/</guid>
         
         <category>iOS</category>
         

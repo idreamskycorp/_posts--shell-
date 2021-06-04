@@ -6,17 +6,17 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <title>Shell脚本中判断字符串是否被包含在内</title>
-  <meta name="description" content="Shell脚本中判断字符串是否被包含在内">
+  <title>rebase使用</title>
+  <meta name="description" content="1、当前分支为feature，基于master合并git rebase -i master ">
   <meta name="author" content="leopardpan">
 
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="Shell脚本中判断字符串是否被包含在内">
-  <meta name="twitter:description" content="Shell脚本中判断字符串是否被包含在内">
+  <meta name="twitter:title" content="rebase使用">
+  <meta name="twitter:description" content="1、当前分支为feature，基于master合并git rebase -i master ">
   
   <meta property="og:type" content="article">
-  <meta property="og:title" content="Shell脚本中判断字符串是否被包含在内">
-  <meta property="og:description" content="Shell脚本中判断字符串是否被包含在内">
+  <meta property="og:title" content="rebase使用">
+  <meta property="og:description" content="1、当前分支为feature，基于master合并git rebase -i master ">
   
   <link rel="icon" type="image/png" href="/images/favicon.png" />
   <link href="/images/favicon.png" rel="shortcut icon" type="image/png">
@@ -24,7 +24,7 @@
   <link rel="stylesheet" href="/css/main.css">
   <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 
-  <link rel="canonical" href="http://localhost:4000/2021/06/Shell%E8%84%9A%E6%9C%AC%E4%B8%AD%E5%88%A4%E6%96%AD%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%98%AF%E5%90%A6%E8%A2%AB%E5%8C%85%E5%90%AB%E5%9C%A8%E5%86%85/">
+  <link rel="canonical" href="http://localhost:4000/2021/06/rebase%E4%BD%BF%E7%94%A8/">
   <link rel="alternate" type="application/rss+xml" title="LiJingBiao" href="http://localhost:4000/feed.xml">
   
   <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
@@ -179,10 +179,10 @@
 
 <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
   <header class="post-header">
-    <h1 class="post-title">Shell脚本中判断字符串是否被包含在内</h1>
+    <h1 class="post-title">rebase使用</h1>
     <div class="post-meta">
       <img src="/images/calendar.png" width="20px"/> 
-      <time datetime="2021-06-02 00:00:00 +0800" itemprop="datePublished" class="post-meta__date date">2021-06-02</time>  
+      <time datetime="2021-06-04 00:00:00 +0800" itemprop="datePublished" class="post-meta__date date">2021-06-04</time>  
 
       <span id="busuanzi_container_page_pv"> | 阅读：<span id="busuanzi_value_page_pv"></span>次</span>
     </p>
@@ -192,49 +192,32 @@
   
     <h2 class="post-title">目录</h2>
     <ul>
-  <li><a href="#shell脚本中判断字符串是否被包含在内">Shell脚本中判断字符串是否被包含在内</a></li>
-  <li><a href="#1字段-grep">1、字段 grep：</a></li>
-  <li><a href="#2-字符串运算符-">2、 字符串运算符 =~:</a></li>
-  <li><a href="#3-正则表达式中的通配符-">3、 正则表达式中的通配符 *:</a></li>
+  <li><a href="#1当前分支为feature基于master合并">1、当前分支为feature，基于master合并</a></li>
+  <li><a href="#2出现冲突">2、出现冲突</a></li>
+  <li><a href="#3出现冲突">3、出现冲突</a></li>
+  <li><a href="#4合并提交信息">4、合并提交信息</a></li>
 </ul>
 
   
 
   <section class="post">
-    <h1 id="shell脚本中判断字符串是否被包含在内">Shell脚本中判断字符串是否被包含在内</h1>
-
-<h1 id="1字段-grep">1、字段 grep：</h1>
-<p>案例：</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>str1="abcdefgh"
-str2="def"
-result=$(echo $str1 | grep "${str2}")
-if [[ "$result" != "" ]];then
-    echo "包含"
-else
-    echo "不包含"
-fi
+    <h1 id="1当前分支为feature基于master合并">1、当前分支为feature，基于master合并</h1>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git rebase -i master 
 </code></pre></div></div>
 
-<h1 id="2-字符串运算符-">2、 字符串运算符 =~:</h1>
-<p>案例：</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>str1="abcdefgh"
-str2="def"
-if [[ $str1 =~ $str2 ]];then
-    echo "包含"
-else
-    echo "不包含"
-fi
+<h1 id="2出现冲突">2、出现冲突</h1>
+<ul>
+  <li>1、解决冲突</li>
+  <li>2、<code class="highlighter-rouge">git add .</code></li>
+  <li>3、<code class="highlighter-rouge">git rebase --continue</code></li>
+</ul>
+
+<h1 id="3出现冲突">3、出现冲突</h1>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git rebase --abort
 </code></pre></div></div>
 
-<h1 id="3-正则表达式中的通配符-">3、 正则表达式中的通配符 *:</h1>
-<p>案例：</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>str1="abcdefgh"
-str2="def"
-if [[ $str1 == *$str2* ]];then
-    echo "包含"
-else
-    echo "不包含"
-fi
+<h1 id="4合并提交信息">4、合并提交信息</h1>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git rebase -i &lt;first commit id&gt; &lt;last commit id&gt;
 </code></pre></div></div>
 
   </section>
@@ -305,13 +288,13 @@ fi
        <ul class="pager">
         
         <li class="previous">
-            <a href="/2021/06/Mac%E4%B8%8A%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8Sed/" data-toggle="tooltip" data-placement="top" title="Mac 上简单使用 Sed">上一篇：  <span>Mac 上简单使用 Sed</span>
+            <a href="/2021/06/Shell%E8%84%9A%E6%9C%AC%E4%B8%AD%E5%88%A4%E6%96%AD%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%98%AF%E5%90%A6%E8%A2%AB%E5%8C%85%E5%90%AB%E5%9C%A8%E5%86%85/" data-toggle="tooltip" data-placement="top" title="Shell脚本中判断字符串是否被包含在内">上一篇：  <span>Shell脚本中判断字符串是否被包含在内</span>
             </a>
         </li>
         
         
         <li class="next">
-            <a href="/2021/06/rebase%E4%BD%BF%E7%94%A8/" data-toggle="tooltip" data-placement="top" title="rebase使用">下一篇：  <span>rebase使用</span>
+            <a href="/2021/06/%E5%88%A9%E7%94%A8shell%E8%AF%BB%E5%8F%96README.MD%E9%85%8D%E7%BD%AE%E4%BF%AE%E6%94%B9%E9%85%8D%E7%BD%AE%E7%8E%AF%E5%A2%83/" data-toggle="tooltip" data-placement="top" title="利用shell读取README.MD配置修改配置环境">下一篇：  <span>利用shell读取README.MD配置修改配置环境</span>
             </a>
         </li>
         
