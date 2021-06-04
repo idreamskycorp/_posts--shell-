@@ -5,9 +5,243 @@
     <description>欢迎来到我的个人博客~</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Wed, 02 Jun 2021 15:21:15 +0800</pubDate>
-    <lastBuildDate>Wed, 02 Jun 2021 15:21:15 +0800</lastBuildDate>
+    <pubDate>Fri, 04 Jun 2021 11:09:49 +0800</pubDate>
+    <lastBuildDate>Fri, 04 Jun 2021 11:09:49 +0800</lastBuildDate>
     <generator>Jekyll v3.8.5</generator>
+    
+      <item>
+        <title>利用shell读取README.MD配置修改配置环境</title>
+        <description>&lt;p&gt;&lt;strong&gt;READM.ME内容&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;|企业证书|key|详情|
+---|---|---
+企业证书 | `PRODUCT_BUNDLE_IDENTIFIER` | `com.helloworld.enterprise.app`
+ | `DEVELOPMENT_TEAM` | `TLWGLP697Z5D`
+ | `PROVISIONING_PROFILE_SPECIFIER` | `HaiDianTong_Distribution`
+ App Store证书 | `PRODUCT_BUNDLE_IDENTIFIER` | `com.helloworld.app`
+  | `DEVELOPMENT_TEAM` | `9D4SRNFSVF43`
+  | `PROVISIONING_PROFILE_SPECIFIER` | `app_Distribution`
+ Debug证书 | `PRODUCT_BUNDLE_IDENTIFIER` | `com.helloworld.beijingtong`
+ | `DEVELOPMENT_TEAM` | `XYD7AF2EXNZZ`
+ | `PROVISIONING_PROFILE_SPECIFIER` | `BeiJingRenShe_Development`
+
+
+|数据环境|key|详情|
+---|---|---
+线上环境 | `toon_router_domain` | `http://routerhd.hebeizhichuang.com/user/router/basicRouter`
+ |`cdtp_dns_router`| `http://www.cdtpdns.com/`
+ |`sensorsAnalyticsServerUrl`| `https://da.helloworld.com/sa?project=production`
+ |`sensorsAnalyticsConfigUrl`| `https://da.helloworld.com/config/?project=production`
+t600环境| `toon_router_domain` | `http://routert600.helloworld.com/user/router/basicRouter`
+ |`cdtp_dns_router` | `http://cdtpdnstmail.helloworld.com`
+ |`sensorsAnalyticsServerUrl` | `https://da.helloworld.com/sa?project=default`
+ |`sensorsAnalyticsConfigUrl` | `https://da.helloworld.com/config/?project=default`
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;切换测试线上环境&quot;&gt;切换测试、线上环境&lt;/h2&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;#!/bin/bash&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;function &lt;/span&gt;Set_Info_Plist&lt;span class=&quot;o&quot;&gt;(){&lt;/span&gt;
+   /usr/libexec/PlistBuddy &lt;span class=&quot;nt&quot;&gt;-c&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Set :&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$1&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$2&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$info_plist&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;nv&quot;&gt;ENV_TOON&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-F&lt;/span&gt;: &lt;span class=&quot;s1&quot;&gt;'BEGIN{};/toon_router_domain/{ gsub(/[[:blank:]]*/,&quot;&quot;,$0);gsub(/\`/,&quot;&quot;,$0);print $0 }'&lt;/span&gt; ../README.MD|cut &lt;span class=&quot;nt&quot;&gt;-d&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\|&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-f3&lt;/span&gt;&lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;ENV_CDTP&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-F&lt;/span&gt;: &lt;span class=&quot;s1&quot;&gt;'BEGIN{};/cdtp_dns_router/{ gsub(/[[:blank:]]*/,&quot;&quot;,$0); gsub(/\`/,&quot;&quot;,$0);print $0 }'&lt;/span&gt; ../README.MD|cut &lt;span class=&quot;nt&quot;&gt;-d&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\|&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-f3&lt;/span&gt;&lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;ENV_SENSOR_SERVER&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-F&lt;/span&gt;: &lt;span class=&quot;s1&quot;&gt;'BEGIN{};/sensorsAnalyticsServerUrl/{ gsub(/[[:blank:]]*/,&quot;&quot;,$0); gsub(/\`/,&quot;&quot;,$0);print $0 }'&lt;/span&gt; ../README.MD|cut &lt;span class=&quot;nt&quot;&gt;-d&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\|&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-f3&lt;/span&gt;&lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;ENV_SENSOR_CONFIG&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-F&lt;/span&gt;: &lt;span class=&quot;s1&quot;&gt;'BEGIN{};/sensorsAnalyticsConfigUrl/{ gsub(/[[:blank:]]*/,&quot;&quot;,$0); gsub(/\`/,&quot;&quot;,$0);print $0 }'&lt;/span&gt; ../README.MD|cut &lt;span class=&quot;nt&quot;&gt;-d&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\|&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-f3&lt;/span&gt;&lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;
+
+&lt;span class=&quot;nv&quot;&gt;ENV_TOON&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$ENV_TOON&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;ENV_CDTP&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$ENV_CDTP&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;ENV_SENSOR_SERVER&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$ENV_SENSOR_SERVER&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;ENV_SENSOR_CONFIG&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$ENV_SENSOR_CONFIG&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;${#&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;ENV_TOON&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[*]&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-eq&lt;/span&gt; 2 &lt;span class=&quot;nt&quot;&gt;-a&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;${#&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;ENV_CDTP&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[*]&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-eq&lt;/span&gt; 2 &lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;then
+    &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;ENV_TOON_RELEASE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;ENV_TOON&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[0]&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;nv&quot;&gt;ENV_TOON_DEVELOPMENT&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;ENV_TOON&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[1]&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;nv&quot;&gt;ENV_CDTP_RELEASE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;ENV_CDTP&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[0]&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;nv&quot;&gt;ENV_CDTP_DEVELOPMENT&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;ENV_CDTP&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[1]&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;else 
+    &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo &lt;/span&gt;获取失败
+    &lt;span class=&quot;nb&quot;&gt;exit&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-1&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;fi
+
+if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;${#&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;ENV_SENSOR_SERVER&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[*]&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-eq&lt;/span&gt; 2 &lt;span class=&quot;nt&quot;&gt;-a&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;${#&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;ENV_SENSOR_CONFIG&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[*]&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-eq&lt;/span&gt; 2 &lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;then
+    &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;ENV_SENSOR_SERVER_RELEASE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;ENV_SENSOR_SERVER&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[0]&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;nv&quot;&gt;ENV_SENSOR_SERVER_DEVELOPMENT&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;ENV_SENSOR_SERVER&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[1]&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;nv&quot;&gt;ENV_SENSOR_CONFIG_RELEASE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;ENV_SENSOR_CONFIG&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[0]&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;nv&quot;&gt;ENV_SENSOR_CONFIG_DEVELOPMENT&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;ENV_SENSOR_CONFIG&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[1]&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;else 
+    &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo &lt;/span&gt;获取失败
+    &lt;span class=&quot;nb&quot;&gt;exit&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-1&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;fi
+&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;--------toon_router_domain develop------------&quot;&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$ENV_TOON_DEVELOPMENT&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# echo $ENV_TOON_RELEASE1&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;--------toon_router_domain release------------&quot;&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$ENV_TOON_RELEASE&lt;/span&gt;
+
+
+&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;--------cdtp_dns_router develop------------&quot;&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$ENV_CDTP_DEVELOPMENT&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# echo $ENV_CDTP_RELEASE1&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;--------cdtp_dns_router release------------&quot;&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$ENV_CDTP_RELEASE&lt;/span&gt;
+
+&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;--------sensorsAnalyticsServerUrl develop------------&quot;&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$ENV_SENSOR_SERVER_DEVELOPMENT&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;--------sensorsAnalyticsServerUrl release------------&quot;&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$ENV_SENSOR_SERVER_RELEASE&lt;/span&gt;
+
+&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;--------sensorsAnalyticsConfigUrl develop------------&quot;&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$ENV_SENSOR_CONFIG_DEVELOPMENT&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;--------sensorsAnalyticsConfigUrl release------------&quot;&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$ENV_SENSOR_CONFIG_RELEASE&lt;/span&gt;
+
+
+&lt;span class=&quot;nv&quot;&gt;info_plist&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;./TLauncher/Info.plist
+
+&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-f&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$info_plist&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;then
+    &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;找不到plist文件&quot;&lt;/span&gt;
+    &lt;span class=&quot;nb&quot;&gt;exit&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-1&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;fi
+
+
+&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;CURRENT_TOON_ENV&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;$(&lt;/span&gt;/usr/libexec/PlistBuddy &lt;span class=&quot;nt&quot;&gt;-c&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'Print toon_router_domain'&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$info_plist&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;------两个环境比较---------&quot;&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$CURRENT_TOON_ENV&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$ENV_TOON_DEVELOPMENT&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$ENV_TOON_DEVELOPMENT&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$CURRENT_TOON_ENV&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;then
+    &lt;/span&gt;Set_Info_Plist &lt;span class=&quot;s2&quot;&gt;&quot;toon_router_domain&quot;&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$ENV_TOON_RELEASE&lt;/span&gt;
+    Set_Info_Plist &lt;span class=&quot;s2&quot;&gt;&quot;cdtp_dns_router&quot;&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$ENV_CDTP_RELEASE&lt;/span&gt;
+    Set_Info_Plist &lt;span class=&quot;s2&quot;&gt;&quot;sensorsAnalyticsServerUrl&quot;&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$ENV_SENSOR_SERVER_RELEASE&lt;/span&gt;
+    Set_Info_Plist &lt;span class=&quot;s2&quot;&gt;&quot;sensorsAnalyticsConfigUrl&quot;&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$ENV_SENSOR_CONFIG_RELEASE&lt;/span&gt;
+    &lt;span class=&quot;nb&quot;&gt;echo &lt;/span&gt;由之前测试环境修改为线上环境
+ &lt;span class=&quot;k&quot;&gt;else 
+    &lt;/span&gt;Set_Info_Plist &lt;span class=&quot;s2&quot;&gt;&quot;toon_router_domain&quot;&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$ENV_TOON_DEVELOPMENT&lt;/span&gt;
+    Set_Info_Plist &lt;span class=&quot;s2&quot;&gt;&quot;cdtp_dns_router&quot;&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$ENV_CDTP_DEVELOPMENT&lt;/span&gt;
+    Set_Info_Plist &lt;span class=&quot;s2&quot;&gt;&quot;sensorsAnalyticsServerUrl&quot;&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$ENV_SENSOR_SERVER_DEVELOPMENT&lt;/span&gt;
+    Set_Info_Plist &lt;span class=&quot;s2&quot;&gt;&quot;sensorsAnalyticsConfigUrl&quot;&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$ENV_SENSOR_CONFIG_DEVELOPMENT&lt;/span&gt;
+    &lt;span class=&quot;nb&quot;&gt;echo &lt;/span&gt;由之前线上环境修改为测试环境
+&lt;span class=&quot;k&quot;&gt;fi&lt;/span&gt;
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h2 id=&quot;证书切换&quot;&gt;证书切换&lt;/h2&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;set -e
+set -u
+set -o pipefail
+
+README_PATH=&quot;$SRCROOT/../README.MD&quot;
+PBXPROJ_PATH=&quot;$PROJECT_FILE_PATH/project.pbxproj&quot;
+PRODUCT_BUNDLE_IDENTIFIER=`awk 'BEGIN{};/PRODUCT_BUNDLE_IDENTIFIER/{ gsub(/[[:blank:]]*/,&quot;&quot;,$0);gsub(/\`/,&quot;&quot;,$0);print $0 }' $README_PATH|cut -d\| -f3`
+DEVELOPMENT_TEAM=`awk 'BEGIN{};/DEVELOPMENT_TEAM/{ gsub(/[[:blank:]]*/,&quot;&quot;,$0);gsub(/\`/,&quot;&quot;,$0);print $0 }' $README_PATH|cut -d\| -f3`
+PROVISIONING_PROFILE_SPECIFIER=`awk 'BEGIN{};/PROVISIONING_PROFILE_SPECIFIER/{ gsub(/[[:blank:]]*/,&quot;&quot;,$0);gsub(/\`/,&quot;&quot;,$0);print $0 }' $README_PATH|cut -d\| -f3`
+
+CONFIG_COUNT=3
+
+
+echo $PRODUCT_BUNDLE_IDENTIFIER
+echo $DEVELOPMENT_TEAM
+echo $PROVISIONING_PROFILE_SPECIFIER
+
+PRODUCT_BUNDLE_IDENTIFIER=($PRODUCT_BUNDLE_IDENTIFIER)
+DEVELOPMENT_TEAM=($DEVELOPMENT_TEAM)
+PROVISIONING_PROFILE_SPECIFIER=($PROVISIONING_PROFILE_SPECIFIER)
+if [ ${#PRODUCT_BUNDLE_IDENTIFIER[*]} -eq $CONFIG_COUNT -a ${#DEVELOPMENT_TEAM[*]} -eq $CONFIG_COUNT -a ${#PROVISIONING_PROFILE_SPECIFIER[*]} -eq $CONFIG_COUNT ]; then
+    ############################ 内部市场 Bundle ID #############################
+    PRODUCT_BUNDLE_IDENTIFIER_ENTERPRISE=${PRODUCT_BUNDLE_IDENTIFIER[0]}
+    ############################ App Store Bundle ID #############################
+    PRODUCT_BUNDLE_IDENTIFIER_APPSTORE=${PRODUCT_BUNDLE_IDENTIFIER[1]}
+
+    ############################ 内部市场证书#############################
+    PROVISIONING_PROFILE_SPECIFIER_ENTERPRISE_Distribution=${PROVISIONING_PROFILE_SPECIFIER[0]}
+    ############################ App Store 证书#############################
+    PROVISIONING_PROFILE_SPECIFIER_APPSTORE_Distribution=${PROVISIONING_PROFILE_SPECIFIER[1]}
+
+    ############################ 内部市场 TEAM #############################
+    DEVELOPMENT_TEAM_ENTERPRISE=${DEVELOPMENT_TEAM[0]}
+    ############################ App Store TEAM #############################
+    DEVELOPMENT_TEAM_APPSTORE=${DEVELOPMENT_TEAM[1]}
+
+    echo $PRODUCT_BUNDLE_IDENTIFIER_ENTERPRISE $PROVISIONING_PROFILE_SPECIFIER_ENTERPRISE_Distribution $DEVELOPMENT_TEAM_ENTERPRISE
+    echo $PRODUCT_BUNDLE_IDENTIFIER_APPSTORE $PROVISIONING_PROFILE_SPECIFIER_APPSTORE_Distribution $DEVELOPMENT_TEAM_APPSTORE
+
+    PRODUCT_BUNDLE_IDENTIFIER_PROJ=`awk 'BEGIN{};/PRODUCT_BUNDLE_IDENTIFIER/{ gsub(/[[:blank:]]*/,&quot;&quot;,$0);print $0 }' $PBXPROJ_PATH`
+    echo ----------------
+    echo $PBXPROJ_PATH
+    echo $PRODUCT_BUNDLE_IDENTIFIER_PROJ
+    echo $PROJECT_FILE_PATH
+    echo $PBXPROJ_PATH                       
+    echo ----------------
+    if [[ $PRODUCT_BUNDLE_IDENTIFIER_PROJ =~ $PRODUCT_BUNDLE_IDENTIFIER_ENTERPRISE ]]; then
+        echo '由企业证书改为App Store证书'
+        sed -i '' -e 's/PROVISIONING_PROFILE_SPECIFIER\ =\ .*/PROVISIONING_PROFILE_SPECIFIER\ =\ '$PROVISIONING_PROFILE_SPECIFIER_APPSTORE_Distribution'\;/' $PBXPROJ_PATH
+        sed -i '' -e 's/PRODUCT_BUNDLE_IDENTIFIER\ =\ .*/PRODUCT_BUNDLE_IDENTIFIER\ =\ '$PRODUCT_BUNDLE_IDENTIFIER_APPSTORE'\;/' $PBXPROJ_PATH
+        sed -i '' -e 's/DEVELOPMENT_TEAM\ =\ .*/DEVELOPMENT_TEAM\ =\ '$DEVELOPMENT_TEAM_APPSTORE'\;/' $PBXPROJ_PATH
+    elif [[ $PRODUCT_BUNDLE_IDENTIFIER_PROJ =~ $PRODUCT_BUNDLE_IDENTIFIER_APPSTORE ]]; then
+        echo '由App Store证书改为企业证书'
+        sed -i '' -e 's/PROVISIONING_PROFILE_SPECIFIER\ =\ .*/PROVISIONING_PROFILE_SPECIFIER\ =\ '$PROVISIONING_PROFILE_SPECIFIER_ENTERPRISE_Distribution'\;/' $PBXPROJ_PATH
+        sed -i '' -e 's/PRODUCT_BUNDLE_IDENTIFIER\ =\ .*/PRODUCT_BUNDLE_IDENTIFIER\ =\ '$PRODUCT_BUNDLE_IDENTIFIER_ENTERPRISE'\;/' $PBXPROJ_PATH
+        sed -i '' -e 's/DEVELOPMENT_TEAM\ =\ .*/DEVELOPMENT_TEAM\ =\ '$DEVELOPMENT_TEAM_ENTERPRISE'\;/' $PBXPROJ_PATH
+    fi
+
+else 
+    echo '修改失败'
+    exit -1
+fi
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;设置debug证书&quot;&gt;设置debug证书&lt;/h2&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# Type a script or drag a script file from your workspace to insert its path.
+set -e
+set -u
+set -o pipefail
+
+README_PATH=&quot;$SRCROOT/../README.MD&quot;
+PBXPROJ_PATH=&quot;$PROJECT_FILE_PATH/project.pbxproj&quot;
+PRODUCT_BUNDLE_IDENTIFIER=`awk 'BEGIN{};/PRODUCT_BUNDLE_IDENTIFIER/{ gsub(/[[:blank:]]*/,&quot;&quot;,$0);gsub(/\`/,&quot;&quot;,$0);print $0 }' $README_PATH|cut -d\| -f3`
+DEVELOPMENT_TEAM=`awk 'BEGIN{};/DEVELOPMENT_TEAM/{ gsub(/[[:blank:]]*/,&quot;&quot;,$0);gsub(/\`/,&quot;&quot;,$0);print $0 }' $README_PATH|cut -d\| -f3`
+PROVISIONING_PROFILE_SPECIFIER=`awk 'BEGIN{};/PROVISIONING_PROFILE_SPECIFIER/{ gsub(/[[:blank:]]*/,&quot;&quot;,$0);gsub(/\`/,&quot;&quot;,$0);print $0 }' $README_PATH|cut -d\| -f3`
+CONFIG_COUNT=3
+echo $PRODUCT_BUNDLE_IDENTIFIER
+echo $DEVELOPMENT_TEAM
+echo $PROVISIONING_PROFILE_SPECIFIER
+
+PRODUCT_BUNDLE_IDENTIFIER=($PRODUCT_BUNDLE_IDENTIFIER)
+DEVELOPMENT_TEAM=($DEVELOPMENT_TEAM)
+PROVISIONING_PROFILE_SPECIFIER=($PROVISIONING_PROFILE_SPECIFIER)
+if [ ${#PRODUCT_BUNDLE_IDENTIFIER[*]} -eq $CONFIG_COUNT -a ${#DEVELOPMENT_TEAM[*]} -eq $CONFIG_COUNT -a ${#PROVISIONING_PROFILE_SPECIFIER[*]} -eq $CONFIG_COUNT ]; then
+    ############################ DEBUG Bundle ID #############################
+    PRODUCT_BUNDLE_IDENTIFIER_DEBUG=${PRODUCT_BUNDLE_IDENTIFIER[2]}
+    ############################ DEBUG 证书#############################
+    PROVISIONING_PROFILE_SPECIFIER_DEBUG=${PROVISIONING_PROFILE_SPECIFIER[2]}
+    ############################ DEBGU TEAM #############################
+    DEVELOPMENT_TEAM_DEBUG=${DEVELOPMENT_TEAM[2]}
+
+    echo $PRODUCT_BUNDLE_IDENTIFIER_DEBUG $PROVISIONING_PROFILE_SPECIFIER_DEBUG $DEVELOPMENT_TEAM_DEBUG
+
+    sed -i '' -e 's/PROVISIONING_PROFILE_SPECIFIER\ =\ .*/PROVISIONING_PROFILE_SPECIFIER\ =\ '$PROVISIONING_PROFILE_SPECIFIER_DEBUG'\;/' $PBXPROJ_PATH
+    sed -i '' -e 's/PRODUCT_BUNDLE_IDENTIFIER\ =\ .*/PRODUCT_BUNDLE_IDENTIFIER\ =\ '$PRODUCT_BUNDLE_IDENTIFIER_DEBUG'\;/' $PBXPROJ_PATH
+    sed -i '' -e 's/DEVELOPMENT_TEAM\ =\ .*/DEVELOPMENT_TEAM\ =\ '$DEVELOPMENT_TEAM_DEBUG'\;/' $PBXPROJ_PATH
+
+else 
+    echo '修改失败'
+    exit -1
+fi
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+</description>
+        <pubDate>Fri, 04 Jun 2021 00:00:00 +0800</pubDate>
+        <link>http://localhost:4000/2021/06/%E5%88%A9%E7%94%A8shell%E8%AF%BB%E5%8F%96README.MD%E9%85%8D%E7%BD%AE%E4%BF%AE%E6%94%B9%E9%85%8D%E7%BD%AE%E7%8E%AF%E5%A2%83/</link>
+        <guid isPermaLink="true">http://localhost:4000/2021/06/%E5%88%A9%E7%94%A8shell%E8%AF%BB%E5%8F%96README.MD%E9%85%8D%E7%BD%AE%E4%BF%AE%E6%94%B9%E9%85%8D%E7%BD%AE%E7%8E%AF%E5%A2%83/</guid>
+        
+        <category>shell</category>
+        
+        
+      </item>
     
       <item>
         <title>Shell脚本中判断字符串是否被包含在内</title>
@@ -1275,468 +1509,6 @@ Target configuration-&amp;gt;Target xcconfig-&amp;gt;Project configuration-&amp;
         <pubDate>Fri, 07 May 2021 00:00:00 +0800</pubDate>
         <link>http://localhost:4000/2021/05/xcconfig%E7%9A%84%E4%BD%BF%E7%94%A8%E4%B8%8Excode%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F/</link>
         <guid isPermaLink="true">http://localhost:4000/2021/05/xcconfig%E7%9A%84%E4%BD%BF%E7%94%A8%E4%B8%8Excode%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F/</guid>
-        
-        <category>iOS</category>
-        
-        
-      </item>
-    
-      <item>
-        <title>iOS添加调试命令</title>
-        <description>&lt;p&gt;MonkeyDev里面的添加lldb命令&lt;/p&gt;
-
-&lt;p&gt;LLDBTools.h文件&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; #import &amp;lt;UIKit/UIKit.h&amp;gt;
- #import &amp;lt;mach/vm_types.h&amp;gt;
-
- //(lldb) po pviews()
-
- NSString* pvc(void);
-
- NSString* pviews(void);
-
- NSString* pactions(vm_address_t address);
-
- NSString* pblock(vm_address_t address);
-
- NSString* methods(const char * classname);
-
- NSString* ivars(vm_address_t address);
-
- NSString* choose(const char* classname);
-
- NSString* vmmap();
-
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;LLDBTools.mm文件&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;#pragma GCC diagnostic ignored &quot;-Wundeclared-selector&quot;
-
-#import &quot;LLDBTools.h&quot;
-#import &amp;lt;set&amp;gt;
-#import &amp;lt;mach/mach_types.h&amp;gt;
-#import &amp;lt;malloc/malloc.h&amp;gt;
-#import &amp;lt;objc/runtime.h&amp;gt;
-#import &amp;lt;mach/mach_init.h&amp;gt;
-#import &amp;lt;mach/mach_error.h&amp;gt;
-
-enum {
-    BLOCK_HAS_COPY_DISPOSE =  (1 &amp;lt;&amp;lt; 25),
-    BLOCK_HAS_CTOR =          (1 &amp;lt;&amp;lt; 26), // helpers have C++ code
-    BLOCK_IS_GLOBAL =         (1 &amp;lt;&amp;lt; 28),
-    BLOCK_HAS_STRET =         (1 &amp;lt;&amp;lt; 29), // IFF BLOCK_HAS_SIGNATURE
-    BLOCK_HAS_SIGNATURE =     (1 &amp;lt;&amp;lt; 30),
-};
-
-struct Block_literal_1 {
-    void *isa; // initialized to &amp;amp;_NSConcreteStackBlock or &amp;amp;_NSConcreteGlobalBlock
-    int flags;
-    int reserved;
-    void (*invoke)(void *, ...);
-    struct Block_descriptor_1 {
-        unsigned long int reserved; // NULL
-        unsigned long int size;         // sizeof(struct Block_literal_1)
-        // optional helper functions
-        void (*copy_helper)(void *dst, void *src);     // IFF (1&amp;lt;&amp;lt;25)
-        void (*dispose_helper)(void *src);             // IFF (1&amp;lt;&amp;lt;25)
-        // required ABI.2010.3.16
-        const char *signature;                         // IFF (1&amp;lt;&amp;lt;30)
-    } *descriptor;
-    // imported variables
-};
-
-NSString* decode(NSString* code);
-NSArray* choose_inner(const char * classname);
-char * protection_bits_to_rwx (vm_prot_t p);
-const char * unparse_inheritance (vm_inherit_t i);
-char * behavior_to_text (vm_behavior_t  b);
-
-NSString* decode(NSString* code){
-    NSDictionary * encodeMap = @{
-                                 @&quot;c&quot;: @&quot;char&quot;,
-                                 @&quot;i&quot;: @&quot;int&quot;,
-                                 @&quot;s&quot;: @&quot;short&quot;,
-                                 @&quot;l&quot;: @&quot;long&quot;,
-                                 @&quot;q&quot;: @&quot;long long&quot;,
-                                 
-                                 @&quot;C&quot;: @&quot;unsigned char&quot;,
-                                 @&quot;I&quot;: @&quot;unsigned int&quot;,
-                                 @&quot;S&quot;: @&quot;unsigned short&quot;,
-                                 @&quot;L&quot;: @&quot;unsigned long&quot;,
-                                 @&quot;Q&quot;: @&quot;unsigned long long&quot;,
-                                 
-                                 @&quot;f&quot;: @&quot;float&quot;,
-                                 @&quot;d&quot;: @&quot;double&quot;,
-                                 @&quot;B&quot;: @&quot;bool&quot;,
-                                 @&quot;v&quot;: @&quot;void&quot;,
-                                 @&quot;*&quot;: @&quot;char *&quot;,
-                                 @&quot;@&quot;: @&quot;id&quot;,
-                                 @&quot;#&quot;: @&quot;Class&quot;,
-                                 @&quot;:&quot;: @&quot;SEL&quot;
-                                 };
-    
-    if(encodeMap[code]){
-        return encodeMap[code];
-    }else if([code characterAtIndex:0] == '@'){
-        if([code characterAtIndex:1] == '?'){
-            return code;
-        }else if([code characterAtIndex:2] == '&amp;lt;'){
-            return [NSString stringWithFormat:@&quot;id%@&quot;, [[code substringWithRange:NSMakeRange(2, code.length-3)] stringByReplacingOccurrencesOfString:@&quot;&amp;gt;&amp;lt;&quot; withString:@&quot;, &quot;]];
-        }else{
-            return [NSString stringWithFormat:@&quot;%@ *&quot;, [code substringWithRange:NSMakeRange(2, code.length-3)]];
-        }
-    }else if([code characterAtIndex:0] == '^'){
-        return [NSString stringWithFormat:@&quot;%@ *&quot;, decode([code substringFromIndex:1])];
-    }
-    return code;
-}
-
-NSString* pvc(){
-    return [[[UIWindow performSelector:@selector(keyWindow)] performSelector:@selector(rootViewController)] performSelector:@selector(_printHierarchy)];
-}
-
-NSString* pviews(){
-    return [[[UIApplication sharedApplication] keyWindow] performSelector:@selector(recursiveDescription)];
-}
-
-NSString* pactions(vm_address_t address){
-    NSMutableString* result = [NSMutableString new];
-    UIControl* control = (__bridge UIControl*)(void*)address;
-    NSArray* targets = [[control allTargets] allObjects];
-    for (id item in targets) {
-        NSArray* actions = [control actionsForTarget:item forControlEvent:0];
-        [result appendFormat:@&quot;&amp;lt;%s: 0x%lx&amp;gt;: %@\n&quot;, object_getClassName(item), (unsigned long)item, [actions componentsJoinedByString:@&quot;,&quot;]];
-    }
-    return result;
-}
-
-NSString* pblock(vm_address_t address){
-    struct Block_literal_1 real = *((struct Block_literal_1 *)(void*)address);
-    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
-    [dict setObject:[NSNumber numberWithLong:(long)real.invoke] forKey:@&quot;invoke&quot;];
-    if (real.flags &amp;amp; BLOCK_HAS_SIGNATURE) {
-        char *signature;
-        if (real.flags &amp;amp; BLOCK_HAS_COPY_DISPOSE) {
-            signature = (char *)(real.descriptor)-&amp;gt;signature;
-        } else {
-            signature = (char *)(real.descriptor)-&amp;gt;copy_helper;
-        }
-        
-        NSMethodSignature *sig = [NSMethodSignature signatureWithObjCTypes:signature];
-        NSMutableArray *types = [NSMutableArray array];
-        
-        [types addObject:[NSString stringWithUTF8String:(char *)[sig methodReturnType]]];
-        
-        for (NSUInteger i = 0; i &amp;lt; sig.numberOfArguments; i++) {
-            char *type = (char *)[sig getArgumentTypeAtIndex:i];
-            [types addObject:[NSString stringWithUTF8String:type]];
-        }
-        
-        [dict setObject:types forKey:@&quot;signature&quot;];
-    }
-    
-    NSMutableArray* sigArr = dict[@&quot;signature&quot;];
-    
-    if(!sigArr){
-        return [NSString stringWithFormat:@&quot;Imp: 0x%lx&quot;, [dict[@&quot;invoke&quot;] longValue]];
-    }else{
-        NSMutableString* sig = [NSMutableString stringWithFormat:@&quot;%@ ^(&quot;, decode(sigArr[0])];
-        for (int i = 2; i &amp;lt; sigArr.count; i++) {
-            if(i == sigArr.count - 1){
-                [sig appendFormat:@&quot;%@&quot;, decode(sigArr[i])];
-            }else{
-                [sig appendFormat:@&quot;%@ ,&quot;, decode(sigArr[i])];
-            }
-        }
-        [sig appendString:@&quot;);&quot;];
-        return [NSString stringWithFormat:@&quot;Imp: 0x%lx    Signature: %s&quot;, [dict[@&quot;invoke&quot;] longValue], [sig UTF8String]];
-    }
-}
-
-struct CYChoice {
-    std::set&amp;lt;Class&amp;gt; query_;
-    std::set&amp;lt;id&amp;gt; results_;
-};
-
-struct CYObjectStruct {
-    Class isa_;
-};
-
-static void choose_(task_t task, void *baton, unsigned type, vm_range_t *ranges, unsigned count) {
-    CYChoice *choice(reinterpret_cast&amp;lt;CYChoice *&amp;gt;(baton));
-    
-    for (unsigned i(0); i != count; ++i) {
-        vm_range_t &amp;amp;range(ranges[i]);
-        void *data(reinterpret_cast&amp;lt;void *&amp;gt;(range.address));
-        size_t size(range.size);
-        
-        if (size &amp;lt; sizeof(CYObjectStruct))
-            continue;
-        
-        uintptr_t *pointers(reinterpret_cast&amp;lt;uintptr_t *&amp;gt;(data));
-#ifdef __arm64__
-        Class isa = (__bridge Class)((void *)(pointers[0] &amp;amp; 0x1fffffff8));
-#else
-        Class isa =(__bridge Class)(void *)pointers[0];
-#endif
-        std::set&amp;lt;Class&amp;gt;::const_iterator result(choice-&amp;gt;query_.find(isa));
-        if (result == choice-&amp;gt;query_.end())
-            continue;
-        
-        size_t needed(class_getInstanceSize(*result));
-        // XXX: if (size &amp;lt; needed)
-        
-        size_t boundary(496);
-#ifdef __LP64__
-        boundary *= 2;
-#endif
-        if ((needed &amp;lt;= boundary &amp;amp;&amp;amp; (needed + 15) / 16 * 16 != size) || (needed &amp;gt; boundary &amp;amp;&amp;amp; (needed + 511) / 512 * 512 != size))
-            continue;
-        choice-&amp;gt;results_.insert((__bridge id)(data));
-    }
-}
-
-static Class *CYCopyClassList(size_t &amp;amp;size) {
-    size = objc_getClassList(NULL, 0);
-    Class *data(reinterpret_cast&amp;lt;Class *&amp;gt;(malloc(sizeof(Class) * size)));
-    
-    for (;;) {
-        size_t writ(objc_getClassList(data, (int)size));
-        if (writ &amp;lt;= size) {
-            size = writ;
-            return data;
-        }
-        
-        Class *copy(reinterpret_cast&amp;lt;Class *&amp;gt;(realloc(data, sizeof(Class) * writ)));
-        if (copy == NULL) {
-            free(data);
-            return NULL;
-        }
-        
-        data = copy;
-        size = writ;
-    }
-}
-
-static kern_return_t CYReadMemory(task_t task, vm_address_t address, vm_size_t size, void **data) {
-    *data = reinterpret_cast&amp;lt;void *&amp;gt;(address);
-    return KERN_SUCCESS;
-}
-
-NSArray* choose_inner(const char * classname){
-    
-    Class _class = NSClassFromString([NSString stringWithUTF8String:classname]);
-    
-    vm_address_t *zones = NULL;
-    unsigned size = 0;
-    //获取所有的zone信息  堆上的区域
-    kern_return_t error = malloc_get_all_zones(mach_task_self(), &amp;amp;CYReadMemory, &amp;amp;zones, &amp;amp;size);
-    assert(error == KERN_SUCCESS);
-    
-    size_t number;
-    Class *classes(CYCopyClassList(number));
-    assert(classes != NULL);
-    
-    CYChoice choice;
-    
-    //找到目标Class
-    for (size_t i(0); i != number; ++i)
-        for (Class current(classes[i]); current != Nil; current = class_getSuperclass(current))
-            if (current == _class) {
-                choice.query_.insert(classes[i]);
-                break;
-            }
-    
-    for (unsigned i(0); i != size; ++i) {
-        const malloc_zone_t *zone(reinterpret_cast&amp;lt;const malloc_zone_t *&amp;gt;(zones[i]));
-        if (zone == NULL || zone-&amp;gt;introspect == NULL)
-            continue;
-        
-        //枚举堆上的对象
-        zone-&amp;gt;introspect-&amp;gt;enumerator(mach_task_self(), &amp;amp;choice, MALLOC_PTR_IN_USE_RANGE_TYPE, zones[i], &amp;amp;CYReadMemory, &amp;amp;choose_);
-    }
-    NSMutableArray * result = [[NSMutableArray alloc] init];
-    
-    for (auto iter = choice.results_.begin(); iter != choice.results_.end(); iter++) {
-        [result addObject:(id)*iter];
-    }
-    return result;
-}
-
-NSString* choose(const char* classname){
-    NSMutableString* result = [NSMutableString new];
-    NSArray* results = choose_inner(classname);
-    [result appendFormat:@&quot;Find %lu instance objects in memory!\n&quot; , (unsigned long)results.count];
-    for (id item in results) {
-        [result appendFormat:@&quot;&amp;lt;%s: 0x%llx&amp;gt;\n&quot;, object_getClassName(item), (long long)item];
-    }
-    return result;
-}
-
-NSString* methods(const char * classname){
-    return [objc_getClass(classname) performSelector:@selector(_shortMethodDescription)];
-}
-
-NSString* ivars(vm_address_t address){
-    id target = (__bridge id)(void*)address;
-    return [target performSelector:@selector(_ivarDescription)];
-}
-
-char * protection_bits_to_rwx (vm_prot_t p){
-    static char returned[4];
-    
-    returned[0] = (p &amp;amp; VM_PROT_READ    ? 'r' : '-');
-    returned[1] = (p &amp;amp; VM_PROT_WRITE   ? 'w' : '-');
-    returned[2] = (p &amp;amp; VM_PROT_EXECUTE ? 'x' : '-');
-    returned[3] = '\0';
-    
-    // memory leak here. No biggy
-    return (strdup(returned));
-}
-
-const char * unparse_inheritance (vm_inherit_t i){
-    switch (i){
-        case VM_INHERIT_SHARE:
-            return &quot;share&quot;;
-        case VM_INHERIT_COPY:
-            return &quot;copy&quot;;
-        case VM_INHERIT_NONE:
-            return &quot;none&quot;;
-        default:
-            return &quot;???&quot;;
-    }
-}
-
-char * behavior_to_text (vm_behavior_t  b){
-    switch (b){
-        case VM_BEHAVIOR_DEFAULT: return((char*)&quot;default&quot;);
-        case VM_BEHAVIOR_RANDOM:  return((char*)&quot;random&quot;);
-        case VM_BEHAVIOR_SEQUENTIAL: return((char*)&quot;fwd-seq&quot;);
-        case VM_BEHAVIOR_RSEQNTL: return((char*)&quot;rev-seq&quot;);
-        case VM_BEHAVIOR_WILLNEED: return((char*)&quot;will-need&quot;);
-        case VM_BEHAVIOR_DONTNEED: return((char*)&quot;will-need&quot;);
-        case VM_BEHAVIOR_FREE: return((char*)&quot;free-nowb&quot;);
-        case VM_BEHAVIOR_ZERO_WIRED_PAGES: return((char*)&quot;zero-wire&quot;);
-        case VM_BEHAVIOR_REUSABLE: return((char*)&quot;reusable&quot;);
-        case VM_BEHAVIOR_REUSE: return((char*)&quot;reuse&quot;);
-        case VM_BEHAVIOR_CAN_REUSE: return((char*)&quot;canreuse&quot;);
-        default: return ((char*)&quot;?&quot;);
-    }
-}
-
-__BEGIN_DECLS
-
-extern kern_return_t mach_vm_region
-(
- vm_map_t target_task,
- mach_vm_address_t *address,
- mach_vm_size_t *size,
- vm_region_flavor_t flavor,
- vm_region_info_t info,
- mach_msg_type_number_t *infoCnt,
- mach_port_t *object_name
- );
-
-__END_DECLS
-
-NSString* vmmap(){
-    vm_region_basic_info_data_t info, prev_info;
-    mach_vm_address_t address = 1, prev_address;
-    mach_vm_size_t size, prev_size;
-    mach_msg_type_number_t count = VM_REGION_BASIC_INFO_COUNT_64;
-    mach_port_t object_name;
-    
-    int nsubregions = 0;
-    kern_return_t kr = mach_vm_region(mach_task_self(), &amp;amp;address, &amp;amp;size, VM_REGION_BASIC_INFO, (vm_region_info_t)&amp;amp;info, &amp;amp;count, &amp;amp;object_name);
-    
-    NSMutableString* result = [[NSMutableString alloc] init];
-    
-    if(kr != KERN_SUCCESS){
-        [result appendFormat:@&quot;mach_vm_region: Error %d - %s&quot;, kr, mach_error_string(kr)];
-        return [result copy];
-    }
-    
-    //保存之前查到的info
-    memcpy (&amp;amp;prev_info, &amp;amp;info, sizeof (vm_region_basic_info_data_t));
-    prev_address = address;
-    prev_size = size;
-    nsubregions = 1;
-    
-    while (true) {
-        int print = 0, done = 0;
-        
-        address = prev_address + prev_size;
-        
-        if (address == 0){
-            print = done = 1;
-        }
-        
-        if (!done){
-            kr = mach_vm_region (mach_task_self(), &amp;amp;address, &amp;amp;size, VM_REGION_BASIC_INFO, (vm_region_info_t)&amp;amp;info, &amp;amp;count, &amp;amp;object_name);
-            
-            if (kr != KERN_SUCCESS){
-                [result appendFormat:@&quot;mach_vm_region failed for address %llu - Error: %x\n&quot;,address, (kr)];
-                print = done = 1;
-            }
-        }
-        
-        //等于才是连续的内存，不等于才打印
-        if (address != prev_address + prev_size)
-            print = 1;
-        
-        //或者权限信息改变了也打印
-        if ((info.protection != prev_info.protection)
-            || (info.max_protection != prev_info.max_protection)
-            || (info.inheritance != prev_info.inheritance)
-            || (info.shared != prev_info.reserved)
-            || (info.reserved != prev_info.reserved))
-            print = 1;
-        
-        if (print){
-            char *print_size_unit = NULL;
-            
-            mach_vm_size_t print_size = prev_size;
-            if (print_size &amp;gt; 1024) { print_size /= 1024; print_size_unit = (char*)&quot;K&quot;; }
-            if (print_size &amp;gt; 1024) { print_size /= 1024; print_size_unit = (char*)&quot;M&quot;; }
-            if (print_size &amp;gt; 1024) { print_size /= 1024; print_size_unit = (char*)&quot;G&quot;; }
-            
-            [result appendFormat:@&quot; %p-%p [%llu%s](%s/%s; %s, %s, %s) %s&quot;,
-             (void*)(prev_address),
-             (void*)(prev_address + prev_size),
-             print_size,
-             print_size_unit,
-             protection_bits_to_rwx (prev_info.protection),
-             protection_bits_to_rwx (prev_info.max_protection),
-             unparse_inheritance (prev_info.inheritance),
-             prev_info.shared ? &quot;shared&quot; : &quot;private&quot;,
-             prev_info.reserved ? &quot;reserved&quot; : &quot;not-reserved&quot;,
-             behavior_to_text (prev_info.behavior)];
-            
-            if (nsubregions &amp;gt; 1)
-                [result appendFormat:@&quot; (%d sub-regions)&quot;, nsubregions];
-            
-            [result appendFormat:@&quot;\n&quot;];
-            prev_address = address;
-            prev_size = size;
-            memcpy (&amp;amp;prev_info, &amp;amp;info, sizeof (vm_region_basic_info_data_t));
-            nsubregions = 1;
-        }else{
-            prev_size += size;
-            nsubregions++;
-        }
-        
-        if (done)
-            break;
-    }
-    return [result copy];
-}
-
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-</description>
-        <pubDate>Fri, 30 Apr 2021 00:00:00 +0800</pubDate>
-        <link>http://localhost:4000/2021/04/iOS%E6%B7%BB%E5%8A%A0%E8%B0%83%E8%AF%95%E5%91%BD%E4%BB%A4/</link>
-        <guid isPermaLink="true">http://localhost:4000/2021/04/iOS%E6%B7%BB%E5%8A%A0%E8%B0%83%E8%AF%95%E5%91%BD%E4%BB%A4/</guid>
         
         <category>iOS</category>
         

@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>利用shell读取README.MD配置修改配置环境</title>
+  <meta name="description" content="READM.ME内容```|企业证书|key|详情|—|—|—企业证书 | PRODUCT_BUNDLE_IDENTIFIER | com.helloworld.enterprise.app | DEVELOPMENT_TEAM | TLWGLP697Z5D | PROVISIONING_PROFILE_SPEC...">
+  <meta name="author" content="leopardpan">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="利用shell读取README.MD配置修改配置环境">
+  <meta name="twitter:description" content="READM.ME内容```|企业证书|key|详情|—|—|—企业证书 | PRODUCT_BUNDLE_IDENTIFIER | com.helloworld.enterprise.app | DEVELOPMENT_TEAM | TLWGLP697Z5D | PROVISIONING_PROFILE_SPEC...">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="利用shell读取README.MD配置修改配置环境">
+  <meta property="og:description" content="READM.ME内容```|企业证书|key|详情|—|—|—企业证书 | PRODUCT_BUNDLE_IDENTIFIER | com.helloworld.enterprise.app | DEVELOPMENT_TEAM | TLWGLP697Z5D | PROVISIONING_PROFILE_SPEC...">
+  
+  <link rel="icon" type="image/png" href="/images/favicon.png" />
+  <link href="/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://localhost:4000/2021/06/%E5%88%A9%E7%94%A8shell%E8%AF%BB%E5%8F%96README.MD%E9%85%8D%E7%BD%AE%E4%BF%AE%E6%94%B9%E9%85%8D%E7%BD%AE%E7%8E%AF%E5%A2%83/">
+  <link rel="alternate" type="application/rss+xml" title="LiJingBiao" href="http://localhost:4000/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+
+<!-- 站点统计 -->
+  <script 
+  async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js">
+  </script>  
+
+<!-- 百度统计 -->
+  
+  <script>
+      var _hmt = _hmt || [];
+      (function() {
+        var hm = document.createElement("script");
+        hm.src = "//hm.baidu.com/hm.js?e75b13a108d5f088539c03b796edf58e";
+        var s = document.getElementsByTagName("script")[0]; 
+        s.parentNode.insertBefore(hm, s);
+      })();
+  </script>
+  
+
+<!-- google 统计 -->
+  
+  <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+      ga('create', 'G-4VB3MXZ8T0', 'auto');
+      ga('send', 'pageview');
+  </script>
+  
+
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-9005224472374751",
+    enable_page_level_ads: true
+  });
+</script>
+
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">        
+      <div class="nav_container">
+         <nav class="nav-menu-item" style = "float:right">
+            <i class="nav-menu-item">
+              <a href="/#blog" title="" class="blog-button">  博客主页
+              </a>
+            </i>
+            
+                <i class="nav-menu-item">
+
+                  <a href="/archive" title="archive" class="btn-mobile-menu__icon">
+                      所有文章
+                  </a>
+                </i>
+            
+                <i class="nav-menu-item">
+
+                  <a href="/tags" title="tags" class="btn-mobile-menu__icon">
+                      标签
+                  </a>
+                </i>
+            
+                <i class="nav-menu-item">
+
+                  <a href="/about" title="about" class="btn-mobile-menu__icon">
+                      关于我
+                  </a>
+                </i>
+            
+          </nav>
+      </div>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+        <!-- 头像效果-start -->
+        <div class="ih-item circle effect right_to_left">            
+            <a href="/#blog" title="前往 LiJingBiao 的主页" class="blog-button">
+                <div class="img"><img src="/images/avatar.jpg" alt="img"></div>
+                <div class="info">
+                    <div class="info-back">
+                        <h2> 
+                            
+                                天道酬勤
+                            
+                        </h2>
+                        <p>
+                           
+                                iOS / Ruby /Shell
+                            
+                        </p>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <!-- 头像效果-end -->
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for LiJingBiao" class="blog-button">LiJingBiao</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">个人网站</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">欢迎来到我的个人博客~</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        
+
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="" class="blog-button">博客主页</a></li>
+                
+                  <li class="navigation__item"><a href="/archive" title="archive">所有文章</a></li>
+                
+                  <li class="navigation__item"><a href="/tags" title="tags">标签</a></li>
+                
+                  <li class="navigation__item"><a href="/about" title="about">关于我</a></li>
+                
+              </ul>
+            </nav>
+          </div>          
+        </div>
+
+
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-clear"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <head>
+  <link rel="stylesheet" href="/css/post.css">
+</head>
+
+<article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <h1 class="post-title">利用shell读取README.MD配置修改配置环境</h1>
+    <div class="post-meta">
+      <img src="/images/calendar.png" width="20px"/> 
+      <time datetime="2021-06-04 00:00:00 +0800" itemprop="datePublished" class="post-meta__date date">2021-06-04</time>  
+
+      <span id="busuanzi_container_page_pv"> | 阅读：<span id="busuanzi_value_page_pv"></span>次</span>
+    </p>
+    </div>
+  </header>
+
+  
+    <h2 class="post-title">目录</h2>
+    <ul>
+  <li><a href="#切换测试线上环境">切换测试、线上环境</a></li>
+  <li><a href="#证书切换">证书切换</a></li>
+  <li><a href="#设置debug证书">设置debug证书</a></li>
+</ul>
+
+  
+
+  <section class="post">
+    <p><strong>READM.ME内容</strong></p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>|企业证书|key|详情|
+---|---|---
+企业证书 | `PRODUCT_BUNDLE_IDENTIFIER` | `com.helloworld.enterprise.app`
+ | `DEVELOPMENT_TEAM` | `TLWGLP697Z5D`
+ | `PROVISIONING_PROFILE_SPECIFIER` | `HaiDianTong_Distribution`
+ App Store证书 | `PRODUCT_BUNDLE_IDENTIFIER` | `com.helloworld.app`
+  | `DEVELOPMENT_TEAM` | `9D4SRNFSVF43`
+  | `PROVISIONING_PROFILE_SPECIFIER` | `app_Distribution`
+ Debug证书 | `PRODUCT_BUNDLE_IDENTIFIER` | `com.helloworld.beijingtong`
+ | `DEVELOPMENT_TEAM` | `XYD7AF2EXNZZ`
+ | `PROVISIONING_PROFILE_SPECIFIER` | `BeiJingRenShe_Development`
+
+
+|数据环境|key|详情|
+---|---|---
+线上环境 | `toon_router_domain` | `http://routerhd.hebeizhichuang.com/user/router/basicRouter`
+ |`cdtp_dns_router`| `http://www.cdtpdns.com/`
+ |`sensorsAnalyticsServerUrl`| `https://da.helloworld.com/sa?project=production`
+ |`sensorsAnalyticsConfigUrl`| `https://da.helloworld.com/config/?project=production`
+t600环境| `toon_router_domain` | `http://routert600.helloworld.com/user/router/basicRouter`
+ |`cdtp_dns_router` | `http://cdtpdnstmail.helloworld.com`
+ |`sensorsAnalyticsServerUrl` | `https://da.helloworld.com/sa?project=default`
+ |`sensorsAnalyticsConfigUrl` | `https://da.helloworld.com/config/?project=default`
+</code></pre></div></div>
+
+<h2 id="切换测试线上环境">切换测试、线上环境</h2>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
+
+<span class="k">function </span>Set_Info_Plist<span class="o">(){</span>
+   /usr/libexec/PlistBuddy <span class="nt">-c</span> <span class="s2">"Set :</span><span class="nv">$1</span><span class="s2"> </span><span class="nv">$2</span><span class="s2">"</span> <span class="nv">$info_plist</span>
+<span class="o">}</span>
+
+<span class="nv">ENV_TOON</span><span class="o">=</span><span class="sb">`</span><span class="nb">awk</span> <span class="nt">-F</span>: <span class="s1">'BEGIN{};/toon_router_domain/{ gsub(/[[:blank:]]*/,"",$0);gsub(/\`/,"",$0);print $0 }'</span> ../README.MD|cut <span class="nt">-d</span><span class="se">\|</span> <span class="nt">-f3</span><span class="sb">`</span>
+<span class="nv">ENV_CDTP</span><span class="o">=</span><span class="sb">`</span><span class="nb">awk</span> <span class="nt">-F</span>: <span class="s1">'BEGIN{};/cdtp_dns_router/{ gsub(/[[:blank:]]*/,"",$0); gsub(/\`/,"",$0);print $0 }'</span> ../README.MD|cut <span class="nt">-d</span><span class="se">\|</span> <span class="nt">-f3</span><span class="sb">`</span>
+<span class="nv">ENV_SENSOR_SERVER</span><span class="o">=</span><span class="sb">`</span><span class="nb">awk</span> <span class="nt">-F</span>: <span class="s1">'BEGIN{};/sensorsAnalyticsServerUrl/{ gsub(/[[:blank:]]*/,"",$0); gsub(/\`/,"",$0);print $0 }'</span> ../README.MD|cut <span class="nt">-d</span><span class="se">\|</span> <span class="nt">-f3</span><span class="sb">`</span>
+<span class="nv">ENV_SENSOR_CONFIG</span><span class="o">=</span><span class="sb">`</span><span class="nb">awk</span> <span class="nt">-F</span>: <span class="s1">'BEGIN{};/sensorsAnalyticsConfigUrl/{ gsub(/[[:blank:]]*/,"",$0); gsub(/\`/,"",$0);print $0 }'</span> ../README.MD|cut <span class="nt">-d</span><span class="se">\|</span> <span class="nt">-f3</span><span class="sb">`</span>
+
+<span class="nv">ENV_TOON</span><span class="o">=(</span><span class="nv">$ENV_TOON</span><span class="o">)</span>
+<span class="nv">ENV_CDTP</span><span class="o">=(</span><span class="nv">$ENV_CDTP</span><span class="o">)</span>
+<span class="nv">ENV_SENSOR_SERVER</span><span class="o">=(</span><span class="nv">$ENV_SENSOR_SERVER</span><span class="o">)</span>
+<span class="nv">ENV_SENSOR_CONFIG</span><span class="o">=(</span><span class="nv">$ENV_SENSOR_CONFIG</span><span class="o">)</span>
+
+<span class="k">if</span> <span class="o">[</span> <span class="k">${#</span><span class="nv">ENV_TOON</span><span class="p">[*]</span><span class="k">}</span> <span class="nt">-eq</span> 2 <span class="nt">-a</span> <span class="k">${#</span><span class="nv">ENV_CDTP</span><span class="p">[*]</span><span class="k">}</span> <span class="nt">-eq</span> 2 <span class="o">]</span><span class="p">;</span> <span class="k">then
+    </span><span class="nv">ENV_TOON_RELEASE</span><span class="o">=</span><span class="k">${</span><span class="nv">ENV_TOON</span><span class="p">[0]</span><span class="k">}</span>
+    <span class="nv">ENV_TOON_DEVELOPMENT</span><span class="o">=</span><span class="k">${</span><span class="nv">ENV_TOON</span><span class="p">[1]</span><span class="k">}</span>
+
+    <span class="nv">ENV_CDTP_RELEASE</span><span class="o">=</span><span class="k">${</span><span class="nv">ENV_CDTP</span><span class="p">[0]</span><span class="k">}</span>
+    <span class="nv">ENV_CDTP_DEVELOPMENT</span><span class="o">=</span><span class="k">${</span><span class="nv">ENV_CDTP</span><span class="p">[1]</span><span class="k">}</span>
+<span class="k">else 
+    </span><span class="nb">echo </span>获取失败
+    <span class="nb">exit</span> <span class="nt">-1</span>
+<span class="k">fi
+
+if</span> <span class="o">[</span> <span class="k">${#</span><span class="nv">ENV_SENSOR_SERVER</span><span class="p">[*]</span><span class="k">}</span> <span class="nt">-eq</span> 2 <span class="nt">-a</span> <span class="k">${#</span><span class="nv">ENV_SENSOR_CONFIG</span><span class="p">[*]</span><span class="k">}</span> <span class="nt">-eq</span> 2 <span class="o">]</span><span class="p">;</span> <span class="k">then
+    </span><span class="nv">ENV_SENSOR_SERVER_RELEASE</span><span class="o">=</span><span class="k">${</span><span class="nv">ENV_SENSOR_SERVER</span><span class="p">[0]</span><span class="k">}</span>
+    <span class="nv">ENV_SENSOR_SERVER_DEVELOPMENT</span><span class="o">=</span><span class="k">${</span><span class="nv">ENV_SENSOR_SERVER</span><span class="p">[1]</span><span class="k">}</span>
+
+    <span class="nv">ENV_SENSOR_CONFIG_RELEASE</span><span class="o">=</span><span class="k">${</span><span class="nv">ENV_SENSOR_CONFIG</span><span class="p">[0]</span><span class="k">}</span>
+    <span class="nv">ENV_SENSOR_CONFIG_DEVELOPMENT</span><span class="o">=</span><span class="k">${</span><span class="nv">ENV_SENSOR_CONFIG</span><span class="p">[1]</span><span class="k">}</span>
+<span class="k">else 
+    </span><span class="nb">echo </span>获取失败
+    <span class="nb">exit</span> <span class="nt">-1</span>
+<span class="k">fi
+</span><span class="nb">echo</span> <span class="s2">"--------toon_router_domain develop------------"</span>
+<span class="nb">echo</span> <span class="nv">$ENV_TOON_DEVELOPMENT</span>
+<span class="c"># echo $ENV_TOON_RELEASE1</span>
+<span class="nb">echo</span> <span class="s2">"--------toon_router_domain release------------"</span>
+<span class="nb">echo</span> <span class="nv">$ENV_TOON_RELEASE</span>
+
+
+<span class="nb">echo</span> <span class="s2">"--------cdtp_dns_router develop------------"</span>
+<span class="nb">echo</span> <span class="nv">$ENV_CDTP_DEVELOPMENT</span>
+<span class="c"># echo $ENV_CDTP_RELEASE1</span>
+<span class="nb">echo</span> <span class="s2">"--------cdtp_dns_router release------------"</span>
+<span class="nb">echo</span> <span class="nv">$ENV_CDTP_RELEASE</span>
+
+<span class="nb">echo</span> <span class="s2">"--------sensorsAnalyticsServerUrl develop------------"</span>
+<span class="nb">echo</span> <span class="nv">$ENV_SENSOR_SERVER_DEVELOPMENT</span>
+<span class="nb">echo</span> <span class="s2">"--------sensorsAnalyticsServerUrl release------------"</span>
+<span class="nb">echo</span> <span class="nv">$ENV_SENSOR_SERVER_RELEASE</span>
+
+<span class="nb">echo</span> <span class="s2">"--------sensorsAnalyticsConfigUrl develop------------"</span>
+<span class="nb">echo</span> <span class="nv">$ENV_SENSOR_CONFIG_DEVELOPMENT</span>
+<span class="nb">echo</span> <span class="s2">"--------sensorsAnalyticsConfigUrl release------------"</span>
+<span class="nb">echo</span> <span class="nv">$ENV_SENSOR_CONFIG_RELEASE</span>
+
+
+<span class="nv">info_plist</span><span class="o">=</span>./TLauncher/Info.plist
+
+<span class="k">if</span> <span class="o">[</span> <span class="o">!</span> <span class="nt">-f</span> <span class="nv">$info_plist</span> <span class="o">]</span><span class="p">;</span> <span class="k">then
+    </span><span class="nb">echo</span> <span class="s2">"找不到plist文件"</span>
+    <span class="nb">exit</span> <span class="nt">-1</span>
+<span class="k">fi
+
+
+</span><span class="nv">CURRENT_TOON_ENV</span><span class="o">=</span><span class="k">$(</span>/usr/libexec/PlistBuddy <span class="nt">-c</span> <span class="s1">'Print toon_router_domain'</span> <span class="nv">$info_plist</span><span class="k">)</span>
+
+<span class="nb">echo</span> <span class="s2">"------两个环境比较---------"</span>
+<span class="nb">echo</span> <span class="nv">$CURRENT_TOON_ENV</span>
+<span class="nb">echo</span> <span class="nv">$ENV_TOON_DEVELOPMENT</span>
+<span class="k">if</span> <span class="o">[</span> <span class="nv">$ENV_TOON_DEVELOPMENT</span> <span class="o">==</span> <span class="nv">$CURRENT_TOON_ENV</span> <span class="o">]</span><span class="p">;</span> <span class="k">then
+    </span>Set_Info_Plist <span class="s2">"toon_router_domain"</span> <span class="nv">$ENV_TOON_RELEASE</span>
+    Set_Info_Plist <span class="s2">"cdtp_dns_router"</span> <span class="nv">$ENV_CDTP_RELEASE</span>
+    Set_Info_Plist <span class="s2">"sensorsAnalyticsServerUrl"</span> <span class="nv">$ENV_SENSOR_SERVER_RELEASE</span>
+    Set_Info_Plist <span class="s2">"sensorsAnalyticsConfigUrl"</span> <span class="nv">$ENV_SENSOR_CONFIG_RELEASE</span>
+    <span class="nb">echo </span>由之前测试环境修改为线上环境
+ <span class="k">else 
+    </span>Set_Info_Plist <span class="s2">"toon_router_domain"</span> <span class="nv">$ENV_TOON_DEVELOPMENT</span>
+    Set_Info_Plist <span class="s2">"cdtp_dns_router"</span> <span class="nv">$ENV_CDTP_DEVELOPMENT</span>
+    Set_Info_Plist <span class="s2">"sensorsAnalyticsServerUrl"</span> <span class="nv">$ENV_SENSOR_SERVER_DEVELOPMENT</span>
+    Set_Info_Plist <span class="s2">"sensorsAnalyticsConfigUrl"</span> <span class="nv">$ENV_SENSOR_CONFIG_DEVELOPMENT</span>
+    <span class="nb">echo </span>由之前线上环境修改为测试环境
+<span class="k">fi</span>
+
+</code></pre></div></div>
+<h2 id="证书切换">证书切换</h2>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>set -e
+set -u
+set -o pipefail
+
+README_PATH="$SRCROOT/../README.MD"
+PBXPROJ_PATH="$PROJECT_FILE_PATH/project.pbxproj"
+PRODUCT_BUNDLE_IDENTIFIER=`awk 'BEGIN{};/PRODUCT_BUNDLE_IDENTIFIER/{ gsub(/[[:blank:]]*/,"",$0);gsub(/\`/,"",$0);print $0 }' $README_PATH|cut -d\| -f3`
+DEVELOPMENT_TEAM=`awk 'BEGIN{};/DEVELOPMENT_TEAM/{ gsub(/[[:blank:]]*/,"",$0);gsub(/\`/,"",$0);print $0 }' $README_PATH|cut -d\| -f3`
+PROVISIONING_PROFILE_SPECIFIER=`awk 'BEGIN{};/PROVISIONING_PROFILE_SPECIFIER/{ gsub(/[[:blank:]]*/,"",$0);gsub(/\`/,"",$0);print $0 }' $README_PATH|cut -d\| -f3`
+
+CONFIG_COUNT=3
+
+
+echo $PRODUCT_BUNDLE_IDENTIFIER
+echo $DEVELOPMENT_TEAM
+echo $PROVISIONING_PROFILE_SPECIFIER
+
+PRODUCT_BUNDLE_IDENTIFIER=($PRODUCT_BUNDLE_IDENTIFIER)
+DEVELOPMENT_TEAM=($DEVELOPMENT_TEAM)
+PROVISIONING_PROFILE_SPECIFIER=($PROVISIONING_PROFILE_SPECIFIER)
+if [ ${#PRODUCT_BUNDLE_IDENTIFIER[*]} -eq $CONFIG_COUNT -a ${#DEVELOPMENT_TEAM[*]} -eq $CONFIG_COUNT -a ${#PROVISIONING_PROFILE_SPECIFIER[*]} -eq $CONFIG_COUNT ]; then
+    ############################ 内部市场 Bundle ID #############################
+    PRODUCT_BUNDLE_IDENTIFIER_ENTERPRISE=${PRODUCT_BUNDLE_IDENTIFIER[0]}
+    ############################ App Store Bundle ID #############################
+    PRODUCT_BUNDLE_IDENTIFIER_APPSTORE=${PRODUCT_BUNDLE_IDENTIFIER[1]}
+
+    ############################ 内部市场证书#############################
+    PROVISIONING_PROFILE_SPECIFIER_ENTERPRISE_Distribution=${PROVISIONING_PROFILE_SPECIFIER[0]}
+    ############################ App Store 证书#############################
+    PROVISIONING_PROFILE_SPECIFIER_APPSTORE_Distribution=${PROVISIONING_PROFILE_SPECIFIER[1]}
+
+    ############################ 内部市场 TEAM #############################
+    DEVELOPMENT_TEAM_ENTERPRISE=${DEVELOPMENT_TEAM[0]}
+    ############################ App Store TEAM #############################
+    DEVELOPMENT_TEAM_APPSTORE=${DEVELOPMENT_TEAM[1]}
+
+    echo $PRODUCT_BUNDLE_IDENTIFIER_ENTERPRISE $PROVISIONING_PROFILE_SPECIFIER_ENTERPRISE_Distribution $DEVELOPMENT_TEAM_ENTERPRISE
+    echo $PRODUCT_BUNDLE_IDENTIFIER_APPSTORE $PROVISIONING_PROFILE_SPECIFIER_APPSTORE_Distribution $DEVELOPMENT_TEAM_APPSTORE
+
+    PRODUCT_BUNDLE_IDENTIFIER_PROJ=`awk 'BEGIN{};/PRODUCT_BUNDLE_IDENTIFIER/{ gsub(/[[:blank:]]*/,"",$0);print $0 }' $PBXPROJ_PATH`
+    echo ----------------
+    echo $PBXPROJ_PATH
+    echo $PRODUCT_BUNDLE_IDENTIFIER_PROJ
+    echo $PROJECT_FILE_PATH
+    echo $PBXPROJ_PATH                       
+    echo ----------------
+    if [[ $PRODUCT_BUNDLE_IDENTIFIER_PROJ =~ $PRODUCT_BUNDLE_IDENTIFIER_ENTERPRISE ]]; then
+        echo '由企业证书改为App Store证书'
+        sed -i '' -e 's/PROVISIONING_PROFILE_SPECIFIER\ =\ .*/PROVISIONING_PROFILE_SPECIFIER\ =\ '$PROVISIONING_PROFILE_SPECIFIER_APPSTORE_Distribution'\;/' $PBXPROJ_PATH
+        sed -i '' -e 's/PRODUCT_BUNDLE_IDENTIFIER\ =\ .*/PRODUCT_BUNDLE_IDENTIFIER\ =\ '$PRODUCT_BUNDLE_IDENTIFIER_APPSTORE'\;/' $PBXPROJ_PATH
+        sed -i '' -e 's/DEVELOPMENT_TEAM\ =\ .*/DEVELOPMENT_TEAM\ =\ '$DEVELOPMENT_TEAM_APPSTORE'\;/' $PBXPROJ_PATH
+    elif [[ $PRODUCT_BUNDLE_IDENTIFIER_PROJ =~ $PRODUCT_BUNDLE_IDENTIFIER_APPSTORE ]]; then
+        echo '由App Store证书改为企业证书'
+        sed -i '' -e 's/PROVISIONING_PROFILE_SPECIFIER\ =\ .*/PROVISIONING_PROFILE_SPECIFIER\ =\ '$PROVISIONING_PROFILE_SPECIFIER_ENTERPRISE_Distribution'\;/' $PBXPROJ_PATH
+        sed -i '' -e 's/PRODUCT_BUNDLE_IDENTIFIER\ =\ .*/PRODUCT_BUNDLE_IDENTIFIER\ =\ '$PRODUCT_BUNDLE_IDENTIFIER_ENTERPRISE'\;/' $PBXPROJ_PATH
+        sed -i '' -e 's/DEVELOPMENT_TEAM\ =\ .*/DEVELOPMENT_TEAM\ =\ '$DEVELOPMENT_TEAM_ENTERPRISE'\;/' $PBXPROJ_PATH
+    fi
+
+else 
+    echo '修改失败'
+    exit -1
+fi
+
+</code></pre></div></div>
+
+<h2 id="设置debug证书">设置debug证书</h2>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># Type a script or drag a script file from your workspace to insert its path.
+set -e
+set -u
+set -o pipefail
+
+README_PATH="$SRCROOT/../README.MD"
+PBXPROJ_PATH="$PROJECT_FILE_PATH/project.pbxproj"
+PRODUCT_BUNDLE_IDENTIFIER=`awk 'BEGIN{};/PRODUCT_BUNDLE_IDENTIFIER/{ gsub(/[[:blank:]]*/,"",$0);gsub(/\`/,"",$0);print $0 }' $README_PATH|cut -d\| -f3`
+DEVELOPMENT_TEAM=`awk 'BEGIN{};/DEVELOPMENT_TEAM/{ gsub(/[[:blank:]]*/,"",$0);gsub(/\`/,"",$0);print $0 }' $README_PATH|cut -d\| -f3`
+PROVISIONING_PROFILE_SPECIFIER=`awk 'BEGIN{};/PROVISIONING_PROFILE_SPECIFIER/{ gsub(/[[:blank:]]*/,"",$0);gsub(/\`/,"",$0);print $0 }' $README_PATH|cut -d\| -f3`
+CONFIG_COUNT=3
+echo $PRODUCT_BUNDLE_IDENTIFIER
+echo $DEVELOPMENT_TEAM
+echo $PROVISIONING_PROFILE_SPECIFIER
+
+PRODUCT_BUNDLE_IDENTIFIER=($PRODUCT_BUNDLE_IDENTIFIER)
+DEVELOPMENT_TEAM=($DEVELOPMENT_TEAM)
+PROVISIONING_PROFILE_SPECIFIER=($PROVISIONING_PROFILE_SPECIFIER)
+if [ ${#PRODUCT_BUNDLE_IDENTIFIER[*]} -eq $CONFIG_COUNT -a ${#DEVELOPMENT_TEAM[*]} -eq $CONFIG_COUNT -a ${#PROVISIONING_PROFILE_SPECIFIER[*]} -eq $CONFIG_COUNT ]; then
+    ############################ DEBUG Bundle ID #############################
+    PRODUCT_BUNDLE_IDENTIFIER_DEBUG=${PRODUCT_BUNDLE_IDENTIFIER[2]}
+    ############################ DEBUG 证书#############################
+    PROVISIONING_PROFILE_SPECIFIER_DEBUG=${PROVISIONING_PROFILE_SPECIFIER[2]}
+    ############################ DEBGU TEAM #############################
+    DEVELOPMENT_TEAM_DEBUG=${DEVELOPMENT_TEAM[2]}
+
+    echo $PRODUCT_BUNDLE_IDENTIFIER_DEBUG $PROVISIONING_PROFILE_SPECIFIER_DEBUG $DEVELOPMENT_TEAM_DEBUG
+
+    sed -i '' -e 's/PROVISIONING_PROFILE_SPECIFIER\ =\ .*/PROVISIONING_PROFILE_SPECIFIER\ =\ '$PROVISIONING_PROFILE_SPECIFIER_DEBUG'\;/' $PBXPROJ_PATH
+    sed -i '' -e 's/PRODUCT_BUNDLE_IDENTIFIER\ =\ .*/PRODUCT_BUNDLE_IDENTIFIER\ =\ '$PRODUCT_BUNDLE_IDENTIFIER_DEBUG'\;/' $PBXPROJ_PATH
+    sed -i '' -e 's/DEVELOPMENT_TEAM\ =\ .*/DEVELOPMENT_TEAM\ =\ '$DEVELOPMENT_TEAM_DEBUG'\;/' $PBXPROJ_PATH
+
+else 
+    echo '修改失败'
+    exit -1
+fi
+
+</code></pre></div></div>
+
+  </section>
+
+</article>
+
+<section>
+
+            <div class="content-play">
+              <p><a href="javascript:void(0)" onclick="dashangToggle()" class="dashang" title="打赏，支持一下">打赏一个呗</a></p>
+              <div class="hide_box-play"></div>
+              <div class="shang_box-play">
+                <a class="shang_close-play" href="javascript:void(0)" onclick="dashangToggle()" title="关闭"><img src="/images/payimg/close.jpg" alt="取消" /></a>
+                <div class="shang_tit-play">
+                  <p>感谢您的支持，我会继续努力的!</p>
+                </div>
+                <div class="shang_payimg">
+                    <img src="/images/payimg/alipayimg.jpg" alt="扫码支持" title="扫一扫" />
+                </div>
+              <div class="shang_payimg">    
+                    <img src="/images/payimg/weipayimg.jpg" alt="扫码支持" title="扫一扫" />
+                </div>
+                <div class="pay_explain">扫码打赏，你说多少就多少</div>
+                <div class="shang_payselect">
+                  <div class="pay_item checked" data-id="alipay">
+                    <span class="pay_logo"><img src="/images/payimg/alipay.jpg" alt="支付宝" /></span>
+                  </div>
+                  <div class="pay_item" data-id="weipay">
+                    <span class="pay_logo"><img src="/images/payimg/wechat.jpg" alt="微信" /></span>
+                  </div>
+                </div>
+                <div class="shang_info-play">
+                  <p>打开<span id="shang_pay_txt">支付宝</span>扫一扫，即可进行扫码打赏哦</p>
+                </div>
+              </div>
+            </div>
+            <script type="text/javascript">
+            function dashangToggle(){
+              $(".hide_box-play").fadeToggle();
+              $(".shang_box-play").fadeToggle();
+            }
+            </script>
+
+            <div style="text-align:center;margin:50px 0; font:normal 14px/24px 'MicroSoft YaHei';"></div>
+
+            <style type="text/css">
+              .content-play{width:80%;margin-top: 20px;margin-bottom: 10px;height:40px;}
+              .hide_box-play{z-index:999;filter:alpha(opacity=50);background:#666;opacity: 0.5;-moz-opacity: 0.5;left:0;top:0;height:99%;width:100%;position:fixed;display:none;}
+              .shang_box-play{width:540px;height:540px;padding:10px;background-color:#fff;border-radius:10px;position:fixed;z-index:1000;left:50%;top:50%;margin-left:-280px;margin-top:-280px;border:1px dotted #dedede;display:none;}
+              .shang_box-play img{border:none;border-width:0;}
+              .dashang{display:block;width:100px;margin:5px auto;height:25px;line-height:25px;padding:10px;background-color:#E74851;color:#fff;text-align:center;text-decoration:none;border-radius:10px;font-weight:bold;font-size:16px;transition: all 0.3s;}
+              .dashang:hover{opacity:0.8;padding:15px;font-size:18px;}
+              .shang_close-play{float:right;display:inline-block;
+                margin-right: 10px;margin-top: 20px;
+              }
+              .shang_logo{display:block;text-align:center;margin:20px auto;}
+              .shang_tit-play{width: 100%;height: 75px;text-align: center;line-height: 66px;color: #a3a3a3;font-size: 16px;background: url('/images/payimg/cy-reward-title-bg.jpg');font-family: 'Microsoft YaHei';margin-top: 7px;margin-right:2px;}
+              .shang_tit-play p{color:#a3a3a3;text-align:center;font-size:16px;}
+              .shang_payimg{width:140px;padding:10px;padding-left: 80px; /*border:6px solid #EA5F00;**/margin:0 auto;border-radius:3px;height:140px;display:inline-block;}
+              .shang_payimg img{display:inline-block;margin-right:10px;float:left;text-align:center;width:140px;height:140px; }
+              .pay_explain{text-align:center;margin:10px auto;font-size:12px;color:#545454;}
+              .shang_payselect{text-align:center;margin:0 auto;margin-top:40px;cursor:pointer;height:60px;width:500px;margin-left:110px;}
+              .shang_payselect .pay_item{display:inline-block;margin-right:140px;float:left;}
+              .shang_info-play{clear:both;}
+              .shang_info-play p,.shang_info-play a{color:#C3C3C3;text-align:center;font-size:12px;text-decoration:none;line-height:2em;}
+            </style>
+
+       <ul class="pager">
+        
+        <li class="previous">
+            <a href="/2021/06/Shell%E8%84%9A%E6%9C%AC%E4%B8%AD%E5%88%A4%E6%96%AD%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%98%AF%E5%90%A6%E8%A2%AB%E5%8C%85%E5%90%AB%E5%9C%A8%E5%86%85/" data-toggle="tooltip" data-placement="top" title="Shell脚本中判断字符串是否被包含在内">上一篇：  <span>Shell脚本中判断字符串是否被包含在内</span>
+            </a>
+        </li>
+        
+        
+    </ul>
+</section>
+
+<section class="post-comments">
+
+  
+
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zMDUwNi83MDYw">
+      <script type="text/javascript">
+         (function(d, s) {
+             var j, e = d.getElementsByTagName(s)[0];
+
+             if (typeof LivereTower === 'function') { return; }
+             j = d.createElement(s);
+             j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+             j.async = true;
+             e.parentNode.insertBefore(j, e);
+         })(document, 'script');
+      </script>
+      <noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+      </div>
+
+  
+
+</section>
+
+
+            <section class="footer">
+    <footer>
+        <div class = "footer_div">  
+        <nav class="cover-navigation navigation--social">
+          <ul class="navigation">
+
+          
+          <!-- Github -->
+          <li class="navigation__item_social">
+            <a href="https://github.com/lijingbiao" title="@lijingbiao 的 Github" target="_blank">
+              <div class="footer-social-icon" style="background:url(/images/github.png);"></div>
+            </a>
+          </li>
+          
+
+          
+
+          
+
+          
+          <!-- Zhihu -->
+          <li class="navigation__item_social">
+            <a href="https://www.jianshu.com/u/e66c74545d7e" title="@e66c74545d7e" target="_blank">
+              <div class="footer-social-icon" style="background:url(/images/jianshu.png);"></div>
+            </a>
+          </li>
+
+          
+
+          
+
+          
+          
+
+
+          
+          <!-- Email -->
+          <li class="navigation__item_social">
+            <a href="mailto:694292399@qq.com" title="Contact me">
+              <div class="footer-social-icon" style="background:url(/images/email.png);"></div>
+            </a>
+          </li>
+          
+          
+          <!-- RSS -->
+          <li class="navigation__item_social">
+            <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+              <div class="footer-social-icon" style="background:url(/images/rss.png);"></div>
+              <span class="label">RSS</span>
+            </a>
+          </li>
+
+          </ul>
+        </nav>
+
+        </div>
+
+        <div class = "footer_div">  
+           <p class="copyright text-muted">
+            Copyright &copy; LiJingBiao 2021  |
+            <iframe
+                style="margin-left: 2px; margin-bottom:-5px;"
+                frameborder="0" scrolling="0" width="91px" height="20px"
+                src="https://ghbtns.com/github-btn.html?user=lijingbiao&repo=lijingbiao.github.io&type=star&count=true" >
+            </iframe>
+            </p>
+        	<div align="right">
+    			<link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+          <!-- 访问统计 -->
+          <span id="busuanzi_container_site_pv">
+            本站总访问量
+            <span id="busuanzi_value_site_pv"></span>次
+          </span>
+
+        </div>
+        <div>
+    </footer>
+</section>
+
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+<script type="text/javascript" src="/js/main.js"></script>
+
+<script type="text/javascript" src="/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+    
+  </body>
+
+</html>
