@@ -5,9 +5,37 @@
     <description>欢迎来到我的个人博客~</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 07 Jun 2021 10:50:28 +0800</pubDate>
-    <lastBuildDate>Mon, 07 Jun 2021 10:50:28 +0800</lastBuildDate>
+    <pubDate>Fri, 02 Jul 2021 11:33:38 +0800</pubDate>
+    <lastBuildDate>Fri, 02 Jul 2021 11:33:38 +0800</lastBuildDate>
     <generator>Jekyll v3.8.5</generator>
+    
+      <item>
+        <title>判断字符串中包含数字或字母</title>
+        <description>&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;//是否是n位纯数字
+-(BOOL)validateOfLength:(NSInteger)length WithString:(NSString *)str{
+    /*
+     @&quot;^\\d{6}$&quot;
+     (6个连续数字,以数字开头,以数字结尾)
+     */
+    NSString *pwdRegex = [NSString stringWithFormat:@&quot;^\\d{\%ld}$&quot;,(long)length];
+    NSPredicate *pwdTest = [NSPredicate predicateWithFormat:@&quot;SELF MATCHES \%@&quot;,pwdRegex];
+    BOOL isMatch= [pwdTest evaluateWithObject:str];
+    
+    if (!isMatch) {
+        return NO;
+    }
+    return isMatch;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+</description>
+        <pubDate>Fri, 02 Jul 2021 00:00:00 +0800</pubDate>
+        <link>http://localhost:4000/2021/07/%E5%88%A4%E6%96%AD%E5%AD%97%E7%AC%A6%E4%B8%B2%E4%B8%AD%E5%8C%85%E5%90%AB%E6%95%B0%E5%AD%97%E6%88%96%E5%AD%97%E6%AF%8D/</link>
+        <guid isPermaLink="true">http://localhost:4000/2021/07/%E5%88%A4%E6%96%AD%E5%AD%97%E7%AC%A6%E4%B8%B2%E4%B8%AD%E5%8C%85%E5%90%AB%E6%95%B0%E5%AD%97%E6%88%96%E5%AD%97%E6%AF%8D/</guid>
+        
+        <category>iOS</category>
+        
+        
+      </item>
     
       <item>
         <title>博客本地服务器开启并打开本地博客网页</title>
@@ -1389,21 +1417,6 @@ gggUG   &quot; 文本所有字符大写
         <guid isPermaLink="true">http://localhost:4000/2021/05/2021-05-27Vim%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/</guid>
         
         <category>vi</category>
-        
-        
-      </item>
-    
-      <item>
-        <title>iOS查找汉字字符串</title>
-        <description>&lt;h1 id=&quot;ios查找汉字字符串&quot;&gt;iOS查找汉字字符串&lt;/h1&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;@&quot;[^&quot;]*[\u4E00-\u9FA5]+[^&quot;\n]*?&quot;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-</description>
-        <pubDate>Sat, 08 May 2021 00:00:00 +0800</pubDate>
-        <link>http://localhost:4000/2021/05/iOS%E6%9F%A5%E6%89%BE%E6%B1%89%E5%AD%97%E5%AD%97%E7%AC%A6%E4%B8%B2/</link>
-        <guid isPermaLink="true">http://localhost:4000/2021/05/iOS%E6%9F%A5%E6%89%BE%E6%B1%89%E5%AD%97%E5%AD%97%E7%AC%A6%E4%B8%B2/</guid>
-        
-        <category>iOS</category>
         
         
       </item>
