@@ -6,17 +6,17 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <title>判断字符串中包含数字或字母</title>
-  <meta name="description" content="//是否是n位纯数字-(BOOL)validateOfLength:(NSInteger)length WithString:(NSString *)str{    /*     @"^\\d{6}$"     (6个连续数字,以数字开头,以数字结尾)     */    NSString *pwdRegex =...">
+  <title>iOS限制密码8-20位</title>
+  <meta name="description" content="-(BOOL)passWordprdicateString:(NSString *)str{    NSString * email = str;    NSString * regex = @"^(?![0-9]+$)(?![a-zA-Z]+$)(?![\\W]+$)[a-zA-Z0-9\\W]{8,20}";...">
   <meta name="author" content="leopardpan">
 
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="判断字符串中包含数字或字母">
-  <meta name="twitter:description" content="//是否是n位纯数字-(BOOL)validateOfLength:(NSInteger)length WithString:(NSString *)str{    /*     @"^\\d{6}$"     (6个连续数字,以数字开头,以数字结尾)     */    NSString *pwdRegex =...">
+  <meta name="twitter:title" content="iOS限制密码8-20位">
+  <meta name="twitter:description" content="-(BOOL)passWordprdicateString:(NSString *)str{    NSString * email = str;    NSString * regex = @"^(?![0-9]+$)(?![a-zA-Z]+$)(?![\\W]+$)[a-zA-Z0-9\\W]{8,20}";...">
   
   <meta property="og:type" content="article">
-  <meta property="og:title" content="判断字符串中包含数字或字母">
-  <meta property="og:description" content="//是否是n位纯数字-(BOOL)validateOfLength:(NSInteger)length WithString:(NSString *)str{    /*     @"^\\d{6}$"     (6个连续数字,以数字开头,以数字结尾)     */    NSString *pwdRegex =...">
+  <meta property="og:title" content="iOS限制密码8-20位">
+  <meta property="og:description" content="-(BOOL)passWordprdicateString:(NSString *)str{    NSString * email = str;    NSString * regex = @"^(?![0-9]+$)(?![a-zA-Z]+$)(?![\\W]+$)[a-zA-Z0-9\\W]{8,20}";...">
   
   <link rel="icon" type="image/png" href="/images/favicon.png" />
   <link href="/images/favicon.png" rel="shortcut icon" type="image/png">
@@ -24,7 +24,7 @@
   <link rel="stylesheet" href="/css/main.css">
   <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 
-  <link rel="canonical" href="http://localhost:4000/2021/07/%E5%88%A4%E6%96%AD%E5%AD%97%E7%AC%A6%E4%B8%B2%E4%B8%AD%E5%8C%85%E5%90%AB%E6%95%B0%E5%AD%97%E6%88%96%E5%AD%97%E6%AF%8D/">
+  <link rel="canonical" href="http://localhost:4000/2021/07/iOS%E9%99%90%E5%88%B6%E5%AF%86%E7%A0%818-0%E4%BD%8D/">
   <link rel="alternate" type="application/rss+xml" title="LiJingBiao" href="http://localhost:4000/feed.xml">
   
   <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
@@ -179,10 +179,10 @@
 
 <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
   <header class="post-header">
-    <h1 class="post-title">判断字符串中包含数字或字母</h1>
+    <h1 class="post-title">iOS限制密码8-20位</h1>
     <div class="post-meta">
       <img src="/images/calendar.png" width="20px"/> 
-      <time datetime="2021-07-02 00:00:00 +0800" itemprop="datePublished" class="post-meta__date date">2021-07-02</time>  
+      <time datetime="2021-07-12 00:00:00 +0800" itemprop="datePublished" class="post-meta__date date">2021-07-12</time>  
 
       <span id="busuanzi_container_page_pv"> | 阅读：<span id="busuanzi_value_page_pv"></span>次</span>
     </p>
@@ -196,20 +196,13 @@
   
 
   <section class="post">
-    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>//是否是n位纯数字
--(BOOL)validateOfLength:(NSInteger)length WithString:(NSString *)str{
-    /*
-     @"^\\d{6}$"
-     (6个连续数字,以数字开头,以数字结尾)
-     */
-    NSString *pwdRegex = [NSString stringWithFormat:@"^\\d{\%ld}$",(long)length];
-    NSPredicate *pwdTest = [NSPredicate predicateWithFormat:@"SELF MATCHES \%@",pwdRegex];
-    BOOL isMatch= [pwdTest evaluateWithObject:str];
-    
-    if (!isMatch) {
-        return NO;
-    }
-    return isMatch;
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>-(BOOL)passWordprdicateString:(NSString *)str{
+    NSString * email = str;
+    NSString * regex = @"^(?![0-9]+$)(?![a-zA-Z]+$)(?![\\W]+$)[a-zA-Z0-9\\W]{8,20}";
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regex];
+    BOOL isValid = [predicate evaluateWithObject:email];
+    NSLog(@"--------%ld",isValid);
+    return isValid;
 }
 </code></pre></div></div>
 
@@ -281,15 +274,10 @@
        <ul class="pager">
         
         <li class="previous">
-            <a href="/2021/06/%E5%8D%9A%E5%AE%A2%E6%9C%AC%E5%9C%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%BC%80%E5%90%AF%E5%B9%B6%E6%89%93%E5%BC%80%E6%9C%AC%E5%9C%B0%E5%8D%9A%E5%AE%A2%E7%BD%91%E9%A1%B5/" data-toggle="tooltip" data-placement="top" title="博客本地服务器开启并打开本地博客网页">上一篇：  <span>博客本地服务器开启并打开本地博客网页</span>
+            <a href="/2021/07/%E5%88%A4%E6%96%AD%E5%AD%97%E7%AC%A6%E4%B8%B2%E4%B8%AD%E5%8C%85%E5%90%AB%E6%95%B0%E5%AD%97%E6%88%96%E5%AD%97%E6%AF%8D/" data-toggle="tooltip" data-placement="top" title="判断字符串中包含数字或字母">上一篇：  <span>判断字符串中包含数字或字母</span>
             </a>
         </li>
         
-        
-        <li class="next">
-            <a href="/2021/07/iOS%E9%99%90%E5%88%B6%E5%AF%86%E7%A0%818-0%E4%BD%8D/" data-toggle="tooltip" data-placement="top" title="iOS限制密码8-20位">下一篇：  <span>iOS限制密码8-20位</span>
-            </a>
-        </li>
         
     </ul>
 </section>
