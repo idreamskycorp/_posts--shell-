@@ -6,17 +6,17 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <title>iOS限制密码8-20位</title>
-  <meta name="description" content="-(BOOL)passWordprdicateString:(NSString *)str{    NSString * email = str;    NSString * regex = @"^(?![0-9]+$)(?![a-zA-Z]+$)(?![\\W]+$)[a-zA-Z0-9\\W]{8,20}";...">
+  <title>iOS打印符号断点参数</title>
+  <meta name="description" content="//打印第一个参数po $arg3//打印第2个参数po $arg4">
   <meta name="author" content="leopardpan">
 
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="iOS限制密码8-20位">
-  <meta name="twitter:description" content="-(BOOL)passWordprdicateString:(NSString *)str{    NSString * email = str;    NSString * regex = @"^(?![0-9]+$)(?![a-zA-Z]+$)(?![\\W]+$)[a-zA-Z0-9\\W]{8,20}";...">
+  <meta name="twitter:title" content="iOS打印符号断点参数">
+  <meta name="twitter:description" content="//打印第一个参数po $arg3//打印第2个参数po $arg4">
   
   <meta property="og:type" content="article">
-  <meta property="og:title" content="iOS限制密码8-20位">
-  <meta property="og:description" content="-(BOOL)passWordprdicateString:(NSString *)str{    NSString * email = str;    NSString * regex = @"^(?![0-9]+$)(?![a-zA-Z]+$)(?![\\W]+$)[a-zA-Z0-9\\W]{8,20}";...">
+  <meta property="og:title" content="iOS打印符号断点参数">
+  <meta property="og:description" content="//打印第一个参数po $arg3//打印第2个参数po $arg4">
   
   <link rel="icon" type="image/png" href="/images/favicon.png" />
   <link href="/images/favicon.png" rel="shortcut icon" type="image/png">
@@ -24,7 +24,7 @@
   <link rel="stylesheet" href="/css/main.css">
   <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 
-  <link rel="canonical" href="http://localhost:4000/2021/07/iOS%E9%99%90%E5%88%B6%E5%AF%86%E7%A0%818-0%E4%BD%8D/">
+  <link rel="canonical" href="http://localhost:4000/2021/09/iOS_print_arg/">
   <link rel="alternate" type="application/rss+xml" title="LiJingBiao" href="http://localhost:4000/feed.xml">
   
   <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
@@ -179,10 +179,10 @@
 
 <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
   <header class="post-header">
-    <h1 class="post-title">iOS限制密码8-20位</h1>
+    <h1 class="post-title">iOS打印符号断点参数</h1>
     <div class="post-meta">
       <img src="/images/calendar.png" width="20px"/> 
-      <time datetime="2021-07-12 00:00:00 +0800" itemprop="datePublished" class="post-meta__date date">2021-07-12</time>  
+      <time datetime="2021-09-13 00:00:00 +0800" itemprop="datePublished" class="post-meta__date date">2021-09-13</time>  
 
       <span id="busuanzi_container_page_pv"> | 阅读：<span id="busuanzi_value_page_pv"></span>次</span>
     </p>
@@ -196,14 +196,10 @@
   
 
   <section class="post">
-    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>-(BOOL)passWordprdicateString:(NSString *)str{
-    NSString * email = str;
-    NSString * regex = @"^(?![0-9]+$)(?![a-zA-Z]+$)(?![\\W]+$)[a-zA-Z0-9\\W]{8,20}";
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regex];
-    BOOL isValid = [predicate evaluateWithObject:email];
-    NSLog(@"--------%ld",isValid);
-    return isValid;
-}
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>//打印第一个参数
+po $arg3
+//打印第2个参数
+po $arg4
 </code></pre></div></div>
 
   </section>
@@ -274,15 +270,10 @@
        <ul class="pager">
         
         <li class="previous">
-            <a href="/2021/07/%E5%88%A4%E6%96%AD%E5%AD%97%E7%AC%A6%E4%B8%B2%E4%B8%AD%E5%8C%85%E5%90%AB%E6%95%B0%E5%AD%97%E6%88%96%E5%AD%97%E6%AF%8D/" data-toggle="tooltip" data-placement="top" title="判断字符串中包含数字或字母">上一篇：  <span>判断字符串中包含数字或字母</span>
+            <a href="/2021/09/iOSAppHook/" data-toggle="tooltip" data-placement="top" title="iOS AppHook">上一篇：  <span>iOS AppHook</span>
             </a>
         </li>
         
-        
-        <li class="next">
-            <a href="/2021/09/iOSAppHook/" data-toggle="tooltip" data-placement="top" title="iOS AppHook">下一篇：  <span>iOS AppHook</span>
-            </a>
-        </li>
         
     </ul>
 </section>

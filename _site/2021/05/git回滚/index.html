@@ -244,24 +244,27 @@ Date:   Mon Sep 18 22:57:47 2017 +0800
   </li>
   <li>git reset –hard commit_id
 完成撤销,同时将代码恢复到commit_id 对应的版本。
-如上一个例子中就是:
-    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> git reset --hard 3a2a9a3f3fd56ec0ebe2ada274d127b3ec9dcb17  
-git reset commit_id
-</code></pre></div>    </div>
-  </li>
-  <li>完成Commit命令的撤销，但是不对代码修改进行撤销，可以直接通过git commit 重新提交对本地代码的修改。
-如上一个例子中就是:
-    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> git reset 3a2a9a3f3fd56ec0ebe2ada274d127b3ec9dcb17  
-</code></pre></div>    </div>
-    <h2 id="暂存到stash">暂存到stash</h2>
-    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git stash
+如上一个例子中就是:</li>
+</ul>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> git reset --hard 3a2a9a3f3fd56ec0ebe2ada274d127b3ec9dcb17  
+
+</code></pre></div></div>
+
+<ul>
+  <li>完成Commit命令的撤销，但是不对代码修改进行撤销，可以直接通过git reset commit_id 重新提交对本地代码的修改。
+如上一个例子中就是:</li>
+</ul>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> git reset 3a2a9a3f3fd56ec0ebe2ada274d127b3ec9dcb17  
+</code></pre></div></div>
+<h2 id="暂存到stash">暂存到stash</h2>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git stash
 //恢复
 git stash pop
-</code></pre></div>    </div>
-    <h2 id="回滚">回滚</h2>
-    <p>Revert 撤销一个提交的同时会创建一个新的提交。这是一个安全的方法，因为它不会重写提交历史。</p>
-  </li>
-</ul>
+</code></pre></div></div>
+<h2 id="回滚">回滚</h2>
+<p>Revert 撤销一个提交的同时会创建一个新的提交。这是一个安全的方法，因为它不会重写提交历史。</p>
 
 <p>比如下面的这个例子的提交，如果我们不想要test1的这次提交了，上面我说过用<code class="highlighter-rouge">git reset --hard test_commit_id</code>，但这是在<code class="highlighter-rouge">test1</code>这次提交未push的情况下。
 如果<code class="highlighter-rouge">test1</code>这次提交已经push的话就应该使用<code class="highlighter-rouge">git revert test1_commit_id</code>，这样的话代码就会把test1这次的代码修改进行撤销并重新生成一次commit，这样的话<code class="highlighter-rouge">test1</code>的这次<code class="highlighter-rouge">commit</code>还是存在于工作树上的，保持了工作树的干净。</p>
