@@ -214,8 +214,8 @@ printf默认不会在行尾自动换行，加\n
 ## 2. awk变量定义
 
 ~~~powershell
-# awk -v NUM=3 -F: '{ print $NUM }' /etc/passwd
-# awk -v NUM=3 -F: '{ print NUM }' /etc/passwd
+# awk -v NUM=3 -F: '{ print $NUM }' /etc/passwd  #打印文件第三列
+# awk -v NUM=3 -F: '{ print NUM }' /etc/passwd  #打印文件第三列 -> 全部替换为3
 # awk -v num=1 'BEGIN{print num}' 
 1
 # awk -v num=1 'BEGIN{print $num}' 
