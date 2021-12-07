@@ -584,8 +584,8 @@ continue    条件满足的时候跳过循环
 + - * / %(模) ^(幂2^3)
 可以在模式中执行计算，awk都将按浮点数方式执行算术运算
 # awk 'BEGIN{print 1+1}'
-# awk 'BEGIN{print 1**1}'
-# awk 'BEGIN{print 2**3}'
+# awk 'BEGIN{print 1**1}' #冥运算
+# awk 'BEGIN{print 2**3}' 
 # awk 'BEGIN{print 2/3}'
 ~~~
 
